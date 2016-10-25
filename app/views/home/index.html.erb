@@ -1,2 +1,6 @@
-<% provide(:title, "Home") %>
-<p>Find me in app/views/home/index.html.erb</p>
+<% provide :title do %>
+<%= inline_svg "logo.svg", :class => "logo" %>
+Micrantha Software Solutions
+<% end %>
+
+<p>Growing software for functionaly appealing solutions.</p>
