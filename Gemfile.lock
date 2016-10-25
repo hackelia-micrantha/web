@@ -396,5 +396,8 @@ DEPENDENCIES
   unicorn-worker-killer
   xray-rails (>= 0.1.18)
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
    1.13.6
