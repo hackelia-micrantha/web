@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby '2.3.1'
+ruby '2.4.1'
 gem "active_type", ">= 0.3.2"
 gem "autoprefixer-rails", ">= 5.0.0.1"
 gem "bcrypt", "~> 3.1.7"
@@ -14,7 +14,7 @@ gem "mail", ">= 2.6.3"
 gem "marco-polo"
 gem "pg", "~> 0.18"
 gem "pgcli-rails"
-gem "rails", "5.0.0.1"
+gem "rails", "5.0.1"
 gem "redis-namespace"
 gem "sass-rails", "~> 5.0"
 gem "secure_headers", "~> 3.0"

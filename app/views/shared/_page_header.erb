@@ -1,3 +1,4 @@
+<% if content_for?(:title) or content_for?(:page_subhead) %>
 <div class="page-header">
   <% if content_for?(:title) %>
     <h2><%= content_for(:title) %></h2>
@@ -6,3 +7,4 @@
     <%= content_for(:page_subhead) %>
   <% end %>
 </div>
+<% end %>
