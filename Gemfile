@@ -22,6 +22,7 @@ gem "sidekiq", ">= 4.2.0"
 gem "turbolinks", "~> 5"
 gem "inline_svg", "~> 0.11.0"
 gem "json", "2.0.4"
+gem "ffi", "1.9.14"
 
 group :production, :staging do
   gem "postmark-rails"
