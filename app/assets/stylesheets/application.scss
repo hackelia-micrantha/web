@@ -4,34 +4,36 @@
 //= require_tree .
 //= require_self
 
-$body-bg: #fefefe;
-$brand-primary: #7caaf7;
-$brand-info: #fa7ded;
-
 html, body {
-	margin:0;
-	padding:0;
-	height:100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
-#container {
-   min-height:100%;
-   position:relative;
+#header {
+  filter: drop-shadow(5px 5px 5px silver);
+  margin-bottom: 2em;
 }
-
 
 #body {
-   padding:10px;
-   padding-bottom:60px;   /* Height of the footer */
-}
-#footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
-   height:60px;   /* Height of the footer */
+  padding: 10px;
+  min-height: 480px;
+  color: #555;
 }
 
-.logo {
-	vertical-align: middle;
-	margin-right: 10px;
+#footer {
+  width: 100%;
+  text-align: center;
 }
+
+.logo-lg {
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 220px;
+}
+
+.card .icon {
+  height: 4em;
+  width: 4em;
+}
+

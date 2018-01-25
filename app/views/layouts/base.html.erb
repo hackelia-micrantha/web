@@ -23,6 +23,8 @@
 
     <%= csrf_meta_tags %>
 
+    <%= render "shared/ads" %>
+
     <title>
       <%= strip_tags(yield(:title)) + " – " if content_for?(:title) %>
       Micrantha
