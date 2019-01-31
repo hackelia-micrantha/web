@@ -38,6 +38,7 @@ group :development do
   gem "capistrano-mb", ">= 0.33.0", :require => false
   gem "capistrano-nc", "~> 0.1.4", :require => false
   gem "capistrano-rails", "~> 1.3.1", :require => false
+  gem "foreman"
   gem "guard", ">= 2.14.2", :require => false
   gem "guard-livereload", "~> 2.5.2", :require => false
   gem "guard-minitest", "~> 2.4.6", :require => false
