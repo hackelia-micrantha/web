@@ -7,7 +7,7 @@
 
 @import "solarized";
 
-@import url("https://fonts.googleapis.com/css?family=Inconsolata|Railway");
+@import url("https://fonts.googleapis.com/css?family=Inconsolata|Raleway");
 
 html, body {
   margin: 0;
@@ -59,16 +59,22 @@ a:hover {
 #philosophy {
   tr {
     td {
-      padding: 0.5em;
+      padding: 0.65em;
 
-      &:first {
+      &:first-child {
         text-align: right;
+        border-right: 1px dashed $base0;
       }
     }
 
     th {
-      background-color: $base1;
+      background-color: $blue;
+      padding: 6px;
       color: $white;
+
+      &:first-child {
+        text-align: right;
+      }
     }
 
     border-bottom: 1px solid $base1;
