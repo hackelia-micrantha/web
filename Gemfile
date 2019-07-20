@@ -7,7 +7,7 @@ gem "bootstrap", "~> 4.0.0"
 gem "bootstrap_form", "~> 2.7.0"
 gem "bootscale", "~> 0.7.0", :require => false
 gem "dotenv-rails", ">= 2.2.1"
-gem "font-awesome-rails", "~> 4.7.0.3"
+gem "font_awesome5_rails", "~> 0.7.0"
 gem "jquery-rails", "~> 4.3.1"
 gem "mail", ">= 2.7.0"
 gem "marco-polo", "~> 1.2.1"

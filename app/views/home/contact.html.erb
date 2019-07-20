@@ -13,7 +13,7 @@
   <div class="col-md-6">
   <div class="card">
       <h5 class="card-header">
-        Email
+        <%= fa_icon :at %> Email
       </h5>
     <div class="card-body">
       <a href="mailto:info@micrantha.com">info@micrantha.com</a>
@@ -24,7 +24,7 @@
   <div class="col-md-6">
     <div class="card">
       <h5 class="card-header">
-        Slack
+        <%= fa_icon :slack, :type => :fab %> Slack
       </h5>
     <div class="card-body">
       <a href="https://micrantha.slack.com">micrantha.slack.com</a>
@@ -39,10 +39,10 @@
   <div class="col-md-6">
     <div class="card">
       <h5 class="card-header">
-        IRC
+        <%= fa_icon :keyboard %> IRC
       </h5>
     <div class="card-body">
-      #micrantha on freenode
+      #micrantha on <%= link_to :freenode, "https://freenode.net/" %> via <%= link_to "irc.micrantha.com", "https://irc.micrantha.com" %>
     </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
   <div class="col-md-6">
     <div class="card">
       <h5 class="card-header">
-        Git
+        <%= fa_icon "git-alt", :type => :fab %> Git
       </h5>
     <div class="card-body">
       <a href="https://git.micrantha.com">git.micrantha.com</a>
