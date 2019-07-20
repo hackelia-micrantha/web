@@ -1,3 +1,4 @@
+@import "solarized";
 
 .card-logo {
   height: 2em;
@@ -10,5 +11,5 @@
 }
 
 .jumbotron {
-  filter: drop-shadow(5px 5px 5px #ddd);
+  filter: drop-shadow(5px 5px 5px $base1);
 }
