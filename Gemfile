@@ -3,7 +3,7 @@ ruby '2.5.0'
 gem "active_type", ">= 0.7.5"
 gem "autoprefixer-rails", ">= 7.2.5"
 gem "bcrypt", "~> 3.1.11"
-gem "bootstrap", "~> 4.0.0"
+gem "bootstrap", "~> 4.3.1"
 gem "bootstrap_form", "~> 2.7.0"
 gem "bootscale", "~> 0.7.0", :require => false
 gem "dotenv-rails", ">= 2.2.1"
