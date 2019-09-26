@@ -1,0 +1,45 @@
+
+{{ define "content" }}
+
+    <p class="larger">Encountering problems or need assistance?</p>
+
+    <div class="card bg-red">
+        <h4><a class="no-link"
+                              href="mailto:support@micrantha.com"><i class="fa fa-at"></i> <b>email</b></a></h4>
+        <p>Send an email inquiries to <a
+                href="mailto:support@micrantha.com">fortunes@micrantha.com</a>.</p>
+    </div>
+    <div class="card bg-blue">
+        <a href="https://micrantha.slack.com">
+
+            <object width="200" height="93" data="/img/slack_monochrome_white.svg" type="image/svg+xml">
+                <img src="/img/slack_monochrome_white.png" alt="Slack" width="200" height="93"  />
+            </object>
+        </a>
+        <p>Request to join the <a href="https://micrantha.slack.com">slack workspace</a> and
+            post your question in <b>#support</b>.</p>
+    </div>
+
+
+    <div class="card bg-brown">
+        <h4>
+                    <i class="fa fa-keyboard-o"></i> IRC
+                </h4>
+                <p>
+                    #micrantha on <a href="https://freenode.net/">freenode</a> via <a href="https://irc.micrantha.com">irc.micrantha.com</a>
+                </p>
+    </div>
+
+        <div class="card bg-green">
+                <h4>
+                    <i class="fa fa-github-alt"></i> Git
+                </h4>
+                <p>
+                    <a href="https://git.micrantha.com">git.micrantha.com</a>
+                </p>
+        </div>
+{{ end }}
+
+{{ define "content-footer" }}
+
+{{ end }}
