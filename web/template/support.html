@@ -1,43 +1,59 @@
-
 {{ define "content" }}
 
     <p class="larger">Encountering problems or need assistance?</p>
 
-    <div class="card bg-red">
-        <h4><a class="no-link"
-                              href="mailto:support@micrantha.com"><i class="fa fa-at"></i> <b>email</b></a></h4>
-        <p>Send an email inquiries to <a
-                href="mailto:support@micrantha.com">fortunes@micrantha.com</a>.</p>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-red">
+                <h4 class="card-title"><a class="no-link"
+                                          href="mailto:support@micrantha.com"><i class="fa fa-2x fa-at"></i>
+                        <b>Email</b></a></h4>
+                <br/>
+                <p class="card-text">Send an email inquiries to <a
+                            href="mailto:support@micrantha.com">fortunes@micrantha.com</a>.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+
+            <div class="card bg-blue">
+                <h4 class="card-title">
+                    <a class="no-link" href="https://micrantha.slack.com">
+                        <i class="fab fa-2x fa-slack"></i> <b>Slack</b>
+                    </a></h4>
+                <br/>
+                <p class="card-text">Request to join the <a href="https://micrantha.slack.com">slack workspace</a>
+                    and
+                    post your question in <b>#support</b>.</p>
+            </div>
+        </div>
     </div>
-    <div class="card bg-blue">
-        <a href="https://micrantha.slack.com">
 
-            <object width="200" height="93" data="/img/slack_monochrome_white.svg" type="image/svg+xml">
-                <img src="/img/slack_monochrome_white.png" alt="Slack" width="200" height="93"  />
-            </object>
-        </a>
-        <p>Request to join the <a href="https://micrantha.slack.com">slack workspace</a> and
-            post your question in <b>#support</b>.</p>
-    </div>
-
-
-    <div class="card bg-brown">
-        <h4>
-                    <i class="fa fa-keyboard-o"></i> IRC
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-green">
+                <h4 class="card-title">
+                    <a class="no-link" href="https://irc.micrantha.com"><i class="fa fa-2x fa-keyboard"></i> <b>IRC</b></a>
                 </h4>
-                <p>
-                    #micrantha on <a href="https://freenode.net/">freenode</a> via <a href="https://irc.micrantha.com">irc.micrantha.com</a>
+                <br/>
+                <p class="card-text">
+                    #micrantha on <a href="https://freenode.net/">freenode</a> via <a
+                            href="https://irc.micrantha.com">irc.micrantha.com</a>
                 </p>
-    </div>
+            </div>
+        </div>
+        <div class="col-md-6">
 
-        <div class="card bg-green">
-                <h4>
-                    <i class="fa fa-github-alt"></i> Git
+            <div class="card bg-orange">
+                <h4 class="card-title">
+                    <a class="no-link" href="https://git.micrantha.com"><i class="fab fa-2x fa-git-alt"></i> <b>Git</b></a>
                 </h4>
-                <p>
+                <br/>
+                <p class="card-text">
                     <a href="https://git.micrantha.com">git.micrantha.com</a>
                 </p>
+            </div>
         </div>
+    </div>
 {{ end }}
 
 {{ define "content-footer" }}

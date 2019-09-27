@@ -1,3 +1,7 @@
+.jumbotron {
+  filter: drop-shadow(5px 5px 5px $shadow);
+}
+
 .card-logo {
   height: 2em;
   width: 2em;

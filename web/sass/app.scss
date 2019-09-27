@@ -1,13 +1,11 @@
 @import "web/sass/solarized";
 @import "web/sass/colors";
 @import "web/sass/fontawesome/fontawesome";
-@import "web/sass/home";
+@import "web/sass/fontawesome/solid";
+@import "web/sass/fontawesome/brands";
+@import "web/sass/bootstrap/bootstrap";
 @import "web/sass/navbar";
-
-#header {
-  background-color: $green;
-}
-
+@import "web/sass/main";
 @import url("https://fonts.googleapis.com/css?family=Inconsolata|Raleway");
 
 html,
@@ -15,8 +13,9 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-size: 1.1em;
   background-color: $white;
-  color: $base00;
+  color: #555555;
   font-family: "Raleway", sans-serif;
 }
 
@@ -27,7 +26,7 @@ code,
 }
 
 #header {
-  filter: drop-shadow(5px 5px 5px $base0);
+  filter: drop-shadow(5px 5px 5px $shadow);
   margin-bottom: 2em;
 }
 
@@ -47,9 +46,15 @@ code,
   height: 220px;
 }
 
-.card .icon {
-  height: 4em;
-  width: 4em;
+.card {
+  .icon {
+    height: 4em;
+    width: 4em;
+  }
+
+  i + b {
+    vertical-align: super;
+  }
 }
 
 a:hover {
@@ -60,30 +65,10 @@ a:hover {
   background-color: $base1;
 }
 
-#philosophy {
-  tr {
-    td {
-      padding: 0.65em;
+@import "web/sass/helper";
 
-      &:first-child {
-        text-align: right;
-        border-right: 1px dashed $base0;
-      }
-    }
+@import "web/sass/home";
 
-    th {
-      background-color: $blue;
-      padding: 6px;
-      color: $white;
+@import "web/sass/philosophy";
 
-      &:first-child {
-        text-align: right;
-      }
-    }
-
-    border-bottom: 1px solid $base1;
-  }
-
-  border: 1px solid $base0;
-  border-radius: 4px;
-}
+@import "web/sass/print";

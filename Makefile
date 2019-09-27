@@ -5,6 +5,8 @@ GOLINT ?= golint
 SASS ?= ./tools/sass
 CMD ?= ./cmd/micrantha
 
+.PHONY: all
+all: build test
 
 .PHONY: test
 test: $(PKGS)
@@ -17,8 +19,6 @@ ifneq (, $(shell which $(GOLINT)))
 endif
 	$(GO) test $@
 
-$(SASS):
-
 .PHONY: sass
 sass:
 	$(GO) run $(SASS) -src ./web/sass/app.scss -dest ./website/css
@@ -30,9 +30,6 @@ build: sass
 .PHONY: css
 css:
     curl -o ./website/css/ https://necolas.github.io/normalize.css/8.0.1/normalize.css
-
-.PHONY: all
-all: build
 
 .PHONY: run
 run: sass

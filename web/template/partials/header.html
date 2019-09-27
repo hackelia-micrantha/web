@@ -1,12 +1,16 @@
-
-    <!-- Add your site or application content here -->
-    <div class="container clearfix">
-        <span id="menu-toggle"><i class="fa fa-bars"></i></span>
-        <div id="brand">
-          {{ template "header-brand.html" . }}
-        </div>
-        <nav>
-          {{ template "navigation.html" . }}
-        </nav>
+<div class="navbar navbar-expand-lg navbar-toggleable-md navbar-dark bg-success">
+<div class="container">
+    <div id="brand">
+        {{ template "header-brand.html" . }}
     </div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <nav class="collapse navbar-collapse" id="navbarToggler">
+        {{ template "navigation.html" . }}
+    </nav>
+</div>
+</div>
 </div>

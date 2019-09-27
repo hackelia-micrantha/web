@@ -48,7 +48,7 @@ func New(routes Routes) *mux.Router {
 // Template returns an handler that renders a template
 func Template(name string, params interface{}) http.HandlerFunc {
 	return func (w http.ResponseWriter, _ *http.Request) {
-		err := render.Template(w, name, nil)
+		err := render.Template(w, name, params)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
