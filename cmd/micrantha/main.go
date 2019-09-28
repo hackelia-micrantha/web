@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"micrantha.com/web.git/internal/pkg/endpoint"
-	"micrantha.com/web.git/pkg/route"
+	"micrantha.com/micrantha/web.git/internal/pkg/endpoint"
+	"micrantha.com/micrantha/web.git/pkg/route"
 )
 
 var (

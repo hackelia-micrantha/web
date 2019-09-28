@@ -1,4 +1,4 @@
-module micrantha.com/web.git
+module micrantha.com/micrantha/web.git
 
 go 1.13
 
