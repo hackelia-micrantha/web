@@ -27,9 +27,10 @@ sass:
 build: sass
 	$(GO) build $(CMD)
 
-.PHONY: install
-install:
-	$(GO) install micrantha.com/pkg
+.PHONY: resources
+resources:
+	@resources -declare -var=Template -tag=embed -package=assets -output=pkg/assets/template.go web/template
+	@resources -declare -var=Website -tag=embed -package=assets -output=internal/pkg/assets/website.go website
 
 .PHONY: run
 run: sass

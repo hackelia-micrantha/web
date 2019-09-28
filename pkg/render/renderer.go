@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"mime"
 	"net/http"
+	"os"
 	"path"
 	"strings"
 )
@@ -21,10 +22,23 @@ const (
 	// FormatNone indicates no rendering type
 	FormatNone
 )
-var templates = make(map[string]*template.Template)
+var (
+	templates = make(map[string]*template.Template)
+	templatePath string
+)
+
+func init() {
+	t, ok := os.LookupEnv("MICRANTHA_TEMPLATE_PATH")
+
+	if !ok {
+		templatePath = path.Join("web", "template")
+	} else {
+		templatePath = t
+	}
+}
 
 func templateFile(name ...string) string {
-	return path.Join("web", "template", path.Join(name...))
+	return path.Join(templatePath, path.Join(name...))
 }
 
 // Template renders a template response given its name and parameters

@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Ryan Jennings -- Owner -- ryan@micrantha.com
+
+# THANKS
+
+    Google, W3C
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5
+    Golang, Docker, Traefik

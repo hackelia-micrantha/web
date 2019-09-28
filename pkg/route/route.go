@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"micrantha.com/web/pkg/render"
+	"micrantha.com/web.git/pkg/render"
 )
 
 // Type is a route type
@@ -35,7 +35,7 @@ func New(routes Routes) *mux.Router {
 			Handler(handler)
 	}
 
-	filePath, ok := os.LookupEnv("PUBLIC_FOLDER_PATH")
+	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
 	if !ok {
 		filePath = "./website"
