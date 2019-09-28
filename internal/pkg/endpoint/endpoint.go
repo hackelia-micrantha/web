@@ -1,16 +1,17 @@
 package endpoint
 
 import (
-	"micrantha.com/pkg/route"
 	"net/http"
+
+	"micrantha.com/web/pkg/route"
 )
 
-var defaultParams = map[string]interface{} {
-	"Title": "Micrantha",
+var defaultParams = map[string]interface{}{
+	"Title":       "Micrantha",
 	"Description": "a software as a service and consulting company.",
-	"Keywords": "sass, software, company, service",
-	"BrandName": "Micrantha",
-	"BrandUrl": "https://micrantha.com",
+	"Keywords":    "sass, software, company, service",
+	"BrandName":   "Micrantha",
+	"BrandUrl":    "https://micrantha.com",
 }
 
 // List is a list of defined route endpoints

@@ -27,9 +27,9 @@ sass:
 build: sass
 	$(GO) build $(CMD)
 
-.PHONY: css
-css:
-    curl -o ./website/css/ https://necolas.github.io/normalize.css/8.0.1/normalize.css
+.PHONY: install
+install:
+	$(GO) install micrantha.com/pkg
 
 .PHONY: run
 run: sass

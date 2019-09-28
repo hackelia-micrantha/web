@@ -1,12 +1,13 @@
 package route
 
 import (
-	"github.com/gorilla/mux"
 	"log"
-	"micrantha.com/pkg/render"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gorilla/mux"
+	"micrantha.com/web/pkg/render"
 )
 
 // Type is a route type
@@ -47,7 +48,7 @@ func New(routes Routes) *mux.Router {
 
 // Template returns an handler that renders a template
 func Template(name string, params interface{}) http.HandlerFunc {
-	return func (w http.ResponseWriter, _ *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		err := render.Template(w, name, params)
 
 		if err != nil {
@@ -73,4 +74,3 @@ func logger(inner http.Handler, name string) http.Handler {
 		)
 	})
 }
-

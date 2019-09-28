@@ -1,4 +1,4 @@
-module micrantha.com
+module micrantha.com/web
 
 go 1.13
 

@@ -4,16 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"micrantha.com/internal/pkg/endpoint"
-	"micrantha.com/pkg/route"
 	"net/http"
 	"os"
+
+	"micrantha.com/web/internal/pkg/endpoint"
+	"micrantha.com/web/pkg/route"
 )
 
 var (
 	port = flag.Int("port", 1337, "The port the web server listens on")
 )
+
 func main() {
+
+	flag.Parse()
 
 	router := route.New(endpoint.List)
 

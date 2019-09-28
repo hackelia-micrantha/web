@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+LOCAL_IMAGE=micrantha/web
+REMOTE_IMAGE=registry.micrantha.com/micrantha/web
+
+docker build -t $LOCAL_IMAGE -f build/package/Dockerfile .
+
+docker tag $LOCAL_IMAGE $REMOTE_IMAGE
+
+docker push $REMOTE_IMAGE
