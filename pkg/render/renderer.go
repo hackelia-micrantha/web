@@ -22,9 +22,14 @@ const (
 	// FormatNone indicates no rendering type
 	FormatNone
 )
+
 var (
-	templates = make(map[string]*template.Template)
+	templates    = make(map[string]*template.Template)
 	templatePath string
+)
+
+const (
+	PoweredBy = "golang/micrantha"
 )
 
 func init() {
@@ -46,7 +51,7 @@ func Template(w http.ResponseWriter, name string, parameters interface{}) error 
 
 	t, ok := templates[name]
 
-	w.Header().Set("X-Powered-By", "golang")
+	w.Header().Set("X-Powered-By", PoweredBy)
 
 	if !ok {
 		t = template.Must(template.ParseFiles(templateFile("layout.html"), templateFile(name)))
@@ -78,7 +83,7 @@ func Format(w http.ResponseWriter, format FormatType, code int, value interface{
 func JSON(w http.ResponseWriter, code int, value interface{}) error {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("X-Powered-By", "golang")
+	w.Header().Set("X-Powered-By", PoweredBy)
 	w.WriteHeader(code)
 	return json.NewEncoder(w).Encode(value)
 }
@@ -86,7 +91,7 @@ func JSON(w http.ResponseWriter, code int, value interface{}) error {
 // Text formats an object as text into an http writer with a status code
 func Text(w http.ResponseWriter, code int, value string) error {
 	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-	w.Header().Set("X-Powered-By", "golang")
+	w.Header().Set("X-Powered-By", PoweredBy)
 	w.WriteHeader(code)
 	_, err := w.Write([]byte(value))
 	return err

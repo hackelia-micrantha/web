@@ -1,11 +1,11 @@
-@import "web/sass/solarized";
-@import "web/sass/colors";
+@import "web/sass/partials/solarized";
+@import "web/sass/partials/colors";
 @import "web/sass/fontawesome/fontawesome";
 @import "web/sass/fontawesome/solid";
 @import "web/sass/fontawesome/brands";
 @import "web/sass/bootstrap/bootstrap";
-@import "web/sass/navbar";
-@import "web/sass/main";
+@import "web/sass/partials/navbar";
+@import "web/sass/partials/main";
 @import url("https://fonts.googleapis.com/css?family=Inconsolata|Raleway");
 
 html,
@@ -38,6 +38,7 @@ code,
 #footer {
   width: 100%;
   text-align: center;
+  padding-top: 2em;
 }
 
 .logo-lg {
@@ -61,14 +62,15 @@ a:hover {
   text-decoration: none;
 }
 
+.card-logo {
+  height: 2em;
+  width: 2em;
+}
+
 .bg-header {
   background-color: $base1;
 }
 
-@import "web/sass/helper";
+@import "web/sass/partials/helper";
 
-@import "web/sass/home";
-
-@import "web/sass/philosophy";
-
-@import "web/sass/print";
+@import "web/sass/partials/print";

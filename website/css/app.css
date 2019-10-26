@@ -1,6 +1,32 @@
-@charset "UTF-8";
 /* light is default mode, so pair with general html definition */
 @import url("https://fonts.googleapis.com/css?family=Inconsolata|Raleway");
+.light {
+  background-color: #fdf6e3;
+  color: #657b83; }
+  .light * {
+    color: #657b83; }
+  .light h1, .light h2, .light h3, .light h4, .light h5, .light h6 {
+    color: #586e75;
+    border-color: #657b83; }
+  .light a, .light a:active, .light a:visited {
+    color: #586e75; }
+
+.dark {
+  background-color: #002b36;
+  color: #839496; }
+  .dark * {
+    color: #839496; }
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #93a1a1;
+    border-color: #839496; }
+  .dark a, .dark a:active, .dark a:visited {
+    color: #93a1a1; }
+
+html * {
+  color-profile: sRGB;
+  rendering-intent: auto; }
+
+/* light is default mode, so pair with general html definition */
 .light {
   background-color: #fdf6e3;
   color: #657b83; }
@@ -10487,10 +10513,12 @@ a {
 a:hover {
   color: cornflowerblue; }
 
-html body a.no-link, html body a.no-link:hover {
+html body a.no-link,
+html body a.no-link:hover {
   color: whitesmoke !important; }
 
-pre, code {
+pre,
+code {
   white-space: pre-wrap;
   /* Since CSS 2.1 */
   white-space: -moz-pre-wrap;
@@ -10501,7 +10529,7 @@ pre, code {
   /* Opera 7 */
   word-wrap: break-word;
   /* Internet Explorer 5.5+ */
-  font-family: 'Inconsolata', monospace; }
+  font-family: "Inconsolata", monospace; }
 
 body > footer {
   font-size: 0.9em; }
@@ -10582,7 +10610,11 @@ hr + footer {
 /* Cards */
 .card {
   margin: 1.5em auto; }
-  .card h1, .card h2, .card h3, .card h4, .card h5 {
+  .card h1,
+  .card h2,
+  .card h3,
+  .card h4,
+  .card h5 {
     margin: 0; }
   .card code {
     padding: inherit;
@@ -10595,7 +10627,9 @@ hr + footer {
     padding: 1.5em;
     filter: drop-shadow(5px 5px 5px #839496); }
 
-ul, p, form {
+ul,
+p,
+form {
   margin-bottom: 1rem; }
 
 /* Header and Navigation */
@@ -10619,61 +10653,24 @@ ul, p, form {
     #header #brand img {
       margin-right: 1em;
       vertical-align: top; }
-  #header nav {
-    display: inline-block;
+  #header #nav {
     font-size: 0.9em;
     margin-top: 0.3em; }
-    #header nav li {
+    #header #nav li {
       list-style: none;
       display: inline-block;
       margin-bottom: 0;
       padding-right: 10px;
       padding-left: 10px; }
-      #header nav li:last-child {
+      #header #nav li:last-child {
         margin-right: inherit; }
-      #header nav li:hover {
+      #header #nav li:hover {
         background-color: rgba(255, 255, 255, 0.1);
         border-radius: 6px; }
-      #header nav li a:hover {
-        color: #93a1a1; }
   #header img.logo {
     width: 2em;
     height: 2em;
     vertical-align: bottom; }
-
-#menu-toggle {
-  font-size: 1.5em;
-  line-height: 0.5em;
-  display: none;
-  cursor: pointer; }
-
-/* Responsive Design */
-@media (max-width: 850px) {
-  #brand span + span {
-    display: none; } }
-
-@media (max-width: 750px) {
-  #menu-toggle {
-    display: inline-block;
-    position: absolute;
-    right: 30px;
-    top: 5px; }
-  #brand {
-    display: block; }
-  #header nav {
-    float: none;
-    display: none; }
-  #header li {
-    display: block;
-    line-height: 2em; }
-  #header li:before, #header #header li + li:before {
-    content: "⇢ "; }
-  #brand span + span {
-    display: inline-block; } }
-
-@media (max-width: 420px) {
-  #brand span + span {
-    display: none; } }
 
 html,
 body {
@@ -10700,7 +10697,8 @@ code,
 
 #footer {
   width: 100%;
-  text-align: center; }
+  text-align: center;
+  padding-top: 2em; }
 
 .logo-lg {
   vertical-align: middle;
@@ -10716,6 +10714,10 @@ code,
 
 a:hover {
   text-decoration: none; }
+
+.card-logo {
+  height: 2em;
+  width: 2em; }
 
 .bg-header {
   background-color: #93a1a1; }
@@ -10794,82 +10796,3 @@ a:hover {
 
 .clearfix:after {
   clear: both; }
-
-.jumbotron {
-  filter: drop-shadow(5px 5px 5px #839496); }
-
-.card-logo {
-  height: 2em;
-  width: 2em; }
-
-.shrink-70 {
-  width: 70%;
-  margin: auto; }
-
-#philosophy tr td {
-  padding: 0.65em; }
-  #philosophy tr td:first-child {
-    text-align: right;
-    border-right: 1px dashed #839496; }
-
-#philosophy tr th {
-  padding: 1em;
-  color: whitesmoke; }
-  #philosophy tr th:first-child {
-    text-align: right; }
-
-@media print, (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
-  /* Style adjustments for high resolution devices */ }
-
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   http://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
-@media print {
-  *,
-  *:before,
-  *:after {
-    background: transparent !important;
-    color: #000 !important;
-    /* Black prints faster:
-                                      http://www.sanbeiji.com/archives/953 */
-    box-shadow: none !important;
-    text-shadow: none !important; }
-  a,
-  a:visited {
-    text-decoration: underline; }
-  a[href]:after {
-    content: " (" attr(href) ")"; }
-  abbr[title]:after {
-    content: " (" attr(title) ")"; }
-  /*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
-  a[href^="#"]:after,
-  a[href^="javascript:"]:after {
-    content: ""; }
-  pre {
-    white-space: pre-wrap !important; }
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid; }
-  /*
-   * Printing Tables:
-   * http://css-discuss.incutio.com/wiki/Printing_Tables
-   */
-  thead {
-    display: table-header-group; }
-  tr,
-  img {
-    page-break-inside: avoid; }
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3; }
-  h2,
-  h3 {
-    page-break-after: avoid; } }

@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{ template "head.html" . }}
+    {{ block "custom-head" . }}
+    {{ end }}
 </head>
 <body>
 
@@ -27,8 +29,6 @@
     {{ template "content" . }}
 
 </div>
-
-<hr>
 
 {{ block "content-footer" . }}
 {{ end }}
