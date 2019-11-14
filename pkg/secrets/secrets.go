@@ -39,5 +39,5 @@ func ReadEnvFile(key string) (string, error) {
 // DatabasePassword reads the file specified by DATABASE_PASSWORD_FILE
 func DatabasePassword() (string, error) {
 
-	return ReadFileFromEnv("DATABASE_PASSWORD_FILE")
+	return ReadEnvFile("DATABASE_PASSWORD_FILE")
 }

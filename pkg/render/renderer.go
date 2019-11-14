@@ -29,6 +29,7 @@ var (
 )
 
 const (
+	// PoweredBy is the header value describing how this app is built
 	PoweredBy = "golang/micrantha"
 )
 
