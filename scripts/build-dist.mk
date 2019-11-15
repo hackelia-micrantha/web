@@ -6,7 +6,7 @@ $(VENDOR):
 	@$(GO) mod vendor
 
 .PHONY: build-dist
-build-dist: $(VENDOR) resources
+build-dist: $(VENDOR)
 	@echo "Building vendored $(EXE)..."
 	@$(GO) build -mod vendor -v $(CMD)
 

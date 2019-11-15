@@ -2,13 +2,47 @@ package secrets
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
+
+	"micrantha.com/micrantha/web.git/pkg/secrets/ext"
 )
 
-func readFileToString(fileName string) (string, error) {
+type secretStorage interface {
+	getSecret(string) (string, error)
+	envSecret(string) (string, error)
+}
 
-	file, err := os.Open(fileName)
+type fileSecretStorage string
+
+const dockerSecrets fileSecretStorage = "/run/secrets"
+
+var defaultStorage = dockerSecrets
+
+func (storage fileSecretStorage) String() string {
+	return string(storage)
+}
+
+func (storage fileSecretStorage) validateSecret(filePath string) (string, error) {
+	if strings.HasPrefix(filePath, storage.String()) {
+		return filePath, nil
+	}
+
+	rel, err := filepath.Rel(storage.String(), filePath)
+
+	if err != nil {
+		return storage.String(), err
+	}
+
+	return filepath.Join(storage.String(), rel), nil
+}
+
+func (storage fileSecretStorage) readSecretToString(filePath string) (string, error) {
+
+	file, err := os.Open(filePath)
 
 	if err != nil {
 		return "", err
@@ -25,19 +59,40 @@ func readFileToString(fileName string) (string, error) {
 	return string(data), nil
 }
 
-// ReadEnvFile reads a file defined in an environment key value
-func ReadEnvFile(key string) (string, error) {
+func (storage fileSecretStorage) getSecret(fileName string) (string, error) {
+
+	filePath, err := storage.validateSecret(fileName)
+
+	if err != nil {
+		return filePath, err
+	}
+
+	return storage.readSecretToString(filePath)
+}
+
+func (storage fileSecretStorage) envSecret(key string) (string, error) {
+
 	fileName, ok := os.LookupEnv(key)
 
 	if ok {
 		return "", errors.New(key + " not found")
 	}
 
-	return readFileToString(fileName)
+	return storage.getSecret(fileName)
 }
 
-// DatabasePassword reads the file specified by DATABASE_PASSWORD_FILE
-func DatabasePassword() (string, error) {
+// GetFromEnv reads a file defined in an environment key value
+func GetFromEnv(key string) (string, error) {
+	return defaultStorage.envSecret(key)
+}
 
-	return ReadEnvFile("DATABASE_PASSWORD_FILE")
+// GetType attempts to find a secret based on a name and type
+//     assumes the format /run/secret/<name>.<type>
+func GetType(name string, secretType ext.Type) (string, error) {
+	return Get(fmt.Sprint(name, secretType))
+}
+
+// Get attempts to read a secret from a file name
+func Get(fileName string) (string, error) {
+	return defaultStorage.getSecret(fileName)
 }

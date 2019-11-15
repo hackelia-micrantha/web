@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN make build
+RUN make dist
 
 FROM alpine:latest
 
@@ -26,6 +26,6 @@ ENV MICRANTHA_TEMPLATE_PATH="/app/template"
 
 ENV MICRANTHA_PUBLIC_PATH="/app/public"
 
-CMD ["sh", "-c", "./micrantha -port $PORT"]
+CMD ["sh", "-c", "/app/micrantha -port $PORT"]
 
 EXPOSE $port
