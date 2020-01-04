@@ -33,11 +33,11 @@ func (storage fileSecretStorage) validateSecret(filePath string) (string, error)
 
 	rel, err := filepath.Rel(storage.String(), filePath)
 
-	if err != nil {
-		return storage.String(), err
+	if err == nil {
+		return filepath.Join(storage.String(), rel), nil
 	}
 
-	return filepath.Join(storage.String(), rel), nil
+	return filepath.Join(storage.String(), filePath), nil
 }
 
 func (storage fileSecretStorage) readSecretToString(filePath string) (string, error) {

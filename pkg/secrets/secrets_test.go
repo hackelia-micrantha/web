@@ -42,10 +42,26 @@ func testGetType(t *testing.T) {
 	}
 }
 
-func testGetFromEnv(t *testing.T) {
+func testGetNameFromEnv(t *testing.T) {
 	expected := "test1ng"
 
 	os.Setenv("TEST_PWD_FILE", "test.pwd")
+
+	actual, err := GetFromEnv("TEST_PWD_FILE")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if actual != expected {
+		t.Fatal("expected ", expected, " got ", actual)
+	}
+}
+
+func testGetPathFromEnv(t *testing.T) {
+	expected := "test1ng"
+
+	os.Setenv("TEST_PWD_FILE", "/run/secrets/test.pwd")
 
 	actual, err := GetFromEnv("TEST_PWD_FILE")
 
