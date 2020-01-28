@@ -2,18 +2,19 @@ package secrets
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"micrantha.com/micrantha/web.git/pkg/secrets/ext"
 )
 
-const testSecrets fileSecretStorage = "./test/secrets"
+const testSecrets fileSecretStorage = "../../test/secrets"
 
 func init() {
 	defaultStorage = testSecrets
 }
 
-func testGet(t *testing.T) {
+func TestGet(t *testing.T) {
 
 	expected := "test1ng"
 
@@ -28,7 +29,7 @@ func testGet(t *testing.T) {
 	}
 }
 
-func testGetType(t *testing.T) {
+func TestGetType(t *testing.T) {
 	expected := "test1ng"
 
 	actual, err := GetType("test", ext.Password)
@@ -42,7 +43,7 @@ func testGetType(t *testing.T) {
 	}
 }
 
-func testGetNameFromEnv(t *testing.T) {
+func TestGetFromEnvRelative(t *testing.T) {
 	expected := "test1ng"
 
 	os.Setenv("TEST_PWD_FILE", "test.pwd")
@@ -58,10 +59,16 @@ func testGetNameFromEnv(t *testing.T) {
 	}
 }
 
-func testGetPathFromEnv(t *testing.T) {
+func TestGetFromEnvAbsolute(t *testing.T) {
 	expected := "test1ng"
 
-	os.Setenv("TEST_PWD_FILE", "/run/secrets/test.pwd")
+	filePath, err := filepath.Abs(filepath.Join(defaultStorage.String(), "test.pwd"))
+
+	if err != nil {
+		t.Fatal("Unable to find absolute path for test")
+	}
+
+	os.Setenv("TEST_PWD_FILE", filePath)
 
 	actual, err := GetFromEnv("TEST_PWD_FILE")
 
@@ -71,5 +78,13 @@ func testGetPathFromEnv(t *testing.T) {
 
 	if actual != expected {
 		t.Fatal("expected ", expected, " got ", actual)
+	}
+}
+
+func TestGetFromEnvEmpty(t *testing.T) {
+	_, err := GetFromEnv("RANDOM_ENV_VAR")
+
+	if err == nil {
+		t.Fatal("Expected error from non-existing env var secret")
 	}
 }

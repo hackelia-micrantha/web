@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,18 +27,12 @@ func (storage fileSecretStorage) String() string {
 	return string(storage)
 }
 
-func (storage fileSecretStorage) validateSecret(filePath string) (string, error) {
-	if strings.HasPrefix(filePath, storage.String()) {
-		return filePath, nil
+func (storage fileSecretStorage) validateSecret(filePath string) string {
+	if strings.HasPrefix(filePath, storage.String()) || filepath.IsAbs(filePath) {
+		return filePath
 	}
 
-	rel, err := filepath.Rel(storage.String(), filePath)
-
-	if err == nil {
-		return filepath.Join(storage.String(), rel), nil
-	}
-
-	return filepath.Join(storage.String(), filePath), nil
+	return filepath.Join(storage.String(), filePath)
 }
 
 func (storage fileSecretStorage) readSecretToString(filePath string) (string, error) {
@@ -61,11 +56,9 @@ func (storage fileSecretStorage) readSecretToString(filePath string) (string, er
 
 func (storage fileSecretStorage) getSecret(fileName string) (string, error) {
 
-	filePath, err := storage.validateSecret(fileName)
+	filePath := storage.validateSecret(fileName)
 
-	if err != nil {
-		return filePath, err
-	}
+	log.Print("Getting secret from ", filePath)
 
 	return storage.readSecretToString(filePath)
 }
@@ -74,7 +67,7 @@ func (storage fileSecretStorage) envSecret(key string) (string, error) {
 
 	fileName, ok := os.LookupEnv(key)
 
-	if ok {
+	if !ok {
 		return "", errors.New(key + " not found")
 	}
 
