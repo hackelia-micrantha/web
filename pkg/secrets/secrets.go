@@ -50,7 +50,7 @@ func (storage fileSecretStorage) readSecretToString(filePath string) (string, er
 		return "", err
 	}
 
-	return string(data), nil
+	return strings.TrimSpace(string(data)), nil
 }
 
 func (storage fileSecretStorage) getSecret(fileName string) (string, error) {
