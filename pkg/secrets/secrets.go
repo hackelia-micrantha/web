@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -57,8 +56,6 @@ func (storage fileSecretStorage) readSecretToString(filePath string) (string, er
 func (storage fileSecretStorage) getSecret(fileName string) (string, error) {
 
 	filePath := storage.validateSecret(fileName)
-
-	log.Print("Getting secret from ", filePath)
 
 	return storage.readSecretToString(filePath)
 }
