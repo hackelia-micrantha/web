@@ -5,5 +5,5 @@ build-dev:
 	@$(GO) build -tags dev -v $(CMD)
 
 .PHONY: dev
-dev: $(CSS_TARGETS) build-dev
+dev: css build-dev
 

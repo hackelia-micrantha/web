@@ -5,7 +5,11 @@ EXE ?= $(shell basename $(CMD))
 LIB ?= "$(EXE).so"
 
 .PHONY: all
-all: test
+all: help
+
+# Syntax info
+
+include scripts/help.mk
 
 # CSS building
 
@@ -24,6 +28,10 @@ include scripts/clean.mk
 include scripts/build-dev.mk
 
 include scripts/build-dist.mk
+
+# packaging
+
+include scripts/package.mk
 
 # running
 

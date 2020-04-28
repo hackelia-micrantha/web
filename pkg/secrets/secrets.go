@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"micrantha.com/micrantha/web.git/pkg/secrets/ext"
+	"micrantha.com/web.git/pkg/secrets/ext"
 )
 
 type secretStorage interface {

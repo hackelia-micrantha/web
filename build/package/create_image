@@ -7,4 +7,9 @@ docker build -t $LOCAL_IMAGE -f build/package/Dockerfile .
 
 docker tag $LOCAL_IMAGE $REMOTE_IMAGE
 
-docker push $REMOTE_IMAGE
+read -t 5 -p "Pushing image in 5 seconds.  Hit any key to cancel."
+
+# no timeout
+if [[ $? -gt 128 ]]; then
+  docker push $REMOTE_IMAGE
+fi

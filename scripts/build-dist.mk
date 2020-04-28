@@ -11,5 +11,5 @@ build-dist: $(VENDOR)
 	@$(GO) build -mod vendor -v $(CMD)
 
 .PHONY: dist
-dist: $(CSS_TARGETS) build-dist
+dist: css build-dist
 

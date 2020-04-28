@@ -13,5 +13,5 @@ $(LIB): $(EMBED)
 	@$(EMBED) -r -d ./$(RES_DIR) -b ./$(RES_LIB) >/dev/null
 	@$(GO) build -v -buildmode=plugin -o $(LIB) ./$(RES_LIB)
 
-.PHONY: resources
-resources: $(RES_DEPS) $(LIB)
+.PHONY: res
+res: $(RES_DEPS) $(LIB)
