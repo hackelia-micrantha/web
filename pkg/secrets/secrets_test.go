@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"micrantha.com/web/pkg/secrets/ext"
+	"micrantha.com/web.git/pkg/secrets/ext"
 )
 
 const testSecrets fileSecretStorage = "../../test/secrets"
