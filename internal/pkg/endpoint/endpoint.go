@@ -3,7 +3,7 @@ package endpoint
 import (
 	"net/http"
 
-	"micrantha.com/web.git/pkg/route"
+	"micrantha.com/web/pkg/route"
 )
 
 var defaultParams = map[string]interface{}{

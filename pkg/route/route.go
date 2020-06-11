@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"micrantha.com/web.git/pkg/render"
+	"micrantha.com/web/pkg/render"
 )
 
 // Type is a route type
