@@ -1,28 +1,41 @@
 
 GO	?= go
-MICRA_PATH ?= /Users/ryjen/.local/opt/micra
-PROJECT_NAME ?= "micrantha"
-CMD ?= ./cmd/$(PROJECT_NAME)
+CMD ?= ./cmd/micrantha
 EXE ?= $(shell basename $(CMD))
 LIB ?= "$(EXE).so"
-
-CLEANERS += clean-project
 
 .PHONY: all
 all: help
 
-.PHONY: clean-project
-clean-project:
-	@echo "Cleaning project"
-	@rm -rf $(EXE)
+# Syntax info
 
-# Delegate to scripts folder
+include scripts/help.mk
 
-include $(MICRA_PATH)/scripts/index.mk
+# CSS building
+
+include scripts/sass.mk
+
+# testing and linting
+
+include scripts/verify.mk
+
+# project cleaning
+
+include scripts/clean.mk
+
+# building
+
+include scripts/build-dev.mk
+
+include scripts/build-dist.mk
+
+# packaging
+
+include scripts/package.mk
 
 # running
 
 .PHONY: run
 run:
-	$(GO) run $(CMD) -- $(ARGS)
+	$(GO) run $(CMD)
 

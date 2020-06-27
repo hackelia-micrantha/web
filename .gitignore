@@ -3,6 +3,5 @@ website/css/app.css
 website/css/philosophy.css
 website/css/home.css
 web/resources/static/css/framework.css
-node_modules
+
 vendor
-*.log

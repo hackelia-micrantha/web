@@ -6,8 +6,6 @@ WORKDIR /app
 
 COPY . .
 
-ENV NODE_ENV=production
-
 RUN make dist
 
 FROM alpine:latest
