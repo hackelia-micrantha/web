@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gorilla/mux"
 	"micrantha.com/web.git/pkg/render"
@@ -26,14 +25,16 @@ func New(routes Routes) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
-		handler := logger(route.HandlerFunc, route.Name)
-
 		router.
 			Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
-			Handler(handler)
+			Handler(route.HandlerFunc)
 	}
+
+	router.Use(security)
+	//router.Use(logger)
+	//router.Use(mux.CORSMethodMiddleware(router))
 
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
@@ -57,20 +58,33 @@ func Template(name string, params interface{}) http.HandlerFunc {
 	}
 }
 
-func logger(inner http.Handler, name string) http.Handler {
+func security(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
+		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
+		w.Header().Set("Content-Security-Policy", "default-src 'self' *.cloudflare.com *.micrantha.com")
+		w.Header().Set("X-XSS-Protection", "1; mode=block")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		inner.ServeHTTP(w, r)
+		if next != nil {
+			next.ServeHTTP(w, r)
+		}
+	})
+}
+
+func logger(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		log.Printf(
-			"%s %s %s %s %s %s",
+			"%s %s %s",
 			r.Method,
 			r.RequestURI,
-			name,
-			time.Since(start),
 			r.RemoteAddr,
-			r.Header.Get("X-Forwarded-For"),
 		)
+
+		if next != nil {
+			next.ServeHTTP(w, r)
+		}
 	})
 }

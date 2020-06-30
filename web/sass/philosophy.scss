@@ -1,22 +1,24 @@
-@import "web/sass/partials/colors";
+@import "partials/colors";
 
 #philosophy {
-  tr {
-    td {
-      padding: 0.65em;
+  table {
+    tr {
+      td {
+        padding: 0.65em;
 
-      &:first-child {
-        text-align: right;
-        border-right: 1px dashed $base0;
+        &:first-child {
+          text-align: right;
+          border-right: 1px dashed $base0;
+        }
       }
-    }
 
-    th {
-      padding: 1em;
-      color: $white;
+      th {
+        padding: 1em;
+        color: $white;
 
-      &:first-child {
-        text-align: right;
+        &:first-child {
+          text-align: right;
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
-@import "web/sass/partials/colors";
+@import "partials/colors";
 
+#home {
 .jumbotron {
   filter: drop-shadow(5px 5px 5px $shadow);
 }
@@ -7,4 +8,5 @@
 .shrink-70 {
   width: 70%;
   margin: auto;
+}
 }

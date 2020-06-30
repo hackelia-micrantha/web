@@ -1,0 +1,33 @@
+{
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-uglify": "^3.0.2",
+    "vinyl-paths": "^3.0.1"
+  },
+  "scripts": {
+    "build": "gulp"
+  },
+  "type": "module",
+  "name": "micrantha",
+  "version": "0.0.1",
+  "description": "corporate web presence for micrantha software solutions",
+  "main": "index.js",
+  "author": "Ryan Jennings <ryan@micrantha.com>",
+  "license": "Proprietary",
+  "private": true,
+  "dependencies": {
+    "@babel/preset-env": "^7.10.3",
+    "@fortawesome/fontawesome-free": "^5.13.1",
+    "bootstrap": "^4.5.0",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  }
+}

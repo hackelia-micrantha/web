@@ -1,13 +1,25 @@
-@import "web/sass/partials/solarized";
-@import "web/sass/partials/colors";
-@import "web/sass/fontawesome/fontawesome";
-@import "web/sass/fontawesome/solid";
-@import "web/sass/fontawesome/brands";
-@import "web/sass/bootstrap/bootstrap";
-@import "web/sass/partials/navbar";
-@import "web/sass/partials/main";
-@import url("https://fonts.googleapis.com/css?family=Inconsolata|Raleway");
+@import "partials/solarized";
+@import "partials/colors";
+@import "partials/fontawesome";
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "partials/navbar";
+@import "partials/main";
 
+@font-face {
+  font-family: 'Inconsolata';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  src: url('font/Inconsolata.woff') format('woff');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/font/Raleway.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 html,
 body {
   margin: 0;
@@ -71,6 +83,6 @@ a:hover {
   background-color: $base1;
 }
 
-@import "web/sass/partials/helper";
+@import "partials/helper";
 
-@import "web/sass/partials/print";
+@import "partials/print";
