@@ -1,8 +1,8 @@
 bin/**
 website/css/**
-website/js/**
-website/img/**
 website/font/**
+website/js/**
 web/node_modules
 vendor
 test/*.pem
+*.log

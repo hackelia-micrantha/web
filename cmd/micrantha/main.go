@@ -23,13 +23,14 @@ func main() {
 
 	if flag.NArg() > 0 {
 		execute(flag.Args())
+		os.Exit(1)
 	}
 
 	router := route.New(endpoint.List)
 
 	log.Printf("%s service listening on %d", path.Base(os.Args[0]), *port)
 
-	log.Fatal(Serve(router, *port))
+	log.Fatal(serve(router, *port))
 }
 
 func execute(args []string) {
@@ -39,6 +40,6 @@ func execute(args []string) {
 	switch cmd {
 	case "version":
 		fmt.Println(version)
-		os.Exit(0)
+		return
 	}
 }

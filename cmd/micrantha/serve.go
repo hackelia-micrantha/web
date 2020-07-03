@@ -7,8 +7,7 @@ import (
 	"net/http"
 )
 
-// Serve the web
-func Serve(router http.Handler, port int) error {
-
+// Serve in production the TLS is handled by the proxy
+func serve(router http.Handler, port int) error {
 	return http.ListenAndServe(fmt.Sprintf(":%d", port), router)
 }
