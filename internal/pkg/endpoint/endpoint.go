@@ -35,10 +35,10 @@ var List = route.Routes{
 		HandlerFunc: route.Template("philosophy.html", defaultParams),
 	},
 	route.Type{
-		Name:        "EmploymentRoute",
+		Name:        "CareersRoute",
 		Method:      http.MethodGet,
-		Pattern:     "/employment",
-		HandlerFunc: route.Template("employment.html", defaultParams),
+		Pattern:     "/careers",
+		HandlerFunc: route.Template("careers.html", defaultParams),
 	},
 	route.Type{
 		Name:        "LabratoryRoute",

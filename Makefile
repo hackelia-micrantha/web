@@ -4,7 +4,7 @@ LOCAL_LIB := $(shell test -d .micra; echo $$?)
 ifeq ($(LOCAL_LIB),0)
 MICRA_PATH ?= .micra
 else
-MICRA_PATH ?= $(HOME)/.local/opt/micra
+MICRA_PATH ?= /Users/ryjen/.local/opt/micra
 endif
 PROJECT_NAME ?= "micrantha"
 BIN_DIR ?= ./bin
