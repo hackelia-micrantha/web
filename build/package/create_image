@@ -3,18 +3,10 @@
 LOCAL_IMAGE=micrantha/web
 REMOTE_IMAGE=registry.micrantha.com/micrantha/web
 
-BUILD_FLAGS=()
-
-if [ -f $HOME/.config/git/credentials ]; then
-  BUILD_FLAGS+=("--build-arg GIT_CREDENTIALS=$(cat $HOME/.config/git/credentials)")
-fi
-
-docker build ${BUILD_FLAGS[*]} -t $LOCAL_IMAGE -f build/package/Dockerfile $@ .
+docker build -t $LOCAL_IMAGE -f build/package/Dockerfile $@ .
 
 docker tag $LOCAL_IMAGE $REMOTE_IMAGE
 
 # no timeout
-if [[ $? -gt 128 ]]; then
-  read -t 5 -p "Pushing image in 5 seconds.  Hit any key to cancel."
-  docker push $REMOTE_IMAGE
-fi
+read -t 5 -p "Pushing image in 5 seconds.  Hit any key to cancel."
+docker push $REMOTE_IMAGE
