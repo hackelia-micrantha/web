@@ -33,7 +33,7 @@ func New(routes Routes) *mux.Router {
 	}
 
 	router.Use(security)
-	//router.Use(logger)
+	router.Use(logger)
 	//router.Use(mux.CORSMethodMiddleware(router))
 
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
@@ -42,7 +42,7 @@ func New(routes Routes) *mux.Router {
 		filePath = "./website"
 	}
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir(filePath)))
+	router.PathPrefix("/").Handler(caching(http.FileServer(http.Dir(filePath))))
 
 	return router
 }
@@ -66,6 +66,16 @@ func security(next http.Handler) http.Handler {
 		w.Header().Set("Content-Security-Policy", "default-src 'self' data: *.cloudflare.com *.micrantha.com")
 		w.Header().Set("X-XSS-Protection", "1; mode=block")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		if next != nil {
+			next.ServeHTTP(w, r)
+		}
+	})
+}
+
+func caching(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Cache-Control", "public, max-age=31536000")
 
 		if next != nil {
 			next.ServeHTTP(w, r)
