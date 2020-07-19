@@ -47,6 +47,12 @@ var List = route.Routes{
 		HandlerFunc: route.Template("labratory.html", defaultParams),
 	},
 	route.Type{
+		Name:        "LabFailsRoute",
+		Method:      http.MethodGet,
+		Pattern:     "/labratory/failures",
+		HandlerFunc: route.Template("lab-fails.html", defaultParams),
+	},
+	route.Type{
 		Name:        "PrivacyRoute",
 		Method:      http.MethodGet,
 		Pattern:     "/privacy",
