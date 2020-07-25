@@ -39,7 +39,7 @@ func New(routes Routes) *mux.Router {
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
 	if !ok {
-		filePath = "./website"
+		filePath = "./web/public"
 	}
 
 	router.PathPrefix("/").Handler(caching(http.FileServer(http.Dir(filePath))))

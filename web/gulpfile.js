@@ -23,36 +23,38 @@ const js = () => src([
   .pipe(concat('app.js'))
   .pipe(uglify())
   .pipe(sourcemaps.write('.'))
-  .pipe(dest('../website/js'))
+  .pipe(dest('./public/js'))
 
-const css = () => src('sass/**.scss')
+const css = () => src([
+    'css/**.css',
+    'sass/**.scss',
+  ])
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.init())
   .pipe(autoprefixer())
   .pipe(concat('app.css'))
   .pipe(sourcemaps.write('.'))
-  .pipe(dest('../website/css'))
+  .pipe(dest('./public/css'))
 
 const img = () => src('img/**')
    .pipe(imagemin())
-  .pipe(dest('../website/img'))
+  .pipe(dest('./public/img'))
 
 const font = () => 
   src([
-    'node_modules/@fortawesome/fontawesome-free/webfonts/*',
+    'node_modules/@fortawesome/fontawesome-free/webfonts/*.woff*',
     'font/**'
   ])
-  .pipe(dest('../website/font'))
+    .pipe(dest('./public/font'))
 
 export const live = () => 
-  watch('sass/**.scss', 'css')
+  watch('sass', 'js', 'img', 'font')
 
 export const clean = () =>
   del([
-    '../website/css/**.css',
-    '../website/js/**.js',
-    '../website/font/**',
-    '../img/**'
+    './public/css/**',
+    './public/js/**',
+    './public/font/**',
   ], { force: true })
 
 export const build = parallel(js, css, img, font)
