@@ -9,6 +9,7 @@
     "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
     "gulp-imagemin": "^7.1.0",
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
@@ -25,7 +26,7 @@
   "version": "0.0.1",
   "description": "corporate web presence for micrantha software solutions",
   "main": "index.js",
-  "author": "Ryan Jennings <ryan@micrantha.com>",
+  "author": "Micrantha Software <info@micrantha.com>",
   "license": "Proprietary",
   "private": true
 }

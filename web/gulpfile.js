@@ -5,9 +5,10 @@ import autoprefixer from 'gulp-autoprefixer';
 import sourcemaps from 'gulp-sourcemaps';
 import concat from 'gulp-concat';
 import imagemin from 'gulp-imagemin';
+import cssmin from 'gulp-cssmin';
+import uglify from 'gulp-uglify';
 import vinylPaths from 'vinyl-paths';
 import del from 'del';
-import uglify from 'gulp-uglify';
 
 const { src, dest, series, parallel, watch } = gulp;
 
@@ -27,11 +28,12 @@ const js = () => src([
 
 const css = () => src([
     'css/**.css',
-    'sass/**.scss',
-  ])
+    'sass/**.scss'
+   ])
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.init())
   .pipe(autoprefixer())
+  .pipe(cssmin())
   .pipe(concat('app.css'))
   .pipe(sourcemaps.write('.'))
   .pipe(dest('./public/css'))
@@ -45,10 +47,10 @@ const font = () =>
     'node_modules/@fortawesome/fontawesome-free/webfonts/*.woff*',
     'font/**'
   ])
-    .pipe(dest('./public/font'))
+  .pipe(dest('./public/font'))
 
 export const live = () => 
-  watch('sass', 'js', 'img', 'font')
+  watch('sass', 'css', 'js', 'img', 'font')
 
 export const clean = () =>
   del([
