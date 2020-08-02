@@ -2,12 +2,28 @@
 
 #home {
   .jumbotron {
-    //filter: drop-shadow(5px 5px 5px $shadow);
     background: none;
+    margin-bottom: 0;
+  }
+
+  h2 {
+    font-size: 1em;
+  }
+
+  dl {
+    dt, dd { 
+      font-size: smaller;
+    }
   }
 
   .shrink-70 {
     width: 70%;
     margin: auto;
   }
+  .logo-lg {
+    margin-top: 48px;
+    margin-right: 24px;
+    height: 220px;
+  }
+
 }

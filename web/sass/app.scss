@@ -1,11 +1,10 @@
 @import "partials/solarized";
 @import "partials/colors";
 @import "partials/fontawesome";
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "partials/bootstrap";
 @import "partials/navbar";
-@import "partials/main";
-
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Raleway:wght@400;700&display=swap');
+@import "partials/card";
+@import "partials/utils";
 
 html,
 body {
@@ -21,12 +20,12 @@ body {
 pre,
 code,
 .code {
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
   font-family: "Inconsolata", monospace;
-}
-
-#header {
-  filter: drop-shadow(5px 5px 5px $shadow);
-  margin-bottom: 2em;
 }
 
 #body {
@@ -35,35 +34,31 @@ code,
 }
 
 #footer {
+  font-size: 0.9em;
   width: 100%;
   text-align: center;
   padding-top: 2em;
+  min-height: 3em;
+  border-top: 1px solid rgba($base1, 0.3);
+  background-color: rgba($base03, 0.05);
 }
 
-.logo-lg {
-  vertical-align: middle;
-  margin-right: 10px;
-  height: 220px;
-}
-
-.card {
-  .icon {
-    height: 4em;
-    width: 4em;
-  }
-
-  i + b {
-    vertical-align: super;
-  }
-}
-
-a:hover {
+/* Links */
+a {
+  color: $blue;
   text-decoration: none;
 }
 
-.card-logo {
-  height: 2em;
-  width: 2em;
+a:hover {
+  color: $hover;
+  text-decoration: none;
+}
+
+html body {
+  a.no-link,
+  a.no-link:hover {
+    color: $white !important;
+  }
 }
 
 .bg-header {

@@ -1,10 +1,75 @@
-.navbar-logo {
-  width: 1em;
-  height: 1em;
-  vertical-align: middle;
-}
 
-#header .navbar-nav .nav-link {
-  color: $white;
+/* Header and Navigation */
 
+#header {
+  background-color: $green;
+  font-weight: bold;
+  filter: drop-shadow(3px 3px 3px $shadow);
+  margin-bottom: 24px;
+
+  a {
+    font-weight: bold;
+    color: $white;
+  }
+
+  ul {
+    margin-top: 0;
+    margin-bottom: auto;
+  }
+
+  #brand {
+    display: inline-block;
+
+    span {
+      font-weight: 500;
+      font-size: 1.2em;
+      font-family: "Raleway", sans-serif;
+    }
+
+    a {
+      &:hover {
+        color: $white;
+      }
+      display: flex;
+      align-items: center;
+    }
+
+    img {
+      margin-right: 12px;
+      vertical-align: top;
+    }
+  }
+
+  #nav {
+    font-size: 0.9em;
+
+    li {
+      list-style: none;
+      display: inline-block;
+      margin-bottom: 0;
+      padding-right: 10px;
+      padding-left: 10px;
+
+      &:last-child {
+        margin-right: inherit;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+      }
+    }
+  }
+
+  img.logo {
+    width: 2em;
+    height: 2em;
+    vertical-align: bottom;
+  }
+  .navbar {
+    padding: 0;
+    .navbar-nav .nav-link {
+      color: $white;
+    }
+  }
 }

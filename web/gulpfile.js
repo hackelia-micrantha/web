@@ -17,8 +17,8 @@ import fs from 'fs';
 const { src, dest, series, parallel, watch } = gulp;
 
 const js = () => src([
-    'node_modules/jquery/dist/jquery.js',
-    'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
+    'node_modules/jquery/dist/jquery.slim.js',
+    'node_modules/bootstrap/js/dist/dropdown.js',
     'js/**.js'
   ])
   .pipe(sourcemaps.init())
@@ -64,7 +64,6 @@ export const clean = () =>
     './public/css/**',
     './public/js/**',
     './public/font/**',
-    './public/icon/**',
   ], { force: true })
 
 export const build = parallel(js, css, img, font)

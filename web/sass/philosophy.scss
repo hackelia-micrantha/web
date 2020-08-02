@@ -2,6 +2,16 @@
 
 #philosophy {
 
+  dt {
+    &:after {
+      content: ":";
+    }
+    font-weight: bold;
+  }
+  dd {
+    font-style: italic;
+  }
+
   img {
     margin-left: 1em;
     border: 2px solid $base01;

@@ -20,7 +20,7 @@ COPY --from=builder /app/bin /app/bin
 
 COPY --from=builder /app/web/template /app/template
 
-COPY --from=builder /app/website /app/public
+COPY --from=builder /app/web/public /app/public
 
 # set the working directory
 WORKDIR /app

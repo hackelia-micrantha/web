@@ -1,0 +1,74 @@
+/* Utilities */
+
+.larger {
+  font-size: 1.3em;
+}
+
+.large {
+  font-size: 1.5em;
+}
+
+.smaller {
+  font-size: smaller;
+}
+
+.center {
+  text-align: center;
+}
+
+/* Foreground Colors */
+
+.fg-brown {
+  color: $brown;
+}
+
+.fg-orange {
+  color: $orange;
+}
+
+.fg-blue {
+  color: $blue;
+}
+
+.fg-green {
+  color: $green;
+}
+
+.fg-red {
+  color: $red;
+}
+
+/* Background Colors */
+
+@mixin setBackgoundColor($value) {
+  background-color: $value;
+  color: $white;
+  a {
+    color: navajowhite;
+
+    &:hover {
+      color: tan;
+    }
+  }
+}
+
+.bg-blue {
+  @include setBackgoundColor($blue);
+}
+
+.bg-green {
+  @include setBackgoundColor($green);
+}
+
+.bg-red {
+  @include setBackgoundColor($red);
+}
+
+.bg-orange {
+  @include setBackgoundColor($orange);
+}
+
+.bg-brown {
+  @include setBackgoundColor($brown);
+}
+
