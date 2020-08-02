@@ -1,10 +1,10 @@
 package route
 
 import (
-	"log"
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"micrantha.com/web.git/pkg/render"
 )
@@ -34,7 +34,8 @@ func New(routes Routes) *mux.Router {
 
 	router.Use(security)
 	router.Use(logger)
-	//router.Use(mux.CORSMethodMiddleware(router))
+	router.Use(handlers.RecoveryHandler())
+	router.Use(handlers.CompressHandler)
 
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
@@ -63,7 +64,7 @@ func security(next http.Handler) http.Handler {
 		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
-		w.Header().Set("Content-Security-Policy", "default-src 'self' data: *.cloudflare.com *.micrantha.com")
+		w.Header().Set("Content-Security-Policy", "default-src 'self' data: *.cloudflare.com *.micrantha.com fonts.googleapis.com fonts.gstatic.com")
 		w.Header().Set("X-XSS-Protection", "1; mode=block")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
@@ -84,17 +85,5 @@ func caching(next http.Handler) http.Handler {
 }
 
 func logger(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		log.Printf(
-			"%s %s %s",
-			r.Method,
-			r.RequestURI,
-			r.RemoteAddr,
-		)
-
-		if next != nil {
-			next.ServeHTTP(w, r)
-		}
-	})
+	return handlers.LoggingHandler(os.Stdout, next)
 }

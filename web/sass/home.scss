@@ -2,7 +2,8 @@
 
 #home {
   .jumbotron {
-    filter: drop-shadow(5px 5px 5px $shadow);
+    //filter: drop-shadow(5px 5px 5px $shadow);
+    background: none;
   }
 
   .shrink-70 {

@@ -1,14 +1,18 @@
 import gulp from 'gulp';
 import babel from 'gulp-babel';
 import sass from 'gulp-sass';
-import autoprefixer from 'gulp-autoprefixer';
+import postcss from 'gulp-postcss';
 import sourcemaps from 'gulp-sourcemaps';
 import concat from 'gulp-concat';
 import imagemin from 'gulp-imagemin';
-import cssmin from 'gulp-cssmin';
 import uglify from 'gulp-uglify';
+
+import normalize from 'postcss-normalize';
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 import vinylPaths from 'vinyl-paths';
 import del from 'del';
+import fs from 'fs';
 
 const { src, dest, series, parallel, watch } = gulp;
 
@@ -32,8 +36,11 @@ const css = () => src([
    ])
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.init())
-  .pipe(autoprefixer())
-  .pipe(cssmin())
+  .pipe(postcss([
+    autoprefixer(),
+    normalize(),
+    cssnano(),
+  ]))
   .pipe(concat('app.css'))
   .pipe(sourcemaps.write('.'))
   .pipe(dest('./public/css'))
@@ -57,6 +64,7 @@ export const clean = () =>
     './public/css/**',
     './public/js/**',
     './public/font/**',
+    './public/icon/**',
   ], { force: true })
 
 export const build = parallel(js, css, img, font)
