@@ -26,14 +26,6 @@ const (
 var (
 	templates    = make(map[string]*template.Template)
 	templatePath string
-	// DefaultParams for renderers
-	DefaultParams = map[string]interface{}{
-		"Title":       "Micrantha",
-		"Description": "a software as a service and consulting company.",
-		"Keywords":    "sass, software, company, service",
-		"BrandName":   "Micrantha",
-		"BrandUrl":    "https://micrantha.com",
-	}
 )
 
 const (
@@ -55,31 +47,19 @@ func templateFile(name ...string) string {
 	return path.Join(templatePath, path.Join(name...))
 }
 
-// AppTemplate renders a template response given its name and parameters
-func AppTemplate(w http.ResponseWriter, name string, parameters interface{}) error {
-	return writeTemplate(w, name, parameters, func(name string) *template.Template {
-		return template.Must(template.ParseFiles(templateFile("layout.tmpl"), templateFile(name)))
-	})
-}
-
-// DataTemplate renders a template response given its name and parameters
-func DataTemplate(w http.ResponseWriter, name string, parameters interface{}) error {
-	return writeTemplate(w, name, parameters, func(name string) *template.Template {
-		return template.Must(template.ParseFiles(templateFile(name)))
-	})
-}
-
-func writeTemplate(w http.ResponseWriter, name string, parameters interface{}, creator func(name string) *template.Template) error {
+// Template renders a template response given its name and parameters
+func Template(w http.ResponseWriter, name string, parameters interface{}) error {
 
 	t, ok := templates[name]
 
+	w.Header().Set("X-Powered-By", PoweredBy)
+
 	if !ok {
-		t = creator(name)
-		t = template.Must(t.ParseGlob(templateFile("partials", "*.tmpl")))
+		t = template.Must(template.ParseFiles(templateFile("layout.html"), templateFile(name)))
+		t = template.Must(t.ParseGlob(templateFile("partials", "*.html")))
 		templates[name] = t
 	}
 
-	w.Header().Set("X-Powered-By", PoweredBy)
 	err := t.Execute(w, parameters)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

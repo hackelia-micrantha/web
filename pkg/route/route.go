@@ -1,10 +1,10 @@
 package route
 
 import (
+	"log"
 	"net/http"
 	"os"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"micrantha.com/web.git/pkg/render"
 )
@@ -32,16 +32,9 @@ func New(routes Routes) *mux.Router {
 			Handler(route.HandlerFunc)
 	}
 
-	router.
-		Methods(http.MethodGet).
-		Path("/manifest.json").
-		Name("manifest").
-		Handler(Data("manifest.tmpl", render.DefaultParams))
-
 	router.Use(security)
 	router.Use(logger)
-	router.Use(handlers.RecoveryHandler())
-	router.Use(handlers.CompressHandler)
+	//router.Use(mux.CORSMethodMiddleware(router))
 
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
@@ -57,18 +50,7 @@ func New(routes Routes) *mux.Router {
 // Template returns an handler that renders a template
 func Template(name string, params interface{}) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
-		err := render.AppTemplate(w, name, params)
-
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
-	}
-}
-
-// Data returns a handler that renders a data template
-func Data(name string, params interface{}) http.HandlerFunc {
-	return func(w http.ResponseWriter, _ *http.Request) {
-		err := render.DataTemplate(w, name, params)
+		err := render.Template(w, name, params)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -102,5 +84,17 @@ func caching(next http.Handler) http.Handler {
 }
 
 func logger(next http.Handler) http.Handler {
-	return handlers.LoggingHandler(os.Stdout, next)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		log.Printf(
+			"%s %s %s",
+			r.Method,
+			r.RequestURI,
+			r.RemoteAddr,
+		)
+
+		if next != nil {
+			next.ServeHTTP(w, r)
+		}
+	})
 }

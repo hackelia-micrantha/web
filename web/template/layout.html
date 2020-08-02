@@ -1,0 +1,45 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ template "head.html" . }}
+    {{ block "custom-head" . }}
+    {{ end }}
+</head>
+<body>
+
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+    your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+
+<header id="header" class="clearfix">
+
+    {{ template "header.html" . }}
+
+</header>
+
+{{ block "content-header" . }}
+{{ end }}
+
+<div class="container clearfix" id="content">
+
+    {{ template "content" . }}
+
+</div>
+
+{{ block "content-footer" . }}
+{{ end }}
+
+<footer class="center clearfix" id="footer">
+    {{ template "footer.html" . }}
+</footer>
+
+{{ template "scripts.html" . }}
+
+{{ template "analytics.html" . }}
+
+</body>
+</html>

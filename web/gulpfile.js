@@ -13,6 +13,8 @@ import del from 'del';
 const { src, dest, series, parallel, watch } = gulp;
 
 const js = () => src([
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
     'js/**.js'
   ])
   .pipe(sourcemaps.init())
