@@ -1,7 +1,6 @@
 package render
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"html/template"
@@ -10,8 +9,6 @@ import (
 	"os"
 	"path"
 	"strings"
-
-	"github.com/clarkf/gomodel"
 )
 
 // FormatType is a type of response formatting
@@ -115,7 +112,7 @@ func JSONStream(w http.ResponseWriter, code int, from Streamable, into func() in
 	for from.Next() {
 		value := into()
 
-		if err := gomodel.Scan(from, value); err != nil {
+		if err := from.Scan(value); err != nil {
 			return err
 		}
 
