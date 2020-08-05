@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -74,9 +75,32 @@ func security(next http.Handler) http.Handler {
 	})
 }
 
+func cachingEnabled() bool {
+
+	nocache, ok := os.LookupEnv("MICRANTHA_NO_CACHE")
+
+	if !ok {
+		return true
+	}
+
+	value, err := strconv.ParseBool(nocache)
+
+	if err != nil {
+		return false
+	}
+
+	return value
+}
 func caching(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Cache-Control", "public, max-age=31536000")
+
+		if cachingEnabled() {
+			w.Header().Add("Cache-Control", "public, max-age=31536000")
+		} else {
+			w.Header().Add("Cache-Control", "no-cache, no-store, must-revalidate")
+			w.Header().Add("Pragma", "no-cache")
+			w.Header().Add("Expires", "0")
+		}
 
 		if next != nil {
 			next.ServeHTTP(w, r)
