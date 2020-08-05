@@ -1,6 +1,7 @@
 package render
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"html/template"
@@ -9,6 +10,8 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	"github.com/clarkf/gomodel"
 )
 
 // FormatType is a type of response formatting
@@ -80,13 +83,50 @@ func Format(w http.ResponseWriter, format FormatType, code int, value interface{
 	}
 }
 
-// JSON ormats an object as json into an http writer with a status code.
+// JSON formats an object as json into an http writer with a status code.
 func JSON(w http.ResponseWriter, code int, value interface{}) error {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("X-Powered-By", PoweredBy)
 	w.WriteHeader(code)
 	return json.NewEncoder(w).Encode(value)
+}
+
+// Streamable is an interface that can stream data to a response
+type Streamable interface {
+	Next() bool
+	Scan(interface{}) error
+}
+
+// JSONStream formats a stream of objects into an http writer with a status code
+func JSONStream(w http.ResponseWriter, code int, from Streamable, into func() interface{}) error {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("X-Powered-By", PoweredBy)
+	w.WriteHeader(code)
+
+	encoder := json.NewEncoder(w)
+
+	_, err := w.Write([]byte{'['})
+
+	if err != nil {
+		return err
+	}
+
+	for from.Next() {
+		value := into()
+
+		if err := gomodel.Scan(from, value); err != nil {
+			return err
+		}
+
+		if err := encoder.Encode(value); err != nil {
+			return err
+		}
+	}
+
+	_, err = w.Write([]byte{']'})
+
+	return err
 }
 
 // Text formats an object as text into an http writer with a status code
