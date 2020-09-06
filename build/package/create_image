@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 LOCAL_IMAGE=micrantha/web
-REMOTE_IMAGE=registry.micrantha.com/micrantha/web
+REMOTE_IMAGE=registry.gitlab.com/micrantha/web
 
 docker build -t $LOCAL_IMAGE -f build/package/Dockerfile $@ .
 
