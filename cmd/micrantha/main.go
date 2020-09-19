@@ -6,23 +6,26 @@ import (
 	"log"
 	"os"
 	"path"
-	"strings"
 
 	"micrantha.com/web.git/internal/pkg/endpoint"
 	"micrantha.com/web.git/pkg/route"
 )
 
 var (
-	version string
-	port    = flag.Int("port", 1337, "The port the web server listens on")
+	version     string
+	port        = flag.Int("port", 1337, "The port the web server listens on")
+	showVersion = false
 )
 
 func main() {
+	if len(version) > 0 {
+		flag.BoolVar(&showVersion, "version", false, "display the version")
+	}
 
 	flag.Parse()
 
-	if flag.NArg() > 0 {
-		execute(flag.Args())
+	if showVersion {
+		fmt.Println(version)
 		os.Exit(1)
 	}
 
@@ -31,15 +34,4 @@ func main() {
 	log.Printf("%s service listening on %d", path.Base(os.Args[0]), *port)
 
 	log.Fatal(serve(router, *port))
-}
-
-func execute(args []string) {
-
-	cmd, args := strings.ToLower(args[0]), args[1:]
-
-	switch cmd {
-	case "version":
-		fmt.Println(version)
-		return
-	}
 }
