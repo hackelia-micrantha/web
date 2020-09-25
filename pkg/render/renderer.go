@@ -58,8 +58,6 @@ func Template(w http.ResponseWriter, name string, parameters interface{}) error 
 
 	t, ok := templates[name]
 
-	w.Header().Set("X-Powered-By", PoweredBy)
-
 	if !ok {
 		t = template.Must(template.ParseFiles(templateFile("layout.html.tmpl"), templateFile(name)))
 		t = template.Must(t.ParseGlob(templateFile("partials", "*.tmpl")))
