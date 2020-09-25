@@ -29,11 +29,6 @@ var (
 	templatePath string
 )
 
-const (
-	// PoweredBy is the header value describing how this app is built
-	PoweredBy = "golang/micrantha"
-)
-
 func init() {
 	t, ok := os.LookupEnv("MICRANTHA_TEMPLATE_PATH")
 
@@ -98,7 +93,6 @@ func Format(w http.ResponseWriter, format FormatType, code int, value interface{
 func JSON(w http.ResponseWriter, code int, value interface{}) error {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("X-Powered-By", PoweredBy)
 	w.WriteHeader(code)
 	return json.NewEncoder(w).Encode(value)
 }
@@ -112,7 +106,6 @@ type Streamable interface {
 // JSONStream formats a stream of objects into an http writer with a status code
 func JSONStream(w http.ResponseWriter, code int, from Streamable, into func() interface{}) error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("X-Powered-By", PoweredBy)
 	w.WriteHeader(code)
 
 	encoder := json.NewEncoder(w)
@@ -143,7 +136,6 @@ func JSONStream(w http.ResponseWriter, code int, from Streamable, into func() in
 // Text formats an object as text into an http writer with a status code
 func Text(w http.ResponseWriter, code int, value string) error {
 	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-	w.Header().Set("X-Powered-By", PoweredBy)
 	w.WriteHeader(code)
 	_, err := w.Write([]byte(value))
 	return err
