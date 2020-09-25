@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -24,7 +25,7 @@ const (
 )
 
 var (
-	templates    = make(map[string]*template.Template)
+	templates    map[string]*template.Template
 	templatePath string
 )
 
@@ -40,6 +41,16 @@ func init() {
 		templatePath = path.Join("web", "template")
 	} else {
 		templatePath = t
+	}
+
+	caching, ok := os.LookupEnv("MICRANTHA_TEMPLATE_CACHING")
+
+	if ok {
+		allowed, err := strconv.ParseBool(caching)
+
+		if err == nil && allowed {
+			templates = make(map[string]*template.Template)
+		}
 	}
 }
 
@@ -57,7 +68,10 @@ func Template(w http.ResponseWriter, name string, parameters interface{}) error 
 	if !ok {
 		t = template.Must(template.ParseFiles(templateFile("layout.html.tmpl"), templateFile(name)))
 		t = template.Must(t.ParseGlob(templateFile("partials", "*.tmpl")))
-		templates[name] = t
+
+		if templates != nil {
+			templates[name] = t
+		}
 	}
 
 	err := t.Execute(w, parameters)

@@ -35,6 +35,7 @@ func New(routes Routes) *mux.Router {
 
 	router.Use(security)
 	router.Use(logger)
+	router.Use(handlers.CORS())
 	router.Use(handlers.RecoveryHandler())
 	router.Use(handlers.CompressHandler)
 
@@ -68,9 +69,8 @@ func security(next http.Handler) http.Handler {
 		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
-		w.Header().Set("Content-Security-Policy", "default-src 'self' data: *.cloudflare.com *.micrantha.com fonts.googleapis.com fonts.gstatic.com "+allowedHosts)
+		w.Header().Set("Content-Security-Policy", "default-src 'self' data: micrantha.com fortunes.micrantha.com analytics.micrantha.com fonts.googleapis.com fonts.gstatic.com "+allowedHosts)
 		w.Header().Set("X-XSS-Protection", "1; mode=block")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 
 		if next != nil {
 			next.ServeHTTP(w, r)
