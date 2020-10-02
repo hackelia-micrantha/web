@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"micrantha.com/web.git/pkg/route"
+	"micrantha.com/web.git/pkg/security/csp"
 )
 
 var defaultParams = map[string]interface{}{
@@ -12,6 +13,16 @@ var defaultParams = map[string]interface{}{
 	"Keywords":    "sass, software, company, service",
 	"BrandName":   "Micrantha",
 	"BrandUrl":    "https://micrantha.com",
+}
+
+var Config = &route.Config{
+	ContentPolicy: &csp.ContentPolicy{
+		Script:   csp.WithSelf("analytics.micrantha.com"),
+		Img:      csp.WithSelf("fortunes.micrantha.com"),
+		Style:    csp.WithSelf("fonts.googleapis.com"),
+		Font:     csp.WithSelf("fonts.googleapis.com"),
+		Manifest: csp.Self,
+	},
 }
 
 // List is a list of defined route endpoints

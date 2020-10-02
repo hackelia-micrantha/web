@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 
-	"micrantha.com/web.git/internal/pkg/endpoint"
+	"micrantha.com/web.git/internal/endpoint"
 	"micrantha.com/web.git/pkg/route"
 )
 
@@ -29,7 +29,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	router := route.New(endpoint.List)
+	router := route.New(endpoint.List, endpoint.Config)
 
 	log.Printf("%s service listening on %d", path.Base(os.Args[0]), *port)
 
