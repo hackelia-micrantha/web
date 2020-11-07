@@ -61,7 +61,7 @@ func (csp ContentPolicy) Middleware(next http.Handler) http.Handler {
 
 // handlerFunc is the http.HandlerFunc interface
 func (csp *ContentPolicy) handlerFunc() http.HandlerFunc {
-	var policies map[string]string
+	policies := make(map[string]string)
 
 	if csp.Default != "" {
 		policies[DefaultSrc] = csp.Default

@@ -1,4 +1,4 @@
-FROM registry.micrantha.com/micrantha/micra as builder
+FROM registry.gitlab.com/micrantha/micra as builder
 
 # install necessary packages for build
 RUN apk add g++ yarn autoconf automake nodejs-current zlib-dev
