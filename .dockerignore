@@ -1,2 +1,3 @@
 web/node_modules
 bin/
+cmd/micrantha/serve_dev.go

@@ -7,3 +7,4 @@ vendor
 test/*.pem
 *.log
 .envrc
+.DS_Store

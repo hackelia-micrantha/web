@@ -33,6 +33,8 @@ ENV PORT=$port
 ENV MICRANTHA_TEMPLATE_PATH="/app/template"
 ENV MICRANTHA_PUBLIC_PATH="/app/public"
 
+HEALTHCHECK CMD curl --fail http://localhost:${PORT} || exit 1
+
 # define the command
 CMD ["sh", "-c", "/app/bin/micrantha -port $PORT"]
 

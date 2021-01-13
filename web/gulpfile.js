@@ -17,8 +17,7 @@ import fs from 'fs';
 const { src, dest, series, parallel, watch } = gulp;
 
 const js = () => src([
-    'node_modules/jquery/dist/jquery.slim.js',
-    'node_modules/bootstrap/js/dist/dropdown.js',
+    'node_modules/jquery/dist/jquery.js',
     'js/**.js'
   ])
   .pipe(sourcemaps.init())

@@ -6,6 +6,7 @@
   font-weight: bold;
   filter: drop-shadow(3px 3px 3px $shadow);
   margin-bottom: 24px;
+  padding: 6px;
 
   a {
     font-weight: bold;
@@ -59,6 +60,12 @@
         border-radius: 6px;
       }
     }
+  }
+
+  .navbar-toggler-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   img.logo {
