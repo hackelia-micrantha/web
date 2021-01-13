@@ -26,7 +26,7 @@ COPY --from=builder /app/web/public /app/public
 WORKDIR /app
 
 # define arguments for running
-ARG port=1337
+ARG port=${PORT:-1337}
 
 # define default environment
 ENV PORT=$port
