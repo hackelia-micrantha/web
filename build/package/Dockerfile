@@ -26,14 +26,14 @@ COPY --from=builder /app/web/public /app/public
 WORKDIR /app
 
 # define arguments for running
-ARG port=3778
+ARG port=1337
 
 # define default environment
 ENV PORT=$port
 ENV MICRANTHA_TEMPLATE_PATH="/app/template"
 ENV MICRANTHA_PUBLIC_PATH="/app/public"
 
-HEALTHCHECK CMD curl --fail http://localhost:${PORT} || exit 1
+HEALTHCHECK --start-period=30s CMD /app/bin/health-check
 
 # define the command
 CMD ["sh", "-c", "/app/bin/micrantha -port $PORT"]
