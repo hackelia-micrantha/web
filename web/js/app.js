@@ -1,6 +1,6 @@
 
 $(function() {
-  $("#header .navbar-toggler").click(function() {
+  $(".navbar-burger").click(function() {
     $($(this).data('target')).slideToggle()
   });
 });

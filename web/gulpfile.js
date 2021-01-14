@@ -32,7 +32,7 @@ const js = () => src([
 const css = () => src([
     'css/**.css',
     'sass/**.scss'
-   ])
+  ])
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.init())
   .pipe(postcss([

@@ -1,61 +1,85 @@
 {{ define "content" }}
   <div id="support">
 
-    <h1>Support</h1>
-    <hr>
-    <p>Encountering problems or need assistance?</p>
+    <h1 class="title">Support</h1>
+    <h2 class="subtitle">Encountering problems or need assistance?</h2>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card bg-red">
-                <h4 class="card-title"><a class="no-link"
-                                          href="mailto:support@micrantha.com"><i class="fa fa-2x fa-at"></i>
-                        <b>Email</b></a></h4>
-                <br/>
-                <p class="card-text">Send an email inquiries to <a
-                            href="mailto:support@micrantha.com">fortunes@micrantha.com</a>.</p>
-            </div>
+    <div class="columns">
+      <div class="column is-half">
+        <div class="card is-full-height">
+          <div class="card-header bg-red">
+            <a href="mailto:support@micrantha.com">
+              <h3 class="title is-5 fg-white p-4">
+                <div class="is-flex is-align-items-center">
+                  <i class="fa fa-2x fa-at"></i>
+                  <b class="ml-4">Email</b>
+                </div>
+              </h3>
+            </a>
+          </div>
+          <div class="card-content">
+            Send an email inquiries to <a
+                            href="mailto:support@micrantha.com">support@micrantha.com</a>.
+          </div>
         </div>
-        <div class="col-md-6">
+      </div>
 
-            <div class="card bg-blue">
-                <h4 class="card-title">
-                    <a class="no-link" href="https://micrantha.slack.com">
-                        <i class="fab fa-2x fa-slack"></i> <b>Slack</b>
-                    </a></h4>
-                <br/>
-                <p class="card-text">Request to join the <a href="https://micrantha.slack.com">slack workspace</a>
+      <div class="column is-half">
+        <div class="card">
+          <div class="card-header bg-blue">
+            <a href="https://micrantha.slack.com">
+              <h3 class="title is-5 fg-white p-4">
+                <div class="is-flex is-align-items-center">
+                  <i class="fab fa-2x fa-slack"></i>
+                  <b class="ml-4">Slack</b>
+                </div>
+              </h3>
+            </a>
+          </div>
+          <div class="card-content">
+            Request to join the <a href="https://micrantha.slack.com">slack workspace</a>
                     and
-                    post your question in <b>#support</b>.</p>
-            </div>
+                    post your question in <b>#support</b>.
+          </div>
         </div>
+      </div>
     </div>
+    <div class="columns">
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card bg-green">
-                <h4 class="card-title">
-                    <a class="no-link" href="https://irc.micrantha.com"><i class="fa fa-2x fa-keyboard"></i> <b>IRC</b></a>
-                </h4>
-                <br/>
-                <p class="card-text">
-                    #micrantha on <a href="https://freenode.net/">freenode</a> via <a
+      <div class="column is-half">
+        <div class="card">
+          <div class="card-header bg-green">
+            <a href="https://irc.micrantha.com">
+              <h3 class="title is-5 fg-white p-4">
+                <div class="is-flex is-align-items-center">
+                  <i class="fa fa-2x fa-keyboard"></i>
+                  <b class="ml-4">IRC</b>
+                </div>
+              </h3>
+            </a>
+          </div>
+          <div class="card-content">
+            #micrantha on <a href="https://freenode.net/">freenode</a> via <a
                             href="https://irc.micrantha.com">irc.micrantha.com</a>
-                </p>
-            </div>
+          </div>
         </div>
-        <div class="col-md-6">
+      </div>
 
-            <div class="card bg-orange">
-                <h4 class="card-title">
-                    <i class="fas fa-2x fa-brain"></i> <b>Tele-pathy</b></a>
-                </h4>
-                <br/>
-                <p class="card-text">
-                    Synchronize your brain waves to Beta in a nearby radius.
-                </p>
-            </div>
+      <div class="column is-half">
+        <div class="card">
+          <div class="card-header bg-orange">
+            <h3 class="title is-5 fg-white p-4">
+              <div class="is-flex is-align-items-center">
+                <i class="fas fa-2x fa-brain"></i>
+                <b class="ml-4">Tele-pathy</b>
+              </div>
+            </h3>
+          </div>
+          <div class="card-content">
+            Synchronize your brain waves to Beta in a nearby radius.
+          </div>
         </div>
+      </div>
     </div>
   </div>
 {{ end }}

@@ -1,40 +1,5 @@
-@import "partials/colors";
 
-#home {
-  .jumbotron {
-    background: none;
-    margin-bottom: 0;
-  }
-
-  h2 {
-    font-size: 1em;
-  }
-
-  dl {
-    dt, dd { 
-      font-size: smaller;
-    }
-  }
-
-  .shrink-70 {
-    width: 70%;
-    margin: 1.5em auto;
-  }
-  .logo-lg {
-    margin-top: 48px;
-    margin-right: 24px;
-    height: 220px;
-  }
-
-  #featured-content {
-
-    h1 {
-      font-size: 1.25em;
-      font-style: italic;
-    }
-
-    .card {
-      height: 100%;
-    }
-  }
+#home .hero img {
+  height: 10rem;
 }
+

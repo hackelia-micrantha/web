@@ -1,33 +1,32 @@
 {{ define "content" }}
 
-    <div class="container">
-        <h1>Solutions</h1>
-        <hr>
+  <div id="solutions">
 
-        <p>Projects that have grown enough to be considered matured.</p>
+    <div class="block">
+    <h1 class="title">Solutions</h1>
+    <h2 class="subtitle">Projects that have grown enough to be considered matured.</h2>
     </div>
 
-    <br>
-
-    <div class="row container">
-
-        <div class="col-md-6">
-            <div class="card text-center">
-                <div class="card-header bg-primary text-white">
-                    <img class="card-logo" src="https://fortunes.micrantha.com/img/logo.png" alt="fortunes logo" />
-                    <h1>Fortunes Service</h1>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">A micro-service and <a href="https://slack.com/apps/A8MAPLX53-fortunes">Slack
-                            App</a> for
-                        UNIX fortunes. Fortunes are witty antidotes that relive project tensions.
-                        They come in many categories such as technical, poems, quotes, and proverbs.</p>
-                    <a href="https://fortunes.micrantha.com" class="btn btn-primary text-white">Visit</a>
-                </div>
+    <div class="columns">
+      <div class="column is-half is-flex">
+        <div class="card is-flex is-flex-direction-column">
+          <div class="card-header bg-green">
+            <div class="is-flex is-align-items-center">
+                <figure class="image is-32x32 m-3">
+                  <img src="https://fortunes.micrantha.com/img/logo.png" alt="fortunes logo" />
+                </figure>
+                <h1 class="fg-white ml-4 title is-5">Fortunes Service</h1>
             </div>
+          </div>
+          <div class="card-content is-flex-grow-1">
+              A micro-service and <a href="https://slack.com/apps/A8MAPLX53-fortunes">Slack App</a> for UNIX fortunes. Fortunes are witty antidotes that relive project tensions. They come in many categories such as technical, poems, quotes, and proverbs.
+          </div>
+          <footer class="card-footer">
+            <a href="https://fortunes.micrantha.com" class="card-footer-item">Visit</a>
+          </footer>
         </div>
-
+      </div>
     </div>
-
+  </div>
 {{ end }}
 

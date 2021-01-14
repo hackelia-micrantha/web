@@ -1,6 +1,6 @@
-@import "./solarized";
+@import "node_modules/bulma/sass/utilities/all";
 
-/* Colors */
+/* Colors 
 $brown: brown;
 $yellow: gold;
 $orange: chocolate;
@@ -12,5 +12,48 @@ $cyan: mediumaquamarine;
 $green: mediumseagreen;
 $white: whitesmoke;
 
-$hover: cornflowerblue;
-$shadow: $base0;
+$hover: $blue;
+$border-color: silver;
+*/
+
+/* Foreground Colors */
+
+.fg-white {
+  color: $white;
+}
+
+.fg-orange {
+  color: $orange;
+}
+
+.fg-blue {
+  color: $blue;
+}
+
+.fg-green {
+  color: $green;
+}
+
+.fg-red {
+  color: $red;
+}
+
+/* Background Colors */
+
+
+.bg-blue {
+  background-color: $blue;
+}
+
+.bg-green {
+  background-color: $green;
+}
+
+.bg-red {
+  background-color: $red;
+}
+
+.bg-orange {
+  background-color: $orange;
+}
+

@@ -26,17 +26,18 @@ COPY --from=builder /app/web/public /app/public
 WORKDIR /app
 
 # define arguments for running
-ARG port=${PORT:-1337}
+ARG port=${PORT:-8080}
 
 # define default environment
 ENV PORT=$port
 ENV MICRANTHA_TEMPLATE_PATH="/app/template"
 ENV MICRANTHA_PUBLIC_PATH="/app/public"
 
-HEALTHCHECK --start-period=30s CMD /app/bin/health-check
+HEALTHCHECK --start-period=30s CMD /app/bin/health-check -port $PORT
 
 # define the command
-CMD ["sh", "-c", "/app/bin/micrantha -port $PORT"]
+
+CMD /app/bin/micrantha -port $PORT
 
 # report which port
 EXPOSE $port

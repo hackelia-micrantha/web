@@ -1,73 +1,26 @@
-@import "partials/solarized";
-@import "partials/colors";
+@import "partials/bulma";
 @import "partials/fontawesome";
-@import "partials/bootstrap";
-@import "partials/navbar";
-@import "partials/card";
-@import "partials/utils";
+@import "partials/colors";
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
   font-size: 1.1em;
   background-color: $white;
   color: #555555;
   font-family: "Raleway", sans-serif;
 }
 
-pre,
-code,
-.code {
-  white-space: pre-wrap; /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
-  font-family: "Inconsolata", monospace;
+#footer.footer {
+  background-color: inherit;
+  font-size: 0.84rem;
 }
 
-#body {
-  padding: 10px;
-  min-height: 480px;
-}
+.column > .card {
+   height: 100%;
+   display: flex;
+   flex-direction: column;
 
-#footer {
-  font-size: 0.9em;
-  width: 100%;
-  text-align: center;
-  padding-top: 2em;
-  margin-top: 2em;
-  min-height: 3em;
-  border-top: 1px solid rgba($base1, 0.3);
-  border-bottom: 1px solid rgba($base1, 0.3);
-  background-color: rgba($base03, 0.05);
-  padding-bottom: 2em;
-}
-
-/* Links */
-a {
-  color: $blue;
-  text-decoration: none;
-}
-
-a:hover {
-  color: $hover;
-  text-decoration: none;
-}
-
-html body {
-  a.no-link,
-  a.no-link:hover {
-    color: $white !important;
-  }
-}
-
-.bg-header {
-  background-color: $base1;
-}
-
-@import "partials/helper";
-
-@import "partials/print";
+   .card-content {
+     flex-grow: 1;
+   }
+ }

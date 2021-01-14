@@ -4,8 +4,8 @@
     "@babel/preset-env": "^7.10.3",
     "@fortawesome/fontawesome-free": "^5.13.1",
     "autoprefixer": "^9.8.6",
-    "bootstrap": "^4.5.0",
     "browserslist": "^4.14.6",
+    "bulma": "^0.9.1",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
@@ -17,7 +17,6 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
     "jquery": "^3.5.1",
-    "popper.js": "^1.16.1",
     "postcss-normalize": "^9.0.0",
     "vinyl-paths": "^3.0.1"
   },

@@ -23,21 +23,23 @@
     <![endif]-->
 
 
-    <header id="header" class="clearfix">
+    <header id="header">
       {{ template "header.html.tmpl" . }}
     </header>
 
     {{ block "content-header" . }}
     {{ end }}
 
-    <div class="container clearfix" id="content">
-      {{ template "content" . }}
+    <section id="content">
+      <div class="container">
+        {{ template "content" . }}
+      </div>
     </div>
 
     {{ block "content-footer" . }}
     {{ end }}
 
-    <footer class="center clearfix" id="footer">
+    <footer id="footer" class="footer">
       {{ template "footer.html.tmpl" . }}
     </footer>
 
