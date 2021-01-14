@@ -18,7 +18,7 @@ var defaultParams = map[string]interface{}{
 var Config = &route.Config{
 	ContentPolicy: &csp.ContentPolicy{
 		Script:   csp.WithSelf("analytics.micrantha.com"),
-		Img:      csp.WithSelf("fortunes.micrantha.com"),
+		Img:      csp.WithSelf("fortunes.micrantha.com", "analytics.micrantha.com"),
 		Style:    csp.WithSelf("fonts.googleapis.com"),
 		Font:     csp.WithSelf("fonts.googleapis.com"),
 		Manifest: csp.Self,
