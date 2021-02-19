@@ -33,7 +33,7 @@ ENV PORT=$port
 ENV MICRANTHA_TEMPLATE_PATH="/app/template"
 ENV MICRANTHA_PUBLIC_PATH="/app/public"
 
-HEALTHCHECK --start-period=30s CMD /app/bin/health-check -port $PORT
+HEALTHCHECK CMD /app/bin/health-check -port $PORT
 
 # define the command
 

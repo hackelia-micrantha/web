@@ -75,4 +75,10 @@ var List = route.Routes{
 		Pattern:     "/support",
 		HandlerFunc: route.Template("support.html.tmpl", defaultParams),
 	},
+	route.Type{
+		Name:        "BlogGardenRoute",
+		Method:      http.MethodGet,
+		Pattern:     "/blog/garden",
+		HandlerFunc: route.Template("garden.html.tmpl", defaultParams),
+	},
 }
