@@ -52,15 +52,15 @@ var List = route.Routes{
 		HandlerFunc: route.Template("careers.html.tmpl", defaultParams),
 	},
 	route.Type{
-		Name:        "LabratoryRoute",
+		Name:        "LaboratoryRoute",
 		Method:      http.MethodGet,
-		Pattern:     "/labratory",
-		HandlerFunc: route.Template("labratory.html.tmpl", defaultParams),
+		Pattern:     "/laboratory",
+		HandlerFunc: route.Template("laboratory.html.tmpl", defaultParams),
 	},
 	route.Type{
 		Name:        "CompostRoute",
 		Method:      http.MethodGet,
-		Pattern:     "/labratory/compost",
+		Pattern:     "/laboratory/compost",
 		HandlerFunc: route.Template("compost.html.tmpl", defaultParams),
 	},
 	route.Type{
