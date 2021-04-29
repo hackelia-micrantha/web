@@ -1,7 +1,7 @@
 FROM registry.gitlab.com/micrantha/micra as builder
 
 # install necessary packages for build
-RUN apk add g++ yarn autoconf automake nodejs-current zlib-dev
+RUN apk add g++ yarn autoconf automake nodejs-current zlib-dev python2
 
 # define working directory
 WORKDIR /app
