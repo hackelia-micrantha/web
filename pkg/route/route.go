@@ -3,10 +3,12 @@ package route
 import (
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	internal "micrantha.com/web.git/internal/route"
 	"micrantha.com/web.git/pkg/render"
 	"micrantha.com/web.git/pkg/security/csp"
 )
@@ -39,13 +41,6 @@ func New(routes Routes, config *Config) *mux.Router {
 			Handler(route.HandlerFunc)
 	}
 
-	router.Use(security)
-	router.Use(logger)
-	router.Use(handlers.CORS())
-	router.Use(config.ContentPolicy.Middleware)
-	router.Use(handlers.RecoveryHandler())
-	router.Use(handlers.CompressHandler)
-
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
 	if !ok {
@@ -56,7 +51,16 @@ func New(routes Routes, config *Config) *mux.Router {
 		}
 	}
 
-	router.PathPrefix("/").Handler(caching(http.FileServer(http.Dir(filePath))))
+	internal.PublicPath = filePath
+
+	router.Use(security)
+	router.Use(logger)
+	router.Use(handlers.CORS())
+	router.Use(config.ContentPolicy.Middleware)
+	router.Use(handlers.RecoveryHandler())
+	router.Use(handlers.CompressHandler)
+
+	router.PathPrefix("/").Handler(caching(http.FileServer(http.Dir(internal.PublicPath))))
 
 	return router
 }
@@ -67,8 +71,14 @@ func Template(name string, params interface{}) http.HandlerFunc {
 		err := render.Template(w, name, params)
 
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+	}
+}
+
+func File(name string, params interface{}) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(internal.PublicPath, name))
 	}
 }
 

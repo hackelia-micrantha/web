@@ -2,10 +2,11 @@ import gulp from 'gulp';
 import babel from 'gulp-babel';
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
-import sourcemaps from 'gulp-sourcemaps';
 import concat from 'gulp-concat';
 import imagemin from 'gulp-imagemin';
 import uglify from 'gulp-uglify';
+import changed from 'gulp-changed-in-place';
+import cachebust from 'gulp-cache-bust';
 
 import normalize from 'postcss-normalize';
 import autoprefixer from 'autoprefixer';
@@ -14,60 +15,106 @@ import vinylPaths from 'vinyl-paths';
 import del from 'del';
 import fs from 'fs';
 
-const { src, dest, series, parallel, watch } = gulp;
 
-const js = () => src([
-    'node_modules/jquery/dist/jquery.js',
-    'js/**.js'
-  ])
-  .pipe(sourcemaps.init())
+
+const { src, dest, series, parallel, watch, lastRun } = gulp;
+
+const paths = {
+  js: {
+    src: [
+      'node_modules/jquery/dist/jquery.js',
+      'js/**.js'
+    ],
+    dest: './public/js',
+  },
+  css: {
+    src: [
+      'css/**/*.css',
+      'sass/**/*.scss'
+    ],
+    dest: './public/css'
+  },
+  img: {
+    src: [
+      'img/**'
+    ],
+    dest: './public/img'
+  },
+  font: {
+    src: [
+      'node_modules/@fortawesome/fontawesome-free/webfonts/*.woff*',
+      'font/**'
+    ],
+    dest: './public/font'
+  },
+  sourcemaps: "maps"
+}
+
+const js = () => src(paths.js.src, {
+    since: lastRun(js),
+    sourcemaps: true
+  })
+  .pipe(changed({firstPass: true}))
   .pipe(babel({ 
     presets: ['@babel/env'] 
   }))
-  .pipe(concat('app.js'))
+  .pipe(concat('app.min.js'))
   .pipe(uglify())
-  .pipe(sourcemaps.write('.'))
-  .pipe(dest('./public/js'))
+  .pipe(dest(paths.js.dest, { sourcemaps: paths.sourcemaps }))
 
-const css = () => src([
-    'css/**.css',
-    'sass/**.scss'
-  ])
+const css = () => src(paths.css.src, { 
+    since: lastRun(css),
+    sourcemaps: true 
+  })
+  .pipe(changed({firstPass: true}))
   .pipe(sass().on('error', sass.logError))
-  .pipe(sourcemaps.init())
   .pipe(postcss([
     autoprefixer(),
     normalize(),
     cssnano(),
   ]))
-  .pipe(concat('app.css'))
-  .pipe(sourcemaps.write('.'))
-  .pipe(dest('./public/css'))
+  .pipe(concat('app.min.css'))
+  .pipe(dest(paths.css.dest, { sourcemaps: paths.sourcemaps } ))
 
-const img = () => src('img/**')
-   .pipe(imagemin())
-  .pipe(dest('./public/img'))
+const img = () => src(paths.img.src, { 
+    since: lastRun(img),
+  })
+  .pipe(changed({firstPass: true}))
+  .pipe(imagemin([
+    imagemin.gifsicle(), 
+    imagemin.mozjpeg(), 
+    imagemin.optipng(), 
+    imagemin.svgo()
+   ], { silent: true }))
+  .pipe(dest(paths.img.dest))
 
 const font = () => 
-  src([
-    'node_modules/@fortawesome/fontawesome-free/webfonts/*.woff*',
-    'font/**'
-  ])
-  .pipe(dest('./public/font'))
+  src(paths.font.src, { 
+    since: lastRun(font),
+  })
+  .pipe(changed({firstPass: true}))
+  .pipe(dest(paths.font.dest))
+
+const html = () =>
+  src('public/**/*.html')
+  .pipe(cachebust())
+  .pipe(gulp.dest('public'));
 
 export const live = () => 
-  watch('sass', 'css', 'js', 'img', 'font')
+  watch('css', 'js', 'img', 'font')
 
 export const clean = () =>
   del([
     './public/css/**',
     './public/js/**',
     './public/font/**',
-  ], { force: true })
+    './public/img/**',
+  ], { force: true } )
 
 export const build = parallel(js, css, img, font)
 
 export default series(
   clean,
-  build
+  build,
+  html
 )

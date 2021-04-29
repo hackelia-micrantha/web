@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"html/template"
+	"io"
 	"mime"
 	"net/http"
 	"os"
@@ -54,7 +55,7 @@ func templateFile(name ...string) string {
 }
 
 // Template renders a template response given its name and parameters
-func Template(w http.ResponseWriter, name string, parameters interface{}) error {
+func Template(w io.Writer, name string, parameters interface{}) error {
 
 	t, ok := templates[name]
 
@@ -67,11 +68,7 @@ func Template(w http.ResponseWriter, name string, parameters interface{}) error 
 		}
 	}
 
-	err := t.Execute(w, parameters)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	return err
+	return t.Execute(w, parameters)
 }
 
 // Format formats an object with the specified format.  The output will be written to the http writer

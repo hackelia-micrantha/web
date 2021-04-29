@@ -1,0 +1,177 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Micrantha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="a software as a service and consulting company.">
+    <meta name="keywords" content="sass, software, company, service">
+    <link rel="stylesheet" type="text/css" href="/css/app.min.css?v=47a744fbefd103b5236ebac06221079e">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Raleway:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="preload" as="style">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
+<link rel="shortcut icon" href="/icon/favicon.ico">
+<link rel="manifest" href="/icon/site.webmanifest">
+
+    
+    
+  </head>
+  <body>
+
+    
+
+
+    <header id="header">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a href="/" class="navbar-item">
+      <img src="/img/logo.png" alt="logo" class="logo"/>
+      <span class="ml-4 brand-name">Micrantha</span>
+    </a>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="#nav">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div role="navigation" id="nav" class="navbar-menu">
+    <div class="navbar-end">
+      <a class="navbar-item" href="/solutions">Solutions</a>
+<a class="navbar-item" href="/laboratory">Laboratory</a>
+<a class="navbar-item" href="/support">Support</a>
+
+    </div>
+  </div>
+</nav>
+
+    </header>
+
+    
+    
+
+    <section id="content">
+      <div class="container">
+        
+
+<div class="content">
+
+<h1 class="title">Hybrid Schemaless Databases</h1>
+
+<p>Databases typically follow three flavours: <b>NoSQL</b>, <b>Relational/SQL</b> and <b>Graph</b>.</p>
+
+<p>Database synchronization with remote devices is usually through a backend API.  Depending on the implementation, this can be lacking or costly to make.</p>
+
+<p>SaaS services like Firebase, <a href="https://www.couchbase.com/">Couchbase</a> and the now defunct <a href="https://github.com/cparse/cparse">cparse</a> (bought by Facebook) offer a new approach to data storage.
+</p>
+
+<p>
+The API's and cloud services for the most part operate using JSON in a NoSQL fashion.  The data storage implementation is a black box in some cases and rewritten in others.
+</p>
+
+<h3>History</h3>
+<p>
+At <a href="https://www.epactnetwork.com/">another local startup</a>, I initially experimented with using a <b>hybrid relational database and schemaless</b> using <a href="https://www.sqlite.org/json1.html">JSON extensions for SQLite</a> - the industry de facto mobile database.  
+</p>
+
+<p>
+This was quite pleasing to enable flexible user interfaces in this manner without changing to much of the data model or backend architecture.
+</p>
+
+
+<h3>Recently</h3>
+
+<p>
+Not too long ago an article from <a href="https://eng.uber.com/schemaless-part-one-mysql-datastore/">Uber engineering</a> described how they transitioned from postgres to a hybrid schemaless using <a href="https://dev.mysql.com/doc/refman/8.0/en/json.html">MySQL and JSON</a>. 
+</p>
+
+<p>
+This was very in line with what I am attempting at <a href="https://micrantha.com/laboratory">micrantha labs</a> with
+
+<a href="https://www.postgresql.org/docs/9.3/functions-json.html">Postgres JSON extensions</a>.
+</p>
+
+<p>
+Re-using relational database systems has some great benefits such as replication, scaling, backups, indexing, and reliability.</p>
+
+<p>
+JSON data types have been around enough to be considered stable.  Potential performance costs can be mitigated by customizing data back to SQL, allowing a pattern of prototyping and formalizing without too much architecture change.
+</p>
+  
+<h3>Micrantha</h3>
+
+<p>
+<b>Garden</b> as is is called, is currently a database extension or plugin that makes it easier to perform basic CRUD using schemaless JSON on postgres.
+</p>
+
+<p>
+Data is synchronized to devices across the <b>Pathway</b>, leveraging industry standard protocols in <a href="https://en.wikipedia.org/wiki/Internet_of_things">IoT</a>.
+</p>
+
+<p>
+Users and administrators (gardeners) use the <b>Nursery</b> as the web frontend.
+</p>
+
+It aims to be:
+<ul>
+<li>efficient and lightweight</li>
+<li>self-hostable and modular</li>
+<li>network ready and secure</li>
+<li>open source friendly</li>
+</ul>
+
+<p>
+Using JSON as a single column for data in a relational database has some interesting features.  Such as indexing in some implementations, but also for hashing.  You can hash the entire data set for versioning and to detect changes.  
+</p>
+
+<p>
+The <a href="https://tools.ietf.org/html/rfc7396">JSON merge patch RFC</a> makes it easy to update the data from multiple sources, 
+</p>
+
+
+<h3>Moving Forward</h3>
+
+<p>
+Moving toward <a href="https://en.wikipedia.org/wiki/Progressive_web_application">progressive web apps</a> for mobile, the <a href="https://developers.google.com/web/fundamentals/instant-and-offline/web-storage/cache-api">storage api</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">indexedDB</a> will hopefully be able to meet expectations.
+</p>
+
+<p>
+Micrantha is just a facade to justify my hobby time, and the garden in its entirety a long haul on my own (2040?).
+</p>
+
+<p>
+Would just be extremely satisfying solution from a technical perspective.
+</p>
+
+</div>
+
+
+      </div>
+    </div>
+
+    
+    
+
+    <footer id="footer" class="footer">
+      <div class="content has-text-centered">
+  <div class="links">
+    <a href="/privacy">Privacy</a> | <a href="/philosophy">Philosophy</a>
+  </div>
+
+  <small>
+      &copy; All Rights Reserved <a href="https://micrantha.com">Micrantha Software Solutions</a>
+  </small>
+</div>
+
+    </footer>
+
+    <script data-goatcounter="https://analytics.micrantha.com/count"
+        async src="//analytics.micrantha.com/count.js"></script>
+<script type="text/javascript" src="/js/app.min.js?v=39730037eaed663cdbfd1a38b062b307"></script>
+
+
+
+  </body>
+</html>

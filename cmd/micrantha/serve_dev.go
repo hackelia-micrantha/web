@@ -14,8 +14,8 @@ var (
 )
 
 func init() {
-	flag.StringVar(&certFile, "cert-file", "test/dev.pem", "sets the server certificate")
-	flag.StringVar(&keyFile, "key-file", "test/dev-key.pem", "sets the server certificate key file")
+	flag.StringVar(&certFile, "cert-file", "test/certs/dev.pem", "sets the server certificate")
+	flag.StringVar(&keyFile, "key-file", "test/certs/dev-key.pem", "sets the server certificate key file")
 }
 
 // Serve in development we generate self-signed certs to test https

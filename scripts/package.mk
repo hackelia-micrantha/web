@@ -3,7 +3,7 @@ HELPS += help-image
 
 .PHONY: image
 image:
-	@build/package/create_image
+	@build/package/create-image
 
 .PHONY: deploy
 deploy: image
@@ -12,4 +12,4 @@ deploy: image
 .PHONY: help-image
 help-image:
 	@echo " image               build a docker image"
-	@echo " deploy              build and deploy the docker image
+	@echo " deploy              build and deploy the docker image"
