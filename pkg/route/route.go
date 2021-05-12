@@ -29,8 +29,44 @@ type Config struct {
 	PublicPath    string
 }
 
-// New allocates a new router for use with an http server
+type spaHandler struct {
+}
+
+func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	path, err := filepath.Abs(r.URL.Path)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	path = filepath.Join(internal.PublicPath, path)
+
+	_, err = os.Stat(path)
+
+	if os.IsNotExist(err) {
+		http.ServeFile(w, r, filepath.Join(internal.PublicPath, "index.html"))
+		return
+	}
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.FileServer(http.Dir(internal.PublicPath)).ServeHTTP(w, r)
+}
+
+func NewSinglePageApp(routes Routes, config *Config) *mux.Router {
+	return newRouter(routes, config, spaHandler{})
+}
+
 func New(routes Routes, config *Config) *mux.Router {
+	return newRouter(routes, config, http.FileServer(http.Dir(internal.PublicPath)))
+}
+
+// New allocates a new router for use with an http server
+func newRouter(routes Routes, config *Config, handler http.Handler) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
@@ -60,7 +96,7 @@ func New(routes Routes, config *Config) *mux.Router {
 	router.Use(handlers.RecoveryHandler())
 	router.Use(handlers.CompressHandler)
 
-	router.PathPrefix("/").Handler(caching(http.FileServer(http.Dir(internal.PublicPath))))
+	router.PathPrefix("/").Handler(caching(handler))
 
 	return router
 }
