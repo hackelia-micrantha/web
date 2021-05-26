@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import babel from 'gulp-babel';
-import sass from 'gulp-sass';
+import sass from 'gulp-dart-sass';
 import postcss from 'gulp-postcss';
 import concat from 'gulp-concat';
 import imagemin from 'gulp-imagemin';
@@ -14,8 +14,6 @@ import cssnano from 'cssnano';
 import vinylPaths from 'vinyl-paths';
 import del from 'del';
 import fs from 'fs';
-
-
 
 const { src, dest, series, parallel, watch, lastRun } = gulp;
 

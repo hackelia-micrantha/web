@@ -12,7 +12,7 @@ const (
 	Self        = "'self'"
 	None        = "'none'"
 	Any         = "*"
-	CSPHeader   = "Content-Security-Policy"
+	Header      = "Content-Security-Policy"
 	DefaultSrc  = "default-src"
 	ScriptSrc   = "script-src"
 	ConnectSrc  = "connect-src"
@@ -120,7 +120,7 @@ func (csp *ContentPolicy) handlerFunc() http.HandlerFunc {
 		}
 
 		if len(header) > 0 {
-			rw.Header().Add(CSPHeader, strings.Join(header, ";"))
+			rw.Header().Add(Header, strings.Join(header, ";"))
 		}
 	}
 }

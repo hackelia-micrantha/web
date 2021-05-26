@@ -32,6 +32,20 @@ type Config struct {
 type spaHandler struct {
 }
 
+func setPublicPath(config *Config) {
+	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
+
+	if !ok {
+		if len(config.PublicPath) > 0 {
+			filePath = config.PublicPath
+		} else {
+			filePath = "./web/public"
+		}
+	}
+
+	internal.PublicPath = filePath
+}
+
 func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path, err := filepath.Abs(r.URL.Path)
 
@@ -58,10 +72,12 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewSinglePageApp(routes Routes, config *Config) *mux.Router {
+	setPublicPath(config)
 	return newRouter(routes, config, spaHandler{})
 }
 
 func New(routes Routes, config *Config) *mux.Router {
+	setPublicPath(config)
 	return newRouter(routes, config, http.FileServer(http.Dir(internal.PublicPath)))
 }
 
@@ -76,18 +92,6 @@ func newRouter(routes Routes, config *Config, handler http.Handler) *mux.Router 
 			Name(route.Name).
 			Handler(route.HandlerFunc)
 	}
-
-	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
-
-	if !ok {
-		if len(config.PublicPath) > 0 {
-			filePath = config.PublicPath
-		} else {
-			filePath = "./web/public"
-		}
-	}
-
-	internal.PublicPath = filePath
 
 	router.Use(security)
 	router.Use(logger)

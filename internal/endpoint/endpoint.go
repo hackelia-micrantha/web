@@ -23,6 +23,7 @@ var Config = &route.Config{
 		Font:     csp.WithSelf("fonts.googleapis.com"),
 		Manifest: csp.Self,
 	},
+	PublicPath: "./web/public",
 }
 
 // List is a list of defined route endpoints
