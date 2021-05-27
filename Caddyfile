@@ -1,0 +1,6 @@
+localhost
+
+root * web/public
+try_files {path} {path}.html {path}/ {path}
+
+file_server

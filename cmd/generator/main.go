@@ -5,7 +5,6 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"micrantha.com/web.git/internal/endpoint"
@@ -14,24 +13,19 @@ import (
 
 func main() {
 
-	excludes := []*regexp.Regexp{
-		regexp.MustCompile("layout.html.tmpl"),
-		regexp.MustCompile("partials/*"),
-	}
+	outputDir := filepath.Join("web", "public")
 
 	err := filepath.WalkDir("web/template", func(path string, d fs.DirEntry, err error) error {
 
+		if path[0] == '_' || d.Name()[0] == '_' {
+			return filepath.SkipDir
+		}
+
 		if d.IsDir() {
-			return nil
+			return os.MkdirAll(filepath.Join(outputDir, path), 0770)
 		}
 
-		for _, ex := range excludes {
-			if ex.MatchString(path) {
-				return nil
-			}
-		}
-
-		destPath := filepath.Join("web", "public", strings.TrimSuffix(d.Name(), filepath.Ext(d.Name())))
+		destPath := filepath.Join(outputDir, strings.TrimSuffix(path, filepath.Ext(d.Name())))
 
 		fmt.Fprintln(os.Stderr, "Generating", destPath)
 		f, err := os.OpenFile(destPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)

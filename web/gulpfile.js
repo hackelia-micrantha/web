@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import babel from 'gulp-babel';
-import sass from 'gulp-sass';
+import sass from 'gulp-dart-sass';
 import postcss from 'gulp-postcss';
 import concat from 'gulp-concat';
 import imagemin from 'gulp-imagemin';
@@ -14,8 +14,6 @@ import cssnano from 'cssnano';
 import vinylPaths from 'vinyl-paths';
 import del from 'del';
 import fs from 'fs';
-
-
 
 const { src, dest, series, parallel, watch, lastRun } = gulp;
 
@@ -36,14 +34,14 @@ const paths = {
   },
   img: {
     src: [
-      'img/**'
+      'static/img/**'
     ],
     dest: './public/img'
   },
   font: {
     src: [
       'node_modules/@fortawesome/fontawesome-free/webfonts/*.woff*',
-      'font/**'
+      'static/font/**'
     ],
     dest: './public/font'
   },
@@ -95,7 +93,15 @@ const font = () =>
   .pipe(changed({firstPass: true}))
   .pipe(dest(paths.font.dest))
 
-const html = () =>
+const files = () => 
+  src([ 
+    'static/*.html', 
+    'static/*.txt',
+    'static/icon',
+  ])
+  .pipe(gulp.dest('public'))
+
+const cache = () =>
   src('public/**/*.html')
   .pipe(cachebust())
   .pipe(gulp.dest('public'));
@@ -111,10 +117,10 @@ export const clean = () =>
     './public/img/**',
   ], { force: true } )
 
-export const build = parallel(js, css, img, font)
+export const build = parallel(js, css, img, font, files)
 
 export default series(
   clean,
   build,
-  html
+  cache
 )
