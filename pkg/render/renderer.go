@@ -60,8 +60,8 @@ func Template(w io.Writer, name string, parameters interface{}) error {
 	t, ok := templates[name]
 
 	if !ok {
-		t = template.Must(template.ParseFiles(templateFile("layout.html.tmpl"), templateFile(name)))
-		t = template.Must(t.ParseGlob(templateFile("partials", "*.tmpl")))
+		t = template.Must(template.ParseFiles(templateFile("_layouts", "default.html.tmpl"), templateFile(name)))
+		t = template.Must(t.ParseGlob(templateFile("_partials", "*.tmpl")))
 
 		if templates != nil {
 			templates[name] = t

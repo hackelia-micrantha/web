@@ -1,7 +1,5 @@
 bin/**
-web/public/css/**
-web/public/font/**
-web/public/js/**
+web/public
 web/node_modules
 vendor
 test/*.pem

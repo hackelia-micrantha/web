@@ -1,0 +1,9 @@
+{
+  http_port 8080
+  https_port 4443
+}
+
+localhost:1337
+
+root * web/public
+file_server

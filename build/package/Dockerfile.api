@@ -18,8 +18,6 @@ FROM alpine:latest
 # copy the necessary files from the build image
 COPY --from=builder /app/bin /app/bin
 
-COPY --from=builder /app/web/public /app/public
-
 # set the working directory
 WORKDIR /app
 
@@ -28,7 +26,6 @@ ARG port=${PORT:-8080}
 
 # define default environment
 ENV PORT=$port
-ENV MICRANTHA_PUBLIC_PATH="/app/public"
 
 HEALTHCHECK CMD /app/bin/health-check -port $PORT
 

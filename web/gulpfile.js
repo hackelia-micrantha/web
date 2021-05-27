@@ -7,6 +7,7 @@ import imagemin from 'gulp-imagemin';
 import uglify from 'gulp-uglify';
 import changed from 'gulp-changed-in-place';
 import cachebust from 'gulp-cache-bust';
+import htmlmin from 'gulp-htmlmin';
 
 import normalize from 'postcss-normalize';
 import autoprefixer from 'autoprefixer';
@@ -34,16 +35,24 @@ const paths = {
   },
   img: {
     src: [
-      'img/**'
+      'static/img/**'
     ],
     dest: './public/img'
   },
   font: {
     src: [
       'node_modules/@fortawesome/fontawesome-free/webfonts/*.woff*',
-      'font/**'
+      'static/font/**'
     ],
     dest: './public/font'
+  },
+  files: {
+    src: [
+      'static/*.html', 
+      'static/*.txt',
+      'static/icon/**/*',
+    ],
+    dest: './public'
   },
   sourcemaps: "maps"
 }
@@ -93,26 +102,31 @@ const font = () =>
   .pipe(changed({firstPass: true}))
   .pipe(dest(paths.font.dest))
 
-const html = () =>
-  src('public/**/*.html')
+const files = () => 
+  src(paths.files.src, { 
+    base: 'static',
+    since: lastRun(font),
+  })
+  .pipe(gulp.dest(paths.files.dest))
+
+export const cache = () =>
+  src('./public/**/*.html')
   .pipe(cachebust())
-  .pipe(gulp.dest('public'));
+  .pipe(htmlmin({ collapseWhitespace: true }))
+  .pipe(gulp.dest('./public'));
 
 export const live = () => 
   watch('css', 'js', 'img', 'font')
 
 export const clean = () =>
   del([
-    './public/css/**',
-    './public/js/**',
-    './public/font/**',
-    './public/img/**',
+    './public/**',
   ], { force: true } )
 
-export const build = parallel(js, css, img, font)
+export const build = parallel(js, css, img, font, files)
 
 export default series(
   clean,
   build,
-  html
+  cache
 )

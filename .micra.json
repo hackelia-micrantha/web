@@ -1,6 +1,0 @@
-{
-  "name": "micrantha",
-  "description": "web presence for micrantha software",
-  "author": "Micrantha Software",
-  "library": "~/.local/opt/micra"
-}
