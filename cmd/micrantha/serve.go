@@ -1,4 +1,4 @@
-// +build !dev
+// +build !ssl
 
 package main
 

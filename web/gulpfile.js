@@ -110,10 +110,10 @@ const files = () =>
   .pipe(gulp.dest(paths.files.dest))
 
 export const cache = () =>
-  src('./public/**/*.html')
+  src('public/**/*.html')
   .pipe(cachebust())
   .pipe(htmlmin({ collapseWhitespace: true }))
-  .pipe(gulp.dest('./public'));
+  .pipe(gulp.dest('public'));
 
 export const live = () => 
   watch('css', 'js', 'img', 'font')
@@ -126,7 +126,6 @@ export const clean = () =>
 export const build = parallel(js, css, img, font, files)
 
 export default series(
-  clean,
   build,
   cache
 )
