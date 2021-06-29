@@ -120,7 +120,7 @@ func (csp *ContentPolicy) handlerFunc() http.HandlerFunc {
 		}
 
 		if len(header) > 0 {
-			rw.Header().Add(Header, strings.Join(header, ";"))
+			rw.Header().Add(Header, strings.Join(header, "; "))
 		}
 	}
 }
