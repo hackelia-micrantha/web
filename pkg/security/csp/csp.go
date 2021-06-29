@@ -9,18 +9,21 @@ import (
 
 // Helpful constants for CSP values
 const (
-	Self        = "'self'"
-	None        = "'none'"
-	Any         = "*"
-	Header      = "Content-Security-Policy"
-	DefaultSrc  = "default-src"
-	ScriptSrc   = "script-src"
-	ConnectSrc  = "connect-src"
-	ImgSrc      = "img-src"
-	FontSrc     = "font-src"
-	StyleSrc    = "style-src"
-	ManifestSrc = "manifest-src"
-	ReportURI   = "report-uri"
+	Self                   = "'self'"
+	None                   = "'none'"
+	StrictDynamic          = "'strict-dynamic'"
+	Any                    = "*"
+	Header                 = "Content-Security-Policy"
+	DefaultSrc             = "default-src"
+	ScriptSrc              = "script-src"
+	ConnectSrc             = "connect-src"
+	ImgSrc                 = "img-src"
+	FontSrc                = "font-src"
+	StyleSrc               = "style-src"
+	ManifestSrc            = "manifest-src"
+	ReportURI              = "report-uri"
+	ObjectSrc              = "object-src"
+	RequireTrustedTypesFor = "require-trusted-types-for"
 )
 
 type ContentPolicy struct {
@@ -31,6 +34,8 @@ type ContentPolicy struct {
 	Style          string
 	Font           string
 	Manifest       string
+	Object         string
+	Require        string
 	ReportURI      string
 	IgnorePatterns []string
 	WebSocket      bool
@@ -46,6 +51,10 @@ func WithSelf(domains ...string) string {
 		args = append(args, domain)
 	}
 
+	return strings.Join(args, " ")
+}
+
+func With(args ...string) string {
 	return strings.Join(args, " ")
 }
 
@@ -93,6 +102,14 @@ func (csp *ContentPolicy) handlerFunc() http.HandlerFunc {
 
 	if csp.ReportURI != "" {
 		policies[ReportURI] = csp.ReportURI
+	}
+
+	if csp.Object != "" {
+		policies[ObjectSrc] = csp.Object
+	}
+
+	if csp.Require != "" {
+		policies[RequireTrustedTypesFor] = csp.Require
 	}
 
 	return func(rw http.ResponseWriter, r *http.Request) {
