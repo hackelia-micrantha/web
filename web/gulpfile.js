@@ -12,7 +12,6 @@ import htmlmin from 'gulp-htmlmin';
 import normalize from 'postcss-normalize';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
-import vinylPaths from 'vinyl-paths';
 import del from 'del';
 import fs from 'fs';
 
