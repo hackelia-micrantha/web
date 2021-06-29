@@ -8,9 +8,9 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	internal "micrantha.com/web.git/internal/route"
+	"micrantha.com/web.git/internal/fs"
+	"micrantha.com/web.git/pkg/config"
 	"micrantha.com/web.git/pkg/render"
-	"micrantha.com/web.git/pkg/security/csp"
 )
 
 // Type is a route type
@@ -24,26 +24,7 @@ type Type struct {
 // Routes is a list a route types
 type Routes []Type
 
-type Config struct {
-	ContentPolicy *csp.ContentPolicy
-	PublicPath    string
-}
-
 type spaHandler struct {
-}
-
-func setPublicPath(config *Config) {
-	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
-
-	if !ok {
-		if len(config.PublicPath) > 0 {
-			filePath = config.PublicPath
-		} else {
-			filePath = "./web/public"
-		}
-	}
-
-	internal.PublicPath = filePath
 }
 
 func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -54,12 +35,12 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path = filepath.Join(internal.PublicPath, path)
+	path = filepath.Join(fs.PublicPath, path)
 
 	_, err = os.Stat(path)
 
 	if os.IsNotExist(err) {
-		http.ServeFile(w, r, filepath.Join(internal.PublicPath, "index.html"))
+		http.ServeFile(w, r, filepath.Join(fs.PublicPath, "index.html"))
 		return
 	}
 
@@ -68,21 +49,21 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.FileServer(http.Dir(internal.PublicPath)).ServeHTTP(w, r)
+	http.FileServer(http.Dir(fs.PublicPath)).ServeHTTP(w, r)
 }
 
-func NewSinglePageApp(routes Routes, config *Config) *mux.Router {
-	setPublicPath(config)
+func NewSinglePageApp(routes Routes, config *config.Config) *mux.Router {
+	fs.SetPaths(config)
 	return newRouter(routes, config, spaHandler{})
 }
 
-func New(routes Routes, config *Config) *mux.Router {
-	setPublicPath(config)
-	return newRouter(routes, config, http.FileServer(http.Dir(internal.PublicPath)))
+func New(routes Routes, config *config.Config) *mux.Router {
+	fs.SetPaths(config)
+	return newRouter(routes, config, http.FileServer(http.Dir(fs.PublicPath)))
 }
 
 // New allocates a new router for use with an http server
-func newRouter(routes Routes, config *Config, handler http.Handler) *mux.Router {
+func newRouter(routes Routes, config *config.Config, handler http.Handler) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
@@ -118,7 +99,7 @@ func Template(name string, params interface{}) http.HandlerFunc {
 
 func File(name string, params interface{}) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath.Join(internal.PublicPath, name))
+		http.ServeFile(w, r, filepath.Join(fs.PublicPath, name))
 	}
 }
 

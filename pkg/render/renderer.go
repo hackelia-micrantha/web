@@ -11,6 +11,8 @@ import (
 	"path"
 	"strconv"
 	"strings"
+
+	"micrantha.com/web.git/internal/fs"
 )
 
 // FormatType is a type of response formatting
@@ -26,18 +28,10 @@ const (
 )
 
 var (
-	templates    map[string]*template.Template
-	templatePath string
+	templates map[string]*template.Template
 )
 
 func init() {
-	t, ok := os.LookupEnv("MICRANTHA_TEMPLATE_PATH")
-
-	if !ok {
-		templatePath = path.Join("web", "template")
-	} else {
-		templatePath = t
-	}
 
 	caching, ok := os.LookupEnv("MICRANTHA_TEMPLATE_CACHING")
 
@@ -51,7 +45,7 @@ func init() {
 }
 
 func templateFile(name ...string) string {
-	return path.Join(templatePath, path.Join(name...))
+	return path.Join(fs.TemplatePath, path.Join(name...))
 }
 
 // Template renders a template response given its name and parameters
