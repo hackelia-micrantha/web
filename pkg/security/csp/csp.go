@@ -12,6 +12,7 @@ const (
 	Self                   = "'self'"
 	None                   = "'none'"
 	StrictDynamic          = "'strict-dynamic'"
+	UnsafeInline           = "'unsafe-inline'"
 	Any                    = "*"
 	Header                 = "Content-Security-Policy"
 	DefaultSrc             = "default-src"
@@ -23,6 +24,7 @@ const (
 	ManifestSrc            = "manifest-src"
 	ReportURI              = "report-uri"
 	ObjectSrc              = "object-src"
+	WorkerSrc              = "worker-src"
 	RequireTrustedTypesFor = "require-trusted-types-for"
 )
 
@@ -35,6 +37,7 @@ type ContentPolicy struct {
 	Font           string
 	Manifest       string
 	Object         string
+	Service        string
 	Require        string
 	ReportURI      string
 	IgnorePatterns []string
@@ -106,6 +109,10 @@ func (csp *ContentPolicy) handlerFunc() http.HandlerFunc {
 
 	if csp.Object != "" {
 		policies[ObjectSrc] = csp.Object
+	}
+
+	if csp.Service != "" {
+		policies[WorkerSrc] = csp.Service
 	}
 
 	if csp.Require != "" {

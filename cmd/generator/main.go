@@ -1,6 +1,6 @@
 package main
 
-import "micrantha.com/web.git/internal/generate"
+import "micrantha.com/web.git/pkg/generate"
 
 func main() {
 
