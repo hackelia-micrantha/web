@@ -15,13 +15,12 @@
     "gulp-concat": "^2.6.1",
     "gulp-dart-sass": "^1.0.2",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-imagemin": "^7.1.0",
+    "gulp-imagemin": "^8.0.0",
     "gulp-postcss": "^9.0.0",
     "gulp-uglify": "^3.0.2",
     "jquery": "^3.5.1",
     "postcss": "^8.2.13",
-    "postcss-normalize": "^10.0.0",
-    "vinyl-paths": "^3.0.1"
+    "postcss-normalize": "^10.0.0"
   },
   "scripts": {
     "build:dev": "gulp build",
