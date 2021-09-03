@@ -18,9 +18,9 @@ var Params = map[string]interface{}{
 
 var Config = &config.Config{
 	ContentPolicy: &csp.ContentPolicy{
-		Script:   csp.WithSelf("analytics.micrantha.com"),
+		Script:   csp.WithSelf("analytics.micrantha.com", "assets.calendly.com"),
 		Img:      csp.WithSelf("fortunes.micrantha.com", "analytics.micrantha.com", "veil.micrantha.com"),
-		Style:    csp.WithSelf("fonts.googleapis.com"),
+		Style:    csp.WithSelf("fonts.googleapis.com", "assets.calendly.com"),
 		Font:     csp.WithSelf("fonts.googleapis.com"),
 		Manifest: csp.Self,
 	},
