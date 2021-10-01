@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"micrantha.com/web.git/pkg/config"
-	"micrantha.com/web.git/pkg/render"
 )
 
 // Type is a route type
@@ -52,21 +51,16 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.FileServer(http.Dir(h.config.PublicPath)).ServeHTTP(w, r)
 }
 
-type RouterConfig struct {
-	*mux.Router
-	config *config.Config
-}
-
-func NewSinglePageApp(routes Routes, config *config.Config) RouterConfig {
+func NewSinglePageApp(routes Routes, config *config.Config) *mux.Router {
 	return newRouter(routes, config, spaHandler{})
 }
 
-func New(routes Routes, config *config.Config) RouterConfig {
+func New(routes Routes, config *config.Config) *mux.Router {
 	return newRouter(routes, config, http.FileServer(http.Dir(config.PublicPath)))
 }
 
 // New allocates a new router for use with an http server
-func newRouter(routes Routes, config *config.Config, handler http.Handler) RouterConfig {
+func newRouter(routes Routes, config *config.Config, handler http.Handler) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
@@ -86,24 +80,7 @@ func newRouter(routes Routes, config *config.Config, handler http.Handler) Route
 
 	router.PathPrefix("/").Handler(caching(handler))
 
-	return RouterConfig{router, config}
-}
-
-// Template returns an handler that renders a template
-func (r RouterConfig) Template(name string, params interface{}) http.HandlerFunc {
-	return func(w http.ResponseWriter, _ *http.Request) {
-		err := render.Template(w, r.config.TemplatePath, name, params)
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	}
-}
-
-func (r RouterConfig) File(name string, params interface{}) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		http.ServeFile(w, req, filepath.Join(r.config.PublicPath, name))
-	}
+	return router
 }
 
 func security(next http.Handler) http.Handler {
