@@ -8,7 +8,6 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"micrantha.com/web.git/internal/fs"
 	"micrantha.com/web.git/pkg/config"
 	"micrantha.com/web.git/pkg/render"
 )
@@ -25,6 +24,7 @@ type Type struct {
 type Routes []Type
 
 type spaHandler struct {
+	config *config.Config
 }
 
 func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -35,12 +35,12 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path = filepath.Join(fs.PublicPath, path)
+	path = filepath.Join(h.config.PublicPath, path)
 
 	_, err = os.Stat(path)
 
 	if os.IsNotExist(err) {
-		http.ServeFile(w, r, filepath.Join(fs.PublicPath, "index.html"))
+		http.ServeFile(w, r, filepath.Join(h.config.PublicPath, "index.html"))
 		return
 	}
 
@@ -49,21 +49,24 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.FileServer(http.Dir(fs.PublicPath)).ServeHTTP(w, r)
+	http.FileServer(http.Dir(h.config.PublicPath)).ServeHTTP(w, r)
 }
 
-func NewSinglePageApp(routes Routes, config *config.Config) *mux.Router {
-	fs.SetPaths(config)
+type RouterConfig struct {
+	*mux.Router
+	config *config.Config
+}
+
+func NewSinglePageApp(routes Routes, config *config.Config) RouterConfig {
 	return newRouter(routes, config, spaHandler{})
 }
 
-func New(routes Routes, config *config.Config) *mux.Router {
-	fs.SetPaths(config)
-	return newRouter(routes, config, http.FileServer(http.Dir(fs.PublicPath)))
+func New(routes Routes, config *config.Config) RouterConfig {
+	return newRouter(routes, config, http.FileServer(http.Dir(config.PublicPath)))
 }
 
 // New allocates a new router for use with an http server
-func newRouter(routes Routes, config *config.Config, handler http.Handler) *mux.Router {
+func newRouter(routes Routes, config *config.Config, handler http.Handler) RouterConfig {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
@@ -83,13 +86,13 @@ func newRouter(routes Routes, config *config.Config, handler http.Handler) *mux.
 
 	router.PathPrefix("/").Handler(caching(handler))
 
-	return router
+	return RouterConfig{router, config}
 }
 
 // Template returns an handler that renders a template
-func Template(name string, params interface{}) http.HandlerFunc {
+func (r RouterConfig) Template(name string, params interface{}) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
-		err := render.Template(w, fs.TemplatePath, name, params)
+		err := render.Template(w, r.config.TemplatePath, name, params)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -97,9 +100,9 @@ func Template(name string, params interface{}) http.HandlerFunc {
 	}
 }
 
-func File(name string, params interface{}) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath.Join(fs.PublicPath, name))
+func (r RouterConfig) File(name string, params interface{}) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		http.ServeFile(w, req, filepath.Join(r.config.PublicPath, name))
 	}
 }
 

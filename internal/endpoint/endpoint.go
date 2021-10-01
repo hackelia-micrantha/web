@@ -1,8 +1,7 @@
 package endpoint
 
 import (
-	"path/filepath"
-
+	"micrantha.com/web.git/internal/fs"
 	"micrantha.com/web.git/pkg/config"
 	"micrantha.com/web.git/pkg/route"
 	"micrantha.com/web.git/pkg/security/csp"
@@ -24,8 +23,8 @@ var Config = &config.Config{
 		Font:     csp.WithSelf("fonts.googleapis.com"),
 		Manifest: csp.Self,
 	},
-	PublicPath:   filepath.Join("web", "public"),
-	TemplatePath: filepath.Join("web", "template"),
+	PublicPath:   fs.GetPublicPath(),
+	TemplatePath: fs.GetTemplatePath(),
 }
 
 // List is a list of defined route endpoints

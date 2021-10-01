@@ -3,45 +3,22 @@ package fs
 import (
 	"os"
 	"path/filepath"
-
-	"micrantha.com/web.git/pkg/config"
 )
 
-var (
-	TemplatePath string
-	PublicPath   string
-)
-
-func GetTemplatePath() (string, bool) {
+func GetTemplatePath() string {
 	t, ok := os.LookupEnv("MICRANTHA_TEMPLATE_PATH")
 
 	if !ok {
-		return filepath.Join("web", "template"), ok
+		return filepath.Join("web", "template")
 	}
-	return t, ok
+	return t
 }
 
-func GetPublicPath() (string, bool) {
+func GetPublicPath() string {
 	filePath, ok := os.LookupEnv("MICRANTHA_PUBLIC_PATH")
 
 	if !ok {
-		return filepath.Join("web", "public"), ok
+		return filepath.Join("web", "public")
 	}
-	return filePath, ok
-}
-
-func SetPaths(config *config.Config) {
-	path, ok := GetTemplatePath()
-	if !ok && len(config.TemplatePath) > 0 {
-		TemplatePath = config.TemplatePath
-	} else {
-		TemplatePath = path
-	}
-
-	path, ok = GetPublicPath()
-	if !ok && len(config.PublicPath) > 0 {
-		PublicPath = config.PublicPath
-	} else {
-		PublicPath = path
-	}
+	return filePath
 }
