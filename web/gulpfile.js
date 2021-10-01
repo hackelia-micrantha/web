@@ -3,7 +3,7 @@ import babel from 'gulp-babel';
 import sass from 'gulp-dart-sass';
 import postcss from 'gulp-postcss';
 import concat from 'gulp-concat';
-import imagemin from 'gulp-imagemin';
+import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
 import uglify from 'gulp-uglify';
 import changed from 'gulp-changed-in-place';
 import cachebust from 'gulp-cache-bust';
@@ -13,7 +13,6 @@ import normalize from 'postcss-normalize';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import del from 'del';
-import fs from 'fs';
 
 const { src, dest, series, parallel, watch, lastRun } = gulp;
 
@@ -47,7 +46,7 @@ const paths = {
   },
   files: {
     src: [
-      'static/*.html', 
+      'static/*.html',
       'static/*.txt',
       'static/icon/**/*',
     ],
@@ -57,22 +56,22 @@ const paths = {
 }
 
 const js = () => src(paths.js.src, {
-    since: lastRun(js),
-    sourcemaps: true
-  })
-  .pipe(changed({firstPass: true}))
-  .pipe(babel({ 
-    presets: ['@babel/env'] 
+  since: lastRun(js),
+  sourcemaps: true
+})
+  .pipe(changed({ firstPass: true }))
+  .pipe(babel({
+    presets: ['@babel/env']
   }))
   .pipe(concat('app.min.js'))
   .pipe(uglify())
   .pipe(dest(paths.js.dest, { sourcemaps: paths.sourcemaps }))
 
-const css = () => src(paths.css.src, { 
-    since: lastRun(css),
-    sourcemaps: true 
-  })
-  .pipe(changed({firstPass: true}))
+const css = () => src(paths.css.src, {
+  since: lastRun(css),
+  sourcemaps: true
+})
+  .pipe(changed({ firstPass: true }))
   .pipe(sass().on('error', sass.logError))
   .pipe(postcss([
     autoprefixer(),
@@ -80,47 +79,47 @@ const css = () => src(paths.css.src, {
     cssnano(),
   ]))
   .pipe(concat('app.min.css'))
-  .pipe(dest(paths.css.dest, { sourcemaps: paths.sourcemaps } ))
+  .pipe(dest(paths.css.dest, { sourcemaps: paths.sourcemaps }))
 
-const img = () => src(paths.img.src, { 
-    since: lastRun(img),
-  })
-  .pipe(changed({firstPass: true}))
+const img = () => src(paths.img.src, {
+  since: lastRun(img),
+})
+  .pipe(changed({ firstPass: true }))
   .pipe(imagemin([
-    imagemin.gifsicle(), 
-    imagemin.mozjpeg(), 
-    imagemin.optipng(), 
-    imagemin.svgo()
-   ], { silent: true }))
+    gifsicle(),
+    mozjpeg(),
+    optipng(),
+    svgo()
+  ], { silent: true }))
   .pipe(dest(paths.img.dest))
 
-const font = () => 
-  src(paths.font.src, { 
+const font = () =>
+  src(paths.font.src, {
     since: lastRun(font),
   })
-  .pipe(changed({firstPass: true}))
-  .pipe(dest(paths.font.dest))
+    .pipe(changed({ firstPass: true }))
+    .pipe(dest(paths.font.dest))
 
-const files = () => 
-  src(paths.files.src, { 
+const files = () =>
+  src(paths.files.src, {
     base: 'static',
     since: lastRun(font),
   })
-  .pipe(gulp.dest(paths.files.dest))
+    .pipe(gulp.dest(paths.files.dest))
 
 export const cache = () =>
   src('public/**/*.html')
-  .pipe(cachebust())
-  .pipe(htmlmin({ collapseWhitespace: true }))
-  .pipe(gulp.dest('public'));
+    .pipe(cachebust())
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gulp.dest('public'));
 
-export const live = () => 
+export const live = () =>
   watch('css', 'js', 'img', 'font')
 
 export const clean = () =>
   del([
     './public/**',
-  ], { force: true } )
+  ], { force: true })
 
 export const build = parallel(js, css, img, font, files)
 

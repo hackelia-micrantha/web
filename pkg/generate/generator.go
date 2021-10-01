@@ -7,17 +7,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"micrantha.com/web.git/internal/endpoint"
-	internal "micrantha.com/web.git/internal/fs"
 	"micrantha.com/web.git/pkg/render"
 )
 
-func Templates() error {
-
-	internal.SetPaths(endpoint.Config)
-	outputDir := internal.PublicPath
-
-	inputDir := internal.TemplatePath
+func Templates(inputDir string, outputDir string, params map[string]interface{}) error {
 
 	return filepath.WalkDir(inputDir, func(path string, d fs.DirEntry, err error) error {
 
@@ -44,7 +37,7 @@ func Templates() error {
 			_ = f.Close()
 		}()
 
-		return render.Template(f, filename, endpoint.Params)
+		return render.Template(f, inputDir, filename, params)
 
 	})
 }

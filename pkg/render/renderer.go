@@ -11,8 +11,6 @@ import (
 	"path"
 	"strconv"
 	"strings"
-
-	"micrantha.com/web.git/internal/fs"
 )
 
 // FormatType is a type of response formatting
@@ -44,18 +42,20 @@ func init() {
 	}
 }
 
-func templateFile(name ...string) string {
-	return path.Join(fs.TemplatePath, path.Join(name...))
-}
-
 // Template renders a template response given its name and parameters
-func Template(w io.Writer, name string, parameters interface{}) error {
+func Template(w io.Writer, templatePath string, name string, parameters interface{}) error {
 
 	t, ok := templates[name]
 
 	if !ok {
-		t = template.Must(template.ParseFiles(templateFile("_layouts", "default.html.tmpl"), templateFile(name)))
-		t = template.Must(t.ParseGlob(templateFile("_partials", "*.tmpl")))
+		t = template.Must(template.ParseFiles(
+			path.Join(templatePath, "_layouts", "default.html.tmpl"),
+			path.Join(templatePath, name),
+		))
+
+		t = template.Must(t.ParseGlob(
+			path.Join(templatePath, "_partials", "*.tmpl"),
+		))
 
 		if templates != nil {
 			templates[name] = t
