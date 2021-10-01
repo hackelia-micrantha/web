@@ -52,7 +52,7 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewSinglePageApp(routes Routes, config *config.Config) *mux.Router {
-	return newRouter(routes, config, spaHandler{})
+	return newRouter(routes, config, spaHandler{config})
 }
 
 func New(routes Routes, config *config.Config) *mux.Router {
