@@ -8,7 +8,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"micrantha.com/web.git/pkg/config"
+	"micrantha.com/web.git/internal"
 )
 
 // Type is a route type
@@ -23,7 +23,7 @@ type Type struct {
 type Routes []Type
 
 type spaHandler struct {
-	config *config.Config
+	config *internal.Config
 }
 
 func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -51,16 +51,16 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.FileServer(http.Dir(h.config.PublicPath)).ServeHTTP(w, r)
 }
 
-func NewSinglePageApp(routes Routes, config *config.Config) *mux.Router {
+func NewSinglePageApp(routes Routes, config *internal.Config) *mux.Router {
 	return newRouter(routes, config, spaHandler{config})
 }
 
-func New(routes Routes, config *config.Config) *mux.Router {
+func New(routes Routes, config *internal.Config) *mux.Router {
 	return newRouter(routes, config, http.FileServer(http.Dir(config.PublicPath)))
 }
 
 // New allocates a new router for use with an http server
-func newRouter(routes Routes, config *config.Config, handler http.Handler) *mux.Router {
+func newRouter(routes Routes, config *internal.Config, handler http.Handler) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
