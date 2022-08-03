@@ -32,9 +32,9 @@ const Laboratory = () => (
         title="Sandbox"
         url="https://ryanjennin.gs/posts/sandcastle-util-demo/"
       >
-        A wrapper around containers to create re-usable development and test
-        environments. Developed to isolate system/project dependencies and time
-        tracking.
+        Secure development environments that are saved and reused as{" "}
+        <b>sandcastles</b>. Project specific bastions with hooks (for example,
+        time tracking).
       </Card>
 
       <Card
