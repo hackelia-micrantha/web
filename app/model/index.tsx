@@ -1,0 +1,1 @@
+export { Fortune } from "./fortune"
