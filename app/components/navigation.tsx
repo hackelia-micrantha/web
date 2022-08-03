@@ -3,17 +3,17 @@ import { Link } from "@remix-run/react"
 export const Navigation = () => (
   <nav className="flex flex-wrap items-stretch justify-between">
     <div className="m-3 flex flex-shrink-0 items-center">
-    <Link to="/">
-      <img
-        src="/img/logo.png"
-        width="48"
-        height="48"
-        alt="logo"
-        className="mr-3"
-      />
+      <Link to="/">
+        <img
+          src="/img/logo.png"
+          width="48"
+          height="48"
+          alt="logo"
+          className="mr-3"
+        />
       </Link>
       <Link to="/" className="text-xl font-semibold tracking-tight">
-      Micrantha
+        Micrantha
       </Link>
     </div>
     <div className="block lg:hidden">

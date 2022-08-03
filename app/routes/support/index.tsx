@@ -1,5 +1,5 @@
 import { PageTitle, Card } from "~/components"
-import { EmailIcon, SlackIcon } from "~/components/icons"
+import { EmailIcon, SlackIcon, IrcIcon } from "~/components/icons"
 
 const Support = () => (
   <div>
@@ -8,7 +8,7 @@ const Support = () => (
       subtitle="Encountering problems or need assistance?"
     />
 
-    <div class="grid grid-cols-2">
+    <div className="grid grid-cols-3">
       <Card
         title="Email"
         icon={<EmailIcon />}
@@ -16,6 +16,11 @@ const Support = () => (
       >
         Send an email inquiries to{" "}
         <a href="mailto:support@micrantha.com">support@micrantha.com</a>.
+      </Card>
+
+      <Card title="IRC" icon={<IrcIcon />} url="https://libera.chat">
+        Join <b>#micrantha</b> on IRC via{" "}
+        <a href="https://libera.chat">libera.chat</a>.
       </Card>
 
       <Card
