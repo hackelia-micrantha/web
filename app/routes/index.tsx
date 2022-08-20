@@ -6,7 +6,7 @@ export default function Index() {
       </div>
 
       <div className="p-8">
-        <h1 className="text-5xl">Micrantha Software</h1>
+        <h1 className="text-4xl">Micrantha Software</h1>
         <h2 className="subtitle mt-4 text-lg">
           Growing software for functionally appealing solutions.
         </h2>
@@ -18,5 +18,5 @@ export default function Index() {
         </dl>
       </div>
     </div>
-  )
+  );
 }

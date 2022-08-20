@@ -5,3 +5,14 @@
 a {
   @apply text-blue-900;
 }
+a:hover {
+  @apply text-indigo-700;
+}
+
+nav a {
+  color: inherit;
+}
+
+nav a:hover {
+  color: inherit;
+}

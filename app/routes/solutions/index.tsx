@@ -1,5 +1,5 @@
-import { Card, PageTitle } from "~/components"
-import { FortunesIcon } from "~/components/icons"
+import { Card, PageTitle } from "~/components";
+import { FortunesIcon, VeilIcon } from "~/components/icons";
 
 const Solutions = () => (
   <div>
@@ -20,8 +20,12 @@ const Solutions = () => (
         tensions. They come in many categories such as technical, poems, quotes,
         and proverbs.
       </Card>
+      <Card title="Veil" icon={<VeilIcon />} url="https://veil.micrantha.com">
+        A micro-service to pseudo-randomly obfuscate a profile photo for fun or
+        security.
+      </Card>
     </div>
   </div>
-)
+);
 
-export default Solutions
+export default Solutions;

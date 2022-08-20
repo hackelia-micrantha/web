@@ -1,5 +1,5 @@
-import { Link } from "@remix-run/react"
-import { Card, PageTitle } from "~/components"
+import { Link } from "@remix-run/react";
+import { Card, PageTitle } from "~/components";
 import {
   MicraIcon,
   CodemuxIcon,
@@ -7,8 +7,7 @@ import {
   OutermeshIcon,
   ScouterIcon,
   SandboxIcon,
-  VeilIcon,
-} from "~/components/icons"
+} from "~/components/icons";
 
 const Laboratory = () => (
   <div>
@@ -65,11 +64,6 @@ const Laboratory = () => (
         MQTT and native database JSON data types. Currently supports PostgreSQL
         and SQLite.
       </Card>
-
-      <Card title="Veil" icon={<VeilIcon />} url="https://veil.micrantha.com">
-        A micro-service to pseudo-randomly obfuscate a profile photo for fun or
-        security.
-      </Card>
     </div>
 
     <div className="mt-8 text-center">
@@ -77,6 +71,6 @@ const Laboratory = () => (
       projects that did not survive.
     </div>
   </div>
-)
+);
 
-export default Laboratory
+export default Laboratory;
