@@ -41,7 +41,7 @@ const Philosophy = () => (
       <b>growing creations over time</b> with patience.
     </p>
 
-    <div class="mt-8 grid grid-cols-2">
+    <div className="mt-8 grid grid-cols-2">
       <dl>
         <dt className="font-bold">Flower</dt>
         <dd>A matured solution</dd>
@@ -79,10 +79,10 @@ const Philosophy = () => (
 
     <hr className="my-8" />
 
-    <div class="flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <img alt="login" src="/img/micrantha.png" />
     </div>
   </div>
-)
+);
 
-export default Philosophy
+export default Philosophy;

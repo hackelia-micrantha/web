@@ -1,8 +1,8 @@
 type Props = {
-  title: string
-  icon?: React.Component
-  url?: string
-}
+  title: string;
+  icon?: React.ReactNode;
+  url?: string;
+};
 
 export const Card: React.FC<Props> = ({ icon, title, url, children }) => (
   <div className="flex max-w-sm flex-col overflow-hidden rounded px-6 py-4 shadow-lg">
@@ -17,4 +17,4 @@ export const Card: React.FC<Props> = ({ icon, title, url, children }) => (
       </div>
     ) : null}
   </div>
-)
+);

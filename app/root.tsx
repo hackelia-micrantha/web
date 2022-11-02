@@ -53,14 +53,18 @@ export const meta: MetaFunction = () => ({
 });
 
 export const loader: LoaderFunction = async () => {
-  const res = await fetch(
-    "https://fortunes.micrantha.com/api/v1/random?s=true"
-  );
-  return json(await res.json());
+  try {
+    const res = await fetch(
+      "https://fortunes.micrantha.com/api/v1/random?s=true"
+    );
+    return json(await res.json());
+  } catch (e) {
+    return null;
+  }
 };
 
 export default function App() {
-  const fortune = useLoaderData() as Fortune;
+  const fortune = useLoaderData() as Fortune | null;
 
   return (
     <html lang="en">
@@ -73,7 +77,7 @@ export default function App() {
         <div className="body container mx-auto px-10">
           <Outlet />
         </div>
-        <Footer fortune={fortune.text} />
+        <Footer fortune={fortune?.text} />
         <ScrollRestoration />
         <Scripts />
         <Analytics />

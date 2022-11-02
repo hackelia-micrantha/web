@@ -1,4 +1,4 @@
-import { Card, PageTitle } from "~/components"
+import { Card, PageTitle } from "~/components";
 
 const Compost = () => (
   <div>
@@ -7,7 +7,7 @@ const Compost = () => (
       subtitle="Projects listed here were neglected and recycled."
     />
 
-    <div class="grid grid-cols-3">
+    <div className="grid grid-cols-3">
       <Card title="😉 Emotext" url="https://emotext.micrantha.com">
         A scalable chat app that has predefined textual representations of
         emotions. Emotext's are displayed for first, second and third persons,
@@ -27,6 +27,6 @@ const Compost = () => (
       </Card>
     </div>
   </div>
-)
+);
 
-export default Compost
+export default Compost;
