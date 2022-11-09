@@ -1,33 +1,20 @@
 
-GO	?= go
-LOCAL_LIB := $(shell test -d .micra; echo $$?)
-ifeq ($(LOCAL_LIB),0)
-MICRA_PATH ?= .micra
-else
-MICRA_PATH ?= ~/.local/share/micra
-endif
-PROJECT_NAME ?= "micrantha"
-BIN_DIR ?= ./bin
-CMD ?= ./cmd/$(PROJECT_NAME)
-EXE ?= $(shell basename $(CMD))
+all:
+	@echo "image"
+	@echo "deploy"
+	@echo "run"
 
-CLEANERS += clean-project
+setup:
+	@if [ ! -d "./node_modules" ]; then \
+		yarn install; \
+	fi
 
-.PHONY: all
-all: help
+image: setup
+	docker build -t $(REGISTRY)/$(SLUG):$(TAG) .
 
-.PHONY: clean-project
-clean-project:
-	@echo "Cleaning project"
-	@rm -rf $(BIN_DIR)/*
+run: image
+	docker run -p $(PORT):80 $(REGISTRY)/$(SLUG):$(TAG)
 
-# Delegate to scripts folder
-
-include $(MICRA_PATH)/library/scripts/index.mk
-
-# running
-
-.PHONY: run
-run:
-	$(GO) run $(CMD) -- $(ARGS)
-
+deploy: image
+	docker tag $(REGISTRY)/$(SLUG):$(TAG) $(REGISTRY)/$(SLUG):latest
+	docker push $(REGISTRY)/$(SLUG) --all-tags

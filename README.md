@@ -1,30 +1,53 @@
-# micrantha
+# Minimal House Remix Stack 
 
-the organization website
+![The Minimal Remix Stack Cover](https://user-images.githubusercontent.com/22895284/163196320-0d5070f8-1a51-4b06-93f4-ef92673784fe.png)
 
-## framework
+## Development
 
-this app also contains a go plugin framework with layout templates and styles for
-micrantha projects
+From your terminal:
 
-## architecture
+```sh
+npm run dev
+```
 
-loosely based on [jamstack](https://jamstack.org)
+This starts your app in development mode, rebuilding assets on file changes.
 
-## web frontend
+## Deployment
 
-gulp based JS and static html
+First, build your app for production:
 
-## mobile frontend
+```sh
+npm run build
+```
 
-PWA prefered, react-native or flutter
+Then run the app in production mode:
 
-## api services
+```sh
+npm start
+```
 
-golang stdlib http / mux / middleware / template gen
+Now you'll need to pick a host to deploy it to.
 
-## auth service
+### DIY
 
-authelia, go-guardian and/or custom user api
+If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
 
-uses JWT to auth other apis
+Make sure to deploy the output of `remix build`
+
+- `build/`
+- `public/build/`
+
+### Using a Template
+
+When you ran `npx create-remix@latest` there were a few choices for hosting. You can run that again to create a new project, then copy over your `app/` folder to the new project that's pre-configured for your target server.
+
+```sh
+cd ..
+# create a new project, and pick a pre-configured host
+npx create-remix@latest
+cd my-new-remix-app
+# remove the new project's app (not the old one!)
+rm -rf app
+# copy your app over
+cp -R ../my-old-remix-app/app app
+```
