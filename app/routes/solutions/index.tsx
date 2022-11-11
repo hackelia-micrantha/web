@@ -1,5 +1,5 @@
-import { Card, PageTitle } from "~/components";
-import { FortunesIcon, VeilIcon } from "~/components/icons";
+import { Card, PageTitle } from "~/components"
+import { FortunesIcon, VeilIcon } from "~/components/icons"
 
 const Solutions = () => (
   <div>
@@ -26,6 +26,6 @@ const Solutions = () => (
       </Card>
     </div>
   </div>
-);
+)
 
-export default Solutions;
+export default Solutions

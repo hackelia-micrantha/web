@@ -1,5 +1,5 @@
-import { Link } from "@remix-run/react";
-import { Card, PageTitle } from "~/components";
+import { Link } from "@remix-run/react"
+import { Card, PageTitle } from "~/components"
 import {
   MicraIcon,
   CodemuxIcon,
@@ -7,7 +7,7 @@ import {
   OutermeshIcon,
   ScouterIcon,
   SandboxIcon,
-} from "~/components/icons";
+} from "~/components/icons"
 
 const Laboratory = () => (
   <div>
@@ -71,6 +71,6 @@ const Laboratory = () => (
       projects that did not survive.
     </div>
   </div>
-);
+)
 
-export default Laboratory;
+export default Laboratory

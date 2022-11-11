@@ -1,8 +1,14 @@
-export const Analytics = () => (
-  <script
-    async
-    defer
-    data-website-id="7a34c5c9-ca97-4a6e-ad04-09652b432c14"
-    src="https://analytics.micrantha.com/umami.js"
-  ></script>
-)
+type Props = {
+  id: string | null | undefined;
+};
+
+export const Analytics = ({ id }: Props) => {
+  return (
+    <script
+      async
+      defer
+      data-website-id={id || "e5bbb807-d4e2-48a0-bfee-f6e8de0ae557"}
+      src="https://analytics.micrantha.com/umami.js"
+    ></script>
+  );
+};

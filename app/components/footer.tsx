@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link } from "@remix-run/react"
 
 export const Footer = ({ fortune }: { fortune: string | undefined }) => (
   <footer className="mt-16 flex flex-col items-center justify-center">
@@ -16,4 +16,4 @@ export const Footer = ({ fortune }: { fortune: string | undefined }) => (
       <a href="https://micrantha.com">Micrantha Software Solutions</a>
     </div>
   </footer>
-);
+)

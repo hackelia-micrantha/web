@@ -1,3 +1,2 @@
-web/node_modules
-bin/
-cmd/micrantha/serve_dev.go
+node_modules
+*.log

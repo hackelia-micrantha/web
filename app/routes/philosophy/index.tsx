@@ -83,6 +83,6 @@ const Philosophy = () => (
       <img alt="login" src="/img/micrantha.png" />
     </div>
   </div>
-);
+)
 
-export default Philosophy;
+export default Philosophy

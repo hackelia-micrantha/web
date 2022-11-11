@@ -1,4 +1,4 @@
-import { Card, PageTitle } from "~/components";
+import { Card, PageTitle } from "~/components"
 
 const Compost = () => (
   <div>
@@ -27,6 +27,6 @@ const Compost = () => (
       </Card>
     </div>
   </div>
-);
+)
 
-export default Compost;
+export default Compost

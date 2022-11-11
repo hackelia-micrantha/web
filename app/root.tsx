@@ -52,19 +52,27 @@ export const meta: MetaFunction = () => ({
     "sass, software, consulting, c, c++, objective-c, swift, java, kotlin, mobile, pwa, frontend, backend, android, ios, database, postgresql, infrastructure, deployment, architecture, design, testing, maintenance, golang, javascript, typescript",
 });
 
+type State = {
+  fortune: Fortune | null;
+  analyticsId: string | null;
+};
+
 export const loader: LoaderFunction = async () => {
   try {
     const res = await fetch(
       "https://fortunes.micrantha.com/api/v1/random?s=true"
     );
-    return json(await res.json());
+    const fortune = await res.json();
+    const analyticsId = process.env.FORTUNES_ANALYTICS_ID;
+
+    return json({ fortune, analyticsId });
   } catch (e) {
     return null;
   }
 };
 
 export default function App() {
-  const fortune = useLoaderData() as Fortune | null;
+  const state = useLoaderData() as State | null;
 
   return (
     <html lang="en">
@@ -77,10 +85,10 @@ export default function App() {
         <div className="body container mx-auto px-10">
           <Outlet />
         </div>
-        <Footer fortune={fortune?.text} />
+        <Footer fortune={state?.fortune?.text} />
         <ScrollRestoration />
         <Scripts />
-        <Analytics />
+        <Analytics id={state?.analyticsId} />
         <LiveReload />
       </body>
     </html>
