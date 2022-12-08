@@ -44,8 +44,8 @@ const Laboratory = () => (
         MQTT and native database JSON data types. Currently supports PostgreSQL
         and SQLite via extensions.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b className="text-orange">Status:</b> developing protocol over MQTT,
-          testing change synchronization
+          <b className="text-orange">Status:</b> developing communication
+          protocols and change synchronization
         </p>
       </Card>
     </div>

@@ -14,8 +14,8 @@ const Compost = () => (
         emotions. Emotext's are displayed for first, second and third persons,
         leading to a more rich and humorous expression context.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: The project got too far behind on some elixir/phoenix
-          major version upgrades and was not worth maintaining
+          <b>Reason</b>: The project got too far behind on elixir/phoenix major
+          version upgrades and was not worth maintaining
         </p>
       </Card>
 
@@ -33,8 +33,9 @@ const Compost = () => (
         and redesigned categories with the ability for users to submit their
         own.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: The project required too much backend changes to move
-          forward. Backend upgrades remain ongoing.
+          <b>Reason</b>: The project was too dependent on infrastructure
+          upgrades and could be genericized into categorized, tagged and custom
+          quotes.
         </p>
       </Card>
 
@@ -47,7 +48,8 @@ const Compost = () => (
         sandcastles. Project specific bastions with hooks (for example, time
         tracking).
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: Better off using <b>Nix</b> environments.
+          <b>Reason</b>: Better off using <b>Nix</b> environments, which seems
+          more feasible as a replacement for homebrew on macos.
         </p>
       </Card>
 
@@ -56,8 +58,8 @@ const Compost = () => (
         build versions.
         <p className="mt-4 text-base text-xs text-gray-700">
           <b>Reason</b>: The plugin system and makefile integration became to
-          cumbersome to maintain. Project needed better cross-plugin templating
-          and a temp filesystem overlay
+          poorly designed to maintain. Could be separated into cross-plugin
+          templating and a temp filesystem overlay
         </p>
       </Card>
 
@@ -65,8 +67,8 @@ const Compost = () => (
         A secure group coding solution in the terminal. Basically tmux and ssh
         but with a few extras for communication and managing edit control.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: While a CLI option is nice, the demand with web
-          versions is minimal.
+          <b>Reason</b>: A TUI option is nice but the
+          demand with existing web solutions is minimal.
         </p>
       </Card>
     </div>

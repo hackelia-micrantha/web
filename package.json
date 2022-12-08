@@ -15,7 +15,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "remix-serve build",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "package": "create-registry-image --latest --push micrantha/web"
   },
   "dependencies": {
     "@remix-run/node": "^1.3.5",
