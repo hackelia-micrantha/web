@@ -1,45 +1,39 @@
-# base node image
-FROM node:16-bullseye-slim as base
+FROM node:slim as base
 
-# set for base and all layer that inherit from it
-ENV NODE_ENV production
+WORKDIR /app
 
-# Install all node_modules, including dev dependencies
-FROM base as deps
+# BUILD DEPS
+FROM base as build-deps
 
-WORKDIR /myapp
+ENV NODE_ENV=development
 
-ADD package.json ./
-RUN npm install --omit=dev
+ADD package.json yarn.lock ./
 
-# Setup production node_modules
+RUN yarn
+
+# PROD DEPS
 FROM base as production-deps
 
-WORKDIR /myapp
+ENV NODE_ENV=production
 
-COPY --from=deps /myapp/node_modules /myapp/node_modules
-ADD package.json ./
-RUN npm prune --omit=dev
+ADD package.json yarn.lock ./
 
-# Build the app
-FROM base as build
+RUN yarn
 
-WORKDIR /myapp
+# BUILD
+FROM build-deps as build
 
-COPY --from=deps /myapp/node_modules /myapp/node_modules
+ENV NODE_ENV=development
 
 ADD . .
-RUN npm run build
 
-# Finally, build the production image with minimal footprint
+RUN NODE_ENV=production yarn build
+
 FROM base
 
-WORKDIR /myapp
+COPY --from=production-deps /app/node_modules /app/node_modules
+COPY --from=build /app/public /app/public
+COPY --from=build /app/build /app/build
+ADD package.json /app/
 
-COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-
-COPY --from=build /myapp/build /myapp/build
-COPY --from=build /myapp/public /myapp/public
-ADD . .
-
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
