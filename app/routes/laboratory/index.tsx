@@ -1,13 +1,6 @@
-import { Link } from "@remix-run/react"
-import { Card, PageTitle } from "~/components"
-import {
-  MicraIcon,
-  CodemuxIcon,
-  GardenIcon,
-  OutermeshIcon,
-  ScouterIcon,
-  SandboxIcon,
-} from "~/components/icons"
+import { Link } from "@remix-run/react";
+import { Card, PageTitle } from "~/components";
+import { GardenIcon, OutermeshIcon, ScouterIcon } from "~/components/icons";
 
 const Laboratory = () => (
   <div>
@@ -24,16 +17,9 @@ const Laboratory = () => (
       >
         Scouter is a turn based mobile game of "I Spy". The app uses machine
         learning to identify real world things and match them based upon clues.
-      </Card>
-
-      <Card
-        icon={<SandboxIcon />}
-        title="Sandbox"
-        url="https://ryanjennin.gs/posts/sandcastle-util-demo/"
-      >
-        Secure development environments that are saved and reused as{" "}
-        <b>sandcastles</b>. Project specific bastions with hooks (for example,
-        time tracking).
+        <p className="mt-4 text-base text-xs text-gray-700">
+          <b className="text-red">Status:</b> kotlin multiplatform refactor
+        </p>
       </Card>
 
       <Card
@@ -43,16 +29,10 @@ const Laboratory = () => (
       >
         An e-book on learning software development that has turned into a
         project in its own right: a multiplayer game about hacking
-      </Card>
-
-      <Card title="Micra" icon={<MicraIcon />} url="#">
-        A plugin based tool to create development projects and to manage git and
-        build versions.
-      </Card>
-
-      <Card title="Codemux" icon={<CodemuxIcon />} url="#">
-        A secure group coding solution in the terminal. Basically tmux and ssh
-        but with a few extras for communication and managing edit control.
+        <p className="mt-4 text-base text-xs text-gray-700">
+          <b className="text-orange">Status:</b> finishing book chapters as
+          prototype
+        </p>
       </Card>
 
       <Card
@@ -62,7 +42,11 @@ const Laboratory = () => (
       >
         The garden is a lightweight mobile synchronization solution leveraging
         MQTT and native database JSON data types. Currently supports PostgreSQL
-        and SQLite.
+        and SQLite via extensions.
+        <p className="mt-4 text-base text-xs text-gray-700">
+          <b className="text-orange">Status:</b> developing protocol over MQTT,
+          testing change synchronization
+        </p>
       </Card>
     </div>
 
@@ -71,6 +55,6 @@ const Laboratory = () => (
       projects that did not survive.
     </div>
   </div>
-)
+);
 
-export default Laboratory
+export default Laboratory;
