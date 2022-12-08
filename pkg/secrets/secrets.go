@@ -1,88 +1,47 @@
 package secrets
 
 import (
-	"errors"
-	"fmt"
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"strings"
 
-	"micrantha.com/web.git/pkg/secrets/ext"
+	"micrantha.com/web.git/pkg/secrets/dir"
 )
 
-type secretStorage interface {
-	getSecret(string) (string, error)
-	envSecret(string) (string, error)
+// Storage interfaces with systems that store a secret
+type Storage interface {
+	Get(string) (string, error)
 }
 
-type fileSecretStorage string
-
-const dockerSecrets fileSecretStorage = "/run/secrets"
-
-var defaultStorage = dockerSecrets
-
-func (storage fileSecretStorage) String() string {
-	return string(storage)
+// Secrets is an implementation of a secrets store
+type Secrets struct {
+	storage Storage
+	handle  string
 }
 
-func (storage fileSecretStorage) validateSecret(filePath string) string {
-	if strings.HasPrefix(filePath, storage.String()) || filepath.IsAbs(filePath) {
-		return filePath
+func (secrets Secrets) String() string {
+	return secrets.handle
+}
+
+// NewDirectorySecrets creates an instance to read secrets from a directory
+func NewDirectorySecrets(path string) *Secrets {
+	return &Secrets{
+		storage: dir.New(path),
+		handle:  path,
+	}
+}
+
+// Get reads the secret from the storage
+func (secrets Secrets) Get(handle string) (string, error) {
+	return secrets.storage.Get(handle)
+}
+
+// Lookup attempts to read a secret from an environment variable
+func (secrets Secrets) Lookup(handle string) (string, error) {
+
+	value, ok := os.LookupEnv(handle)
+
+	if ok {
+		return secrets.storage.Get(value)
 	}
 
-	return filepath.Join(storage.String(), filePath)
-}
-
-func (storage fileSecretStorage) readSecretToString(filePath string) (string, error) {
-
-	file, err := os.Open(filePath)
-
-	if err != nil {
-		return "", err
-	}
-
-	defer file.Close()
-
-	data, err := ioutil.ReadAll(file)
-
-	if err != nil {
-		return "", err
-	}
-
-	return strings.TrimSpace(string(data)), nil
-}
-
-func (storage fileSecretStorage) getSecret(fileName string) (string, error) {
-
-	filePath := storage.validateSecret(fileName)
-
-	return storage.readSecretToString(filePath)
-}
-
-func (storage fileSecretStorage) envSecret(key string) (string, error) {
-
-	fileName, ok := os.LookupEnv(key)
-
-	if !ok {
-		return "", errors.New(key + " not found")
-	}
-
-	return storage.getSecret(fileName)
-}
-
-// GetFromEnv reads a file defined in an environment key value
-func GetFromEnv(key string) (string, error) {
-	return defaultStorage.envSecret(key)
-}
-
-// GetType attempts to find a secret based on a name and type
-//     assumes the format /run/secret/<name>.<type>
-func GetType(name string, secretType ext.Type) (string, error) {
-	return Get(fmt.Sprint(name, secretType))
-}
-
-// Get attempts to read a secret from a file name
-func Get(fileName string) (string, error) {
-	return defaultStorage.getSecret(fileName)
+	return secrets.storage.Get(handle)
 }

@@ -4,21 +4,15 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"micrantha.com/web.git/pkg/secrets/ext"
 )
 
-const testSecrets fileSecretStorage = "../../test/secrets"
-
-func init() {
-	defaultStorage = testSecrets
-}
+var testSecrets = NewDirectorySecrets("../../test/secrets")
 
 func TestGet(t *testing.T) {
 
 	expected := "test1ng"
 
-	actual, err := Get("test.pwd")
+	actual, err := testSecrets.Get("test.pwd")
 
 	if err != nil {
 		t.Fatal(err)
@@ -29,26 +23,12 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestGetType(t *testing.T) {
-	expected := "test1ng"
-
-	actual, err := GetType("test", ext.Password)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if actual != expected {
-		t.Fatal("expected ", expected, " got ", actual)
-	}
-}
-
-func TestGetFromEnvRelative(t *testing.T) {
+func TestLookupRelative(t *testing.T) {
 	expected := "test1ng"
 
 	os.Setenv("TEST_PWD_FILE", "test.pwd")
 
-	actual, err := GetFromEnv("TEST_PWD_FILE")
+	actual, err := testSecrets.Lookup("TEST_PWD_FILE")
 
 	if err != nil {
 		t.Fatal(err)
@@ -59,10 +39,10 @@ func TestGetFromEnvRelative(t *testing.T) {
 	}
 }
 
-func TestGetFromEnvAbsolute(t *testing.T) {
+func TestLookupAbsolute(t *testing.T) {
 	expected := "test1ng"
 
-	filePath, err := filepath.Abs(filepath.Join(defaultStorage.String(), "test.pwd"))
+	filePath, err := filepath.Abs(filepath.Join(testSecrets.String(), "test.pwd"))
 
 	if err != nil {
 		t.Fatal("Unable to find absolute path for test")
@@ -70,7 +50,7 @@ func TestGetFromEnvAbsolute(t *testing.T) {
 
 	os.Setenv("TEST_PWD_FILE", filePath)
 
-	actual, err := GetFromEnv("TEST_PWD_FILE")
+	actual, err := testSecrets.Lookup("TEST_PWD_FILE")
 
 	if err != nil {
 		t.Fatal(err)
@@ -81,8 +61,8 @@ func TestGetFromEnvAbsolute(t *testing.T) {
 	}
 }
 
-func TestGetFromEnvEmpty(t *testing.T) {
-	_, err := GetFromEnv("RANDOM_ENV_VAR")
+func TestLookupEmpty(t *testing.T) {
+	_, err := testSecrets.Lookup("RANDOM_ENV_VAR")
 
 	if err == nil {
 		t.Fatal("Expected error from non-existing env var secret")
