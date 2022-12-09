@@ -28,7 +28,7 @@ const Laboratory = () => (
         url="https://outermesh.micrantha.com"
       >
         An e-book on learning software development that has turned into a
-        project in its own right: a multiplayer game about hacking
+        project in its own right: a multiplayer TUI game about hacking
         <p className="mt-4 text-base text-xs text-gray-700">
           <b className="text-orange">Status:</b> finishing book chapters as
           prototype
@@ -41,11 +41,10 @@ const Laboratory = () => (
         url="https://nursery.micrantha.com"
       >
         The garden is a lightweight mobile synchronization solution leveraging
-        MQTT and native database JSON data types. Currently supports PostgreSQL
-        and SQLite via extensions.
+        open source and algorithms.
         <p className="mt-4 text-base text-xs text-gray-700">
           <b className="text-orange">Status:</b> developing communication
-          protocols and change synchronization
+          protocols and efficient change synchronization
         </p>
       </Card>
     </div>

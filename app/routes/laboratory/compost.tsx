@@ -14,8 +14,8 @@ const Compost = () => (
         emotions. Emotext's are displayed for first, second and third persons,
         leading to a more rich and humorous expression context.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: The project got too far behind on elixir/phoenix major
-          version upgrades and was not worth maintaining
+          <b>Reason</b>: got too far behind on elixir/phoenix major version
+          upgrades and not worth maintaining
         </p>
       </Card>
 
@@ -23,7 +23,7 @@ const Compost = () => (
         Research on test automation, fuzz testing, security and machine learning
         and how to bring them all together.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: The project was too big in scope, and a little boring
+          <b>Reason</b>: too big in scope, and a little boring
         </p>
       </Card>
 
@@ -33,9 +33,7 @@ const Compost = () => (
         and redesigned categories with the ability for users to submit their
         own.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: The project was too dependent on infrastructure
-          upgrades and could be genericized into categorized, tagged and custom
-          quotes.
+          <b>Reason</b>: too dependent on infrastructure upgrades, no demand.
         </p>
       </Card>
 
@@ -44,9 +42,8 @@ const Compost = () => (
         title="Sandbox"
         url="https://ryanjennin.gs/posts/sandcastle-util-demo/"
       >
-        Secure development environments that are saved and reused as
-        sandcastles. Project specific bastions with hooks (for example, time
-        tracking).
+        Development environments reused as sandcastles. Project specific
+        bastions with hooks.
         <p className="mt-4 text-base text-xs text-gray-700">
           <b>Reason</b>: Better off using <b>Nix</b> environments, which seems
           more feasible as a replacement for homebrew on macos.
@@ -57,9 +54,9 @@ const Compost = () => (
         A plugin based tool to create development projects and to manage git and
         build versions.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: The plugin system and makefile integration became to
-          poorly designed to maintain. Could be separated into cross-plugin
-          templating and a temp filesystem overlay
+          <b>Reason</b>: plugin system and makefile integration became to poorly
+          designed to maintain. Could refactor plugin templating and add a temp
+          filesystem overlay.
         </p>
       </Card>
 
@@ -67,8 +64,8 @@ const Compost = () => (
         A secure group coding solution in the terminal. Basically tmux and ssh
         but with a few extras for communication and managing edit control.
         <p className="mt-4 text-base text-xs text-gray-700">
-          <b>Reason</b>: A TUI option is nice but the
-          demand with existing web solutions is minimal.
+          <b>Reason</b>: A TUI option is nice but the demand with existing web
+          solutions is minimal.
         </p>
       </Card>
     </div>
