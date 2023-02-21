@@ -37,8 +37,7 @@ const Laboratory = () => (
     </div>
 
     <div className="mt-8 text-center">
-      See the <Link to="/laboratory/compost">laboratory compost</Link> for
-      projects that did not survive.
+      See the <Link to="/laboratory/compost">laboratory compost</Link> for recycled projects.
     </div>
   </div>
 );
