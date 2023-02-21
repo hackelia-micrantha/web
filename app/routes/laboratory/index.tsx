@@ -1,6 +1,11 @@
 import { Link } from "@remix-run/react";
 import { Card, PageTitle } from "~/components";
-import { GardenIcon, OutermeshIcon, ScouterIcon } from "~/components/icons";
+import {
+  HyperionIcon,
+  GardenIcon,
+  OutermeshIcon,
+  ScouterIcon,
+} from "~/components/icons";
 
 const Laboratory = () => (
   <div>
@@ -10,42 +15,24 @@ const Laboratory = () => (
     />
 
     <div className="grid grid-cols-3">
-      <Card
-        title="Scouter"
-        icon={<ScouterIcon />}
-        url="https://ryanjennin.gs/posts/scouter-demo/"
-      >
-        Scouter is a turn based mobile game of "I Spy". The app uses machine
-        learning to identify real world things and match them based upon clues.
-        <p className="mt-4 text-base text-xs text-gray-700">
-          <b className="text-red">Status:</b> kotlin multiplatform refactor
-        </p>
+      <Card title="Project Hyperion" icon={<HyperionIcon />}>
+        Infrastructure for secure, reproducible laboratory environments,
+        migrations and deploys.
       </Card>
 
-      <Card
-        title="Outermesh"
-        icon={<OutermeshIcon />}
-        url="https://outermesh.micrantha.com"
-      >
+      <Card title="Scouter" icon={<ScouterIcon />}>
+        Scouter is a turn based mobile game using machine learning to identify
+        real world things and match them based upon clues.
+      </Card>
+
+      <Card title="Outermesh" icon={<OutermeshIcon />}>
         An e-book on learning software development that has turned into a
         project in its own right: a multiplayer TUI game about hacking
-        <p className="mt-4 text-base text-xs text-gray-700">
-          <b className="text-orange">Status:</b> finishing book chapters as
-          prototype
-        </p>
       </Card>
 
-      <Card
-        title="The Garden"
-        icon={<GardenIcon />}
-        url="https://nursery.micrantha.com"
-      >
-        The garden is a lightweight mobile synchronization solution leveraging
-        open source and algorithms.
-        <p className="mt-4 text-base text-xs text-gray-700">
-          <b className="text-orange">Status:</b> developing communication
-          protocols and efficient change synchronization
-        </p>
+      <Card title="The Garden" icon={<GardenIcon />}>
+        The garden is a lightweight data layer and mobile synchronization
+        solution leveraging open source and algorithms.
       </Card>
     </div>
 

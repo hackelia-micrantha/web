@@ -1,5 +1,6 @@
-import { Card, PageTitle } from "~/components"
-import { FortunesIcon, VeilIcon } from "~/components/icons"
+import { Card, PageTitle } from "~/components";
+import { FortunesIcon, VeilIcon } from "~/components/icons";
+import { Link } from "@remix-run/react";
 
 const Solutions = () => (
   <div>
@@ -15,10 +16,9 @@ const Solutions = () => (
         icon={<FortunesIcon />}
       >
         A micro-service and{" "}
-        <a href="https://slack.com/apps/A8MAPLX53-fortunes">Slack App</a> for
-        UNIX fortunes. Fortunes are witty antidotes that relive project
-        tensions. They come in many categories such as technical, poems, quotes,
-        and proverbs.
+        <Link to="https://slack.com/apps/A8MAPLX53-fortunes">Slack App</Link>{" "}
+        for UNIX fortunes. Fortunes are witty antidotes that come in many
+        categories such as technical, poems, quotes, and proverbs.
       </Card>
       <Card title="Veil" icon={<VeilIcon />} url="https://veil.micrantha.com">
         A micro-service to pseudo-randomly obfuscate a profile photo for fun or
@@ -26,6 +26,6 @@ const Solutions = () => (
       </Card>
     </div>
   </div>
-)
+);
 
-export default Solutions
+export default Solutions;
