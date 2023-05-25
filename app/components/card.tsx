@@ -10,7 +10,7 @@ export const Card: React.FC<Props> = ({ icon, title, url, children }) => (
       <div className="flex h-8 w-8 items-center justify-center">{icon}</div>
       <div className="text-xl font-bold">{title}</div>
     </div>
-    <p className="mt-4 flex grow flex-col justify-between text-base text-gray-700">
+    <p className="mt-4 grow flex-col justify-between text-base text-gray-700">
       {children}
     </p>
     {url ? (
