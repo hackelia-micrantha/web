@@ -1,4 +1,5 @@
-import { Link } from "@remix-run/react"
+import { Link } from "@remix-run/react";
+import { GithubIcon } from "~/components/icons";
 
 export const Navigation = () => (
   <nav className="flex flex-wrap items-stretch justify-between">
@@ -50,6 +51,12 @@ export const Navigation = () => (
       >
         Support
       </Link>
+      <a
+        href="https://github.com/hackelia-micrantha"
+        className="flex items-center justify-center px-3 hover:bg-gray-100"
+      >
+        <GithubIcon />
+      </a>
     </div>
   </nav>
-)
+);
