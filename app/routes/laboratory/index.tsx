@@ -20,9 +20,13 @@ const Laboratory = () => (
         migrations and deploys.
       </Card>
 
-      <Card title="Scouter" icon={<ScouterIcon />}>
+      <Card
+        title="Scouter"
+        icon={<ScouterIcon />}
+        url="https://github.com/hackelia-micrantha/skouter"
+      >
         Scouter is a turn based mobile game using machine learning to identify
-        real world things and match them based upon clues.
+        real world things with clues and guess them with proofs.
       </Card>
 
       <Card title="Outermesh" icon={<OutermeshIcon />}>
@@ -31,13 +35,14 @@ const Laboratory = () => (
       </Card>
 
       <Card title="The Garden" icon={<GardenIcon />}>
-        The garden is a lightweight data layer and mobile synchronization
-        solution leveraging open source and algorithms.
+        The garden is a lightweight addition to turn a relational database into
+        a hybrid nosql mesh network for decentralized efficient data sync.
       </Card>
     </div>
 
     <div className="mt-8 text-center">
-      See the <Link to="/laboratory/compost">laboratory compost</Link> for recycled projects.
+      See the <Link to="/laboratory/compost">laboratory compost</Link> for
+      recycled projects.
     </div>
   </div>
 );
