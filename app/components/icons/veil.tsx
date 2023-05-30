@@ -4,4 +4,4 @@ export const VeilIcon = () => (
     alt="veil"
     className="mr-4 h-6 w-6"
   />
-)
+);

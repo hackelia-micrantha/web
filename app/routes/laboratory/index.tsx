@@ -5,6 +5,7 @@ import {
   GardenIcon,
   OutermeshIcon,
   ScouterIcon,
+  MusingsIcon,
 } from "~/components/icons";
 
 const Laboratory = () => (
@@ -37,6 +38,12 @@ const Laboratory = () => (
       <Card title="The Garden" icon={<GardenIcon />}>
         The garden is a lightweight addition to turn a relational database into
         a hybrid nosql mesh network for decentralized efficient data sync.
+      </Card>
+
+      <Card title="Musings" icon={<MusingsIcon />}>
+        A social network for thing inside sanity and in sanity's side. Where
+        negative sentiment is automatically turned into a poem by AI and toxic
+        positivity has to fight its own shadow with an advanced chatbot.
       </Card>
     </div>
 

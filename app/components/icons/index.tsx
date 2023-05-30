@@ -11,3 +11,4 @@ export { MicraIcon } from "./micra";
 export { IrcIcon } from "./irc";
 export { HyperionIcon } from "./hyperion";
 export { GithubIcon } from "./github";
+export { MusingsIcon } from "./musings";

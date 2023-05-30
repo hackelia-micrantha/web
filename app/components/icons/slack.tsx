@@ -1,4 +1,4 @@
-import "./slack.css"
+import "./slack.css";
 
 export const SlackIcon = () => (
   <svg
@@ -59,4 +59,4 @@ export const SlackIcon = () => (
       </g>
     </g>
   </svg>
-)
+);
