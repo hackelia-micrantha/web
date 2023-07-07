@@ -2,6 +2,7 @@ type Props = {
   title: string
   icon?: React.ReactNode
   url?: string
+  children?: React.ReactNode
 }
 
 export const Card: React.FC<Props> = ({ icon, title, url, children }) => (
