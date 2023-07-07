@@ -1,12 +1,12 @@
-import { Link } from "@remix-run/react";
-import { Card, PageTitle } from "~/components";
+import { Link } from "@remix-run/react"
+import { Card, PageTitle } from "~/components"
 import {
   HyperionIcon,
   GardenIcon,
   OutermeshIcon,
   ScouterIcon,
   MusingsIcon,
-} from "~/components/icons";
+} from "~/components/icons"
 
 const Laboratory = () => (
   <div>
@@ -41,9 +41,9 @@ const Laboratory = () => (
       </Card>
 
       <Card title="Musings" icon={<MusingsIcon />}>
-        A social network inside sanity and in sanity's side. Where
-        negative sentiment is turned into a poem by AI and toxic
-        positivity has to fight its own shadow with an advanced chatbot.
+        A social network inside sanity and in sanity's side. Where negative
+        sentiment is turned into a poem by AI and toxic positivity has to fight
+        its own shadow with an advanced chatbot.
       </Card>
     </div>
 
@@ -52,6 +52,6 @@ const Laboratory = () => (
       recycled projects.
     </div>
   </div>
-);
+)
 
-export default Laboratory;
+export default Laboratory

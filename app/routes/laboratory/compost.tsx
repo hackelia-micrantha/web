@@ -1,5 +1,5 @@
-import { Card, PageTitle } from "~/components";
-import { SandboxIcon, MicraIcon, CodemuxIcon } from "~/components/icons";
+import { Card, PageTitle } from "~/components"
+import { SandboxIcon, MicraIcon, CodemuxIcon } from "~/components/icons"
 
 const Compost = () => (
   <div>
@@ -47,6 +47,6 @@ const Compost = () => (
       </Card>
     </div>
   </div>
-);
+)
 
-export default Compost;
+export default Compost

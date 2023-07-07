@@ -1,5 +1,5 @@
-import { Link } from "@remix-run/react";
-import { GithubIcon } from "~/components/icons";
+import { Link } from "@remix-run/react"
+import { GithubIcon } from "~/components/icons"
 
 export const Navigation = () => (
   <nav className="flex flex-wrap items-stretch justify-between">
@@ -30,9 +30,6 @@ export const Navigation = () => (
       </button>
     </div>
     <div className="flex items-stretch">
-      {/* <Link to="/services" className="px-3 hover:bg-gray-100 flex items-center justify-center">
-          Services
-        </Link> */}
       <Link
         to="/solutions"
         className="flex items-center justify-center px-3 hover:bg-gray-100"
@@ -59,4 +56,4 @@ export const Navigation = () => (
       </a>
     </div>
   </nav>
-);
+)

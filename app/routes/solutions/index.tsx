@@ -1,6 +1,6 @@
-import { Card, PageTitle } from "~/components";
-import { FortunesIcon, VeilIcon } from "~/components/icons";
-import { Link } from "@remix-run/react";
+import { Card, PageTitle } from "~/components"
+import { FortunesIcon, VeilIcon } from "~/components/icons"
+import { Link } from "@remix-run/react"
 
 const Solutions = () => (
   <div>
@@ -26,6 +26,6 @@ const Solutions = () => (
       </Card>
     </div>
   </div>
-);
+)
 
-export default Solutions;
+export default Solutions

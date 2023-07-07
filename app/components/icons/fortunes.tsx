@@ -4,4 +4,4 @@ export const FortunesIcon = () => (
     alt="fortunes"
     className="mr-4"
   />
-);
+)
