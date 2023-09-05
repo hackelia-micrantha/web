@@ -1,9 +1,35 @@
+import { WebsiteCarbonBadge } from "react-websitecarbon-badge";
+
 const Philosophy = () => (
   <div>
     <h1 className="text-2xl">Philosophy</h1>
 
     <p className="mt-8">
-      Software forms naturally and inherently through <b>enjoyment</b>
+      Micrantha aims to generate passive income with services that are private,
+      secure, functional, and continuously learning.
+    </p>
+
+    <p className="mt-8">
+      Micrantha fundamentally is a sanctuary from <i>capitalism</i>,{" "}
+      <i>hierarchy of status</i>, <i>pseudo democratic slavery</i>,{" "}
+      <i>extreme competition</i>, and <i>delusions of sustainability</i>.
+    </p>
+
+    <p className="mt-8">
+      The philosophy of making software is that it is done iteratively with a
+      project management triangle of <b>quality</b>, <b>time</b>
+      or <b>cost</b>.
+    </p>
+
+    <img
+      className="float-right"
+      src="/img/project-management-triangle-venn-diagram.png"
+      alt="project management triangle diagram"
+    />
+
+    <p className="mt-8">
+      For the people at Micrantha it is a creative process, forming inherently
+      through <b>enjoyment</b>
       <sub>
         <a href="#enjoyment">1</a>
       </sub>
@@ -18,71 +44,51 @@ const Philosophy = () => (
       .
     </p>
 
-    <p>
-      This is akin to the project management triangle of <b>quality</b>
-      <sub>
-        <a href="#enjoyment">1</a>
-      </sub>
-      , <b>time</b>
-      <sub>
-        <a href="#enthusiasm">2</a>
-      </sub>{" "}
-      or <b>cost</b>
-      <sub>
-        <a href="#acceptance">3</a>
-      </sub>
-      .
+    <p className="mt-8">
+      An analogy to the software development we do is gardening, growing
+      creations over time.
     </p>
 
-    <p>Projects must have two of these components to be taken on.</p>
+    <dl className="mt-8">
+      <dt className="font-bold">Flower</dt>
+      <dd className="mr-8">Code names for solutions</dd>
+      <dt className="font-bold">Soil</dt>
+      <dd className="mr-8">The groundwork that helps produces a solution</dd>
+      <dt className="font-bold">Seed</dt>
+      <dd className="mr-8">The design of a solution</dd>
+      <dt className="font-bold">Water</dt>
+      <dd>The flow of resources around a solution</dd>
+      <dt className="font-bold">Sunlight</dt>
+      <dd className="mr-8">The viability and visibility of a solution</dd>
+      <dt className="font-bold">Garden</dt>
+      <dd>A collection of soil, seeds and flowers</dd>
+    </dl>
 
-    <p>
-      An analogy to the software development we do is <b>gardening</b>,{" "}
-      <b>growing creations over time</b> with patience.
-    </p>
-
-    <div className="mt-8 grid grid-cols-2">
-      <dl>
-        <dt className="font-bold">Flower</dt>
-        <dd>A matured solution</dd>
-        <dt className="font-bold">Soil</dt>
-        <dd>The groundwork that helps produces a solution</dd>
-        <dt className="font-bold">Seed</dt>
-        <dd>The design of a solution</dd>
-        <dt className="font-bold">Water</dt>
-        <dd>The flow of resources around a solution</dd>
-        <dt className="font-bold">Sunlight</dt>
-        <dd>The visibility of a solution in the market</dd>
-        <dt className="font-bold">Garden</dt>
-        <dd>A collection of soil, seeds and flowers</dd>
-      </dl>
-      <img
-        src="/img/project-management-triangle-venn-diagram.png"
-        alt="project management triangle diagram"
-      />
-    </div>
-
-    <div className="mt-8 text-xs">
+    <div className="text-xs mt-8 float-right">
       <p>
-        [<a name="enjoyment">1</a>] Enjoyment relates to quality such that a
-        quality solution is enjoyable
+        [<a name="enjoyment">1</a>] <b>Enjoyment &rarr; Quality</b>: a quality
+        solution is enjoyable
       </p>
       <p>
-        [<a name="enthusiasm">2</a>] Enthusiasm relates to time such that there
-        is more time when enthused
+        [<a name="enthusiasm">2</a>] <b>Enthusiasm &rarr; Time</b>: there is
+        more time when enthused
       </p>
       <p>
-        [<a name="acceptance">3</a>] Acceptance relates to cost such that there
-        is a need to
+        [<a name="acceptance">3</a>] <b>Acceptance &rarr; Cost</b>: there is a
+        need to
       </p>
     </div>
 
-    <hr className="my-8" />
-
-    <div className="flex items-center justify-center">
+    <div className="mt-8 mb-16 flex items-center justify-center">
       <img alt="login" src="/img/micrantha.png" />
     </div>
-  </div>
-)
 
-export default Philosophy
+    <WebsiteCarbonBadge
+      url="https://micrantha.com"
+      co2="0.003"
+      percentage="97"
+    />
+  </div>
+);
+
+export default Philosophy;

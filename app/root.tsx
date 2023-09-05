@@ -60,7 +60,7 @@ type State = {
 export const loader: LoaderFunction = async () => {
   try {
     const res = await fetch(
-      "https://fortunes.micrantha.com/api/v1/random?s=true"
+      "https://fortunes.micrantha.com/api/v1/random?s=true",
     )
     const fortune = await res.json()
     const analyticsId = process.env.FORTUNES_ANALYTICS_ID
