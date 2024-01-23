@@ -7,7 +7,7 @@ export const Analytics = ({ id }: Props) => {
     <script
       async
       defer
-      data-website-id={id || "e5bbb807-d4e2-48a0-bfee-f6e8de0ae557"}
+      data-website-id={id || "d664cd1b-9690-4e09-aeb1-664347a2b0a0"}
       src="https://analytics.micrantha.com/umami.js"
     ></script>
   )
