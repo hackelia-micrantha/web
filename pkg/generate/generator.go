@@ -12,7 +12,7 @@ import (
 	"micrantha.com/web.git/pkg/render"
 )
 
-func Templates() error {
+func Templates(params map[string]interface{}) error {
 
 	internal.SetPaths(endpoint.Config)
 	outputDir := internal.PublicPath
@@ -44,7 +44,7 @@ func Templates() error {
 			_ = f.Close()
 		}()
 
-		return render.Template(f, filename, endpoint.Params)
+		return render.Template(f, filename, params)
 
 	})
 }
