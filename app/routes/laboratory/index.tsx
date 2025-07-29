@@ -15,7 +15,7 @@ const Laboratory = () => (
       subtitle="Projects listed here are still being grown."
     />
 
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card title="Project Hyperion" icon={<HyperionIcon />}>
         Infrastructure for secure, reproducible laboratory environments,
         migrations and deploys.

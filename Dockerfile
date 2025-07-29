@@ -1,9 +1,9 @@
-FROM node:slim as base
+FROM node:slim AS base
 
 WORKDIR /app
 
 # BUILD DEPS
-FROM base as build-deps
+FROM base AS build-deps
 
 ENV NODE_ENV=development
 
@@ -12,7 +12,7 @@ ADD package.json yarn.lock ./
 RUN yarn
 
 # PROD DEPS
-FROM base as production-deps
+FROM base AS production-deps
 
 ENV NODE_ENV=production
 
@@ -21,7 +21,7 @@ ADD package.json yarn.lock ./
 RUN yarn
 
 # BUILD
-FROM build-deps as build
+FROM build-deps AS build
 
 ENV NODE_ENV=development
 

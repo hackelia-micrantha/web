@@ -8,7 +8,7 @@ const Compost = () => (
       subtitle="Projects listed here were neglected and recycled."
     />
 
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card title="😉 Emotext">
         A scalable chat app that has predefined textual representations of
         emotions. Emotext's are displayed for first, second and third persons,

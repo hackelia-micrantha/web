@@ -9,7 +9,7 @@ const Solutions = () => (
       subtitle="Projects that have grown enough to be considered matured."
     />
 
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card
         title="Fortunes Service"
         url="https://fortunes.micrantha.com"
