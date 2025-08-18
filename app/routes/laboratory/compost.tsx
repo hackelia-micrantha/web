@@ -1,5 +1,7 @@
 import { Card, PageTitle } from "~/components"
-import { SandboxIcon, MicraIcon, CodemuxIcon } from "~/components/icons"
+import { 
+  SandboxIcon, MicraIcon, CodemuxIcon, OutermeshIcon  
+} from "~/components/icons"
 
 const Compost = () => (
   <div>
@@ -38,6 +40,11 @@ const Compost = () => (
         A plugin based tool to create development projects and to manage git and
         build versions. Plugin/templating system for new projects needs better
         design.
+      </Card>
+
+      <Card title="Outermesh" icon={<OutermeshIcon />}>
+        An e-book on learning software development that has turned into a
+        project in its own right: a multiplayer TUI game about hacking
       </Card>
 
       <Card title="Codemux" icon={<CodemuxIcon />}>
