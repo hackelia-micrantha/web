@@ -24,15 +24,6 @@ const Laboratory = () => (
       </Card>
 
       <Card
-        title="Eyespie"
-        icon={<EyespieIcon />}
-        url="https://github.com/hackelia-micrantha/eyespie"
-      >
-        Eyespie is a turn based mobile game using machine learning to identify
-        real world things with clues and guess them with proofs.
-      </Card>
-
-      <Card
         title="Bluebell"
 	url="https://github.com/hackelia-micrantha/bluebell"
 	icon={<BluebellIcon />}>
@@ -40,21 +31,24 @@ const Laboratory = () => (
 	  Scientific name is 'Hyacinthoides non-scripta'.
       </Card>
 
+      <Card
+        title="Eyespie"
+        icon={<EyespieIcon />}
+        url="https://github.com/hackelia-micrantha/eyespie"
+      >
+        Eyespie is a turn based mobile game using machine learning to identify
+        real world things with clues and guess them with proofs.  Bluebell use case.
+      </Card>
+
       <Card title="Mobuild Envuscator"
 	url="https://github.com/hackelia-micrantha/mobuild"
 	icon={<MobuildIcon />}>
-        A mobile SDK to obfuscate environment variables on mobile clients. An extra security layer with a Github action to update.
+        A mobile SDK to randomly obfuscate environment variables on mobile clients per build. An extra security layer with a Github action to update.
       </Card>
 
       <Card title="The Garden" icon={<GardenIcon />}>
-        The garden is a lightweight addition to turn a relational database into
-        a hybrid nosql mesh network for decentralized efficient data sync.
-      </Card>
-
-      <Card title="Musings" icon={<MusingsIcon />}>
-        A social network inside sanity and in sanity's side. Where negative
-        sentiment is turned into a poem by AI and toxic positivity has to fight
-        its own shadow with an advanced chatbot.
+        The garden is a lightweight extension to turn any relational database with native JSON support into
+        a hybrid nosql mesh network for efficient data sync.
       </Card>
 
       <Card title="Solidago" icon={<SolidagoIcon />}>

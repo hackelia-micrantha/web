@@ -52,6 +52,13 @@ const Compost = () => (
         but with a few extras for communication and managing edit control.
         Requires mouseless editing skill.
       </Card>
+
+      <Card title="Musings" icon={<MusingsIcon />}>
+        A social network inside sanity and in sanity's side. Where negative
+        sentiment is turned into a poem by AI and toxic positivity has to fight
+        its own shadow with an advanced chatbot.
+      </Card>
+
     </div>
   </div>
 )
