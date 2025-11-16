@@ -43,14 +43,16 @@ export const links: LinksFunction = () => [
   },
 ]
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Micrantha Software Solutions",
-  viewport: "width=device-width,initial-scale=1",
-  description: "a software as a service and consulting company",
-  keywords:
-    "sass, software, consulting, c, c++, objective-c, swift, java, kotlin, mobile, pwa, frontend, backend, android, ios, database, postgresql, infrastructure, deployment, architecture, design, testing, maintenance, golang, javascript, typescript",
-})
+export const meta: MetaFunction = () => [
+  { charset: "utf-8" },
+  { title: "Micrantha Software Solutions" },
+  { viewport: "width=device-width,initial-scale=1" },
+  { description: "a software as a service and consulting company" },
+  {
+    keywords:
+      "sass, software, consulting, c, c++, objective-c, swift, java, kotlin, mobile, pwa, frontend, backend, android, ios, database, postgresql, infrastructure, deployment, architecture, design, testing, maintenance, golang, javascript, typescript",
+  },
+]
 
 type State = {
   fortune: Fortune | null
@@ -66,7 +68,7 @@ export const loader: LoaderFunction = async () => {
     const analyticsId = process.env.FORTUNES_ANALYTICS_ID
 
     return json({ fortune, analyticsId })
-  } catch (e) {
+  } catch {
     return null
   }
 }
