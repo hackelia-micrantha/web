@@ -1,6 +1,12 @@
 import { Card, PageTitle } from "~/components"
 import { 
-  SandboxIcon, MicraIcon, CodemuxIcon, OutermeshIcon  
+  SandboxIcon, 
+  MicraIcon, 
+  CodemuxIcon, 
+  OutermeshIcon,
+  GardenIcon,
+  MusingsIcon,
+  SolidagoIcon,
 } from "~/components/icons"
 
 const Compost = () => (
@@ -31,6 +37,11 @@ const Compost = () => (
         own.
       </Card>
 
+      <Card title="The Garden" icon={<GardenIcon />}>
+        The garden is a lightweight extension to turn any relational database with native JSON support into
+        a hybrid nosql mesh network for efficient data sync.
+      </Card>
+
       <Card icon={<SandboxIcon />} title="Sandbox">
         Development environments reused as sandcastles. Project specific
         bastions with hooks. Requires mouseless editing skill.
@@ -57,6 +68,10 @@ const Compost = () => (
         A social network inside sanity and in sanity's side. Where negative
         sentiment is turned into a poem by AI and toxic positivity has to fight
         its own shadow with an advanced chatbot.
+      </Card>
+
+      <Card title="Solidago" icon={<SolidagoIcon />}>
+        An internal API to manage invoicing and/or payroll (scientific flower name for the 'Goldenrod').
       </Card>
 
     </div>

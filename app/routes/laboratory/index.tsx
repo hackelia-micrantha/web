@@ -2,19 +2,17 @@ import { Link } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
 import {
   HyperionIcon,
-  GardenIcon,
   EyespieIcon,
-  SolidagoIcon,
   BluebellIcon,
-  MusingsIcon,
   MobuildIcon,
+  MysotosisIcon,
 } from "~/components/icons"
 
 const Laboratory = () => (
   <div>
     <PageTitle
       title="Laboratory"
-      subtitle="Projects listed here are still being grown."
+      subtitle={<div>Projects listed here are still being grown. Recycled projects go to the <Link to="/laboratory/compost">laboratory compost</Link> for reuse.</div>}
     />
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -43,24 +41,21 @@ const Laboratory = () => (
       <Card title="Mobuild Envuscator"
 	url="https://github.com/hackelia-micrantha/mobuild"
 	icon={<MobuildIcon />}>
-        A mobile SDK to randomly obfuscate environment variables on mobile clients per build. An extra security layer with a Github action to update.
+        A mobile SDK to randomly obfuscate environment variables on mobile clients per build. An extra small security layer with a Github action to update.
       </Card>
 
-      <Card title="The Garden" icon={<GardenIcon />}>
-        The garden is a lightweight extension to turn any relational database with native JSON support into
-        a hybrid nosql mesh network for efficient data sync.
+      <Card title="Mobuild Digitalis"
+        icon={<MobuildIcon />}>
+	A backend and mobile SDK to attest for mobile clients.  Once attested, provides mobile configuration that is stored in secure enclave, such as APIs and secrets.  Scientific name is 'Digitalis Obscura'.
       </Card>
 
-      <Card title="Solidago" icon={<SolidagoIcon />}>
-        An internal API to manage invoicing and/or payroll (scientific flower name for the 'Goldenrod').
+      <Card title="Project Mysotosis"
+        icon={<MysotosisIcon />}>
+	An MCP and LLM registry for mobile clients.  Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows.  Scientific name is 'Mysotosis Sylvatica'.
       </Card>
 
     </div>
 
-    <div className="mt-8 text-center">
-      See the <Link to="/laboratory/compost">laboratory compost</Link> for
-      recycled projects.
-    </div>
   </div>
 )
 
