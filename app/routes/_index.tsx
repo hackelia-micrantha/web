@@ -2,7 +2,7 @@ export default function Index() {
   return (
     <div className="flex items-center justify-center">
       <div className="md:shrink-0">
-        <img src="/img/logo.svg" width="195" height="300" alt="logo" />
+        <img src="/img/logo.svg" alt="logo" />
       </div>
 
       <div className="p-8">

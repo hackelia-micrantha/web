@@ -15,7 +15,7 @@
     "generate:css": "npx @tailwindcss/cli -i ./app/styles/app.css -o ./app/tailwind.css",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "start": "remix-serve build",
+    "start": "remix-serve build/index.js",
     "typecheck": "tsc -b",
     "package": "create-registry-image --latest --push micrantha/web"
   },

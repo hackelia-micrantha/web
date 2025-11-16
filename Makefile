@@ -1,4 +1,10 @@
 
+REGISTRY ?=
+SLUG ?= micrantha/web
+TAG ?= latest
+PORT ?= 3000
+IMAGE := $(if $(REGISTRY),$(REGISTRY)/,)$(SLUG):$(TAG)
+
 all:
 	@echo "image"
 	@echo "deploy"
@@ -10,11 +16,11 @@ setup:
 	fi
 
 image: setup
-	docker build -t $(REGISTRY)/$(SLUG):$(TAG) .
+	docker build -t $(IMAGE) .
 
 run: image
-	docker run -p $(PORT):3000 $(REGISTRY)/$(SLUG):$(TAG)
+	docker run -p $(PORT):3000 $(IMAGE)
 
 deploy: image
-	docker tag $(REGISTRY)/$(SLUG):$(TAG) $(REGISTRY)/$(SLUG):latest
-	docker push $(REGISTRY)/$(SLUG) --all-tags
+	docker tag $(IMAGE) $(if $(REGISTRY),$(REGISTRY)/,)$(SLUG):latest
+	docker push $(if $(REGISTRY),$(REGISTRY)/,)$(SLUG) --all-tags
