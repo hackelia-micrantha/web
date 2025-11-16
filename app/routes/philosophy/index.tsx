@@ -1,4 +1,4 @@
-import { WebsiteCarbonBadge } from "react-websitecarbon-badge";
+import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
 
 const Philosophy = () => (
   <div>
@@ -66,16 +66,25 @@ const Philosophy = () => (
 
     <div className="text-xs mt-8 float-right">
       <p>
-        [<a name="enjoyment">1</a>] <b>Enjoyment &rarr; Quality</b>: a quality
-        solution is enjoyable
+        [
+        <a id="enjoyment" href="#enjoyment">
+          1
+        </a>
+        ] <b>Enjoyment &rarr; Quality</b>: a quality solution is enjoyable
       </p>
       <p>
-        [<a name="enthusiasm">2</a>] <b>Enthusiasm &rarr; Time</b>: there is
-        more time when enthused
+        [
+        <a id="enthusiasm" href="#enthusiasm">
+          2
+        </a>
+        ] <b>Enthusiasm &rarr; Time</b>: there is more time when enthused
       </p>
       <p>
-        [<a name="acceptance">3</a>] <b>Acceptance &rarr; Cost</b>: there is a
-        need to
+        [
+        <a id="acceptance" href="#acceptance">
+          3
+        </a>
+        ] <b>Acceptance &rarr; Cost</b>: there is a need to
       </p>
     </div>
 
@@ -89,6 +98,6 @@ const Philosophy = () => (
       percentage="97"
     />
   </div>
-);
+)
 
-export default Philosophy;
+export default Philosophy

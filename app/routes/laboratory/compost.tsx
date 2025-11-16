@@ -1,8 +1,8 @@
 import { Card, PageTitle } from "~/components"
-import { 
-  SandboxIcon, 
-  MicraIcon, 
-  CodemuxIcon, 
+import {
+  SandboxIcon,
+  MicraIcon,
+  CodemuxIcon,
   OutermeshIcon,
   GardenIcon,
   MusingsIcon,
@@ -38,8 +38,9 @@ const Compost = () => (
       </Card>
 
       <Card title="The Garden" icon={<GardenIcon />}>
-        The garden is a lightweight extension to turn any relational database with native JSON support into
-        a hybrid nosql mesh network for efficient data sync.
+        The garden is a lightweight extension to turn any relational database
+        with native JSON support into a hybrid nosql mesh network for efficient
+        data sync.
       </Card>
 
       <Card icon={<SandboxIcon />} title="Sandbox">
@@ -71,9 +72,9 @@ const Compost = () => (
       </Card>
 
       <Card title="Solidago" icon={<SolidagoIcon />}>
-        An internal API to manage invoicing and/or payroll (scientific flower name for the 'Goldenrod').
+        An internal API to manage invoicing and/or payroll (scientific flower
+        name for the 'Goldenrod').
       </Card>
-
     </div>
   </div>
 )

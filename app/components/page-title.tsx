@@ -1,6 +1,6 @@
 type Props = {
   title: string
-  subtitle?: string
+  subtitle?: React.ReactNode
 }
 
 export const PageTitle: React.FC<Props> = ({ title, subtitle }) => (
