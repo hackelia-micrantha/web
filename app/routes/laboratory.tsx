@@ -15,7 +15,7 @@ const Laboratory = () => (
       subtitle={
         <div>
           Projects listed here are still being grown. Recycled projects go to
-          the <Link to="/laboratory/compost">laboratory compost</Link> for
+          the <Link to="/compost">laboratory compost</Link> for
           reuse.
         </div>
       }
