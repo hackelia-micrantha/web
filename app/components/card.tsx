@@ -34,10 +34,13 @@ export const Card: React.FC<Props> = ({
 
   const cardClasses =
     "flex max-w-sm flex-col overflow-hidden rounded px-6 py-4 shadow-lg transition-all duration-300"
-  const interactiveCardClasses = "hover:shadow-xl hover:scale-105 cursor-pointer"
+  const interactiveCardClasses =
+    "hover:shadow-xl hover:scale-105 cursor-pointer"
 
   return (
-    <div className={`${cardClasses} ${url || onClick ? interactiveCardClasses : ""}`}>
+    <div
+      className={`${cardClasses} ${url || onClick ? interactiveCardClasses : ""}`}
+    >
       {url ? (
         <a href={url} className="flex flex-col h-full">
           {content}
@@ -47,9 +50,7 @@ export const Card: React.FC<Props> = ({
           {content}
         </div>
       ) : (
-        <div className="flex flex-col h-full">
-          {content}
-        </div>
+        <div className="flex flex-col h-full">{content}</div>
       )}
       {actions && actions.length > 0 && (
         <div className="mt-4 flex justify-end gap-2 border-t pt-4">
