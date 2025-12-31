@@ -48,17 +48,17 @@ export default function Index() {
             >
               Request a consultation
             </a>
-            <Link
-              className="button button-outline"
-              to="/#solutions"
-            >
+            <Link className="button button-outline" to="/#solutions">
               See solutions
             </Link>
           </div>
         </div>
       </section>
 
-      <section id="services" className="space-y-6 border-t border-gray-200 pt-12">
+      <section
+        id="services"
+        className="space-y-6 border-t border-gray-200 pt-12"
+      >
         <div>
           <p className="text-xs uppercase tracking-widest text-gray-500">
             Services
@@ -81,7 +81,10 @@ export default function Index() {
         </div>
       </section>
 
-      <section id="solutions" className="space-y-6 border-t border-gray-200 pt-12">
+      <section
+        id="solutions"
+        className="space-y-6 border-t border-gray-200 pt-12"
+      >
         <div>
           <p className="text-xs uppercase tracking-widest text-gray-500">
             Solutions
@@ -96,7 +99,11 @@ export default function Index() {
           >
             A micro-service and Slack app for UNIX fortunes.
           </Card>
-          <Card title="Veil" url="https://veil.micrantha.com" icon={<VeilIcon />}>
+          <Card
+            title="Veil"
+            url="https://veil.micrantha.com"
+            icon={<VeilIcon />}
+          >
             Pseudo-random profile photo obfuscation for fun or privacy.
           </Card>
           <Card
@@ -138,7 +145,10 @@ export default function Index() {
         </Link>
       </section>
 
-      <section id="philosophy" className="space-y-4 border-t border-gray-200 pt-12">
+      <section
+        id="philosophy"
+        className="space-y-4 border-t border-gray-200 pt-12"
+      >
         <p className="text-xs uppercase tracking-widest text-gray-500">
           Philosophy
         </p>
@@ -152,10 +162,17 @@ export default function Index() {
         </Link>
       </section>
 
-      <section id="contact" className="space-y-4 border-t border-gray-200 pt-12">
-        <p className="text-xs uppercase tracking-widest text-gray-500">Contact</p>
+      <section
+        id="contact"
+        className="space-y-4 border-t border-gray-200 pt-12"
+      >
+        <p className="text-xs uppercase tracking-widest text-gray-500">
+          Contact
+        </p>
         <h2 className="text-2xl">Start the conversation.</h2>
-        <p className="text-gray-700">For consultations or support, reach us directly.</p>
+        <p className="text-gray-700">
+          For consultations or support, reach us directly.
+        </p>
         <div className="flex flex-wrap gap-4">
           <a href="mailto:services@micrantha.com">services@micrantha.com</a>
           <Link to="/support">Support options</Link>

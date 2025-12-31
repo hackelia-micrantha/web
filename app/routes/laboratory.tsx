@@ -41,8 +41,13 @@ const Laboratory = () => (
         migrations and deploys. Hyperion is the worlds tallest living tree.
       </Card>
 
-      <Card title="Project Anthesis" url="https://anthesis.micrantha.com" icon={<AnthesisIcon />}>
-      Agentic SDLC with principles: Governed Autonomy, Human Authority First, Deterministic Execution, Auditability, and a Living Architecture.  
+      <Card
+        title="Project Anthesis"
+        url="https://anthesis.micrantha.com"
+        icon={<AnthesisIcon />}
+      >
+        Agentic SDLC with principles: Governed Autonomy, Human Authority First,
+        Deterministic Execution, Auditability, and a Living Architecture.
       </Card>
 
       <Card

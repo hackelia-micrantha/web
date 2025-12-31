@@ -38,7 +38,7 @@ export const Card: React.FC<Props> = ({
   )
 
   const cardClasses =
-    "flex max-w-sm flex-col overflow-hidden rounded px-6 py-4 shadow-lg transition-all duration-300"
+    "flex max-w-sm flex-col overflow-hidden rounded-lg border border-gray-200 px-6 py-4 shadow-lg transition-all duration-300"
   const interactiveCardClasses =
     "hover:shadow-xl hover:scale-105 cursor-pointer"
 

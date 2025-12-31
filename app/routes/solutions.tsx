@@ -7,8 +7,7 @@ export const meta: MetaFunction = () => [
   { title: "Micrantha Software | Solutions" },
   {
     name: "description",
-    content:
-      "Mature Micrantha products, including Fortunes Service and Veil.",
+    content: "Mature Micrantha products, including Fortunes Service and Veil.",
   },
   {
     tagName: "link",

@@ -16,14 +16,12 @@ import {
   useLoaderData,
 } from "@remix-run/react"
 
-import tailwind from "./tailwind.css"
-
 import { Navigation, Footer, Analytics } from "./components"
 
 import type { Fortune } from "./model"
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: tailwind },
+  { rel: "stylesheet", href: "/tailwind.css" },
   { rel: "shortcut icon", href: "/icon/favicon.ico" },
   { rel: "manifest", href: "/icon/site.webmanifest" },
   {
