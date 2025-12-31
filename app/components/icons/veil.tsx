@@ -3,5 +3,7 @@ export const VeilIcon = () => (
     src="https://veil.micrantha.com/assets/favicon-32x32.png"
     alt="veil"
     className="mr-4 h-6 w-6"
+    width="24"
+    height="24"
   />
 )

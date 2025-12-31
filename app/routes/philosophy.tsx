@@ -40,6 +40,10 @@ const Philosophy = () => (
       className="float-right"
       src="/img/project-management-triangle-venn-diagram.png"
       alt="project management triangle diagram"
+      width="397"
+      height="420"
+      loading="lazy"
+      decoding="async"
     />
 
     <p className="mt-8">
@@ -104,7 +108,14 @@ const Philosophy = () => (
     </div>
 
     <div className="mt-8 mb-16 flex items-center justify-center">
-      <img alt="login" src="/img/micrantha.png" />
+      <img
+        alt="login"
+        src="/img/micrantha.png"
+        width="580"
+        height="214"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
 
     <WebsiteCarbonBadge
