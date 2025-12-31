@@ -77,16 +77,27 @@ type State = {
 }
 
 export const loader: LoaderFunction = async () => {
+  const analyticsId = process.env.FORTUNES_ANALYTICS_ID
+
   try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 1500)
     const res = await fetch(
       "https://fortunes.micrantha.com/api/v1/random?s=true",
+      { signal: controller.signal },
     )
+    clearTimeout(timeoutId)
     const fortune = await res.json()
-    const analyticsId = process.env.FORTUNES_ANALYTICS_ID
 
-    return json({ fortune, analyticsId })
+    return json(
+      { fortune, analyticsId },
+      { headers: { "Cache-Control": "public, max-age=300" } },
+    )
   } catch {
-    return null
+    return json(
+      { fortune: null, analyticsId },
+      { headers: { "Cache-Control": "public, max-age=60" } },
+    )
   }
 }
 
@@ -134,7 +145,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <Analytics id={state?.analyticsId} />
-        <LiveReload />
+        {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
       </body>
     </html>
   )

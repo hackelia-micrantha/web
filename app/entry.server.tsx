@@ -1,6 +1,8 @@
 import type { EntryContext } from "@remix-run/node"
+import { createReadableStreamFromReadable } from "@remix-run/node"
 import { RemixServer } from "@remix-run/react"
-import { renderToString } from "react-dom/server"
+import { PassThrough } from "node:stream"
+import { renderToPipeableStream } from "react-dom/server"
 
 export default function handleRequest(
   request: Request,
@@ -8,14 +10,37 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const markup = renderToString(
-    <RemixServer context={remixContext} url={request.url} />,
-  )
+  return new Promise((resolve, reject) => {
+    let didError = false
 
-  responseHeaders.set("Content-Type", "text/html")
+    const { pipe, abort } = renderToPipeableStream(
+      <RemixServer context={remixContext} url={request.url} />,
+      {
+        onShellReady() {
+          const body = new PassThrough()
+          const stream = createReadableStreamFromReadable(body)
 
-  return new Response("<!DOCTYPE html>" + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
+          responseHeaders.set("Content-Type", "text/html")
+
+          resolve(
+            new Response(stream, {
+              status: didError ? 500 : responseStatusCode,
+              headers: responseHeaders,
+            }),
+          )
+
+          pipe(body)
+        },
+        onShellError(error) {
+          reject(error)
+        },
+        onError(error) {
+          didError = true
+          console.error(error)
+        },
+      },
+    )
+
+    setTimeout(abort, 5000)
   })
 }
