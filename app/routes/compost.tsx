@@ -31,7 +31,7 @@ const Compost = () => (
     />
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card title="😉 Emotext">
+      <Card title="😉 Emotext" url="https://emotext.micrantha.com">
         A scalable chat app that has predefined textual representations of
         emotions. Emotext's are displayed for first, second and third persons,
         leading to a more rich and humorous expression context. Got too far
@@ -68,7 +68,7 @@ const Compost = () => (
         design.
       </Card>
 
-      <Card title="Outermesh" icon={<OutermeshIcon />}>
+      <Card title="Outermesh" icon={<OutermeshIcon />} url="https://outermesh.micrantha.com">
         An e-book on learning software development that has turned into a
         project in its own right: a multiplayer TUI game about hacking
       </Card>

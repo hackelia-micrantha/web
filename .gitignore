@@ -12,6 +12,7 @@ lerna-debug.log*
 /public/build
 .env
 /app/tailwind.css
+/public/tailwind.css
 
 /cypress/screenshots
 /cypress/videos
