@@ -18,7 +18,7 @@ export const Services = () => (
     <h1 className="text-2xl">Services</h1>
     <p>
       Request a consultation by sending an
-      <a href="mailto:services@micrantha?subject=Consultation">
+      <a href="mailto:services@micrantha.com?subject=Consultation">
         email to services@micrantha.com
       </a>
       .

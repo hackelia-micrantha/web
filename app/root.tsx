@@ -1,4 +1,5 @@
 import type {
+  HeadersFunction,
   LinksFunction,
   MetaFunction,
   LoaderFunction,
@@ -70,6 +71,13 @@ export const meta: MetaFunction = () => [
     content: "A software as a service and consulting company.",
   },
 ]
+
+export const headers: HeadersFunction = () => ({
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
+})
 
 type State = {
   fortune: Fortune | null

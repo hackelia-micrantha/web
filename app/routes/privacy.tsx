@@ -98,16 +98,9 @@ const Privacy = () => (
       Our Service may contain links to other sites. If you click on a
       third-party link, you will be directed to that site. Note that these
       external sites are not operated by us. Therefore, we strongly advise you
-      to review the Privacy Policy of these websites,{" "}
-      <a
-        href="http://webtrafficgeeks.org/website_traffic/adsense_safe_traffic/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        visit
-      </a>
-      . We have no control over, and assume no responsibility for the content,
-      privacy policies, or practices of any third-party sites or services.
+      to review the Privacy Policy of these websites. We have no control over,
+      and assume no responsibility for the content, privacy policies, or
+      practices of any third-party sites or services.
     </p>
     <p className="mt-8 font-bold">Children’s Privacy</p>
     <p>

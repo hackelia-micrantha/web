@@ -19,17 +19,20 @@ const Philosophy = () => (
   <div>
     <h1 className="text-2xl">Philosophy</h1>
 
+    <h2 className="mt-8 text-xl">Purpose</h2>
     <p className="mt-8">
       Micrantha aims to generate passive income with services that are private,
       secure, functional, and continuously learning.
     </p>
 
+    <h2 className="mt-8 text-xl">Position</h2>
     <p className="mt-8">
       Micrantha fundamentally is a sanctuary from <i>capitalism</i>,{" "}
       <i>hierarchy of status</i>, <i>pseudo democratic slavery</i>,{" "}
       <i>extreme competition</i>, and <i>delusions of sustainability</i>.
     </p>
 
+    <h2 className="mt-8 text-xl">Triangle</h2>
     <p className="mt-8">
       The philosophy of making software is that it is done iteratively with a
       project management triangle of <b>quality</b>, <b>time</b>
@@ -63,6 +66,7 @@ const Philosophy = () => (
       .
     </p>
 
+    <h2 className="mt-8 text-xl">Metaphor</h2>
     <p className="mt-8">
       An analogy to the software development we do is gardening, growing
       creations over time.
