@@ -21,7 +21,12 @@ export const Card: React.FC<Props> = ({
     <>
       <div className="flex items-center gap-4">
         {icon && (
-          <div className="flex h-8 w-8 items-center justify-center">{icon}</div>
+          <div
+            className="flex h-8 w-8 items-center justify-center"
+            aria-hidden="true"
+          >
+            {icon}
+          </div>
         )}
         <div>
           <div className="text-xl font-bold">{title}</div>
@@ -42,15 +47,19 @@ export const Card: React.FC<Props> = ({
       className={`${cardClasses} ${url || onClick ? interactiveCardClasses : ""}`}
     >
       {url ? (
-        <a href={url} className="flex flex-col h-full">
+        <a href={url} className="flex h-full flex-col">
           {content}
         </a>
       ) : onClick ? (
-        <div onClick={onClick} className="flex flex-col h-full">
+        <button
+          type="button"
+          onClick={onClick}
+          className="flex h-full flex-col text-left"
+        >
           {content}
-        </div>
+        </button>
       ) : (
-        <div className="flex flex-col h-full">{content}</div>
+        <div className="flex h-full flex-col">{content}</div>
       )}
       {actions && actions.length > 0 && (
         <div className="mt-4 flex justify-end gap-2 border-t pt-4">

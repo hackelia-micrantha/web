@@ -6,6 +6,21 @@
   --brand-mist: #b0c4de;
 }
 
+.skip-link {
+  background: #ffffff;
+  border: 2px solid var(--brand-dark);
+  color: var(--brand-dark);
+  left: 1rem;
+  padding: 0.5rem 0.75rem;
+  position: absolute;
+  top: -3rem;
+  z-index: 50;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
 a:not(.button) {
   color: var(--brand-dark);
 }
@@ -35,6 +50,13 @@ a:not(.button):hover {
 .button-outline:hover {
   background: var(--brand-mist);
   color: var(--brand-dark);
+}
+
+button:focus-visible,
+a:focus-visible,
+.button:focus-visible {
+  outline: 3px solid var(--brand-mist);
+  outline-offset: 2px;
 }
 
 nav a {

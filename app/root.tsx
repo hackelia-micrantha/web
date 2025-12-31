@@ -99,10 +99,13 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <a className="skip-link" href="#content">
+          Skip to content
+        </a>
         <Navigation />
-        <div className="body container mx-auto px-10">
+        <main id="content" className="body container mx-auto px-10">
           <Outlet />
-        </div>
+        </main>
         <Footer fortune={state?.fortune?.text} />
         <ScrollRestoration />
         <Scripts />
