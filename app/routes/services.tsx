@@ -1,3 +1,18 @@
+import type { MetaFunction } from "@remix-run/node"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Services" },
+  {
+    name: "description",
+    content: "Request a consultation for Micrantha software services.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/services",
+  },
+]
+
 export const Services = () => (
   <div>
     <h1 className="text-2xl">Services</h1>

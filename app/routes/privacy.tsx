@@ -1,3 +1,18 @@
+import type { MetaFunction } from "@remix-run/node"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Privacy Policy" },
+  {
+    name: "description",
+    content: "Privacy policy for Micrantha Software Solutions.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/privacy",
+  },
+]
+
 const Privacy = () => (
   <div>
     <h1 className="text-2xl">Privacy Policy</h1>

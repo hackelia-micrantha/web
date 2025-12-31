@@ -1,4 +1,19 @@
+import type { MetaFunction } from "@remix-run/node"
 import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Philosophy" },
+  {
+    name: "description",
+    content:
+      "Micrantha's philosophy on building software with quality, time, and cost in balance.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/philosophy",
+  },
+]
 
 const Philosophy = () => (
   <div>

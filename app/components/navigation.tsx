@@ -19,16 +19,34 @@ export const Navigation = () => (
     </div>
     <div className="flex items-stretch">
       <Link
-        to="/solutions"
+        to="/#services"
+        className="flex items-center justify-center px-3 hover:bg-gray-100"
+      >
+        Services
+      </Link>
+      <Link
+        to="/#solutions"
         className="flex items-center justify-center px-3 hover:bg-gray-100"
       >
         Solutions
       </Link>
       <Link
-        to="/laboratory"
+        to="/#laboratory"
         className="flex items-center justify-center px-3 hover:bg-gray-100"
       >
         Laboratory
+      </Link>
+      <Link
+        to="/#philosophy"
+        className="flex items-center justify-center px-3 hover:bg-gray-100"
+      >
+        Philosophy
+      </Link>
+      <Link
+        to="/#contact"
+        className="flex items-center justify-center px-3 hover:bg-gray-100"
+      >
+        Contact
       </Link>
       <Link
         to="/support"

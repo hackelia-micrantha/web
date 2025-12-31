@@ -1,3 +1,4 @@
+import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
 import {
@@ -6,7 +7,21 @@ import {
   BluebellIcon,
   MobuildIcon,
   MysotosisIcon,
+  AnthesisIcon,
 } from "~/components/icons"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Laboratory" },
+  {
+    name: "description",
+    content: "Projects in active growth from the Micrantha laboratory.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/laboratory",
+  },
+]
 
 const Laboratory = () => (
   <div>
@@ -24,6 +39,10 @@ const Laboratory = () => (
       <Card title="Project Hyperion" icon={<HyperionIcon />}>
         Infrastructure for secure, reproducible laboratory environments,
         migrations and deploys. Hyperion is the worlds tallest living tree.
+      </Card>
+
+      <Card title="Project Anthesis" url="https://anthesis.micrantha.com" icon={<AnthesisIcon />}>
+      Agentic SDLC with principles: Governed Autonomy, Human Authority First, Deterministic Execution, Auditability, and a Living Architecture.  
       </Card>
 
       <Card

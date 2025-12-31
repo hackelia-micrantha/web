@@ -1,3 +1,4 @@
+import type { MetaFunction } from "@remix-run/node"
 import { Card, PageTitle } from "~/components"
 import {
   SandboxIcon,
@@ -8,6 +9,19 @@ import {
   MusingsIcon,
   SolidagoIcon,
 } from "~/components/icons"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Laboratory Compost" },
+  {
+    name: "description",
+    content: "Recycled or paused projects from the Micrantha laboratory.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/compost",
+  },
+]
 
 const Compost = () => (
   <div>

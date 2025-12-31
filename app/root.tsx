@@ -48,9 +48,25 @@ export const meta: MetaFunction = () => [
   { title: "Micrantha Software Solutions" },
   { viewport: "width=device-width,initial-scale=1" },
   { description: "a software as a service and consulting company" },
+  { name: "robots", content: "index,follow" },
   {
     keywords:
       "sass, software, consulting, c, c++, objective-c, swift, java, kotlin, mobile, pwa, frontend, backend, android, ios, database, postgresql, infrastructure, deployment, architecture, design, testing, maintenance, golang, javascript, typescript",
+  },
+  { property: "og:site_name", content: "Micrantha Software" },
+  { property: "og:title", content: "Micrantha Software Solutions" },
+  {
+    property: "og:description",
+    content: "A software as a service and consulting company.",
+  },
+  { property: "og:type", content: "website" },
+  { property: "og:url", content: "https://micrantha.com" },
+  { property: "og:image", content: "https://micrantha.com/img/logo.png" },
+  { name: "twitter:card", content: "summary" },
+  { name: "twitter:title", content: "Micrantha Software Solutions" },
+  {
+    name: "twitter:description",
+    content: "A software as a service and consulting company.",
   },
 ]
 

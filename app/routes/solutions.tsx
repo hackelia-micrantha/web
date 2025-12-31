@@ -1,6 +1,21 @@
+import type { MetaFunction } from "@remix-run/node"
 import { Card, PageTitle } from "~/components"
 import { FortunesIcon, VeilIcon } from "~/components/icons"
 import { Link } from "@remix-run/react"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Solutions" },
+  {
+    name: "description",
+    content:
+      "Mature Micrantha products, including Fortunes Service and Veil.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/solutions",
+  },
+]
 
 const Solutions = () => (
   <div>

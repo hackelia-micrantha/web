@@ -1,5 +1,19 @@
+import type { MetaFunction } from "@remix-run/node"
 import { PageTitle, Card } from "~/components"
 import { EmailIcon, SlackIcon, IrcIcon } from "~/components/icons"
+
+export const meta: MetaFunction = () => [
+  { title: "Micrantha Software | Support" },
+  {
+    name: "description",
+    content: "Support options for Micrantha products and services.",
+  },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://micrantha.com/support",
+  },
+]
 
 const Support = () => (
   <div>

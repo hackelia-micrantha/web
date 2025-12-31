@@ -1,10 +1,40 @@
 @import "tailwindcss";
 
-a {
-  @apply text-blue-900;
+:root {
+  --brand-dark: #343a40;
+  --brand-leaf: #2e8b57;
+  --brand-mist: #b0c4de;
 }
-a:hover {
-  @apply text-indigo-700;
+
+a:not(.button) {
+  color: var(--brand-dark);
+}
+a:not(.button):hover {
+  color: var(--brand-leaf);
+}
+
+.button {
+  align-items: center;
+  background: var(--brand-dark);
+  border-radius: 0.375rem;
+  color: #ffffff;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+.button:hover {
+  background: var(--brand-leaf);
+  color: #ffffff;
+}
+.button-outline {
+  background: transparent;
+  border: 1px solid var(--brand-dark);
+  color: var(--brand-dark);
+}
+.button-outline:hover {
+  background: var(--brand-mist);
+  color: var(--brand-dark);
 }
 
 nav a {
