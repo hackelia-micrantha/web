@@ -4,6 +4,7 @@ import type {
   LoaderFunction,
 } from "@remix-run/node"
 import { json } from "@remix-run/node"
+import { useLocation } from "@remix-run/react"
 import {
   Links,
   LiveReload,
@@ -91,12 +92,35 @@ export const loader: LoaderFunction = async () => {
 
 export default function App() {
   const state = useLoaderData() as State | null
+  const location = useLocation()
+  const url = `https://micrantha.com${location.pathname}`
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Micrantha Software",
+      url: "https://micrantha.com",
+      logo: "https://micrantha.com/img/logo.png",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Micrantha Software",
+      url,
+    },
+  ]
 
   return (
     <html lang="en">
       <head>
         <Meta />
         <Links />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
       </head>
       <body>
         <a className="skip-link" href="#content">
