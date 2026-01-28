@@ -1,13 +1,19 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Card, PageTitle } from "~/components"
-import { FortunesIcon, VeilIcon } from "~/components/icons"
+import {
+  FortunesIcon,
+  VeilIcon,
+  AmaryllisIcon,
+  AnthesisIcon,
+} from "~/components/icons"
 import { Link } from "@remix-run/react"
 
 export const meta: MetaFunction = () => [
   { title: "Micrantha Software | Solutions" },
   {
     name: "description",
-    content: "Mature Micrantha products, including Fortunes Service and Veil.",
+    content:
+      "Mature Micrantha products, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
   },
   {
     tagName: "link",
@@ -24,6 +30,20 @@ const Solutions = () => (
     />
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <Card
+        title="Amaryllis"
+        url="https://amaryllis.micrantha.com"
+        icon={<AmaryllisIcon />}
+      >
+        A react-native SDK for on-device mobile inference.
+      </Card>
+      <Card
+        title="Anthesis"
+        url="https://anthesis.micrantha.com"
+        icon={<AnthesisIcon />}
+      >
+        Agentic SDLC with governed autonomy and auditability.
+      </Card>
       <Card
         title="Fortunes Service"
         url="https://fortunes.micrantha.com"

@@ -25,13 +25,6 @@ const Philosophy = () => (
       secure, functional, and continuously learning.
     </p>
 
-    <h2 className="mt-8 text-xl">Position</h2>
-    <p className="mt-8">
-      Micrantha fundamentally is a sanctuary from <i>capitalism</i>,{" "}
-      <i>hierarchy of status</i>, <i>pseudo democratic slavery</i>,{" "}
-      <i>extreme competition</i>, and <i>delusions of sustainability</i>.
-    </p>
-
     <h2 className="mt-8 text-xl">Triangle</h2>
     <p className="mt-8">
       The philosophy of making software is that it is done iteratively with a

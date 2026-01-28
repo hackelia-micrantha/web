@@ -7,7 +7,7 @@ import {
   FortunesIcon,
   HyperionIcon,
   MysotosisIcon,
-  VeilIcon,
+  AmaryllisIcon,
 } from "~/components/icons"
 
 export const meta: MetaFunction = () => [
@@ -93,18 +93,18 @@ export default function Index() {
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <Card
+            title="Amaryllis"
+            url="https://amaryllis.micrantha.com"
+            icon={<AmaryllisIcon />}
+          >
+            A react-native SDK for on-device mobile inference.
+          </Card>
+          <Card
             title="Fortunes Service"
             url="https://fortunes.micrantha.com"
             icon={<FortunesIcon />}
           >
             A micro-service and Slack app for UNIX fortunes.
-          </Card>
-          <Card
-            title="Veil"
-            url="https://veil.micrantha.com"
-            icon={<VeilIcon />}
-          >
-            Pseudo-random profile photo obfuscation for fun or privacy.
           </Card>
           <Card
             title="Anthesis"

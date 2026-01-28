@@ -8,6 +8,7 @@ import {
   MobuildIcon,
   MysotosisIcon,
   AnthesisIcon,
+  GardenIcon,
 } from "~/components/icons"
 
 export const meta: MetaFunction = () => [
@@ -89,6 +90,15 @@ const Laboratory = () => (
         An MCP and LLM registry for mobile clients. Mobile SDK registers and
         provides tools that can be incorporated into LLM results and Agentic
         workflows. Scientific name is 'Mysotosis Sylvatica'.
+      </Card>
+
+      <Card
+        title="Compost"
+        icon={<GardenIcon />}
+        url="/compost"
+      >
+        A list of recycled projects that may be useful for parts. Sometimes they
+        are returned to the laboratory.
       </Card>
     </div>
   </div>
