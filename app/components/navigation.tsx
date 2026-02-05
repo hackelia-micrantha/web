@@ -31,21 +31,21 @@ export const Navigation = () => {
           Services
         </Link>
         <Link
-          to="/#solutions"
+          to="/solutions"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
           aria-current={currentHash === "#solutions" ? "page" : undefined}
         >
           Solutions
         </Link>
         <Link
-          to="/#laboratory"
+          to="/laboratory"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
           aria-current={currentHash === "#laboratory" ? "page" : undefined}
         >
           Laboratory
         </Link>
         <Link
-          to="/#philosophy"
+          to="/philosophy"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
           aria-current={currentHash === "#philosophy" ? "page" : undefined}
         >
