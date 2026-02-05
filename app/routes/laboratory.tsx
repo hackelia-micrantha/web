@@ -37,7 +37,7 @@ const Laboratory = () => (
     />
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card title="Project Hyperion" icon={<HyperionIcon />}>
+      <Card title="Project Hyperion" icon={<HyperionIcon />} url="https://hyperion.micrantha.com">
         Infrastructure for secure, reproducible laboratory environments,
         migrations and deploys. Hyperion is the worlds tallest living tree.
       </Card>

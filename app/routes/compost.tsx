@@ -58,7 +58,7 @@ const Compost = () => (
       </Card>
 
       <Card icon={<SandboxIcon />} title="Sandbox">
-        Development environments reused as sandcastles. Project specific
+        Development environments saved and reused as sandcastles. Project specific
         bastions with hooks. Requires mouseless editing skill.
       </Card>
 
