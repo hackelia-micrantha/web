@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/build/*",
+    "/img/*",
+    "/icon/*",
+    "/tailwind.css",
+    "/favicon.ico",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/*.css",
+    "/*.js",
+    "/*.map",
+    "/*.png",
+    "/*.jpg",
+    "/*.jpeg",
+    "/*.gif",
+    "/*.svg",
+    "/*.ico",
+    "/*.txt",
+    "/*.xml",
+    "/*.webmanifest"
+  ]
+}

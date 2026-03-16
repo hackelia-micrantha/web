@@ -1,8 +1,11 @@
+import { PassThrough } from "node:stream"
+
 import type { EntryContext } from "@remix-run/node"
 import { createReadableStreamFromReadable } from "@remix-run/node"
 import { RemixServer } from "@remix-run/react"
-import { PassThrough } from "node:stream"
 import { renderToPipeableStream } from "react-dom/server"
+
+const ABORT_DELAY = 5000
 
 export default function handleRequest(
   request: Request,
@@ -10,13 +13,13 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  return new Promise((resolve, reject) => {
+  return new Promise<Response>((resolve, reject) => {
     let didError = false
 
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer context={remixContext} url={request.url} />,
       {
-        onShellReady() {
+        onAllReady() {
           const body = new PassThrough()
           const stream = createReadableStreamFromReadable(body)
 
@@ -41,6 +44,10 @@ export default function handleRequest(
       },
     )
 
-    setTimeout(abort, 5000)
+    request.signal.addEventListener("abort", () => {
+      abort()
+    })
+
+    setTimeout(abort, ABORT_DELAY)
   })
 }

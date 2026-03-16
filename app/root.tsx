@@ -2,10 +2,9 @@ import type {
   HeadersFunction,
   LinksFunction,
   MetaFunction,
-  LoaderFunction,
+  LoaderFunctionArgs,
 } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { useLocation } from "@remix-run/react"
 import {
   Links,
   LiveReload,
@@ -17,6 +16,9 @@ import {
 } from "@remix-run/react"
 
 import { Navigation, Footer, Analytics } from "./components"
+import { getDocumentCacheControl } from "./services/cache-policy.server"
+import { getFortune } from "./services/fortune.server"
+import { resolveRuntimePlatform } from "./services/platform.server"
 
 import type { Fortune } from "./model"
 
@@ -70,47 +72,46 @@ export const meta: MetaFunction = () => [
   },
 ]
 
-export const headers: HeadersFunction = () => ({
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "DENY",
-  "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
-})
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  const cacheControl =
+    loaderHeaders.get("Cache-Control") ??
+    "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
+
+  return {
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
+    "Cache-Control": cacheControl,
+  }
+}
 
 type State = {
   fortune: Fortune | null
   analyticsId: string | null
 }
 
-export const loader: LoaderFunction = async () => {
-  const analyticsId = process.env.FORTUNES_ANALYTICS_ID
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+  const runtime = resolveRuntimePlatform(context, request)
+  const fortune = await getFortune({
+    cache: runtime.edgeCache,
+    origin: runtime.origin,
+  })
+  const cacheControl = getDocumentCacheControl(new URL(request.url).pathname)
 
-  try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 1500)
-    const res = await fetch(
-      "https://fortunes.micrantha.com/api/v1/random?s=true",
-      { signal: controller.signal },
-    )
-    clearTimeout(timeoutId)
-    const fortune = await res.json()
-
-    return json(
-      { fortune, analyticsId },
-      { headers: { "Cache-Control": "public, max-age=300" } },
-    )
-  } catch {
-    return json(
-      { fortune: null, analyticsId },
-      { headers: { "Cache-Control": "public, max-age=60" } },
-    )
-  }
+  return json(
+    { fortune, analyticsId: runtime.analyticsId },
+    { headers: { "Cache-Control": cacheControl } },
+  )
 }
 
 export default function App() {
+  const isDev =
+    typeof process !== "undefined"
+      ? process.env.NODE_ENV === "development"
+      : false
+
   const state = useLoaderData() as State | null
-  const location = useLocation()
-  const url = `https://micrantha.com${location.pathname}`
   const structuredData = [
     {
       "@context": "https://schema.org",
@@ -123,7 +124,7 @@ export default function App() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: "Micrantha Software",
-      url,
+      url: "https://micrantha.com",
     },
   ]
 
@@ -151,7 +152,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <Analytics id={state?.analyticsId} />
-        {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
+        {isDev ? <LiveReload /> : null}
       </body>
     </html>
   )

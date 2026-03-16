@@ -1,15 +1,10 @@
-import { Link, NavLink, useLocation } from "@remix-run/react"
 import { GithubIcon } from "~/components/icons"
 
 export const Navigation = () => {
-  const { pathname, hash } = useLocation()
-  const isHome = pathname === "/"
-  const currentHash = isHome ? hash : ""
-
   return (
     <nav className="flex flex-wrap items-stretch justify-between">
       <div className="m-3 flex flex-shrink-0 items-center">
-        <Link to="/">
+        <a href="/">
           <img
             src="/img/logo.png"
             width="48"
@@ -17,53 +12,48 @@ export const Navigation = () => {
             alt="logo"
             className="mr-3"
           />
-        </Link>
-        <Link to="/" className="text-xl font-semibold tracking-tight">
+        </a>
+        <a href="/" className="text-xl font-semibold tracking-tight">
           Micrantha
-        </Link>
+        </a>
       </div>
       <div className="flex items-stretch">
-        <Link
-          to="/#services"
+        <a
+          href="/#services"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
-          aria-current={currentHash === "#services" ? "page" : undefined}
         >
           Services
-        </Link>
-        <Link
-          to="/solutions"
+        </a>
+        <a
+          href="/solutions"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
-          aria-current={currentHash === "#solutions" ? "page" : undefined}
         >
           Solutions
-        </Link>
-        <Link
-          to="/laboratory"
+        </a>
+        <a
+          href="/laboratory"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
-          aria-current={currentHash === "#laboratory" ? "page" : undefined}
         >
           Laboratory
-        </Link>
-        <Link
-          to="/philosophy"
+        </a>
+        <a
+          href="/philosophy"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
-          aria-current={currentHash === "#philosophy" ? "page" : undefined}
         >
           Philosophy
-        </Link>
-        <Link
-          to="/#contact"
+        </a>
+        <a
+          href="/#contact"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
-          aria-current={currentHash === "#contact" ? "page" : undefined}
         >
           Contact
-        </Link>
-        <NavLink
-          to="/support"
+        </a>
+        <a
+          href="/support"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
         >
           Support
-        </NavLink>
+        </a>
         <a
           href="https://github.com/hackelia-micrantha"
           className="flex items-center justify-center px-3 hover:bg-gray-100"

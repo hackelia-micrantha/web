@@ -17,12 +17,14 @@
     "lint:fix": "eslint --fix .",
     "start": "remix-serve build/index.js",
     "typecheck": "tsc -b",
+    "deploy:cloudflare": "yarn typecheck && yarn build && npx wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main}",
     "package": "create-registry-image --latest --push micrantha/web"
   },
   "dependencies": {
     "@remix-run/node": "2.17.2",
     "@remix-run/react": "2.17.2",
     "@remix-run/serve": "2.17.2",
+    "isbot": "^4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-websitecarbon-badge": "^1.0.5"

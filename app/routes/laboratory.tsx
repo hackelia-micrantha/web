@@ -37,7 +37,11 @@ const Laboratory = () => (
     />
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card title="Project Hyperion" icon={<HyperionIcon />} url="https://hyperion.micrantha.com">
+      <Card
+        title="Project Hyperion"
+        icon={<HyperionIcon />}
+        url="https://hyperion.micrantha.com"
+      >
         Infrastructure for secure, reproducible laboratory environments,
         migrations and deploys. Hyperion is the worlds tallest living tree.
       </Card>
@@ -53,7 +57,7 @@ const Laboratory = () => (
 
       <Card
         title="Bluebell"
-        url="https://github.com/hackelia-micrantha/bluebell"
+        url="https://bluebell.micrantha.com"
         icon={<BluebellIcon />}
       >
         A multiplatform mobile SDK and project template using AI to generate
@@ -92,11 +96,7 @@ const Laboratory = () => (
         workflows. Scientific name is 'Mysotosis Sylvatica'.
       </Card>
 
-      <Card
-        title="Compost"
-        icon={<GardenIcon />}
-        url="/compost"
-      >
+      <Card title="Compost" icon={<GardenIcon />} url="/compost">
         A list of recycled projects that may be useful for parts. Sometimes they
         are returned to the laboratory.
       </Card>

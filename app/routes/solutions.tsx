@@ -6,7 +6,6 @@ import {
   AmaryllisIcon,
   AnthesisIcon,
 } from "~/components/icons"
-import { Link } from "@remix-run/react"
 
 export const meta: MetaFunction = () => [
   { title: "Micrantha Software | Solutions" },
@@ -48,11 +47,18 @@ const Solutions = () => (
         title="Fortunes Service"
         url="https://fortunes.micrantha.com"
         icon={<FortunesIcon />}
+        actions={[
+          <a
+            key="slack-app"
+            href="https://slack.com/apps/A8MAPLX53-fortunes"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Slack App
+          </a>,
+        ]}
       >
-        A micro-service and{" "}
-        <Link to="https://slack.com/apps/A8MAPLX53-fortunes">Slack App</Link>{" "}
-        for UNIX fortunes. Fortunes are witty antidotes that come in many
-        categories such as technical, poems, quotes, and proverbs.
+        A micro-service and Slack app for UNIX fortunes.
       </Card>
       <Card title="Veil" icon={<VeilIcon />} url="https://veil.micrantha.com">
         A micro-service to pseudo-randomly obfuscate a profile photo for fun or

@@ -58,8 +58,8 @@ const Compost = () => (
       </Card>
 
       <Card icon={<SandboxIcon />} title="Sandbox">
-        Development environments saved and reused as sandcastles. Project specific
-        bastions with hooks. Requires mouseless editing skill.
+        Development environments saved and reused as sandcastles. Project
+        specific bastions with hooks. Requires mouseless editing skill.
       </Card>
 
       <Card title="Micra" icon={<MicraIcon />}>
@@ -68,7 +68,11 @@ const Compost = () => (
         design.
       </Card>
 
-      <Card title="Outermesh" icon={<OutermeshIcon />} url="https://outermesh.micrantha.com">
+      <Card
+        title="Outermesh"
+        icon={<OutermeshIcon />}
+        url="https://outermesh.micrantha.com"
+      >
         An e-book on learning software development that has turned into a
         project in its own right: a multiplayer TUI game about hacking
       </Card>

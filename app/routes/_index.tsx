@@ -63,20 +63,24 @@ export default function Index() {
           <p className="text-xs uppercase tracking-widest text-gray-500">
             Services
           </p>
-          <h2 className="text-2xl">Focused, end-to-end work.</h2>
+          <h2 className="text-2xl">Specialized consulting for hard systems.</h2>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card title="Product strategy and architecture">
-            Clarify scope, constraints, and outcomes.
+          <Card title="Mobile Architecture & Legacy Modernization">
+            Modernize aging mobile codebases, untangle platform decisions, and
+            create a path from brittle apps to maintainable systems.
           </Card>
-          <Card title="Full-stack delivery">
-            Web, mobile, infrastructure, and integration.
+          <Card title="Mobile & Authorization Security">
+            Harden mobile clients, auth flows, token handling, and access
+            boundaries before weaknesses become incidents.
           </Card>
-          <Card title="Reliability and maintenance">
-            Hardening, monitoring, and iteration.
+          <Card title="Platform Systems">
+            Design the internal systems that support delivery: infrastructure,
+            environments, deployment workflows, and service foundations.
           </Card>
-          <Card title="AI-assisted development">
-            Accelerated delivery with governance.
+          <Card title="AI Governance">
+            Put controls around AI-assisted development and automation with
+            policy, auditability, review loops, and operational guardrails.
           </Card>
         </div>
       </section>
@@ -134,7 +138,7 @@ export default function Index() {
             Secure, reproducible lab environments, migrations, and deploys.
           </Card>
           <Card title="Bluebell" icon={<BluebellIcon />}>
-            Multiplatform mobile SDK with AI-generated features.
+            Multiplatform mobile SDK with AI capable features.
           </Card>
           <Card title="Project Mysotosis" icon={<MysotosisIcon />}>
             MCP and LLM registry for mobile clients.
