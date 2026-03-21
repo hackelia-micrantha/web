@@ -2,7 +2,10 @@ import { expect, test } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
 
 const pages = [
-  { path: "/", heading: "Software that grows with you." },
+  {
+    path: "/",
+    heading: "Build, govern, and ship software that can survive production.",
+  },
   { path: "/solutions", heading: "Solutions" },
   { path: "/support", heading: "Support" },
 ]
