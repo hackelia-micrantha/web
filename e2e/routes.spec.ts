@@ -5,11 +5,17 @@ test("/services exposes the consultation path", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Services" })).toBeVisible()
   await expect(
-    page.getByRole("link", { name: /services@micrantha\.com/i }),
+    page.getByRole("heading", { name: "Request a consultation" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: "Email services@micrantha.com" }),
   ).toHaveAttribute(
     "href",
     "mailto:services@micrantha.com?subject=Consultation",
   )
+  await expect(
+    page.getByRole("heading", { name: "What to include" }),
+  ).toBeVisible()
   await expect(page.getByText("the problem or project")).toBeVisible()
   await expect(page.getByText("what we can help with")).toBeVisible()
   await expect(page.getByText("how and when to contact you")).toBeVisible()
