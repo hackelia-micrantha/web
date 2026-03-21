@@ -15,7 +15,7 @@ export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Home",
     description:
-      "Micrantha builds resilient software systems from discovery to production. Explore services, solutions, and the laboratory.",
+      "Micrantha helps teams build, govern, and ship software that can survive production, with depth in AI, mobile platforms, secure systems, and deployments.",
     path: "/",
   })
 
@@ -31,17 +31,20 @@ export default function Index() {
           <p className="text-xs uppercase tracking-widest text-gray-500">
             Micrantha Software
           </p>
-          <h1 className="text-4xl">Software that grows with you.</h1>
+          <h1 className="text-4xl">
+            Build, govern, and ship software that can survive production.
+          </h1>
           <p className="mt-4 text-base text-gray-700">
-            Design and delivery of resilient systems from discovery to
-            production.
+            Broad engineering support across AI development, AI governance,
+            mobile platforms, secure authentication, and deployment systems for
+            teams turning fragile software into production systems.
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
             <Link className="button" to="/services">
               Request a consultation
             </Link>
-            <Link className="button button-outline" to="/solutions">
-              See solutions
+            <Link className="button button-outline" to="/services">
+              Explore services
             </Link>
           </div>
         </div>
@@ -55,24 +58,36 @@ export default function Index() {
           <p className="text-xs uppercase tracking-widest text-gray-500">
             Services
           </p>
-          <h2 className="text-2xl">Specialized consulting for hard systems.</h2>
+          <h2 className="text-2xl">
+            Broad engineering with depth in AI, mobile platforms, secure
+            systems, and production delivery.
+          </h2>
+          <p className="mt-3 text-gray-700">
+            We help teams turn fragile products, platforms, and workflows into
+            production systems.
+          </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card title="Mobile Architecture & Legacy Modernization">
-            Modernize aging mobile codebases, untangle platform decisions, and
-            create a path from brittle apps to maintainable systems.
-          </Card>
-          <Card title="Mobile & Authorization Security">
-            Harden mobile clients, auth flows, token handling, and access
-            boundaries before weaknesses become incidents.
-          </Card>
-          <Card title="Platform Systems">
-            Design the internal systems that support delivery: infrastructure,
-            environments, deployment workflows, and service foundations.
+          <Card title="AI Development">
+            Build AI-enabled products, internal tools, and workflows that
+            integrate with real software systems instead of living as isolated
+            demos.
           </Card>
           <Card title="AI Governance">
-            Put controls around AI-assisted development and automation with
-            policy, auditability, review loops, and operational guardrails.
+            Add policy, review, auditability, and operational controls around
+            AI-assisted development and AI-enabled systems.
+          </Card>
+          <Card title="Mobile Platforms">
+            Modernize mobile foundations, untangle platform architecture, and
+            support secure, maintainable client delivery.
+          </Card>
+          <Card title="Secure Systems">
+            Harden authentication, authorization, and access boundaries for
+            systems where trust, compliance, and risk matter.
+          </Card>
+          <Card title="Production Deployments">
+            Design the environments, rollout paths, and operational foundations
+            needed to ship reliably and keep systems stable after release.
           </Card>
         </div>
         <Link className="inline-block text-sm" to="/services">

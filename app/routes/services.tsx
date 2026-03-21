@@ -5,7 +5,8 @@ import { buildPageMeta } from "~/utils/seo"
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Services",
-    description: "Request a consultation for Micrantha software services.",
+    description:
+      "Request a consultation for AI development, AI governance, mobile platform, secure systems, and production deployment services.",
     path: "/services",
   })
 
@@ -13,13 +14,14 @@ export const Services = () => (
   <div>
     <PageTitle
       title="Services"
-      subtitle="Consulting for platform systems, mobile architecture, AI governance, and security-sensitive delivery work."
+      subtitle="Engineering support across AI development, AI governance, mobile platforms, secure systems, and production deployments."
     />
 
     <section className="space-y-4">
       <h2 className="text-xl">Request a consultation</h2>
       <p>
-        Send a consultation request to{" "}
+        Request a consultation if you need to turn a fragile product, platform,
+        or workflow into a production system. Reach us at{" "}
         <a href="mailto:services@micrantha.com?subject=Consultation">
           services@micrantha.com
         </a>
@@ -37,9 +39,12 @@ export const Services = () => (
       <h2 className="text-xl">What to include</h2>
       <p>Include enough context for an informed first reply:</p>
       <ul className="list-disc space-y-2 pl-6">
-        <li>the problem or project</li>
-        <li>what we can help with</li>
-        <li>how and when to contact you</li>
+        <li>the product, platform, or workflow you are building</li>
+        <li>
+          whether you need AI delivery, governance, mobile platform, security,
+          or deployment support
+        </li>
+        <li>your timeline, constraints, and how to contact you</li>
       </ul>
     </section>
   </div>
