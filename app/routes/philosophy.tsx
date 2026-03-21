@@ -53,20 +53,16 @@ const Philosophy = () => {
         or <b>cost</b>.
       </p>
 
-      <picture className="float-right">
-        <source
-          srcSet="/img/project-management-triangle-venn-diagram.webp"
-          type="image/webp"
-        />
+      <div className="float-right">
         <img
-          src="/img/project-management-triangle-venn-diagram.png"
+          src="/img/project-management-triangle-venn-diagram.svg"
           alt="project management triangle diagram"
           width="397"
           height="420"
           loading="lazy"
           decoding="async"
         />
-      </picture>
+      </div>
 
       <p className="mt-8">
         For the people at Micrantha it is a creative process, forming inherently

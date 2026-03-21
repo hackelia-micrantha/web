@@ -1,0 +1,100 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="397"
+  height="420"
+  viewBox="0 0 397 420"
+  fill="none"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">Project management triangle venn diagram</title>
+  <desc id="desc">
+    A three-circle diagram showing quality, time, and cost in balance.
+  </desc>
+
+  <rect width="397" height="420" rx="24" fill="white" />
+
+  <circle
+    cx="198.5"
+    cy="132"
+    r="96"
+    fill="#fda4af"
+    fill-opacity="0.5"
+    stroke="#fb7185"
+    stroke-width="2"
+  />
+  <circle
+    cx="126"
+    cy="244"
+    r="96"
+    fill="#93c5fd"
+    fill-opacity="0.5"
+    stroke="#60a5fa"
+    stroke-width="2"
+  />
+  <circle
+    cx="271"
+    cy="244"
+    r="96"
+    fill="#fde68a"
+    fill-opacity="0.55"
+    stroke="#fbbf24"
+    stroke-width="2"
+  />
+
+  <path
+    d="M198.5 72 312 270H85L198.5 72Z"
+    stroke="#1f2937"
+    stroke-width="2.5"
+    stroke-linejoin="round"
+    stroke-opacity="0.65"
+  />
+
+  <circle cx="198.5" cy="218" r="34" fill="#111827" fill-opacity="0.08" />
+
+  <text
+    x="198.5"
+    y="70"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="20"
+    font-weight="700"
+    fill="#881337"
+  >
+    QUALITY
+  </text>
+  <text
+    x="100"
+    y="306"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="20"
+    font-weight="700"
+    fill="#1d4ed8"
+  >
+    TIME
+  </text>
+  <text
+    x="297"
+    y="306"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="20"
+    font-weight="700"
+    fill="#b45309"
+  >
+    COST
+  </text>
+
+  <text
+    x="198.5"
+    y="211"
+    text-anchor="middle"
+    font-family="Arial, sans-serif"
+    font-size="15"
+    font-weight="700"
+    fill="#111827"
+  >
+    BALANCE
+  </text>
+</svg>

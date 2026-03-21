@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Card, ExternalLink, PageTitle } from "~/components"
+import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
   FortunesIcon,
@@ -61,7 +62,7 @@ const Solutions = () => (
         url="https://amaryllis.micrantha.com"
         icon={<AmaryllisIcon />}
         headingLevel={2}
-        className="border-slate-300 bg-slate-50"
+        className={cardStyles.neutral}
       >
         A react-native SDK for on-device mobile inference.
       </Card>
@@ -70,7 +71,7 @@ const Solutions = () => (
         url="https://anthesis.micrantha.com"
         icon={<AnthesisIcon />}
         headingLevel={2}
-        className="border-emerald-300 bg-emerald-50"
+        className={cardStyles.green}
       >
         Agentic SDLC with governed autonomy and auditability.
       </Card>
@@ -79,7 +80,7 @@ const Solutions = () => (
         url="https://fortunes.micrantha.com"
         icon={<FortunesIcon />}
         headingLevel={2}
-        className="border-amber-200 bg-[#fffdf5]"
+        className={cardStyles.yellow}
         actions={[
           <ExternalLink
             key="slack-app"
@@ -97,7 +98,7 @@ const Solutions = () => (
         icon={<VeilIcon />}
         url="https://veil.micrantha.com"
         headingLevel={2}
-        className="border-sky-300 bg-sky-50"
+        className={cardStyles.blue}
       >
         A micro-service to pseudo-randomly obfuscate a profile photo for fun or
         security.

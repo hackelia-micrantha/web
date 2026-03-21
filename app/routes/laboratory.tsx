@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
+import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
   HyperionIcon,
@@ -93,7 +94,7 @@ const Laboratory = () => (
         icon={<HyperionIcon />}
         url="https://hyperion.micrantha.com"
         headingLevel={2}
-        className="border-slate-300 bg-slate-50"
+        className={cardStyles.neutral}
       >
         Infrastructure for secure, reproducible laboratory environments,
         migrations and deploys. Hyperion is the worlds tallest living tree.
@@ -104,7 +105,7 @@ const Laboratory = () => (
         url="https://anthesis.micrantha.com"
         icon={<AnthesisIcon />}
         headingLevel={2}
-        className="border-emerald-300 bg-emerald-50"
+        className={cardStyles.green}
       >
         Agentic SDLC with principles: Governed Autonomy, Human Authority First,
         Deterministic Execution, Auditability, and a Living Architecture.
@@ -115,7 +116,7 @@ const Laboratory = () => (
         url="https://github.com/hackelia-micrantha/bluebell"
         icon={<BluebellIcon />}
         headingLevel={2}
-        className="border-sky-300 bg-sky-50"
+        className={cardStyles.blue}
       >
         A multiplatform mobile SDK and project template using AI to generate
         features. Scientific name is 'Hyacinthoides non-scripta'.
@@ -126,7 +127,7 @@ const Laboratory = () => (
         icon={<EyespieIcon />}
         url="https://github.com/hackelia-micrantha/eyespie"
         headingLevel={2}
-        className="border-rose-200 bg-rose-50"
+        className={cardStyles.red}
       >
         Eyespie is a turn based mobile game using machine learning to identify
         real world things with clues and guess them with proofs. Bluebell use
@@ -138,7 +139,7 @@ const Laboratory = () => (
         url="https://github.com/hackelia-micrantha/mobuild"
         icon={<MobuildIcon />}
         headingLevel={2}
-        className="border-amber-200 bg-[#fffdf5]"
+        className={cardStyles.yellow}
       >
         A mobile SDK to randomly obfuscate environment variables on mobile
         clients per build. An extra small security layer with a Github action to
@@ -149,7 +150,7 @@ const Laboratory = () => (
         title="Mobuild Digitalis"
         icon={<MobuildIcon />}
         headingLevel={2}
-        className="border-violet-300 bg-violet-50"
+        className={cardStyles.purple}
       >
         A backend and mobile SDK to attest for mobile clients. Once attested,
         provides mobile configuration that is stored in secure enclave, such as
@@ -160,7 +161,7 @@ const Laboratory = () => (
         title="Project Mysotosis"
         icon={<MysotosisIcon />}
         headingLevel={2}
-        className="border-cyan-300 bg-cyan-50"
+        className={cardStyles.cyan}
       >
         An MCP and LLM registry for mobile clients. Mobile SDK registers and
         provides tools that can be incorporated into LLM results and Agentic
@@ -172,7 +173,7 @@ const Laboratory = () => (
         icon={<GardenIcon />}
         url="/compost"
         headingLevel={2}
-        className="border-lime-300 bg-lime-50"
+        className={cardStyles.lime}
       >
         A list of recycled projects that may be useful for parts. Sometimes they
         are returned to the laboratory.
