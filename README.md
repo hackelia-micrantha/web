@@ -34,6 +34,7 @@ Then visit `http://localhost:3000`.
 - `yarn test:e2e`: run Playwright end-to-end tests
 - `yarn test:e2e:mobile`: run the mobile Playwright project
 - `yarn typecheck`: TypeScript project check
+- `yarn deploy:cloudflare`: build and direct-upload the app to Cloudflare Pages with Wrangler
 
 ## End-to-end tests
 
@@ -72,6 +73,22 @@ Or use the Makefile helpers:
 make image
 make run
 ```
+
+## Cloudflare Pages
+
+This repo includes a Cloudflare Pages deployment path for the Remix app:
+
+```sh
+npx wrangler whoami
+yarn deploy:cloudflare
+```
+
+Notes:
+
+- `wrangler.toml` is the source of truth for the Pages build output directory and compatibility date.
+- The Pages deploy path expects the root-level `functions/` directory and the Remix server build in `build/`.
+- Override the target project or branch with `CLOUDFLARE_PAGES_PROJECT` and `CLOUDFLARE_PAGES_BRANCH` if needed.
+- Runtime values such as `MICRANTHA_ANALYTICS_ID` should be configured in the Cloudflare Pages project environment.
 
 ## Project structure
 
