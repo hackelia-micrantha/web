@@ -16,6 +16,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "remix-serve build/index.js",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:mobile": "playwright test --project=mobile-chromium",
     "typecheck": "tsc -b",
     "deploy:cloudflare": "yarn typecheck && yarn build && npx wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main}",
     "package": "create-registry-image --latest --push micrantha/web"
@@ -31,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
+    "@playwright/test": "^1.54.2",
     "@remix-run/dev": "2.17.2",
     "@remix-run/eslint-config": "2.17.2",
     "@tailwindcss/cli": "4.1.18",
