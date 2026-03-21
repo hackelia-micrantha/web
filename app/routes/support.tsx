@@ -14,41 +14,67 @@ const Support = () => (
   <div>
     <PageTitle
       title="Support"
-      subtitle="Encountering problems or need assistance?"
+      subtitle="Choose the support channel that fits the urgency and shape of the issue."
     />
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Card
         title="Email"
+        subtitle="Best for detailed support requests"
         icon={<EmailIcon />}
-        url="mailto:support@micrantha.com"
         headingLevel={2}
+        className="border-slate-300 bg-slate-50"
+        actions={[
+          <a
+            key="email-support"
+            className="button"
+            href="mailto:support@micrantha.com"
+          >
+            support@micrantha.com
+          </a>,
+        ]}
       >
-        Send an email inquiries to{" "}
-        <a href="mailto:support@micrantha.com">support@micrantha.com</a>.
+        Send support details, screenshots, logs, or reproduction steps by email.
       </Card>
 
       <Card
         title="IRC"
+        subtitle="Best for open technical discussion"
         icon={<IrcIcon />}
-        url="https://libera.chat"
         headingLevel={2}
+        className="border-emerald-300 bg-emerald-50"
+        actions={[
+          <ExternalLink
+            key="irc-link"
+            className="button"
+            href="https://libera.chat"
+          >
+            libera.chat
+          </ExternalLink>,
+        ]}
       >
-        Join <b>#micrantha</b> on IRC via{" "}
-        <ExternalLink href="https://libera.chat">libera.chat</ExternalLink>.
+        Join <b>#micrantha</b> on IRC for open technical discussion and shared
+        troubleshooting.
       </Card>
 
       <Card
         title="Slack"
+        subtitle="Best for team coordination"
         icon={<SlackIcon />}
-        url="https://micrantha.slack.com"
         headingLevel={2}
+        className="border-sky-300 bg-sky-50"
+        actions={[
+          <ExternalLink
+            key="slack-link"
+            className="button"
+            href="https://micrantha.slack.com"
+          >
+            Join Slack
+          </ExternalLink>,
+        ]}
       >
-        Request to join the{" "}
-        <ExternalLink href="https://micrantha.slack.com">
-          slack workspace
-        </ExternalLink>{" "}
-        and post your question in <b>#support</b>.
+        Request workspace access and post your question in <b>#support</b> for
+        team coordination.
       </Card>
     </div>
   </div>
