@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
 
-test("/philosophy exposes the core manifesto and optimized diagram", async ({
+test("/philosophy exposes the core manifesto and vector diagram", async ({
   page,
 }) => {
   await page.goto("/philosophy")
@@ -9,12 +9,9 @@ test("/philosophy exposes the core manifesto and optimized diagram", async ({
   await expect(page.getByRole("heading", { name: "Triangle" })).toBeVisible()
   await expect(page.getByText("project management triangle")).toBeVisible()
   await expect(
-    page.locator('picture source[type="image/webp"]'),
-  ).toHaveAttribute(
-    "srcset",
-    "/img/project-management-triangle-venn-diagram.webp",
-  )
-  await expect(
     page.getByAltText("project management triangle diagram"),
   ).toBeVisible()
+  await expect(
+    page.getByAltText("project management triangle diagram"),
+  ).toHaveAttribute("src", "/img/project-management-triangle-venn-diagram.svg")
 })

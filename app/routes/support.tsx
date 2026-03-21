@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node"
 import { PageTitle, Card, ExternalLink } from "~/components"
 import { EmailIcon, SlackIcon, IrcIcon } from "~/components/icons"
+import { cardStyles } from "~/utils/card-styles"
 import { buildPageMeta } from "~/utils/seo"
 
 export const meta: MetaFunction = () =>
@@ -23,7 +24,7 @@ const Support = () => (
         subtitle="Best for detailed support requests"
         icon={<EmailIcon />}
         headingLevel={2}
-        className="border-slate-300 bg-slate-50"
+        className={cardStyles.neutral}
         actions={[
           <a
             key="email-support"
@@ -42,7 +43,7 @@ const Support = () => (
         subtitle="Best for open technical discussion"
         icon={<IrcIcon />}
         headingLevel={2}
-        className="border-emerald-300 bg-emerald-50"
+        className={cardStyles.green}
         actions={[
           <ExternalLink
             key="irc-link"
@@ -62,7 +63,7 @@ const Support = () => (
         subtitle="Best for team coordination"
         icon={<SlackIcon />}
         headingLevel={2}
-        className="border-sky-300 bg-sky-50"
+        className={cardStyles.blue}
         actions={[
           <ExternalLink
             key="slack-link"

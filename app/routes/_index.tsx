@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card } from "~/components"
+import { cardStyles } from "~/utils/card-styles"
 import { buildPageMeta } from "~/utils/seo"
 import {
   AnthesisIcon,
@@ -68,30 +69,24 @@ export default function Index() {
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Card title="AI Development" className="border-slate-300 bg-slate-50">
+          <Card title="AI Development" className={cardStyles.neutral}>
             Build AI-enabled products, internal tools, and workflows that
             integrate with real software systems instead of living as isolated
             demos.
           </Card>
-          <Card
-            title="AI Governance"
-            className="border-emerald-300 bg-emerald-50"
-          >
+          <Card title="AI Governance" className={cardStyles.green}>
             Add policy, review, auditability, and operational controls around
             AI-assisted development and AI-enabled systems.
           </Card>
-          <Card title="Mobile Platforms" className="border-sky-300 bg-sky-50">
+          <Card title="Mobile Platforms" className={cardStyles.blue}>
             Modernize mobile foundations, untangle platform architecture, and
             support secure, maintainable client delivery.
           </Card>
-          <Card title="Secure Systems" className="border-rose-200 bg-rose-50">
+          <Card title="Secure Systems" className={cardStyles.red}>
             Harden authentication, authorization, and access boundaries for
             systems where trust, compliance, and risk matter.
           </Card>
-          <Card
-            title="Production Deployments"
-            className="border-amber-200 bg-[#fffdf5]"
-          >
+          <Card title="Production Deployments" className={cardStyles.yellow}>
             Design the environments, rollout paths, and operational foundations
             needed to ship reliably and keep systems stable after release.
           </Card>
@@ -117,7 +112,7 @@ export default function Index() {
             url="https://amaryllis.micrantha.com"
             icon={<AmaryllisIcon />}
             headingLevel={3}
-            className="border-slate-300 bg-slate-50"
+            className={cardStyles.neutral}
           >
             A react-native SDK for on-device mobile inference.
           </Card>
@@ -126,7 +121,7 @@ export default function Index() {
             url="https://fortunes.micrantha.com"
             icon={<FortunesIcon />}
             headingLevel={3}
-            className="border-amber-200 bg-[#fffdf5]"
+            className={cardStyles.yellow}
           >
             A micro-service and Slack app for UNIX fortunes.
           </Card>
@@ -135,7 +130,7 @@ export default function Index() {
             url="https://anthesis.micrantha.com"
             icon={<AnthesisIcon />}
             headingLevel={3}
-            className="border-emerald-300 bg-emerald-50"
+            className={cardStyles.green}
           >
             Agentic SDLC with governed autonomy and auditability.
           </Card>
@@ -161,7 +156,7 @@ export default function Index() {
             icon={<HyperionIcon />}
             url="https://hyperion.micrantha.com"
             headingLevel={3}
-            className="border-slate-300 bg-slate-50"
+            className={cardStyles.neutral}
           >
             Secure, reproducible lab environments, migrations, and deploys.
           </Card>
@@ -170,7 +165,7 @@ export default function Index() {
             icon={<BluebellIcon />}
             url="https://github.com/hackelia-micrantha/bluebell"
             headingLevel={3}
-            className="border-sky-300 bg-sky-50"
+            className={cardStyles.blue}
           >
             Multiplatform mobile SDK with AI capable features.
           </Card>
@@ -178,7 +173,7 @@ export default function Index() {
             title="Project Mysotosis"
             icon={<MysotosisIcon />}
             headingLevel={3}
-            className="border-emerald-300 bg-emerald-50"
+            className={cardStyles.green}
           >
             MCP and LLM registry for mobile clients.
           </Card>
