@@ -16,9 +16,17 @@ test("/services exposes the consultation path", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "What to include" }),
   ).toBeVisible()
-  await expect(page.getByText("the problem or project")).toBeVisible()
-  await expect(page.getByText("what we can help with")).toBeVisible()
-  await expect(page.getByText("how and when to contact you")).toBeVisible()
+  await expect(
+    page.getByText("the product, platform, or workflow you are building"),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "whether you need AI delivery, governance, mobile platform, security, or deployment support",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByText("your timeline, constraints, and how to contact you"),
+  ).toBeVisible()
 })
 
 test("/laboratory exposes key collection content", async ({ page }) => {

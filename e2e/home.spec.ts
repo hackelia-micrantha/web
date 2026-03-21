@@ -4,7 +4,9 @@ test("homepage exposes primary marketing content", async ({ page }) => {
   await page.goto("/")
 
   await expect(
-    page.getByRole("heading", { name: "Software that grows with you." }),
+    page.getByRole("heading", {
+      name: "Build, govern, and ship software that can survive production.",
+    }),
   ).toBeVisible()
   await expect(
     page.getByRole("link", { name: "Request a consultation" }),
@@ -14,11 +16,11 @@ test("homepage exposes primary marketing content", async ({ page }) => {
   ).toHaveAttribute("href", "/services")
   await expect(
     page.getByRole("heading", {
-      name: "Specialized consulting for hard systems.",
+      name: "Broad engineering with depth in AI, mobile platforms, secure systems, and production delivery.",
     }),
   ).toBeVisible()
   await expect(
-    page.getByRole("link", { name: "View all solutions" }),
+    page.getByRole("link", { name: "Explore services" }).first(),
   ).toBeVisible()
 })
 
