@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react"
 import { useEffect, useState } from "react"
+import { ExternalLink } from "./external-link"
 
 type FortuneResponse = {
   text: string
@@ -45,7 +46,9 @@ export const Footer = () => {
 
       <div className="mt-2">
         &copy; All Rights Reserved{" "}
-        <a href="https://micrantha.com">Micrantha Software Solutions</a>
+        <ExternalLink href="https://micrantha.com">
+          Micrantha Software Solutions
+        </ExternalLink>
       </div>
     </footer>
   )

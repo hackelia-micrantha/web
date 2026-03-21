@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node"
-import { PageTitle, Card } from "~/components"
+import { PageTitle, Card, ExternalLink } from "~/components"
 import { EmailIcon, SlackIcon, IrcIcon } from "~/components/icons"
 import { buildPageMeta } from "~/utils/seo"
 
@@ -35,7 +35,7 @@ const Support = () => (
         headingLevel={2}
       >
         Join <b>#micrantha</b> on IRC via{" "}
-        <a href="https://libera.chat">libera.chat</a>.
+        <ExternalLink href="https://libera.chat">libera.chat</ExternalLink>.
       </Card>
 
       <Card
@@ -45,8 +45,10 @@ const Support = () => (
         headingLevel={2}
       >
         Request to join the{" "}
-        <a href="https://micrantha.slack.com">slack workspace</a> and post your
-        question in <b>#support</b>.
+        <ExternalLink href="https://micrantha.slack.com">
+          slack workspace
+        </ExternalLink>{" "}
+        and post your question in <b>#support</b>.
       </Card>
     </div>
   </div>

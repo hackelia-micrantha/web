@@ -12,6 +12,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useMatches,
 } from "@remix-run/react"
 
 import { Navigation, Footer, Analytics } from "./components"
@@ -127,6 +128,13 @@ export default function App() {
       : false
 
   const state = useLoaderData() as State | null
+  const matches = useMatches()
+  const routeStructuredData = matches.flatMap((match) => {
+    const candidate = (match.handle as { structuredData?: unknown } | undefined)
+      ?.structuredData
+
+    return candidate ? [candidate] : []
+  })
   const structuredData = [
     {
       "@context": "https://schema.org",
@@ -141,6 +149,7 @@ export default function App() {
       name: "Micrantha Software",
       url: "https://micrantha.com",
     },
+    ...routeStructuredData,
   ]
 
   return (
