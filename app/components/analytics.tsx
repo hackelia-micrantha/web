@@ -1,8 +1,9 @@
 type Props = {
   id: string | null | undefined
+  nonce?: string
 }
 
-export const Analytics = ({ id }: Props) => {
+export const Analytics = ({ id, nonce }: Props) => {
   if (!id) return null
 
   return (
@@ -10,6 +11,7 @@ export const Analytics = ({ id }: Props) => {
       async
       defer
       data-website-id={id}
+      nonce={nonce}
       src="https://analytics.micrantha.com/umami.js"
     ></script>
   )

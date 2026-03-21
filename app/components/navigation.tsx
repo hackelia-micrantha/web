@@ -1,63 +1,59 @@
+import { Link } from "@remix-run/react"
 import { GithubIcon } from "~/components/icons"
 
 export const Navigation = () => {
   return (
     <nav className="flex flex-wrap items-stretch justify-between">
       <div className="m-3 flex flex-shrink-0 items-center">
-        <a href="/">
+        <Link to="/" aria-label="Micrantha home">
           <img
-            src="/img/logo.png"
+            src="/img/logo.svg"
             width="48"
             height="48"
-            alt="logo"
+            alt="Micrantha logo"
             className="mr-3"
           />
-        </a>
-        <a href="/" className="text-xl font-semibold tracking-tight">
+        </Link>
+        <Link to="/" className="text-xl font-semibold tracking-tight">
           Micrantha
-        </a>
+        </Link>
       </div>
       <div className="flex items-stretch">
-        <a
-          href="/#services"
+        <Link
+          to="/services"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
         >
           Services
-        </a>
-        <a
-          href="/solutions"
+        </Link>
+        <Link
+          to="/solutions"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
         >
           Solutions
-        </a>
-        <a
-          href="/laboratory"
+        </Link>
+        <Link
+          to="/laboratory"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
         >
           Laboratory
-        </a>
-        <a
-          href="/philosophy"
+        </Link>
+        <Link
+          to="/philosophy"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
         >
           Philosophy
-        </a>
-        <a
-          href="/#contact"
-          className="flex items-center justify-center px-3 hover:bg-gray-100"
-        >
-          Contact
-        </a>
-        <a
-          href="/support"
+        </Link>
+        <Link
+          to="/support"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
         >
           Support
-        </a>
+        </Link>
         <a
           href="https://github.com/hackelia-micrantha"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
           aria-label="Micrantha GitHub"
+          rel="noreferrer"
         >
           <GithubIcon />
         </a>

@@ -16,10 +16,36 @@ import {
 
 import { Navigation, Footer, Analytics } from "./components"
 import { getDocumentCacheControl } from "./services/cache-policy.server"
-import { getFortune } from "./services/fortune.server"
 import { resolveRuntimePlatform } from "./services/platform.server"
+import { buildSiteMeta } from "./utils/seo"
 
-import type { Fortune } from "./model"
+const NONCE_HEADER = "X-CSP-Nonce"
+
+function buildContentSecurityPolicy(nonce: string, isDev: boolean) {
+  const scriptSources = [
+    "'self'",
+    `'nonce-${nonce}'`,
+    "https://analytics.micrantha.com",
+  ]
+  const connectSources = ["'self'", "https://analytics.micrantha.com"]
+
+  if (isDev) {
+    connectSources.push("ws:", "wss:")
+    scriptSources.push("'unsafe-eval'")
+  }
+
+  return [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "img-src 'self' https: data:",
+    "manifest-src 'self'",
+    `connect-src ${connectSources.join(" ")}`,
+    "style-src 'self' 'unsafe-inline'",
+    `script-src ${scriptSources.join(" ")}`,
+  ].join("; ")
+}
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/tailwind.css" },
@@ -44,66 +70,54 @@ export const links: LinksFunction = () => [
   },
 ]
 
-export const meta: MetaFunction = () => [
-  { charset: "utf-8" },
-  { title: "Micrantha Software Solutions" },
-  { viewport: "width=device-width,initial-scale=1" },
-  { description: "a software as a service and consulting company" },
-  { name: "robots", content: "index,follow" },
-  {
-    keywords:
-      "sass, software, consulting, c, c++, objective-c, swift, java, kotlin, mobile, pwa, frontend, backend, android, ios, database, postgresql, infrastructure, deployment, architecture, design, testing, maintenance, golang, javascript, typescript",
-  },
-  { property: "og:site_name", content: "Micrantha Software" },
-  { property: "og:title", content: "Micrantha Software Solutions" },
-  {
-    property: "og:description",
-    content: "A software as a service and consulting company.",
-  },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: "https://micrantha.com" },
-  { property: "og:image", content: "https://micrantha.com/img/logo.png" },
-  { name: "twitter:card", content: "summary" },
-  { name: "twitter:title", content: "Micrantha Software Solutions" },
-  {
-    name: "twitter:description",
-    content: "A software as a service and consulting company.",
-  },
-]
+export const meta: MetaFunction = () => buildSiteMeta()
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => {
   const cacheControl =
     loaderHeaders.get("Cache-Control") ??
     "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
+  const nonce = loaderHeaders.get(NONCE_HEADER)
+  const isDev =
+    typeof process !== "undefined"
+      ? process.env.NODE_ENV === "development"
+      : false
 
-  return {
+  const headers: Record<string, string> = {
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
     "Cache-Control": cacheControl,
   }
+
+  if (!isDev && nonce) {
+    headers["Content-Security-Policy"] = buildContentSecurityPolicy(
+      nonce,
+      isDev,
+    )
+    headers["Strict-Transport-Security"] = "max-age=31536000"
+  }
+
+  return headers
 }
 
-type State = {
-  fortune: Fortune | null
-  analyticsId: string | null
-}
+type State = { analyticsId: string | null; nonce: string }
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const runtime = resolveRuntimePlatform(context, request)
-  const fortune = await getFortune({
-    cache: runtime.edgeCache,
-    origin: runtime.origin,
-  })
   const cacheControl = getDocumentCacheControl(new URL(request.url).pathname)
+  const nonce = globalThis.crypto.randomUUID()
 
-  return new Response(JSON.stringify({ fortune, analyticsId: runtime.analyticsId }), {
-    headers: {
-      "Cache-Control": cacheControl,
-      "Content-Type": "application/json; charset=utf-8",
+  return new Response(
+    JSON.stringify({ analyticsId: runtime.analyticsId, nonce }),
+    {
+      headers: {
+        "Cache-Control": cacheControl,
+        "Content-Type": "application/json; charset=utf-8",
+        [NONCE_HEADER]: nonce,
+      },
     },
-  })
+  )
 }
 
 export default function App() {
@@ -135,6 +149,7 @@ export default function App() {
         <Meta />
         <Links />
         <script
+          nonce={state?.nonce}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData),
@@ -149,11 +164,11 @@ export default function App() {
         <main id="content" className="body container mx-auto px-10">
           <Outlet />
         </main>
-        <Footer fortune={state?.fortune?.text} />
-        <ScrollRestoration />
-        <Scripts />
-        <Analytics id={state?.analyticsId} />
-        {isDev ? <LiveReload /> : null}
+        <Footer />
+        <ScrollRestoration nonce={state?.nonce} />
+        <Scripts nonce={state?.nonce} />
+        <Analytics id={state?.analyticsId} nonce={state?.nonce} />
+        {isDev ? <LiveReload nonce={state?.nonce} /> : null}
       </body>
     </html>
   )

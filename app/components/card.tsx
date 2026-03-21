@@ -6,6 +6,7 @@ type Props = {
   onClick?: () => void
   children?: React.ReactNode
   actions?: React.ReactNode[]
+  headingLevel?: 2 | 3 | 4
 }
 
 export const Card: React.FC<Props> = ({
@@ -16,7 +17,9 @@ export const Card: React.FC<Props> = ({
   onClick,
   children,
   actions,
+  headingLevel = 3,
 }) => {
+  const HeadingTag = `h${headingLevel}` as const
   const content = (
     <>
       <div className="flex items-center gap-4">
@@ -29,7 +32,7 @@ export const Card: React.FC<Props> = ({
           </div>
         )}
         <div>
-          <div className="text-xl font-bold">{title}</div>
+          <HeadingTag className="text-xl font-bold">{title}</HeadingTag>
           {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
         </div>
       </div>
@@ -47,7 +50,11 @@ export const Card: React.FC<Props> = ({
       className={`${cardClasses} ${url || onClick ? interactiveCardClasses : ""}`}
     >
       {url ? (
-        <a href={url} className="flex h-full flex-col">
+        <a
+          href={url}
+          className="flex h-full flex-col"
+          rel={url.startsWith("http") ? "noreferrer" : undefined}
+        >
           {content}
         </a>
       ) : onClick ? (

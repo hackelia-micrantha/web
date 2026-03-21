@@ -1,17 +1,12 @@
 import type { MetaFunction } from "@remix-run/node"
+import { buildPageMeta } from "~/utils/seo"
 
-export const meta: MetaFunction = () => [
-  { title: "Micrantha Software | Services" },
-  {
-    name: "description",
-    content: "Request a consultation for Micrantha software services.",
-  },
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://micrantha.com/services",
-  },
-]
+export const meta: MetaFunction = () =>
+  buildPageMeta({
+    title: "Services",
+    description: "Request a consultation for Micrantha software services.",
+    path: "/services",
+  })
 
 export const Services = () => (
   <div>

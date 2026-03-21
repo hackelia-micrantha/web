@@ -53,6 +53,7 @@ Notes:
 
 - Tests expect the app on `http://127.0.0.1:3000` and will run `yarn build && PORT=3000 yarn start` automatically.
 - Tests cover both desktop and mobile Chromium projects.
+- The suite includes automated axe accessibility scans for core public routes.
 - On this machine, the config will use `/usr/bin/chromium` if Playwright-managed browsers are not installed.
 - Override with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium` if needed.
 
