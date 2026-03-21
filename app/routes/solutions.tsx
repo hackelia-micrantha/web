@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node"
-import { Card, PageTitle } from "~/components"
-import { buildPageMeta } from "~/utils/seo"
+import { Card, ExternalLink, PageTitle } from "~/components"
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
   FortunesIcon,
   VeilIcon,
@@ -15,6 +15,38 @@ export const meta: MetaFunction = () =>
       "Mature Micrantha products, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
     path: "/solutions",
   })
+
+export const handle = {
+  structuredData: buildCollectionPageStructuredData({
+    name: "Solutions",
+    description:
+      "Mature Micrantha products, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
+    path: "/solutions",
+    items: [
+      {
+        name: "Amaryllis",
+        description: "A react-native SDK for on-device mobile inference.",
+        url: "https://amaryllis.micrantha.com",
+      },
+      {
+        name: "Anthesis",
+        description: "Agentic SDLC with governed autonomy and auditability.",
+        url: "https://anthesis.micrantha.com",
+      },
+      {
+        name: "Fortunes Service",
+        description: "A micro-service and Slack app for UNIX fortunes.",
+        url: "https://fortunes.micrantha.com",
+      },
+      {
+        name: "Veil",
+        description:
+          "A micro-service to pseudo-randomly obfuscate a profile photo for fun or security.",
+        url: "https://veil.micrantha.com",
+      },
+    ],
+  }),
+}
 
 const Solutions = () => (
   <div>
@@ -46,14 +78,13 @@ const Solutions = () => (
         icon={<FortunesIcon />}
         headingLevel={2}
         actions={[
-          <a
+          <ExternalLink
             key="slack-app"
             href="https://slack.com/apps/A8MAPLX53-fortunes"
-            rel="noopener noreferrer"
-            target="_blank"
+            newTab
           >
             Slack App
-          </a>,
+          </ExternalLink>,
         ]}
       >
         A micro-service and Slack app for UNIX fortunes.

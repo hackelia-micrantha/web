@@ -50,13 +50,15 @@ export const Card: React.FC<Props> = ({
       className={`${cardClasses} ${url || onClick ? interactiveCardClasses : ""}`}
     >
       {url ? (
-        <a
-          href={url}
-          className="flex h-full flex-col"
-          rel={url.startsWith("http") ? "noreferrer" : undefined}
-        >
-          {content}
-        </a>
+        url.startsWith("http") ? (
+          <ExternalLink href={url} className="flex h-full flex-col">
+            {content}
+          </ExternalLink>
+        ) : (
+          <a href={url} className="flex h-full flex-col">
+            {content}
+          </a>
+        )
       ) : onClick ? (
         <button
           type="button"
@@ -78,3 +80,4 @@ export const Card: React.FC<Props> = ({
     </div>
   )
 }
+import { ExternalLink } from "./external-link"

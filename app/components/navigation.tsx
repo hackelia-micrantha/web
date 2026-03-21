@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react"
 import { GithubIcon } from "~/components/icons"
+import { ExternalLink } from "./external-link"
 
 export const Navigation = () => {
   return (
@@ -49,14 +50,13 @@ export const Navigation = () => {
         >
           Support
         </Link>
-        <a
+        <ExternalLink
           href="https://github.com/hackelia-micrantha"
           className="flex items-center justify-center px-3 hover:bg-gray-100"
           aria-label="Micrantha GitHub"
-          rel="noreferrer"
         >
           <GithubIcon />
-        </a>
+        </ExternalLink>
       </div>
     </nav>
   )

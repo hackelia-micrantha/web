@@ -78,6 +78,9 @@ export default function Index() {
             policy, auditability, review loops, and operational guardrails.
           </Card>
         </div>
+        <Link className="inline-block text-sm" to="/services">
+          Explore services
+        </Link>
       </section>
 
       <section

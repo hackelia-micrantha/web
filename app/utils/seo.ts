@@ -11,6 +11,19 @@ type PageMetaOptions = {
   path: string
 }
 
+type CollectionItem = {
+  name: string
+  description: string
+  url?: string
+}
+
+type CollectionStructuredDataOptions = {
+  name: string
+  description: string
+  path: string
+  items: CollectionItem[]
+}
+
 export function buildPageMeta({
   title,
   description,
@@ -70,4 +83,36 @@ export function buildSiteMeta(): MetaDescriptor[] {
     },
     { name: "twitter:image", content: DEFAULT_IMAGE },
   ]
+}
+
+export function buildCollectionPageStructuredData({
+  name,
+  description,
+  path,
+  items,
+}: CollectionStructuredDataOptions) {
+  const url = new URL(path, SITE_URL).toString()
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListOrder: "https://schema.org/ItemListOrderAscending",
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        ...(item.url ? { url: item.url } : {}),
+        item: {
+          "@type": "Thing",
+          name: item.name,
+          description: item.description,
+        },
+      })),
+    },
+  }
 }
