@@ -10,6 +10,9 @@ test("homepage exposes primary marketing content", async ({ page }) => {
     page.getByRole("link", { name: "Request a consultation" }),
   ).toBeVisible()
   await expect(
+    page.getByRole("link", { name: "Request a consultation" }),
+  ).toHaveAttribute("href", "/services")
+  await expect(
     page.getByRole("heading", {
       name: "Specialized consulting for hard systems.",
     }),

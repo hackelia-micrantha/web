@@ -37,12 +37,9 @@ export default function Index() {
             production.
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
-            <a
-              className="button"
-              href="mailto:services@micrantha.com?subject=Consultation"
-            >
+            <Link className="button" to="/services">
               Request a consultation
-            </a>
+            </Link>
             <Link className="button button-outline" to="/solutions">
               See solutions
             </Link>
