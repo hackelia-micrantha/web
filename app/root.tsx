@@ -4,7 +4,6 @@ import type {
   MetaFunction,
   LoaderFunctionArgs,
 } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -99,10 +98,12 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   })
   const cacheControl = getDocumentCacheControl(new URL(request.url).pathname)
 
-  return json(
-    { fortune, analyticsId: runtime.analyticsId },
-    { headers: { "Cache-Control": cacheControl } },
-  )
+  return new Response(JSON.stringify({ fortune, analyticsId: runtime.analyticsId }), {
+    headers: {
+      "Cache-Control": cacheControl,
+      "Content-Type": "application/json; charset=utf-8",
+    },
+  })
 }
 
 export default function App() {

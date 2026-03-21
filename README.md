@@ -31,7 +31,30 @@ Then visit `http://localhost:3000`.
 - `yarn start`: run built server
 - `yarn lint`: lint all files
 - `yarn lint:fix`: auto-fix lint issues
+- `yarn test:e2e`: run Playwright end-to-end tests
+- `yarn test:e2e:mobile`: run the mobile Playwright project
 - `yarn typecheck`: TypeScript project check
+
+## End-to-end tests
+
+This repo uses Playwright for route-level smoke tests.
+
+```sh
+yarn test:e2e
+```
+
+Run only the mobile-emulated project:
+
+```sh
+yarn test:e2e:mobile
+```
+
+Notes:
+
+- Tests expect the app on `http://127.0.0.1:3000` and will run `yarn build && PORT=3000 yarn start` automatically.
+- Tests cover both desktop and mobile Chromium projects.
+- On this machine, the config will use `/usr/bin/chromium` if Playwright-managed browsers are not installed.
+- Override with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium` if needed.
 
 ## Docker
 

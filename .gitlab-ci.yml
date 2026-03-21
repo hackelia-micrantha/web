@@ -1,3 +1,25 @@
+stages:
+  - test
+  - build
+
+e2e:
+  image: mcr.microsoft.com/playwright:v1.54.2-jammy
+  stage: test
+  variables:
+    CI: "true"
+  script:
+    - yarn install --frozen-lockfile
+    - yarn test:e2e
+  artifacts:
+    when: always
+    paths:
+      - test-results/
+    expire_in: 7 days
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - package.json
+
 docker-build:
   # Use the official docker image.
   image: docker:latest
