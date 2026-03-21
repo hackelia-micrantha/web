@@ -66,3 +66,11 @@ nav a {
 nav a:hover {
   color: inherit;
 }
+
+.bg-card-yellow {
+  background: #fffdf5;
+}
+
+.bg-card-lime {
+  background: #f5faec;
+}
