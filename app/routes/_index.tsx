@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card } from "~/components"
+import { buildPageMeta } from "~/utils/seo"
 import {
   AnthesisIcon,
   BluebellIcon,
@@ -10,19 +11,13 @@ import {
   AmaryllisIcon,
 } from "~/components/icons"
 
-export const meta: MetaFunction = () => [
-  { title: "Micrantha Software | Home" },
-  {
-    name: "description",
-    content:
+export const meta: MetaFunction = () =>
+  buildPageMeta({
+    title: "Home",
+    description:
       "Micrantha builds resilient software systems from discovery to production. Explore services, solutions, and the laboratory.",
-  },
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://micrantha.com/",
-  },
-]
+    path: "/",
+  })
 
 export default function Index() {
   return (
@@ -48,7 +43,7 @@ export default function Index() {
             >
               Request a consultation
             </a>
-            <Link className="button button-outline" to="/#solutions">
+            <Link className="button button-outline" to="/solutions">
               See solutions
             </Link>
           </div>
@@ -100,6 +95,7 @@ export default function Index() {
             title="Amaryllis"
             url="https://amaryllis.micrantha.com"
             icon={<AmaryllisIcon />}
+            headingLevel={3}
           >
             A react-native SDK for on-device mobile inference.
           </Card>
@@ -107,6 +103,7 @@ export default function Index() {
             title="Fortunes Service"
             url="https://fortunes.micrantha.com"
             icon={<FortunesIcon />}
+            headingLevel={3}
           >
             A micro-service and Slack app for UNIX fortunes.
           </Card>
@@ -114,6 +111,7 @@ export default function Index() {
             title="Anthesis"
             url="https://anthesis.micrantha.com"
             icon={<AnthesisIcon />}
+            headingLevel={3}
           >
             Agentic SDLC with governed autonomy and auditability.
           </Card>
@@ -134,13 +132,21 @@ export default function Index() {
           <h2 className="text-2xl">Projects in active growth.</h2>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card title="Project Hyperion" icon={<HyperionIcon />}>
+          <Card
+            title="Project Hyperion"
+            icon={<HyperionIcon />}
+            headingLevel={3}
+          >
             Secure, reproducible lab environments, migrations, and deploys.
           </Card>
-          <Card title="Bluebell" icon={<BluebellIcon />}>
+          <Card title="Bluebell" icon={<BluebellIcon />} headingLevel={3}>
             Multiplatform mobile SDK with AI capable features.
           </Card>
-          <Card title="Project Mysotosis" icon={<MysotosisIcon />}>
+          <Card
+            title="Project Mysotosis"
+            icon={<MysotosisIcon />}
+            headingLevel={3}
+          >
             MCP and LLM registry for mobile clients.
           </Card>
         </div>

@@ -3,6 +3,7 @@ import type { Fortune } from "~/model"
 const FORTUNE_URL = "https://fortunes.micrantha.com/api/v1/random?s=true"
 const FORTUNE_CACHE_KEY = "/__cache/fortune?s=true"
 const FORTUNE_CACHE_TTL_SECONDS = 300
+const MAX_FORTUNE_LENGTH = 280
 
 type FortuneOptions = {
   cache: Cache | null
@@ -11,6 +12,17 @@ type FortuneOptions = {
 
 function getCacheKey(origin: string) {
   return new Request(`${origin}${FORTUNE_CACHE_KEY}`, { method: "GET" })
+}
+
+function isValidFortune(value: unknown): value is Fortune {
+  if (!value || typeof value !== "object") return false
+
+  const text = Reflect.get(value, "text")
+  return (
+    typeof text === "string" &&
+    text.trim().length > 0 &&
+    text.length <= MAX_FORTUNE_LENGTH
+  )
 }
 
 export async function getFortune(
@@ -32,8 +44,14 @@ export async function getFortune(
   try {
     const response = await fetch(FORTUNE_URL, { signal: controller.signal })
     if (!response.ok) return null
+    if (!response.headers.get("Content-Type")?.includes("application/json")) {
+      return null
+    }
 
-    const fortune = (await response.json()) as Fortune
+    const payload = await response.json()
+    if (!isValidFortune(payload)) return null
+
+    const fortune = payload
 
     if (cache) {
       await cache.put(

@@ -1,17 +1,12 @@
 import type { MetaFunction } from "@remix-run/node"
+import { buildPageMeta } from "~/utils/seo"
 
-export const meta: MetaFunction = () => [
-  { title: "Micrantha Software | Privacy Policy" },
-  {
-    name: "description",
-    content: "Privacy policy for Micrantha Software Solutions.",
-  },
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://micrantha.com/privacy",
-  },
-]
+export const meta: MetaFunction = () =>
+  buildPageMeta({
+    title: "Privacy Policy",
+    description: "Privacy policy for Micrantha Software Solutions.",
+    path: "/privacy",
+  })
 
 const Privacy = () => (
   <div>
@@ -35,8 +30,7 @@ const Privacy = () => (
     </p>
     <p>
       The terms used in this Privacy Policy have the same meanings as in our
-      Terms and Conditions, which is accessible at
-      https://fortunes.micrantha.com, unless otherwise defined in this Privacy
+      site policies and service terms, unless otherwise defined in this Privacy
       Policy.
     </p>
     <p className="mt-8 font-bold">Information Collection and Use</p>

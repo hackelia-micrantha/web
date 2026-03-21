@@ -1,19 +1,14 @@
 import type { MetaFunction } from "@remix-run/node"
 import { PageTitle, Card } from "~/components"
 import { EmailIcon, SlackIcon, IrcIcon } from "~/components/icons"
+import { buildPageMeta } from "~/utils/seo"
 
-export const meta: MetaFunction = () => [
-  { title: "Micrantha Software | Support" },
-  {
-    name: "description",
-    content: "Support options for Micrantha products and services.",
-  },
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://micrantha.com/support",
-  },
-]
+export const meta: MetaFunction = () =>
+  buildPageMeta({
+    title: "Support",
+    description: "Support options for Micrantha products and services.",
+    path: "/support",
+  })
 
 const Support = () => (
   <div>
@@ -27,12 +22,18 @@ const Support = () => (
         title="Email"
         icon={<EmailIcon />}
         url="mailto:support@micrantha.com"
+        headingLevel={2}
       >
         Send an email inquiries to{" "}
         <a href="mailto:support@micrantha.com">support@micrantha.com</a>.
       </Card>
 
-      <Card title="IRC" icon={<IrcIcon />} url="https://libera.chat">
+      <Card
+        title="IRC"
+        icon={<IrcIcon />}
+        url="https://libera.chat"
+        headingLevel={2}
+      >
         Join <b>#micrantha</b> on IRC via{" "}
         <a href="https://libera.chat">libera.chat</a>.
       </Card>
@@ -41,6 +42,7 @@ const Support = () => (
         title="Slack"
         icon={<SlackIcon />}
         url="https://micrantha.slack.com"
+        headingLevel={2}
       >
         Request to join the{" "}
         <a href="https://micrantha.slack.com">slack workspace</a> and post your

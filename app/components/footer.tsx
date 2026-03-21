@@ -1,19 +1,52 @@
 import { Link } from "@remix-run/react"
+import { useEffect, useState } from "react"
 
-export const Footer = ({ fortune }: { fortune: string | undefined }) => (
-  <footer className="mt-16 flex flex-col items-center justify-center">
-    <div>
-      <Link to="/privacy">Privacy</Link> |{" "}
-      <Link to="/philosophy">Philosophy</Link>
-    </div>
+type FortuneResponse = {
+  text: string
+}
 
-    {fortune ? (
-      <div className="mx-10 mt-4">&#10077; {fortune} &#10078;</div>
-    ) : null}
+export const Footer = () => {
+  const [fortune, setFortune] = useState<string | null>(null)
 
-    <div className="mt-2">
-      &copy; All Rights Reserved{" "}
-      <a href="https://micrantha.com">Micrantha Software Solutions</a>
-    </div>
-  </footer>
-)
+  useEffect(() => {
+    let isActive = true
+
+    void fetch("/api/fortune")
+      .then(async (response) => {
+        if (!response.ok) return null
+        return (await response.json()) as FortuneResponse
+      })
+      .then((data) => {
+        if (isActive && data?.text) {
+          setFortune(data.text)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isActive = false
+    }
+  }, [])
+
+  return (
+    <footer className="mt-16 flex flex-col items-center justify-center">
+      <div>
+        <Link to="/services">Services</Link> |{" "}
+        <Link to="/solutions">Solutions</Link> |{" "}
+        <Link to="/support">Support</Link> | <Link to="/privacy">Privacy</Link>{" "}
+        | <Link to="/philosophy">Philosophy</Link>
+      </div>
+
+      {fortune ? (
+        <div className="mx-10 mt-4" aria-live="polite">
+          &#10077; {fortune} &#10078;
+        </div>
+      ) : null}
+
+      <div className="mt-2">
+        &copy; All Rights Reserved{" "}
+        <a href="https://micrantha.com">Micrantha Software Solutions</a>
+      </div>
+    </footer>
+  )
+}

@@ -1,26 +1,39 @@
 import type { MetaFunction } from "@remix-run/node"
 import { useEffect, useState } from "react"
-import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
+import { buildPageMeta } from "~/utils/seo"
 
-export const meta: MetaFunction = () => [
-  { title: "Micrantha Software | Philosophy" },
-  {
-    name: "description",
-    content:
+type WebsiteCarbonBadgeComponent =
+  (typeof import("react-websitecarbon-badge"))["WebsiteCarbonBadge"]
+
+export const meta: MetaFunction = () =>
+  buildPageMeta({
+    title: "Philosophy",
+    description:
       "Micrantha's philosophy on building software with quality, time, and cost in balance.",
-  },
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://micrantha.com/philosophy",
-  },
-]
+    path: "/philosophy",
+  })
 
 const Philosophy = () => {
   const [mounted, setMounted] = useState(false)
+  const [WebsiteCarbonBadge, setWebsiteCarbonBadge] =
+    useState<WebsiteCarbonBadgeComponent | null>(null)
 
   useEffect(() => {
     setMounted(true)
+
+    let isActive = true
+
+    void import("react-websitecarbon-badge")
+      .then((module) => {
+        if (isActive) {
+          setWebsiteCarbonBadge(() => module.WebsiteCarbonBadge)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isActive = false
+    }
   }, [])
 
   return (
@@ -40,15 +53,20 @@ const Philosophy = () => {
         or <b>cost</b>.
       </p>
 
-      <img
-        className="float-right"
-        src="/img/project-management-triangle-venn-diagram.png"
-        alt="project management triangle diagram"
-        width="397"
-        height="420"
-        loading="lazy"
-        decoding="async"
-      />
+      <picture className="float-right">
+        <source
+          srcSet="/img/project-management-triangle-venn-diagram.webp"
+          type="image/webp"
+        />
+        <img
+          src="/img/project-management-triangle-venn-diagram.png"
+          alt="project management triangle diagram"
+          width="397"
+          height="420"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
 
       <p className="mt-8">
         For the people at Micrantha it is a creative process, forming inherently
@@ -123,7 +141,7 @@ const Philosophy = () => {
         />
       </div>
 
-      {mounted ? (
+      {mounted && WebsiteCarbonBadge ? (
         <WebsiteCarbonBadge
           url="https://micrantha.com"
           co2="0.003"
