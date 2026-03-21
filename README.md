@@ -1,62 +1,123 @@
 # Micrantha Web
 
-Marketing site and web presence for [micrantha.com](https://micrantha.com). Built as
-an isomorphic React app with Remix and a lean Tailwind 4 setup.
+[![Remix](https://img.shields.io/badge/Remix-2.17-121212?logo=remix)](https://remix.run/)
+[![React](https://img.shields.io/badge/React-18.3-149ECA?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
+[![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare_Pages-F38020?logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-111827.svg)](./LICENSE)
+
+Marketing site and web presence for [micrantha.com](https://micrantha.com), built with Remix, React, TypeScript, and a lean Tailwind CSS pipeline.
+
+## Overview
+
+- Server-rendered Remix application with client-side enhancements
+- Marketing pages for services, solutions, philosophy, support, and laboratory work
+- Shared card palette and icon system for consistent presentation
+- Playwright route, accessibility, and visual regression coverage
+- Cloudflare Pages deployment path with checked-in Wrangler config
 
 ## Stack
 
-- Remix (server + client rendering)
-- React 18 + TypeScript
-- Tailwind CSS via CLI pipeline
-- ESLint + Prettier for linting/formatting
+| Area | Tools |
+| --- | --- |
+| App framework | Remix 2 |
+| UI | React 18 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4 via CLI |
+| Quality | ESLint + Prettier |
+| Testing | Playwright |
+| Deployment | Cloudflare Pages |
 
 ## Requirements
 
-- Node.js >= 18
-- Yarn (preferred, matches lockfile)
+- Node.js `>=18`
+- Yarn
 
-## Quick start
+## Quick Start
 
 ```sh
 yarn install
 yarn dev
 ```
 
-Then visit `http://localhost:3000`.
+Open `http://localhost:3000`.
 
 ## Scripts
 
-- `yarn dev`: run Remix + Tailwind watch
-- `yarn build`: production build
-- `yarn start`: run built server
-- `yarn lint`: lint all files
-- `yarn lint:fix`: auto-fix lint issues
-- `yarn test:e2e`: run Playwright end-to-end tests
-- `yarn test:e2e:mobile`: run the mobile Playwright project
-- `yarn typecheck`: TypeScript project check
-- `yarn deploy:cloudflare`: build and direct-upload the app to Cloudflare Pages with Wrangler
+| Command | Purpose |
+| --- | --- |
+| `yarn dev` | Run Remix and Tailwind in watch mode |
+| `yarn build` | Build CSS and Remix for production |
+| `yarn start` | Serve the production build |
+| `yarn lint` | Run ESLint |
+| `yarn lint:fix` | Auto-fix lint issues |
+| `yarn typecheck` | Run the TypeScript build check |
+| `yarn test:e2e` | Run the full Playwright suite |
+| `yarn test:e2e:mobile` | Run the mobile Playwright project only |
+| `yarn test:e2e:headed` | Run Playwright in headed mode |
+| `yarn deploy:cloudflare` | Typecheck, build, and deploy to Cloudflare Pages |
 
-## End-to-end tests
+## Testing
 
-This repo uses Playwright for route-level smoke tests.
+This repo uses Playwright for:
+
+- Route smoke coverage
+- Accessibility checks on key pages
+- Visual regression snapshots for stable sections
+
+Run the full suite:
 
 ```sh
 yarn test:e2e
 ```
 
-Run only the mobile-emulated project:
+Run a specific spec:
 
 ```sh
-yarn test:e2e:mobile
+yarn test:e2e e2e/visual.spec.ts
 ```
 
 Notes:
 
-- Tests expect the app on `http://127.0.0.1:3000` and will run `yarn build && PORT=3000 yarn start` automatically.
-- Tests cover both desktop and mobile Chromium projects.
-- The suite includes automated axe accessibility scans for core public routes.
-- On this machine, the config will use `/usr/bin/chromium` if Playwright-managed browsers are not installed.
-- Override with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium` if needed.
+- Playwright uses `http://127.0.0.1:3000` by default.
+- The test config starts the app automatically with `yarn build && PORT=3000 yarn start`.
+- Desktop and mobile Chromium projects are configured.
+- The suite includes automated axe accessibility scans for key public routes.
+- On this machine, `/usr/bin/chromium` is used automatically when Playwright-managed browsers are unavailable.
+- Override the browser path with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium` if needed.
+
+## Visual Regression Baselines
+
+Visual baselines live in `e2e/visual.spec.ts-snapshots/`.
+
+To refresh them intentionally:
+
+```sh
+yarn test:e2e e2e/visual.spec.ts --update-snapshots
+```
+
+## Deployment
+
+Cloudflare Pages is the primary deployment target.
+
+Checked-in config:
+
+- `wrangler.toml`
+- `package.json` deploy script
+
+Expected environment variables:
+
+- `CLOUDFLARE_API_TOKEN` or a compatible Pages token
+- `CLOUDFLARE_PAGES_PROJECT` to override the default project name
+- `CLOUDFLARE_PAGES_BRANCH` to override the branch name
+
+Deploy manually:
+
+```sh
+yarn deploy:cloudflare
+```
 
 ## Docker
 
@@ -74,29 +135,18 @@ make image
 make run
 ```
 
-## Cloudflare Pages
+## Project Structure
 
-This repo includes a Cloudflare Pages deployment path for the Remix app:
-
-```sh
-npx wrangler whoami
-yarn deploy:cloudflare
+```text
+app/          Remix routes, components, services, and utilities
+e2e/          Playwright specs and visual baselines
+public/       Static assets
+build/        Production output after yarn build
+functions/    Edge or platform-specific function code
 ```
 
-Notes:
-
-- `wrangler.toml` is the source of truth for the Pages build output directory and compatibility date.
-- The Pages deploy path expects the root-level `functions/` directory and the Remix server build in `build/`.
-- Override the target project or branch with `CLOUDFLARE_PAGES_PROJECT` and `CLOUDFLARE_PAGES_BRANCH` if needed.
-- Runtime values such as `MICRANTHA_ANALYTICS_ID` should be configured in the Cloudflare Pages project environment.
-
-## Project structure
-
-- `app/`: Remix routes, components, and styles
-- `public/`: static assets
-- `build/`: output after `yarn build`
-
-## Notes
+## Development Notes
 
 - Tailwind is compiled from `app/styles/app.css` into `public/tailwind.css`.
-- This repo is mirrored from GitLab.
+- The philosophy triangle diagram is now served as SVG for sharper rendering.
+- This repository is mirrored from GitLab.

@@ -24,33 +24,33 @@
     "package": "create-registry-image --latest --push micrantha/web"
   },
   "dependencies": {
-    "@remix-run/node": "2.17.2",
-    "@remix-run/react": "2.17.2",
-    "@remix-run/serve": "2.17.2",
+    "@remix-run/node": "2.17.4",
+    "@remix-run/react": "2.17.4",
+    "@remix-run/serve": "2.17.4",
     "isbot": "^4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-websitecarbon-badge": "^1.0.5"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.0",
+    "@eslint/compat": "2.0.3",
     "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.54.2",
-    "@remix-run/dev": "2.17.2",
-    "@remix-run/eslint-config": "2.17.2",
-    "@tailwindcss/cli": "4.1.18",
+    "@remix-run/dev": "2.17.4",
+    "@remix-run/eslint-config": "2.17.4",
+    "@tailwindcss/cli": "4.2.2",
     "@types/minimatch": "^6.0.0",
     "@types/react": "18.3.27",
     "@types/react-dom": "18.3.7",
     "eslint": "9.39.2",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-react": "^7.37.5",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.0.0",
+    "prettier": "3.8.1",
     "prettier-plugin-tailwindcss": "0.7.2",
-    "tailwindcss": "4.1.18",
+    "tailwindcss": "4.2.2",
     "typescript": "^5.1.6",
-    "typescript-eslint": "8.51.0"
+    "typescript-eslint": "8.57.1"
   },
   "engines": {
     "node": ">=18"
