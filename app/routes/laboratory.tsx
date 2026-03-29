@@ -36,7 +36,7 @@ export const handle = {
         name: "Project Anthesis",
         description:
           "Agentic SDLC with principles: Governed Autonomy, Human Authority First, Deterministic Execution, Auditability, and a Living Architecture.",
-        url: "https://anthesis.micrantha.com",
+        url: "https://anthesis.dev",
       },
       {
         name: "Bluebell",
@@ -65,6 +65,7 @@ export const handle = {
         name: "Project Mysotosis",
         description:
           "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Mysotosis Sylvatica'.",
+	url: "https://mysotosis.micrantha.com",
       },
       {
         name: "Compost",
@@ -102,7 +103,7 @@ const Laboratory = () => (
 
       <Card
         title="Project Anthesis"
-        url="https://anthesis.micrantha.com"
+        url="https://anthesis.dev"
         icon={<AnthesisIcon />}
         headingLevel={2}
         className={cardStyles.green}
@@ -136,7 +137,7 @@ const Laboratory = () => (
 
       <Card
         title="Mobuild Envuscator"
-        url="https://github.com/hackelia-micrantha/mobuild"
+        url="https://envuscator.com"
         icon={<MobuildIcon />}
         headingLevel={2}
         className={cardStyles.yellow}
@@ -159,6 +160,7 @@ const Laboratory = () => (
 
       <Card
         title="Project Mysotosis"
+	url="https://mysotosis.micrantha.com"
         icon={<MysotosisIcon />}
         headingLevel={2}
         className={cardStyles.cyan}
