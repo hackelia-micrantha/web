@@ -18,7 +18,7 @@ const Support = () => (
       subtitle="Choose the support channel that fits the urgency and shape of the issue."
     />
 
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       <Card
         title="Email"
         subtitle="Best for detailed support requests"

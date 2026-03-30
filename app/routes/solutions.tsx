@@ -13,7 +13,7 @@ export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Solutions",
     description:
-      "Mature Micrantha products, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
+      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
     path: "/solutions",
   })
 
@@ -21,28 +21,28 @@ export const handle = {
   structuredData: buildCollectionPageStructuredData({
     name: "Solutions",
     description:
-      "Mature Micrantha products, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
+      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
     path: "/solutions",
     items: [
       {
         name: "Amaryllis",
-        description: "A react-native SDK for on-device mobile inference.",
+        description: "A React Native SDK for on-device mobile inference.",
         url: "https://amaryllis.micrantha.com",
       },
       {
         name: "Anthesis",
         description: "Agentic SDLC with governed autonomy and auditability.",
-        url: "https://anthesis.micrantha.com",
+        url: "https://anthesis.dev",
       },
       {
         name: "Fortunes Service",
-        description: "A micro-service and Slack app for UNIX fortunes.",
+        description: "A microservice and Slack app for UNIX fortunes.",
         url: "https://fortunes.micrantha.com",
       },
       {
         name: "Veil",
         description:
-          "A micro-service to pseudo-randomly obfuscate a profile photo for fun or security.",
+          "A microservice to pseudo-randomly obfuscate a profile photo for fun or security.",
         url: "https://veil.micrantha.com",
       },
     ],
@@ -53,10 +53,10 @@ const Solutions = () => (
   <div>
     <PageTitle
       title="Solutions"
-      subtitle="Projects that have grown enough to be considered matured."
+      subtitle="Products that have grown into active use."
     />
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <Card
         title="Amaryllis"
         url="https://amaryllis.micrantha.com"
@@ -64,11 +64,11 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.neutral}
       >
-        A react-native SDK for on-device mobile inference.
+        A React Native SDK for on-device mobile inference.
       </Card>
       <Card
         title="Anthesis"
-        url="https://anthesis.micrantha.com"
+        url="https://anthesis.dev"
         icon={<AnthesisIcon />}
         headingLevel={2}
         className={cardStyles.green}
@@ -91,7 +91,7 @@ const Solutions = () => (
           </ExternalLink>,
         ]}
       >
-        A micro-service and Slack app for UNIX fortunes.
+        A microservice and Slack app for UNIX fortunes.
       </Card>
       <Card
         title="Veil"
@@ -100,7 +100,7 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.blue}
       >
-        A micro-service to pseudo-randomly obfuscate a profile photo for fun or
+        A microservice to pseudo-randomly obfuscate a profile photo for fun or
         security.
       </Card>
     </div>

@@ -1,5 +1,4 @@
 import type { MetaFunction } from "@remix-run/node"
-import { Link } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
@@ -29,7 +28,7 @@ export const handle = {
       {
         name: "Project Hyperion",
         description:
-          "Infrastructure for secure, reproducible laboratory environments, migrations and deploys. Hyperion is the worlds tallest living tree.",
+          "Infrastructure for secure, reproducible laboratory environments, migrations, and deployments. Hyperion is the world's tallest living tree.",
         url: "https://hyperion.micrantha.com",
       },
       {
@@ -47,13 +46,13 @@ export const handle = {
       {
         name: "Eyespie",
         description:
-          "Eyespie is a turn based mobile game using machine learning to identify real world things with clues and guess them with proofs. Bluebell use case.",
+          "Eyespie is a turn-based mobile game that uses machine learning to identify real-world things with clues and guess them with proofs. A Bluebell use case.",
         url: "https://github.com/hackelia-micrantha/eyespie",
       },
       {
         name: "Mobuild Envuscator",
         description:
-          "A mobile SDK to randomly obfuscate environment variables on mobile clients per build. An extra small security layer with a Github action to update.",
+          "A mobile SDK that randomly obfuscates environment variables on mobile clients per build. An extra-small security layer with a GitHub Action to update it.",
         url: "https://github.com/hackelia-micrantha/mobuild",
       },
       {
@@ -82,15 +81,10 @@ const Laboratory = () => (
   <div>
     <PageTitle
       title="Laboratory"
-      subtitle={
-        <div>
-          Projects listed here are still being grown. Recycled projects go to
-          the <Link to="/compost">laboratory compost</Link> for reuse.
-        </div>
-      }
+      subtitle="Projects listed here are still being grown. Recycled projects go to laboratory compost for reuse."
     />
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       <Card
         title="Project Hyperion"
         icon={<HyperionIcon />}
@@ -99,7 +93,8 @@ const Laboratory = () => (
         className={cardStyles.neutral}
       >
         Infrastructure for secure, reproducible laboratory environments,
-        migrations and deploys. Hyperion is the worlds tallest living tree.
+        migrations, and deployments. Hyperion is the world's tallest living
+        tree.
       </Card>
 
       <Card
@@ -131,9 +126,9 @@ const Laboratory = () => (
         headingLevel={2}
         className={cardStyles.red}
       >
-        Eyespie is a turn based mobile game using machine learning to identify
-        real world things with clues and guess them with proofs. Bluebell use
-        case.
+        Eyespie is a turn-based mobile game that uses machine learning to
+        identify real-world things with clues and guess them with proofs. A
+        Bluebell use case.
       </Card>
 
       <Card
@@ -143,9 +138,9 @@ const Laboratory = () => (
         headingLevel={2}
         className={cardStyles.yellow}
       >
-        A mobile SDK to randomly obfuscate environment variables on mobile
-        clients per build. An extra small security layer with a Github action to
-        update.
+        A mobile SDK that randomly obfuscates environment variables on mobile
+        clients per build. An extra-small security layer with a GitHub Action to
+        update it.
       </Card>
 
       <Card

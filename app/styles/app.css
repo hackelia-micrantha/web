@@ -1,9 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --brand-dark: #343a40;
-  --brand-leaf: #2e8b57;
-  --brand-mist: #b0c4de;
+  --brand-ink: #1f2a2a;
+  --brand-dark: #253334;
+  --brand-leaf: #2f6b55;
+  --brand-leaf-deep: #234c3e;
+  --brand-mist: #d3e4de;
+  --brand-sky: #dbeaf7;
+  --brand-sand: #f4efe3;
+  --brand-paper: #fcfbf7;
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgb(219 234 247 / 0.5), transparent 30%),
+    radial-gradient(circle at top right, rgb(211 228 222 / 0.4), transparent 32%),
+    var(--brand-paper);
+}
+
+body {
+  color: var(--brand-ink);
+  min-height: 100vh;
+}
+
+@keyframes nav-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+::selection {
+  background: var(--brand-mist);
+  color: var(--brand-dark);
 }
 
 .skip-link {
@@ -23,6 +65,8 @@
 
 a:not(.button) {
   color: var(--brand-dark);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.14em;
 }
 a:not(.button):hover {
   color: var(--brand-leaf);
@@ -30,25 +74,39 @@ a:not(.button):hover {
 
 .button {
   align-items: center;
-  background: var(--brand-dark);
-  border-radius: 0.375rem;
+  background: linear-gradient(135deg, var(--brand-dark), var(--brand-leaf));
+  border: 1px solid rgb(37 51 52 / 0.18);
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgb(37 51 52 / 0.14);
   color: #ffffff;
   display: inline-flex;
+  font-weight: 600;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1.1rem;
   text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
 }
 .button:hover {
-  background: var(--brand-leaf);
+  background: linear-gradient(
+    135deg,
+    var(--brand-leaf-deep),
+    var(--brand-leaf)
+  );
   color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgb(37 51 52 / 0.18);
 }
 .button-outline {
-  background: transparent;
-  border: 1px solid var(--brand-dark);
+  background: rgb(255 255 255 / 0.72);
+  border: 1px solid rgb(37 51 52 / 0.16);
+  box-shadow: none;
   color: var(--brand-dark);
 }
 .button-outline:hover {
-  background: var(--brand-mist);
+  background: rgb(211 228 222 / 0.9);
   color: var(--brand-dark);
 }
 
@@ -67,10 +125,25 @@ nav a:hover {
   color: inherit;
 }
 
+.mobile-nav-panel {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+details[open] > .mobile-nav-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
 .bg-card-yellow {
-  background: #fffdf5;
+  background: #fffaf0;
 }
 
 .bg-card-lime {
-  background: #f5faec;
+  background: #f2f8e7;
 }

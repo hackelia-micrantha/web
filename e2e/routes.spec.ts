@@ -42,7 +42,7 @@ test("/laboratory exposes key collection content", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "https://github.com/hackelia-micrantha/bluebell")
   await expect(
-    page.getByRole("link", { name: /laboratory compost/i }),
+    page.getByRole("link", { name: "Compost" }),
   ).toHaveAttribute("href", "/compost")
   await expect(
     page.getByRole("heading", { name: "Project Hyperion" }),
@@ -59,7 +59,7 @@ test("/privacy retains the tailored long-form policy copy", async ({
   await page.goto("/privacy")
 
   await expect(
-    page.getByRole("heading", { name: "Privacy Policy" }),
+    page.getByRole("heading", { name: "Privacy Policy", exact: true }),
   ).toBeVisible()
   await expect(page.getByText("Information Collection and Use")).toBeVisible()
   await expect(page.getByText("Cookies", { exact: true })).toBeVisible()

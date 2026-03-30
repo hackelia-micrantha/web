@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright"
 const pages = [
   {
     path: "/",
-    heading: "Build, govern, and ship software that can survive production.",
+    heading: "Software that grows with you.",
   },
   { path: "/solutions", heading: "Solutions" },
   { path: "/support", heading: "Support" },

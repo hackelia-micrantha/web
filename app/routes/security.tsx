@@ -26,8 +26,8 @@ const Security = () => (
     </p>
     <p>
       Include the affected URL, product, component, impact, reproduction steps,
-      proof of concept, and any logs or screenshots that help us validate the
-      issue quickly.
+      proof-of-concept details, and any logs or screenshots that help us
+      validate the issue quickly.
     </p>
 
     <p className="mt-8 font-bold">Scope</p>

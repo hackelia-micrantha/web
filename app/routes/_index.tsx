@@ -2,7 +2,7 @@ import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card } from "~/components"
 import { cardStyles } from "~/utils/card-styles"
-import { buildPageMeta } from "~/utils/seo"
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
   AnthesisIcon,
   BluebellIcon,
@@ -20,34 +20,145 @@ export const meta: MetaFunction = () =>
     path: "/",
   })
 
+export const handle = {
+  structuredData: buildCollectionPageStructuredData({
+    name: "Micrantha Software",
+    description:
+      "Micrantha helps teams build, govern, and ship software that can survive production.",
+    path: "/",
+    items: [
+      {
+        name: "Services",
+        description:
+          "Engineering support across AI development, AI governance, mobile platforms, secure systems, and production delivery.",
+        url: "https://micrantha.com/services",
+      },
+      {
+        name: "Solutions",
+        description:
+          "Products in active use, including Amaryllis, Fortunes Service, and Anthesis.",
+        url: "https://micrantha.com/solutions",
+      },
+      {
+        name: "Laboratory",
+        description:
+          "Projects in active growth, including Hyperion, Bluebell, and Mysotosis.",
+        url: "https://micrantha.com/laboratory",
+      },
+      {
+        name: "Philosophy",
+        description: "Micrantha's approach to building work that compounds.",
+        url: "https://micrantha.com/philosophy",
+      },
+    ],
+  }),
+}
+
 export default function Index() {
   return (
     <div className="space-y-20">
-      <section className="flex flex-col items-center justify-center gap-8 md:flex-row">
-        <div className="md:shrink-0">
-          <img src="/img/logo.svg" width="160" height="160" alt="Micrantha" />
-        </div>
-
-        <div className="max-w-2xl">
-          <p className="text-xs uppercase tracking-widest text-gray-500">
-            Micrantha Software
-          </p>
-          <h1 className="text-4xl">
-            Build, govern, and ship software that can survive production.
-          </h1>
-          <p className="mt-4 text-base text-gray-700">
-            Broad engineering support across AI development, AI governance,
-            mobile platforms, secure authentication, and deployment systems for
-            teams turning fragile software into production systems.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-4">
-            <Link className="button" to="/services">
-              Request a consultation
-            </Link>
-            <Link className="button button-outline" to="/services">
-              Explore services
-            </Link>
+      <section className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(135deg,rgba(250,248,242,0.96),rgba(236,243,238,0.94)_52%,rgba(226,235,244,0.94))] px-6 py-10 shadow-[0_24px_60px_rgba(31,42,42,0.10)] backdrop-blur-sm md:px-10 md:py-12">
+        <div className="relative flex flex-col items-start justify-center gap-8 md:flex-row md:items-center">
+          <div className="flex w-full justify-center md:w-auto md:shrink-0">
+            <div className="rounded-[2rem] border border-slate-200 bg-[linear-gradient(180deg,rgba(219,234,247,0.85),rgba(255,255,255,0.96))] p-5 shadow-[0_18px_40px_rgba(31,42,42,0.10)]">
+              <img
+                src="/img/logo.svg"
+                width="168"
+                height="168"
+                alt="Micrantha"
+                className="h-32 w-32 md:h-40 md:w-40"
+              />
+            </div>
           </div>
+
+          <div className="max-w-3xl">
+            <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-800">
+              Micrantha Software
+            </p>
+            <h1 className="mt-4 max-w-3xl text-4xl leading-tight tracking-tight text-slate-900 md:text-5xl">
+              Software that grows with you.
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-700 md:text-lg">
+              Broad engineering support across AI development, AI governance,
+              mobile platforms, secure authentication, and deployment systems
+              for teams turning fragile software into production systems.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link className="button" to="/services">
+                Request a consultation
+              </Link>
+              <Link className="button button-outline" to="/solutions">
+                View active solutions
+              </Link>
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Delivery
+                </p>
+                <p className="mt-2 text-sm text-slate-700">
+                  AI systems, mobile platforms, and deployment foundations.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Governance
+                </p>
+                <p className="mt-2 text-sm text-slate-700">
+                  Auditability, policy, and operational control for durable
+                  teams.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Reliability
+                </p>
+                <p className="mt-2 text-sm text-slate-700">
+                  Architecture that keeps working after the demo is over.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Where Teams Get Stuck
+          </p>
+          <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
+            Fragile AI delivery
+          </p>
+          <p className="mt-2 text-sm leading-6 text-slate-700">
+            We help teams move from isolated demos and brittle workflows to
+            systems that fit real engineering environments.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Where Teams Get Stuck
+          </p>
+          <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
+            Platform drift
+          </p>
+          <p className="mt-2 text-sm leading-6 text-slate-700">
+            Mobile foundations, auth boundaries, and deployment paths tend to
+            decay unless someone restores structure and operational discipline.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            What We Bring
+          </p>
+          <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
+            Production-minded depth
+          </p>
+          <p className="mt-2 text-sm leading-6 text-slate-700">
+            Clear tradeoffs, governed delivery, and systems thinking across AI,
+            mobile, security, and release engineering.
+          </p>
         </div>
       </section>
 
@@ -55,15 +166,15 @@ export default function Index() {
         id="services"
         className="space-y-6 border-t border-gray-200 pt-12"
       >
-        <div>
-          <p className="text-xs uppercase tracking-widest text-gray-500">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
             Services
           </p>
-          <h2 className="text-2xl">
+          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
             Broad engineering with depth in AI, mobile platforms, secure
             systems, and production delivery.
           </h2>
-          <p className="mt-3 text-gray-700">
+          <p className="mt-3 text-base leading-7 text-slate-700">
             We help teams turn fragile products, platforms, and workflows into
             production systems.
           </p>
@@ -96,15 +207,67 @@ export default function Index() {
         </Link>
       </section>
 
+      <section className="space-y-6 border-t border-gray-200 pt-12">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+            How We Work
+          </p>
+          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
+            Built for teams past the demo stage.
+          </h2>
+          <p className="mt-3 text-base leading-7 text-slate-700">
+            Micrantha works where software gets fragile: AI delivery that needs
+            governance, mobile platforms that need structure, and systems that
+            need to survive production.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+            <p className="text-lg font-semibold tracking-tight text-slate-900">
+              Technical depth
+            </p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              AI product work, mobile foundations, secure authentication,
+              deployment systems, and operational cleanup.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+            <p className="text-lg font-semibold tracking-tight text-slate-900">
+              Engagement style
+            </p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              Hands-on implementation, technical review, and decision support
+              for teams that need forward motion without extra noise.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+            <p className="text-lg font-semibold tracking-tight text-slate-900">
+              Delivery bias
+            </p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              Work scoped around production realities: constraints, failure
+              modes, maintainability, and governance.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section
         id="solutions"
         className="space-y-6 border-t border-gray-200 pt-12"
       >
-        <div>
-          <p className="text-xs uppercase tracking-widest text-gray-500">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
             Solutions
           </p>
-          <h2 className="text-2xl">Products in active use.</h2>
+          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
+            Products in active use.
+          </h2>
+          <p className="mt-3 text-base leading-7 text-slate-700">
+            Products that teams can adopt directly or use as reference points
+            for durable delivery.
+          </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <Card
@@ -114,7 +277,7 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.neutral}
           >
-            A react-native SDK for on-device mobile inference.
+            A React Native SDK for on-device mobile inference.
           </Card>
           <Card
             title="Fortunes Service"
@@ -123,11 +286,11 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.yellow}
           >
-            A micro-service and Slack app for UNIX fortunes.
+            A microservice and Slack app for UNIX fortunes.
           </Card>
           <Card
             title="Anthesis"
-            url="https://anthesis.micrantha.com"
+            url="https://anthesis.dev"
             icon={<AnthesisIcon />}
             headingLevel={3}
             className={cardStyles.green}
@@ -144,11 +307,17 @@ export default function Index() {
         id="laboratory"
         className="space-y-6 border-t border-gray-200 pt-12"
       >
-        <div>
-          <p className="text-xs uppercase tracking-widest text-gray-500">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
             Laboratory
           </p>
-          <h2 className="text-2xl">Projects in active growth.</h2>
+          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
+            Projects in active growth.
+          </h2>
+          <p className="mt-3 text-base leading-7 text-slate-700">
+            Experimental systems, SDKs, and infrastructure work still being
+            refined in public.
+          </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <Card
@@ -167,10 +336,11 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.blue}
           >
-            Multiplatform mobile SDK with AI capable features.
+            Multiplatform mobile SDK with AI-capable features.
           </Card>
           <Card
             title="Project Mysotosis"
+            url="https://mysotosis.micrantha.com"
             icon={<MysotosisIcon />}
             headingLevel={3}
             className={cardStyles.green}
@@ -187,11 +357,13 @@ export default function Index() {
         id="philosophy"
         className="space-y-4 border-t border-gray-200 pt-12"
       >
-        <p className="text-xs uppercase tracking-widest text-gray-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
           Philosophy
         </p>
-        <h2 className="text-2xl">Work that compounds.</h2>
-        <p className="text-gray-700">
+        <h2 className="text-2xl tracking-tight md:text-3xl">
+          Work that compounds.
+        </h2>
+        <p className="max-w-3xl text-base leading-7 text-slate-700">
           We build iteratively, guided by quality, time, and cost. Gardening is
           our metaphor: tend the soil, grow the seeds, cultivate the garden.
         </p>
@@ -202,29 +374,34 @@ export default function Index() {
 
       <section
         id="contact"
-        className="space-y-4 border-t border-gray-200 pt-12"
+        className="rounded-[2rem] border border-slate-200 bg-white/80 px-6 py-8 shadow-[0_20px_45px_rgba(31,42,42,0.08)]"
       >
-        <p className="text-xs uppercase tracking-widest text-gray-500">
-          Contact
-        </p>
-        <h2 className="text-2xl">Start the conversation.</h2>
-        <p className="text-gray-700">
-          For consultations or support, reach us directly.
-        </p>
-        <div className="flex flex-wrap gap-4">
-          <a href="mailto:services@micrantha.com">services@micrantha.com</a>
-          <Link to="/support">Support options</Link>
-        </div>
-      </section>
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Contact
+            </p>
+            <h2 className="text-2xl tracking-tight md:text-3xl">
+              Start the conversation.
+            </h2>
+            <p className="max-w-2xl text-base leading-7 text-slate-700">
+              For consultations or operational support, reach us directly.
+            </p>
+            <div className="flex flex-wrap gap-4 text-sm">
+              <a href="mailto:services@micrantha.com">services@micrantha.com</a>
+              <Link to="/support">Support options</Link>
+            </div>
+          </div>
 
-      <section className="rounded border border-gray-200 p-6 text-center">
-        <p className="text-lg">Let us grow something durable.</p>
-        <a
-          className="button mt-4"
-          href="mailto:services@micrantha.com?subject=Consultation"
-        >
-          Start a conversation
-        </a>
+          <div className="flex flex-wrap gap-3">
+            <Link className="button" to="/services">
+              Request a consultation
+            </Link>
+            <Link className="button button-outline" to="/support">
+              View support options
+            </Link>
+          </div>
+        </div>
       </section>
     </div>
   )

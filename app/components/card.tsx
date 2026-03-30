@@ -1,3 +1,6 @@
+import { Link } from "@remix-run/react"
+import { ExternalLink } from "./external-link"
+
 type Props = {
   title: string
   subtitle?: string
@@ -51,9 +54,9 @@ export const Card: React.FC<Props> = ({
   )
 
   const cardClasses =
-    "flex w-full flex-col overflow-hidden rounded-lg border border-gray-200 px-6 py-4 shadow-lg transition-all duration-300"
+    "flex w-full flex-col overflow-hidden rounded-2xl border px-6 py-5 shadow-[0_12px_28px_rgba(31,42,42,0.10)] transition-all duration-300"
   const interactiveCardClasses =
-    "hover:shadow-xl hover:scale-105 cursor-pointer"
+    "cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(31,42,42,0.14)]"
 
   return (
     <div
@@ -65,9 +68,9 @@ export const Card: React.FC<Props> = ({
             {content}
           </ExternalLink>
         ) : (
-          <a href={url} className="flex h-full flex-col">
+          <Link to={url} className="flex h-full flex-col">
             {content}
-          </a>
+          </Link>
         )
       ) : onClick ? (
         <button
@@ -90,4 +93,3 @@ export const Card: React.FC<Props> = ({
     </div>
   )
 }
-import { ExternalLink } from "./external-link"

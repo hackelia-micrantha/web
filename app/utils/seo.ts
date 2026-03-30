@@ -1,7 +1,7 @@
 import type { MetaDescriptor } from "@remix-run/node"
 
 const SITE_NAME = "Micrantha Software"
-const SITE_TITLE = "Micrantha Software Solutions"
+const SITE_TITLE = "Micrantha Software"
 const SITE_URL = "https://micrantha.com"
 const DEFAULT_IMAGE = `${SITE_URL}/img/logo.png`
 

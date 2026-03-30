@@ -30,27 +30,29 @@ export const Footer = () => {
   }, [])
 
   return (
-    <footer className="mt-16 flex flex-col items-center justify-center">
-      <div>
-        <Link to="/services">Services</Link> |{" "}
-        <Link to="/solutions">Solutions</Link> |{" "}
-        <Link to="/support">Support</Link> |{" "}
-        <Link to="/security">Security</Link> |{" "}
-        <Link to="/privacy">Privacy</Link> |{" "}
-        <Link to="/philosophy">Philosophy</Link>
-      </div>
-
-      {fortune ? (
-        <div className="mx-10 mt-4" aria-live="polite">
-          &#10077; {fortune} &#10078;
+    <footer className="mt-20 border-t border-gray-200 px-4 py-8 text-center sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4">
+        <div className="flex w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-gray-600">
+          <Link to="/services">Services</Link>
+          <Link to="/solutions">Solutions</Link>
+          <Link to="/support">Support</Link>
+          <Link to="/security">Security</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/philosophy">Philosophy</Link>
         </div>
-      ) : null}
 
-      <div className="mt-2">
-        &copy; All Rights Reserved{" "}
-        <ExternalLink href="https://micrantha.com">
-          Micrantha Software Solutions
-        </ExternalLink>
+        {fortune ? (
+          <div className="max-w-3xl text-sm text-gray-700" aria-live="polite">
+            &#10077; {fortune} &#10078;
+          </div>
+        ) : null}
+
+        <div className="text-sm text-gray-600">
+          &copy; All Rights Reserved{" "}
+          <ExternalLink href="https://micrantha.com">
+            Micrantha Software
+          </ExternalLink>
+        </div>
       </div>
     </footer>
   )

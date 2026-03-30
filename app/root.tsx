@@ -155,6 +155,7 @@ export default function App() {
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
         <script
@@ -170,7 +171,10 @@ export default function App() {
           Skip to content
         </a>
         <Navigation />
-        <main id="content" className="body container mx-auto px-10">
+        <main
+          id="content"
+          className="body mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8"
+        >
           <Outlet />
         </main>
         <Footer />
