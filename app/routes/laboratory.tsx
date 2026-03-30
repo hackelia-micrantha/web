@@ -58,6 +58,7 @@ export const handle = {
       },
       {
         name: "Mobuild Digitalis",
+        url: "https://digitalis.micrantha.com",
         description:
           "A backend and mobile SDK to attest for mobile clients. Once attested, provides mobile configuration that is stored in secure enclave, such as APIs and secrets. Scientific name is 'Digitalis Obscura'.",
       },
@@ -65,7 +66,7 @@ export const handle = {
         name: "Project Mysotosis",
         description:
           "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Mysotosis Sylvatica'.",
-	url: "https://mysotosis.micrantha.com",
+        url: "https://mysotosis.micrantha.com",
       },
       {
         name: "Compost",
@@ -149,6 +150,7 @@ const Laboratory = () => (
 
       <Card
         title="Mobuild Digitalis"
+        url="https://digitalis.micrantha.com"
         icon={<MobuildIcon />}
         headingLevel={2}
         className={cardStyles.purple}
@@ -160,7 +162,7 @@ const Laboratory = () => (
 
       <Card
         title="Project Mysotosis"
-	url="https://mysotosis.micrantha.com"
+        url="https://mysotosis.micrantha.com"
         icon={<MysotosisIcon />}
         headingLevel={2}
         className={cardStyles.cyan}
