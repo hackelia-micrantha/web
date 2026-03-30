@@ -34,8 +34,10 @@ export const Footer = () => {
       <div>
         <Link to="/services">Services</Link> |{" "}
         <Link to="/solutions">Solutions</Link> |{" "}
-        <Link to="/support">Support</Link> | <Link to="/privacy">Privacy</Link>{" "}
-        | <Link to="/philosophy">Philosophy</Link>
+        <Link to="/support">Support</Link> |{" "}
+        <Link to="/security">Security</Link> |{" "}
+        <Link to="/privacy">Privacy</Link> |{" "}
+        <Link to="/philosophy">Philosophy</Link>
       </div>
 
       {fortune ? (

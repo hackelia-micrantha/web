@@ -66,3 +66,14 @@ test("/privacy retains the tailored long-form policy copy", async ({
   await expect(page.getByText("Contact Us", { exact: true })).toBeVisible()
   await expect(page.getByText("fortunes.micrantha.com")).toHaveCount(0)
 })
+
+test("/security exposes the reporting path", async ({ page }) => {
+  await page.goto("/security")
+
+  await expect(page.getByRole("heading", { name: "Security" })).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: "security@micrantha.com" }),
+  ).toHaveAttribute("href", "mailto:security@micrantha.com")
+  await expect(page.getByText("Good-Faith Research")).toBeVisible()
+  await expect(page.getByText("Bug Bounty", { exact: true })).toBeVisible()
+})
