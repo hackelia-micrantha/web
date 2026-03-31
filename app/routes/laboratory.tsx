@@ -7,7 +7,7 @@ import {
   EyespieIcon,
   BluebellIcon,
   MobuildIcon,
-  MysotosisIcon,
+  MyotosisIcon,
   AnthesisIcon,
   GardenIcon,
 } from "~/components/icons"
@@ -62,10 +62,10 @@ export const handle = {
           "A backend and mobile SDK to attest for mobile clients. Once attested, provides mobile configuration that is stored in secure enclave, such as APIs and secrets. Scientific name is 'Digitalis Obscura'.",
       },
       {
-        name: "Project Mysotosis",
+        name: "Project Myotosis",
         description:
-          "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Mysotosis Sylvatica'.",
-        url: "https://mysotosis.micrantha.com",
+          "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Myotosis Sylvatica'.",
+        url: "https://myotosis.micrantha.com",
       },
       {
         name: "Compost",
@@ -156,15 +156,15 @@ const Laboratory = () => (
       </Card>
 
       <Card
-        title="Project Mysotosis"
-        url="https://mysotosis.micrantha.com"
-        icon={<MysotosisIcon />}
+        title="Project Myotosis"
+        url="https://myotosis.micrantha.com"
+        icon={<MyotosisIcon />}
         headingLevel={2}
         className={cardStyles.cyan}
       >
         An MCP and LLM registry for mobile clients. Mobile SDK registers and
         provides tools that can be incorporated into LLM results and Agentic
-        workflows. Scientific name is 'Mysotosis Sylvatica'.
+        workflows. Scientific name is 'Myotosis Sylvatica'.
       </Card>
 
       <Card

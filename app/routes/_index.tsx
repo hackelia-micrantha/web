@@ -8,7 +8,7 @@ import {
   BluebellIcon,
   FortunesIcon,
   HyperionIcon,
-  MysotosisIcon,
+  MyotosisIcon,
   AmaryllisIcon,
 } from "~/components/icons"
 
@@ -42,7 +42,7 @@ export const handle = {
       {
         name: "Laboratory",
         description:
-          "Projects in active growth, including Hyperion, Bluebell, and Mysotosis.",
+          "Projects in active growth, including Hyperion, Bluebell, and Myotosis.",
         url: "https://micrantha.com/laboratory",
       },
       {
@@ -339,9 +339,9 @@ export default function Index() {
             Multiplatform mobile SDK with AI-capable features.
           </Card>
           <Card
-            title="Project Mysotosis"
-            url="https://mysotosis.micrantha.com"
-            icon={<MysotosisIcon />}
+            title="Project Myotosis"
+            url="https://myotosis.micrantha.com"
+            icon={<MyotosisIcon />}
             headingLevel={3}
             className={cardStyles.green}
           >
