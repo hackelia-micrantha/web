@@ -42,7 +42,7 @@ export const handle = {
       {
         name: "Project Calathea",
         description:
-          "CLI-first, AI-assisted system for deciding what work actually deserves focus—and continuously correcting that decision based on reality.",
+          "CLI-first, AI-assisted system for deciding what work actually deserves focus—and continuously correcting that decision based on reality. Scientific name is 'Calathea orbifolia'.",
         url: "https://calathea.micrantha.com",
       },
       {
@@ -130,7 +130,7 @@ const Laboratory = () => (
         className={cardStyles.purple}
       >
         CLI-first, AI-assisted system for deciding what work actually deserves
-        focus—and continuously correcting that decision based on reality.
+        focus—and continuously correcting that decision based on reality. Scientific name is 'Calathea orbifolia'.
       </Card>
 
       <Card
