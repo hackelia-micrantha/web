@@ -13,7 +13,7 @@ export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Solutions",
     description:
-      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
+      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and internally used Anthesis.",
     path: "/solutions",
   })
 
@@ -21,7 +21,7 @@ export const handle = {
   structuredData: buildCollectionPageStructuredData({
     name: "Solutions",
     description:
-      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and Anthesis.",
+      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and internally used Anthesis.",
     path: "/solutions",
     items: [
       {
@@ -31,7 +31,8 @@ export const handle = {
       },
       {
         name: "Anthesis",
-        description: "Agentic SDLC with governed autonomy and auditability.",
+        description:
+          "Internally used agentic SDLC with governed autonomy and auditability.",
         url: "https://anthesis.dev",
       },
       {
@@ -53,7 +54,7 @@ const Solutions = () => (
   <div>
     <PageTitle
       title="Solutions"
-      subtitle="Products that have grown into active use."
+      subtitle="Products that have grown into active use, including internal use."
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -73,7 +74,7 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.green}
       >
-        Agentic SDLC with governed autonomy and auditability.
+        Internally used agentic SDLC with governed autonomy and auditability.
       </Card>
       <Card
         title="Fortunes Service"

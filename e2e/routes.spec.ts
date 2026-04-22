@@ -41,9 +41,10 @@ test("/laboratory exposes key collection content", async ({ page }) => {
       has: page.getByRole("heading", { name: "Bluebell" }),
     }),
   ).toHaveAttribute("href", "https://github.com/hackelia-micrantha/bluebell")
-  await expect(
-    page.getByRole("link", { name: "Compost" }),
-  ).toHaveAttribute("href", "/compost")
+  await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
+    "href",
+    "/compost",
+  )
   await expect(
     page.getByRole("heading", { name: "Project Hyperion" }),
   ).toBeVisible()

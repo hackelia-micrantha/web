@@ -36,7 +36,7 @@ export const handle = {
       {
         name: "Solutions",
         description:
-          "Products in active use, including Amaryllis, Fortunes Service, and Anthesis.",
+          "Products in active use, including Amaryllis, Fortunes Service, and internally used Anthesis.",
         url: "https://micrantha.com/solutions",
       },
       {
@@ -262,11 +262,11 @@ export default function Index() {
             Solutions
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Products in active use.
+            Products in active use, including internal use.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Products that teams can adopt directly or use as reference points
-            for durable delivery.
+            Products that teams can adopt directly, or internally used systems
+            that show the direction of durable delivery.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -295,7 +295,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.green}
           >
-            Agentic SDLC with governed autonomy and auditability.
+            Internally used agentic SDLC with governed autonomy and
+            auditability.
           </Card>
         </div>
         <Link className="inline-block text-sm" to="/solutions">

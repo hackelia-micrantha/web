@@ -34,7 +34,7 @@ export const handle = {
       {
         name: "Project Anthesis",
         description:
-          "Agentic SDLC with principles: Governed Autonomy, Human Authority First, Deterministic Execution, Auditability, and a Living Architecture.",
+          "Internally used agentic SDLC with principles: Governed Autonomy, Human Authority First, Deterministic Execution, Auditability, and a Living Architecture.",
         url: "https://anthesis.dev",
       },
       {
@@ -104,8 +104,9 @@ const Laboratory = () => (
         headingLevel={2}
         className={cardStyles.green}
       >
-        Agentic SDLC with principles: Governed Autonomy, Human Authority First,
-        Deterministic Execution, Auditability, and a Living Architecture.
+        Internally used agentic SDLC with principles: Governed Autonomy, Human
+        Authority First, Deterministic Execution, Auditability, and a Living
+        Architecture.
       </Card>
 
       <Card
