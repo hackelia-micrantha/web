@@ -58,10 +58,9 @@ export const handle = {
         url: "https://github.com/hackelia-micrantha/bluebell",
       },
       {
-        name: "Eyespie",
-        description:
-          "Eyespie is a turn-based mobile game that uses machine learning to identify real-world things with clues and guess them with proofs. A Bluebell use case.",
-        url: "https://github.com/hackelia-micrantha/eyespie",
+        name: "Achillea",
+        description: "Dynamic feature platform for interactive React Native applications. Scientific name is 'Achillea millefolium'.",
+        url: "https://achillea.micrantha.com",
       },
       {
         name: "Mobuild Envuscator",
@@ -70,15 +69,15 @@ export const handle = {
         url: "https://github.com/hackelia-micrantha/mobuild",
       },
       {
-        name: "Mobuild Digitalis",
+        name: "Project Digitalis",
         url: "https://digitalis.micrantha.com",
         description:
-          "A backend and mobile SDK to attest for mobile clients. Once attested, provides mobile configuration that is stored in secure enclave, such as APIs and secrets. Scientific name is 'Digitalis Obscura'.",
+          "A backend and mobile SDK to attest for mobile clients. Once attested, provides mobile configuration that is stored in secure enclave, such as APIs and secrets. Scientific name is 'Digitalis obscura'.",
       },
       {
         name: "Project Myotosis",
         description:
-          "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Myotosis Sylvatica'.",
+          "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Myotosis sylvatica'.",
         url: "https://myotosis.micrantha.com",
       },
       {
@@ -152,21 +151,31 @@ const Laboratory = () => (
         icon={<BluebellIcon />}
         headingLevel={2}
         className={cardStyles.blue}
+        actions={[
+          <ExternalLink
+            key="eyespie"
+            href="https://github.com/ryjen/eyespie"
+            newTab
+          >
+            Eyespie Demo App
+          </ExternalLink>,
+        ]}
       >
         A multiplatform mobile SDK and project template using AI to generate
         features. Scientific name is 'Hyacinthoides non-scripta'.
       </Card>
 
       <Card
-        title="Eyespie"
+        title="Achillea"
         icon={<EyespieIcon />}
-        url="https://github.com/hackelia-micrantha/eyespie"
+        url="https://achillea.micrantha.com"
         headingLevel={2}
         className={cardStyles.red}
+        actions={[
+          <Text key="achillea-demo">Asterwild Demo Game</Text>
+        ]}
       >
-        Eyespie is a turn-based mobile game that uses machine learning to
-        identify real-world things with clues and guess them with proofs. A
-        Bluebell use case.
+        Achillea is a dynamic feature platform for interactive applications. Scientific name is 'Achillea millefolium'.
       </Card>
 
       <Card
@@ -190,7 +199,7 @@ const Laboratory = () => (
       >
         A backend and mobile SDK to attest for mobile clients. Once attested,
         provides mobile configuration that is stored in secure enclave, such as
-        APIs and secrets. Scientific name is 'Digitalis Obscura'.
+        APIs and secrets. Scientific name is 'Digitalis obscura'.
       </Card>
 
       <Card
@@ -202,7 +211,7 @@ const Laboratory = () => (
       >
         An MCP and LLM registry for mobile clients. Mobile SDK registers and
         provides tools that can be incorporated into LLM results and Agentic
-        workflows. Scientific name is 'Myotosis Sylvatica'.
+        workflows. Scientific name is 'Myotosis sylvatica'.
       </Card>
 
       <Card
