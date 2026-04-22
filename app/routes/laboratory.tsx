@@ -10,6 +10,8 @@ import {
   MyotosisIcon,
   AnthesisIcon,
   GardenIcon,
+  CalatheaIcon,
+  DubniumIcon,
 } from "~/components/icons"
 
 export const meta: MetaFunction = () =>
@@ -36,6 +38,18 @@ export const handle = {
         description:
           "Internally used agentic SDLC with principles: Governed Autonomy, Human Authority First, Deterministic Execution, Auditability, and a Living Architecture.",
         url: "https://anthesis.dev",
+      },
+      {
+        name: "Project Calathea",
+        description:
+          "CLI-first, AI-assisted system for deciding what work actually deserves focus—and continuously correcting that decision based on reality.",
+        url: "https://calathea.micrantha.com",
+      },
+      {
+        name: "Project Dubnium",
+        description:
+          "A Micrantha hardware element: a policy-driven NixOS local server/workstation and AI node with dual-GPU planning and desktop, studio-local, and compute operating modes.",
+        url: "https://github.com/ryjen/dubnium",
       },
       {
         name: "Bluebell",
@@ -107,6 +121,29 @@ const Laboratory = () => (
         Internally used agentic SDLC with principles: Governed Autonomy, Human
         Authority First, Deterministic Execution, Auditability, and a Living
         Architecture.
+      </Card>
+
+      <Card
+        title="Project Calathea"
+        url="https://calathea.micrantha.com"
+        icon={<CalatheaIcon />}
+        headingLevel={2}
+        className={cardStyles.purple}
+      >
+        CLI-first, AI-assisted system for deciding what work actually deserves
+        focus—and continuously correcting that decision based on reality.
+      </Card>
+
+      <Card
+        title="Project Dubnium"
+        url="https://github.com/ryjen/dubnium"
+        icon={<DubniumIcon />}
+        headingLevel={2}
+        className={cardStyles.cyan}
+      >
+        A Micrantha hardware element: a policy-driven NixOS local
+        server/workstation and AI node with dual-GPU planning and desktop,
+        studio-local, and compute operating modes.
       </Card>
 
       <Card

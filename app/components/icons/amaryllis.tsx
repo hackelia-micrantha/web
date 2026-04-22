@@ -6,21 +6,21 @@ export const AmaryllisIcon = () => (
     role="img"
     aria-label="Amaryllis"
   >
-    <circle cx="12" cy="12" r="11.5" fill="#fdf2f8" />
+    <circle cx="12" cy="12" r="11.5" fill="currentColor" opacity=".12" />
     <path
       d="M12 3.8c1 2.2 2.6 3.8 4.8 4.8-2.2 1-3.8 2.6-4.8 4.8-1-2.2-2.6-3.8-4.8-4.8 2.2-1 3.8-2.6 4.8-4.8Z"
-      fill="#be185d"
+      fill="currentColor"
     />
     <path
       d="M20.2 12c-2.2 1-3.8 2.6-4.8 4.8-1-2.2-2.6-3.8-4.8-4.8 2.2-1 3.8-2.6 4.8-4.8 1 2.2 2.6 3.8 4.8 4.8Z"
-      fill="#ec4899"
-      opacity=".9"
+      fill="currentColor"
+      opacity=".75"
     />
     <path
       d="M12 20.2c-1-2.2-2.6-3.8-4.8-4.8 2.2-1 3.8-2.6 4.8-4.8 1 2.2 2.6 3.8 4.8 4.8-2.2 1-3.8 2.6-4.8 4.8Z"
-      fill="#f472b6"
-      opacity=".95"
+      fill="currentColor"
+      opacity=".55"
     />
-    <circle cx="12" cy="12" r="2.2" fill="#881337" />
+    <circle cx="12" cy="12" r="2.2" fill="currentColor" />
   </svg>
 )

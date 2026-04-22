@@ -8,13 +8,14 @@ export const VeilIcon = () => (
   >
     <path
       d="M12 3.5c3.9 0 7.2 1.9 9 5-1.8 3.1-5.1 5-9 5s-7.2-1.9-9-5c1.8-3.1 5.1-5 9-5Z"
-      fill="#cbd5e1"
+      fill="currentColor"
+      opacity=".35"
     />
     <path
       d="M12 10.5c3.9 0 7.2 1.9 9 5-1.8 3.1-5.1 5-9 5s-7.2-1.9-9-5c1.8-3.1 5.1-5 9-5Z"
-      fill="#64748b"
-      opacity=".9"
+      fill="currentColor"
+      opacity=".7"
     />
-    <circle cx="12" cy="12" r="2.2" fill="#0f172a" />
+    <circle cx="12" cy="12" r="2.2" fill="currentColor" />
   </svg>
 )

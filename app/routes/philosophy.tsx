@@ -63,6 +63,13 @@ const Philosophy = () => {
                 when those tradeoffs are explicit instead of implied.
               </p>
               <p>
+                The traditional iron triangle is treated as a management
+                constraint, not a slogan. Calathea exists to make that
+                constraint operational: it helps decide what work deserves focus
+                now, what should wait, and what should be corrected when reality
+                changes.
+              </p>
+              <p>
                 For the people at Micrantha, that process is shaped by{" "}
                 <b>enjoyment</b>
                 <sub>
@@ -110,6 +117,48 @@ const Philosophy = () => {
               className="mx-auto"
             />
           </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-xl">Naming</h2>
+          <p>
+            Micrantha names work according to the kind of thing it is. The names
+            are a lightweight taxonomy: they make the role of a project easier
+            to remember without turning the system into a rigid brand scheme.
+          </p>
+          <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <dt className="font-bold">Plants and flowers</dt>
+              <dd>
+                Software systems, services, and tools are usually named from
+                living things. Anthesis, Calathea, Bluebell, Amaryllis, and
+                Myotosis belong to this line.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold">Elements</dt>
+              <dd>
+                Hardware is named from the periodic table. Dubnium is the local
+                server/workstation element; Zirconium names the phone, and
+                Technetium names the laptop.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold">Gardens</dt>
+              <dd>
+                Collections, operating contexts, and supporting environments use
+                garden language because they contain the conditions that let the
+                work grow.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold">Laboratory</dt>
+              <dd>
+                Active experiments live in the laboratory until their purpose,
+                constraints, and tradeoffs are clear enough to keep or recycle.
+              </dd>
+            </div>
+          </dl>
         </section>
 
         <section className="space-y-6">

@@ -1,26 +1,24 @@
 export const AnthesisIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
+    viewBox="-80 -80 800 800"
     className="h-6 w-6"
     role="img"
     aria-label="Anthesis"
   >
-    <rect x="1" y="1" width="22" height="22" rx="5.5" fill="#ecfdf5" />
+    {/* Font Awesome Free paths: diagram-project + shield-halved. */}
     <path
-      d="M12 4.5 18.4 8.1v7.8L12 19.5 5.6 15.9V8.1L12 4.5Z"
-      fill="#065f46"
+      d="M320 24c6 0 11.8 1.3 17.2 3.7l214.3 90.9c28.1 11.9 49.1 39.6 48.9 73.1-.7 126.8-52.8 358.8-272.9 464.2-21.3 10.2-46.1 10.2-67.4 0C40 550.5-12.1 318.5-12.7 191.7c-.2-33.5 20.8-61.2 48.9-73.1l214.3-90.9c5.4-2.4 11.2-3.7 17.2-3.7H320Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="48"
+      strokeLinejoin="round"
+      opacity=".22"
     />
     <path
-      d="M12 7.2 15.5 9.2v5.6L12 16.8 8.5 14.8V9.2L12 7.2Z"
-      fill="#a7f3d0"
+      d="M384 320H256c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h128c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32zM192 32c0-17.67-14.33-32-32-32H32C14.33 0 0 14.33 0 32v128c0 17.67 14.33 32 32 32h95.72l73.16 128.04C211.98 300.98 232.4 288 256 288h.28L192 175.51V128h224V64H192V32zM608 0H480c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h128c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32z"
+      fill="currentColor"
+      transform="translate(144 176) scale(.55)"
     />
-    <path
-      d="M12 4.5v2.5M18.4 8.1l-2.1 1.2M18.4 15.9l-2.1-1.2M12 19.5V17M5.6 15.9l2.1-1.2M5.6 8.1l2.1 1.2"
-      stroke="#10b981"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-    />
-    <circle cx="12" cy="12" r="1.2" fill="#ecfdf5" />
   </svg>
 )
