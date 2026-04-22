@@ -89,9 +89,6 @@ check: setup ## [Dev] Run lint, typecheck, and build.
 	yarn typecheck
 	yarn build
 
-package: setup ## [Deploy] Build and push registry image via package script.
-	yarn package
-
 image: setup ## [Docker] Build the Docker image.
 	docker build -t $(IMAGE) .
 

@@ -1,5 +1,5 @@
 {
-  "name": "minimal-remix-stack",
+  "name": "micrantha-web",
   "private": true,
   "description": "The Minimal House Remix Stack to setup Remix with minimal typsescript, tailwind, linting, and formatting. Worry about storage, testing, or deployment later.",
   "license": "MIT",
@@ -20,8 +20,7 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:mobile": "playwright test --project=mobile-chromium",
     "typecheck": "tsc -b",
-    "deploy:cloudflare": "yarn typecheck && yarn build && npx wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps",
-    "package": "create-registry-image --latest --push micrantha/web"
+    "deploy:cloudflare": "yarn typecheck && yarn build && npx wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",

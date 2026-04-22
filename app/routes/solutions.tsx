@@ -26,18 +26,20 @@ export const handle = {
     items: [
       {
         name: "Amaryllis",
-        description: "A React Native SDK for on-device mobile inference.",
+        description:
+          "A React Native SDK for on-device mobile inference and ai-enabled components.",
         url: "https://amaryllis.micrantha.com",
       },
       {
         name: "Anthesis",
         description:
-          "Internally used agentic SDLC with governed autonomy and auditability.",
+          "Internally used agentic SDLC with governed autonomy, auditability and replayability.",
         url: "https://anthesis.dev",
       },
       {
         name: "Fortunes Service",
-        description: "A microservice and Slack app for UNIX fortunes.",
+        description:
+          "A microservice, progressive web and Slack app for UNIX fortunes.",
         url: "https://fortunes.micrantha.com",
       },
       {
@@ -57,7 +59,7 @@ const Solutions = () => (
       subtitle="Products that have grown into active use, including internal use."
     />
 
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <Card
         title="Amaryllis"
         url="https://amaryllis.micrantha.com"
@@ -65,7 +67,8 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.neutral}
       >
-        A React Native SDK for on-device mobile inference.
+        A React Native SDK for on-device mobile inference and ai-enabled
+        components.
       </Card>
       <Card
         title="Anthesis"
@@ -74,7 +77,8 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.green}
       >
-        Internally used agentic SDLC with governed autonomy and auditability.
+        Internally used agentic SDLC with governed autonomy, auditability and
+        replayability.
       </Card>
       <Card
         title="Fortunes Service"
@@ -92,7 +96,7 @@ const Solutions = () => (
           </ExternalLink>,
         ]}
       >
-        A microservice and Slack app for UNIX fortunes.
+        A microservice, progressive web and Slack app for UNIX fortunes.
       </Card>
       <Card
         title="Veil"

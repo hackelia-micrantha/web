@@ -1,4 +1,21 @@
-import { expect, test } from "@playwright/test"
+import { expect, test, type Page } from "@playwright/test"
+
+const navTargets = {
+  Solutions: "/solutions",
+  Support: "/support",
+}
+
+async function clickNavigationLink(page: Page, name: keyof typeof navTargets) {
+  const navigation = page.getByRole("navigation")
+  const target = navTargets[name]
+  const visibleLink = navigation.locator(`a[href="${target}"]:visible`)
+
+  if ((await visibleLink.count()) === 0) {
+    await navigation.locator("summary:visible").click()
+  }
+
+  await visibleLink.click()
+}
 
 test("homepage exposes primary marketing content", async ({ page }) => {
   await page.goto("/")
@@ -34,9 +51,7 @@ test("homepage exposes primary marketing content", async ({ page }) => {
 test("primary navigation reaches key sections and routes", async ({ page }) => {
   await page.goto("/")
 
-  const navigation = page.getByRole("navigation")
-
-  await navigation.getByRole("link", { name: "Solutions", exact: true }).click()
+  await clickNavigationLink(page, "Solutions")
   await expect(page).toHaveURL(/\/solutions$/)
   await expect(page.getByRole("heading", { name: "Solutions" })).toBeVisible()
   await expect(
@@ -45,7 +60,7 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
     ),
   ).toBeVisible()
 
-  await navigation.getByRole("link", { name: "Support", exact: true }).click()
+  await clickNavigationLink(page, "Support")
   await expect(page).toHaveURL(/\/support$/)
   await expect(page.getByRole("heading", { name: "Support" })).toBeVisible()
   await expect(
