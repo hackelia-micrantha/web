@@ -1,10 +1,10 @@
 import type { MetaFunction } from "@remix-run/node"
-import { Card, PageTitle } from "~/components"
+import { Card, PageTitle, ExternalLink } from "~/components"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
   HyperionIcon,
-  EyespieIcon,
+  AchilleaIcon,
   BluebellIcon,
   MobuildIcon,
   MyotosisIcon,
@@ -167,12 +167,12 @@ const Laboratory = () => (
 
       <Card
         title="Achillea"
-        icon={<EyespieIcon />}
+        icon={<AchilleaIcon />}
         url="https://achillea.micrantha.com"
         headingLevel={2}
         className={cardStyles.red}
         actions={[
-          <Text key="achillea-demo">Asterwild Demo Game</Text>
+          <span key="achillea-demo">Asterwild Demo Game</span>
         ]}
       >
         Achillea is a dynamic feature platform for interactive applications. Scientific name is 'Achillea millefolium'.

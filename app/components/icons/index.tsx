@@ -1,7 +1,7 @@
 export { EmailIcon } from "./at"
 export { SlackIcon } from "./slack"
 export { FortunesIcon } from "./fortunes"
-export { EyespieIcon } from "./eyespie"
+export { AchilleaIcon } from "./achillea"
 export { OutermeshIcon } from "./outermesh"
 export { VeilIcon } from "./veil"
 export { SandboxIcon } from "./sandbox"
