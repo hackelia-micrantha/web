@@ -73,34 +73,34 @@ const Philosophy = () => {
                 For the people at Micrantha, that process is shaped by{" "}
                 <b>enjoyment</b>
                 <sub>
-                  <a id="enjoyment" href="#enjoyment">
+                  <a id="ref-enjoyment" href="#footnote-1">
                     1
                   </a>
                 </sub>
                 , <b>enthusiasm</b>
                 <sub>
-                  <a id="enthusiasm" href="#enthusiasm">
+                  <a id="ref-enthusiasm" href="#footnote-2">
                     2
                   </a>
                 </sub>{" "}
                 and <b>acceptance</b>
                 <sub>
-                  <a id="acceptance" href="#acceptance">
+                  <a id="ref-acceptance" href="#footnote-3">
                     3
                   </a>
                 </sub>
                 .
               </p>
               <div className="space-y-2 text-sm text-gray-700">
-                <p>
+                <p id="footnote-1">
                   [1] <b>Enjoyment → Quality</b>: quality work is enjoyable to
                   build and maintain.
                 </p>
-                <p>
+                <p id="footnote-2">
                   [2] <b>Enthusiasm → Time</b>: motivated teams sustain effort
                   and momentum longer.
                 </p>
-                <p>
+                <p id="footnote-3">
                   [3] <b>Acceptance → Cost</b>: real constraints demand
                   deliberate tradeoffs.
                 </p>

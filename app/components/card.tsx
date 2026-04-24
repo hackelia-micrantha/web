@@ -41,7 +41,7 @@ export const Card: React.FC<Props> = ({
             {title}
           </HeadingTag>
           {subtitle && (
-            <p className="mt-1 text-sm leading-6 text-slate-500 break-words">
+            <p className="mt-1 text-sm leading-6 text-slate-600 break-words">
               {subtitle}
             </p>
           )}

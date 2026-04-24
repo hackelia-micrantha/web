@@ -71,4 +71,13 @@ test.describe("visual regressions", () => {
       "support-page.png",
     )
   })
+
+  test("philosophy page remains stable", async ({ page }) => {
+    await prepareVisualPage(page, "/philosophy")
+
+    await expectVisualSnapshot(
+      page.locator("main#content > div"),
+      "philosophy-page.png",
+    )
+  })
 })

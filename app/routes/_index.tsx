@@ -103,7 +103,7 @@ export default function Index() {
 
             <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
                   Delivery
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
@@ -111,7 +111,7 @@ export default function Index() {
                 </p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
                   Governance
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
@@ -120,7 +120,7 @@ export default function Index() {
                 </p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
                   Reliability
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
@@ -134,7 +134,7 @@ export default function Index() {
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             Where Teams Get Stuck
           </p>
           <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
@@ -146,7 +146,7 @@ export default function Index() {
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             Where Teams Get Stuck
           </p>
           <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
@@ -158,7 +158,7 @@ export default function Index() {
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             What We Bring
           </p>
           <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
@@ -176,7 +176,7 @@ export default function Index() {
         className="space-y-6 border-t border-gray-200 pt-12"
       >
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
             Services
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
@@ -218,7 +218,7 @@ export default function Index() {
 
       <section className="space-y-6 border-t border-gray-200 pt-12">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
             How We Work
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
@@ -264,7 +264,7 @@ export default function Index() {
 
       <section className="space-y-6 border-t border-gray-200 pt-12">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
             Architecture Notes
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
@@ -313,7 +313,7 @@ export default function Index() {
         className="space-y-6 border-t border-gray-200 pt-12"
       >
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
             Solutions
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
@@ -364,7 +364,7 @@ export default function Index() {
         className="space-y-6 border-t border-gray-200 pt-12"
       >
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
             Laboratory
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
@@ -413,7 +413,7 @@ export default function Index() {
         id="philosophy"
         className="space-y-4 border-t border-gray-200 pt-12"
       >
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
           Philosophy
         </p>
         <h2 className="text-2xl tracking-tight md:text-3xl">
@@ -434,7 +434,7 @@ export default function Index() {
       >
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
               Contact
             </p>
             <h2 className="text-2xl tracking-tight md:text-3xl">
