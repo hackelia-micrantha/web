@@ -5,6 +5,7 @@ import { ExternalLink } from "./external-link"
 const navLinks = [
   { to: "/services", label: "Services" },
   { to: "/solutions", label: "Solutions" },
+  { to: "/blog", label: "Blog" },
   { to: "/laboratory", label: "Laboratory" },
   { to: "/philosophy", label: "Philosophy" },
   { to: "/support", label: "Support" },

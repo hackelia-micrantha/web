@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
 
 const navTargets = {
+  Blog: "/blog",
   Solutions: "/solutions",
   Support: "/support",
 }
@@ -57,6 +58,15 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
   await expect(
     page.getByText(
       "Products that have grown into active use, including internal use.",
+    ),
+  ).toBeVisible()
+
+  await clickNavigationLink(page, "Blog")
+  await expect(page).toHaveURL(/\/blog$/)
+  await expect(page.getByRole("heading", { name: "Blog" })).toBeVisible()
+  await expect(
+    page.getByText(
+      "Architecture notes on secure platform integration, delivery governance, AI-assisted systems, and long-lived software design.",
     ),
   ).toBeVisible()
 

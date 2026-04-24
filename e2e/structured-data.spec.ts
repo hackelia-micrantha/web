@@ -73,7 +73,7 @@ test("/laboratory exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage).toBeTruthy()
   expect(collectionPage?.name).toBe("Laboratory")
   expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
-  expect(collectionPage?.mainEntity?.numberOfItems).toBe(8)
+  expect(collectionPage?.mainEntity?.numberOfItems).toBe(10)
   expect(collectionPage?.mainEntity?.itemListElement?.[0]?.position).toBe(1)
   expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
     "Project Hyperion",
@@ -81,7 +81,34 @@ test("/laboratory exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
     "Project Anthesis",
   )
-  expect(collectionPage?.mainEntity?.itemListElement?.[7]?.item?.name).toBe(
+  expect(collectionPage?.mainEntity?.itemListElement?.[9]?.item?.name).toBe(
     "Compost",
+  )
+})
+
+test("/blog exposes CollectionPage structured data", async ({ page }) => {
+  await page.goto("/blog")
+
+  await expect(page.getByRole("heading", { name: "Blog" })).toBeVisible()
+
+  const structuredData = await getStructuredData(page)
+  const collectionPage = structuredData.find(
+    (entry) =>
+      entry["@type"] === "CollectionPage" &&
+      entry.url === "https://micrantha.com/blog",
+  )
+
+  expect(collectionPage).toBeTruthy()
+  expect(collectionPage?.name).toBe("Blog")
+  expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
+  expect(collectionPage?.mainEntity?.numberOfItems).toBe(3)
+  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
+    "Secure Platform Integration Is Not Plumbing",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
+    "AI Pipelines Need Control Boundaries",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[2]?.item?.name).toBe(
+    "Software Layers Are Risk Boundaries",
   )
 })

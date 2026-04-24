@@ -109,6 +109,26 @@ const Solutions = () => (
         security.
       </Card>
     </div>
+
+    <section className="mt-10 max-w-3xl space-y-4">
+      <h2 className="text-xl">Related architecture notes</h2>
+      <p>
+        The blog tracks the architectural concerns behind these systems:
+        governed AI execution, integration control surfaces, and software
+        boundaries that keep platforms replaceable.
+      </p>
+      <p>
+        Start with{" "}
+        <a href="/blog/ai-pipelines-need-control-boundaries">
+          AI Pipelines Need Control Boundaries
+        </a>{" "}
+        or{" "}
+        <a href="/blog/software-layers-are-risk-boundaries">
+          Software Layers Are Risk Boundaries
+        </a>
+        .
+      </p>
+    </section>
   </div>
 )
 

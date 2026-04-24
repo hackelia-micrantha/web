@@ -78,3 +78,45 @@ test("/security exposes the reporting path", async ({ page }) => {
   await expect(page.getByText("Good-Faith Research")).toBeVisible()
   await expect(page.getByText("Bug Bounty", { exact: true })).toBeVisible()
 })
+
+test("/blog exposes the architecture notes index", async ({ page }) => {
+  await page.goto("/blog")
+
+  await expect(page.getByRole("heading", { name: "Blog" })).toBeVisible()
+  await expect(
+    page.getByRole("link", {
+      name: "Secure Platform Integration Is Not Plumbing",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
+  await expect(
+    page.getByText(
+      "Durable technical writing for proposals, partnerships, and delivery decisions.",
+    ),
+  ).toBeVisible()
+})
+
+test("/blog/:slug exposes article content and related notes", async ({
+  page,
+}) => {
+  await page.goto("/blog/ai-pipelines-need-control-boundaries")
+
+  await expect(
+    page.getByRole("heading", {
+      name: "AI Pipelines Need Control Boundaries",
+    }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "AI is not the system of record. AI is an untrusted reasoning component operating inside a governed integration path.",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "LinkedIn and teaser copy" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", {
+      name: "Secure Platform Integration Is Not Plumbing",
+    }),
+  ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
+})

@@ -47,6 +47,22 @@ export const Services = () => (
         <li>your timeline, constraints, and how to contact you</li>
       </ul>
     </section>
+
+    <section className="mt-8 space-y-4">
+      <h2 className="text-xl">Architecture notes</h2>
+      <p>
+        For a clearer sense of how Micrantha approaches governed delivery,
+        integration boundaries, and long-lived software structure, see the{" "}
+        <a href="/blog">Architecture Notes</a> series.
+      </p>
+      <p>
+        A practical starting point is{" "}
+        <a href="/blog/secure-platform-integration-is-not-plumbing">
+          Secure Platform Integration Is Not Plumbing
+        </a>
+        , which outlines where modernization programs usually lose control.
+      </p>
+    </section>
   </div>
 )
 

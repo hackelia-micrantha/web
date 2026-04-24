@@ -59,7 +59,8 @@ export const handle = {
       },
       {
         name: "Achillea",
-        description: "Dynamic feature platform for interactive React Native applications. Scientific name is 'Achillea millefolium'.",
+        description:
+          "Dynamic feature platform for interactive React Native applications. Scientific name is 'Achillea millefolium'.",
         url: "https://achillea.micrantha.com",
       },
       {
@@ -130,7 +131,8 @@ const Laboratory = () => (
         className={cardStyles.purple}
       >
         CLI-first, AI-assisted system for deciding what work actually deserves
-        focus—and continuously correcting that decision based on reality. Scientific name is 'Calathea orbifolia'.
+        focus—and continuously correcting that decision based on reality.
+        Scientific name is 'Calathea orbifolia'.
       </Card>
 
       <Card
@@ -171,11 +173,10 @@ const Laboratory = () => (
         url="https://achillea.micrantha.com"
         headingLevel={2}
         className={cardStyles.red}
-        actions={[
-          <span key="achillea-demo">Asterwild Demo Game</span>
-        ]}
+        actions={[<span key="achillea-demo">Asterwild Demo Game</span>]}
       >
-        Achillea is a dynamic feature platform for interactive applications. Scientific name is 'Achillea millefolium'.
+        Achillea is a dynamic feature platform for interactive applications.
+        Scientific name is 'Achillea millefolium'.
       </Card>
 
       <Card

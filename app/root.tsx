@@ -132,8 +132,12 @@ export default function App() {
   const routeStructuredData = matches.flatMap((match) => {
     const candidate = (match.handle as { structuredData?: unknown } | undefined)
       ?.structuredData
+    const resolvedCandidate =
+      typeof candidate === "function"
+        ? (candidate as (data: unknown) => unknown)(match.data)
+        : candidate
 
-    return candidate ? [candidate] : []
+    return resolvedCandidate ? [resolvedCandidate] : []
   })
   const structuredData = [
     {
