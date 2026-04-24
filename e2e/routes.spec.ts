@@ -112,11 +112,36 @@ test("/blog/:slug exposes article content and related notes", async ({
     ),
   ).toBeVisible()
   await expect(
-    page.getByRole("heading", { name: "LinkedIn and teaser copy" }),
-  ).toBeVisible()
-  await expect(
     page.getByRole("link", {
       name: "Secure Platform Integration Is Not Plumbing",
     }),
   ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
+})
+
+test("/blog posts expose their diagram images", async ({ page }) => {
+  const blogPosts = [
+    {
+      path: "/blog/secure-platform-integration-is-not-plumbing",
+      alt: "Diagram showing channels and source systems flowing through an API gateway, identity and validation controls into ERP core, then outward to workflows, reporting, and CI/CD.",
+      src: "/img/blog/erp_integration_diagram.svg",
+    },
+    {
+      path: "/blog/ai-pipelines-need-control-boundaries",
+      alt: "Diagram showing sources flowing through preprocessing, MCP boundary, AI layer, post-processing, and finally to controlled targets.",
+      src: "/img/blog/ai_pipeline_diagram.svg",
+    },
+    {
+      path: "/blog/software-layers-are-risk-boundaries",
+      alt: "Diagram showing clients flowing into interface and application layers, with the application layer connected to both domain and infrastructure.",
+      src: "/img/blog/software_layers_diagram.svg",
+    },
+  ]
+
+  for (const post of blogPosts) {
+    await page.goto(post.path)
+
+    const diagram = page.getByRole("img", { name: post.alt })
+    await expect(diagram).toBeVisible()
+    await expect(diagram).toHaveAttribute("src", post.src)
+  }
 })

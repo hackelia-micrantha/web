@@ -34,25 +34,23 @@ export const handle = {
 
 export default function BlogIndexRoute() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageTitle title="Blog" subtitle={BLOG_DESCRIPTION} />
 
-      <section className="max-w-3xl rounded-[1.75rem] border border-slate-200 bg-white/80 px-6 py-6 shadow-[0_18px_36px_rgba(31,42,42,0.08)]">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-          {BLOG_TITLE}
-        </p>
-        <h2 className="mt-2 text-2xl tracking-tight text-slate-900">
+      <section className="editorial-panel max-w-4xl px-6 py-7 md:px-8 md:py-8">
+        <p className="meta-kicker">{BLOG_TITLE}</p>
+        <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.035em] text-slate-900 md:text-[2.15rem] md:leading-[1.08]">
           Durable technical writing for proposals, partnerships, and delivery
           decisions.
         </h2>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-slate-700">
+        <p className="page-copy mt-4 max-w-3xl">
           These notes are written as architecture guidance rather than campaign
           copy: secure platform integration, delivery governance, AI-assisted
           workflows, and long-lived software boundaries.
         </p>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {posts.map((post, index) => (
           <Card
             key={post.slug}
@@ -61,30 +59,34 @@ export default function BlogIndexRoute() {
             headingLevel={2}
             className={
               index === 0
-                ? cardStyles.neutral
+                ? `${cardStyles.neutral} editorial-card`
                 : index === 1
-                  ? cardStyles.blue
-                  : cardStyles.green
+                  ? `${cardStyles.blue} editorial-card`
+                  : `${cardStyles.green} editorial-card`
             }
           >
             <>
-              <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <span className="meta-kicker mb-3 block">
                 {formatBlogDate(post.date)}
               </span>
-              {post.excerpt}
+              <span className="block text-[1.02rem] leading-8 text-slate-700">
+                {post.excerpt}
+              </span>
             </>
           </Card>
         ))}
       </section>
 
-      <section className="max-w-3xl space-y-4 rounded-[1.75rem] border border-slate-200 bg-slate-50/80 px-6 py-6">
-        <h2 className="text-xl tracking-tight">Series use</h2>
-        <p className="text-base leading-7 text-slate-700">
-          Each post includes a short teaser and two LinkedIn variants. That
-          material is kept with the post source so the writing and outreach copy
-          stay aligned.
+      <section className="editorial-panel max-w-3xl space-y-4 bg-slate-50/80 px-6 py-6">
+        <h2 className="text-[1.35rem] font-semibold tracking-[-0.02em] text-slate-900">
+          Editorial use
+        </h2>
+        <p className="page-copy">
+          These notes are written to stand on their own as durable technical
+          pieces. Outreach drafts and posting variants are kept separately so
+          the public articles stay focused.
         </p>
-        <p className="text-sm text-slate-600">
+        <p className="page-copy-sm">
           Looking for a starting point? Begin with{" "}
           <Link to="/blog/secure-platform-integration-is-not-plumbing">
             Secure Platform Integration Is Not Plumbing

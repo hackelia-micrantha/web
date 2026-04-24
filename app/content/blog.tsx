@@ -8,9 +8,6 @@ export type BlogPost = {
   date: string
   excerpt: string
   tags: string[]
-  teaser: string
-  linkedinShort: string
-  linkedinTechnical: string
   relatedSlugs: string[]
   Content: () => ReactNode
 }
@@ -26,6 +23,24 @@ const PostLink = ({
   slug: string
   children: ReactNode
 }) => <Link to={`/blog/${slug}`}>{children}</Link>
+
+const DiagramFrame = ({
+  title,
+  caption,
+  children,
+}: {
+  title: string
+  caption: string
+  children: ReactNode
+}) => (
+  <figure className="article-diagram">
+    <figcaption className="article-diagram-caption">
+      <span className="article-diagram-title">{title}</span>
+      <span className="article-diagram-note">{caption}</span>
+    </figcaption>
+    {children}
+  </figure>
+)
 
 const securePlatformIntegrationContent = () => (
   <>
@@ -66,8 +81,8 @@ const securePlatformIntegrationContent = () => (
       <p>
         This gets worse when the integration path is built inside a single
         vendor implementation mindset. Once orchestration rules, security
-        choices, and business corrections collapse into one tool, replacement
-        becomes expensive and defects become harder to isolate.
+        decisions, and business corrections collapse into one integration path,
+        replacement gets more expensive and defects get harder to isolate.
       </p>
     </section>
 
@@ -79,33 +94,20 @@ const securePlatformIntegrationContent = () => (
         event and observability records around the transaction, and explicit
         recovery tooling for operators.
       </p>
-      <pre>
-        <code>{`flowchart TD
-    A[Channels and Source Systems] --> B[Interface Boundary
-    Validate schema
-    Authenticate caller
-    Assign correlation IDs]
-    B --> C[Integration Application Layer
-    Map contracts
-    Enforce workflow rules
-    Route commands and events]
-    C --> D[Domain and Policy Decisions
-    Eligibility
-    State transitions
-    Exceptions]
-    C --> E[Observability and Audit
-    Logs
-    Metrics
-    Provenance
-    Replay markers]
-    D --> F[Systems of Record and External Platforms]
-    E --> G[Operations and Recovery]`}</code>
-      </pre>
+      <DiagramFrame
+        title="Integration control path"
+        caption="Contracts and trust enter at the edge; recovery and observability stay explicit instead of incidental."
+      >
+        <img
+          className="article-diagram-image"
+          src="/img/blog/erp_integration_diagram.svg"
+          alt="Diagram showing channels and source systems flowing through an API gateway, identity and validation controls into ERP core, then outward to workflows, reporting, and CI/CD."
+        />
+      </DiagramFrame>
       <p>
-        Even as plain text, the diagram is useful because it forces the
-        questions that matter: where is identity asserted, where is state
-        normalized, where are business decisions made, and where do operators go
-        when a transaction is partial?
+        The diagram forces the questions that matter: where is identity
+        asserted, where is state normalized, where are business decisions made,
+        and where do operators go when a transaction is partial?
       </p>
     </section>
 
@@ -173,10 +175,10 @@ const securePlatformIntegrationContent = () => (
       <h2>Conclusion</h2>
       <p>
         Integration layers deserve architectural attention because they decide
-        whether modernization produces a governable system or only a more
+        whether modernization produces a governable system or just a more
         complicated failure surface. When teams treat integration as a control
-        boundary instead of a wiring task, they gain cleaner workflow behavior,
-        better recovery, and more realistic options for future change.
+        boundary instead of a wiring task, they get clearer workflow behavior,
+        better recovery, and more realistic options for later change.
       </p>
     </section>
   </>
@@ -188,8 +190,8 @@ const aiPipelinesControlBoundariesContent = () => (
       <h2>Start with the right mental model</h2>
       <p>
         Enterprise AI work becomes risky when the model is treated like an
-        authoritative subsystem instead of a fallible component inside a larger
-        delivery path.
+        authoritative component instead of a fallible part of a larger delivery
+        path.
       </p>
       <div className="article-callout">
         <p>
@@ -198,9 +200,9 @@ const aiPipelinesControlBoundariesContent = () => (
         </p>
       </div>
       <p>
-        That sentence changes the design. It means prompts, tool access,
-        retrieval, outputs, and write-back actions all need control boundaries
-        of their own.
+        That framing changes the design. Prompts, tool access, retrieval,
+        outputs, and write-back actions all need control boundaries of their
+        own.
       </p>
     </section>
 
@@ -254,12 +256,22 @@ const aiPipelinesControlBoundariesContent = () => (
 
     <section className="space-y-4">
       <h2>AI execution</h2>
+      <DiagramFrame
+        title="Governed AI pipeline"
+        caption="AI lives inside a controlled path with explicit checks before and after reasoning."
+      >
+        <img
+          className="article-diagram-image article-diagram-image-narrow"
+          src="/img/blog/ai_pipeline_diagram.svg"
+          alt="Diagram showing sources flowing through preprocessing, MCP boundary, AI layer, post-processing, and finally to controlled targets."
+        />
+      </DiagramFrame>
       <p>
         Inside the execution zone, retrieval, model or agent selection, and tool
         calls are still just intermediate reasoning steps. They are useful, but
-        they should not be confused with final system action. Enterprise
-        architectures need a visible boundary between the reasoning process and
-        the transaction that affects a real workflow.
+        they should not be confused with final system action. There needs to be
+        a visible boundary between the reasoning process and the transaction
+        that changes a real workflow.
       </p>
       <p>
         This is where a layered architecture matters. The same separation
@@ -350,9 +362,10 @@ const aiPipelinesControlBoundariesContent = () => (
       <h2>Conclusion</h2>
       <p>
         The practical goal is not to remove AI from the workflow. It is to put
-        AI in a place where it can be useful without becoming the implicit owner
-        of security, state, or business truth. Once the control boundaries are
-        explicit, enterprise AI becomes easier to test, review, and replace.
+        AI in a governed part of the workflow without letting it become the
+        implicit owner of security, state, or business truth. Once the control
+        boundaries are explicit, enterprise AI becomes easier to test, review,
+        and replace.
       </p>
     </section>
   </>
@@ -363,17 +376,27 @@ const softwareLayersRiskBoundariesContent = () => (
     <section className="space-y-4">
       <h2>Why layers still matter</h2>
       <p>
-        Layered architecture is sometimes dismissed as ceremony. In practice, it
-        is one of the simplest ways to keep risk from collapsing into a single
-        code path. Without layers, interface concerns, business rules,
-        integration behavior, and infrastructure choices drift together until
-        every change becomes a coupled change.
+        Layered architecture matters because it is one of the simplest ways to
+        keep risk from collapsing into a single code path. Without layers,
+        interface concerns, business rules, integration behavior, and
+        infrastructure choices drift together until every change becomes a
+        coupled change.
       </p>
       <p>
         The useful question is not whether the layers are academically pure. It
         is whether they preserve replaceability and make failure easier to
         localize.
       </p>
+      <DiagramFrame
+        title="Software layers as risk boundaries"
+        caption="Each layer contains a different kind of change so clients, policy, and vendor concerns do not collapse into one code path."
+      >
+        <img
+          className="article-diagram-image"
+          src="/img/blog/software_layers_diagram.svg"
+          alt="Diagram showing clients flowing into interface and application layers, with the application layer connected to both domain and infrastructure."
+        />
+      </DiagramFrame>
     </section>
 
     <section className="space-y-4">
@@ -465,7 +488,8 @@ const softwareLayersRiskBoundariesContent = () => (
       <p>
         It also supports replacement. A mobile client can be rebuilt, an ERP
         connector can be swapped, or an AI provider can change without forcing a
-        redesign of the domain. That is the architectural payoff.
+        redesign of the domain. That is the point of keeping the boundaries
+        clear.
       </p>
       <p>
         The operational side of that same argument shows up in{" "}
@@ -504,12 +528,6 @@ export const blogPosts: BlogPost[] = [
       "delivery-governance",
       "enterprise-modernization",
     ],
-    teaser:
-      "Integration is not wiring between systems; it is where trust, workflow state, and recovery have to become explicit.",
-    linkedinShort:
-      "New in Micrantha Architecture Notes: secure platform integration is not a plumbing exercise. It is where data contracts, identity, workflow state, observability, and recovery paths stop being implied and become designed. A short note on why modernization programs usually fail here first.",
-    linkedinTechnical:
-      "A practical integration architecture needs more than field mapping. The boundary has to validate contracts, preserve identity, route workflow semantics, expose provenance, and support replay or recovery when transactions go partial. I wrote up a compact architecture note on why enterprise integration layers should be treated as control surfaces, not transport detail.",
     relatedSlugs: [
       "ai-pipelines-need-control-boundaries",
       "software-layers-are-risk-boundaries",
@@ -530,12 +548,6 @@ export const blogPosts: BlogPost[] = [
       "workflow-validation",
       "secure-integration",
     ],
-    teaser:
-      "AI belongs inside a governed integration path, not in charge of one.",
-    linkedinShort:
-      "Enterprise AI needs control boundaries. The model is useful, but it is not the system of record and it should not become the implicit owner of workflow state. I wrote a short note on preprocessing, scoped tool access, validation, approval, and controlled write-back.",
-    linkedinTechnical:
-      "The framing I keep coming back to is simple: AI is an untrusted reasoning component operating inside a governed integration path. That pushes design effort into input normalization, redaction, provenance, scoped MCP or tool access, deterministic validation, diffing, approval, and controlled adapter writes. I pulled that into a compact architecture note with a threat table.",
     relatedSlugs: [
       "secure-platform-integration-is-not-plumbing",
       "software-layers-are-risk-boundaries",
@@ -556,12 +568,6 @@ export const blogPosts: BlogPost[] = [
       "mobile-systems",
       "enterprise-architecture",
     ],
-    teaser:
-      "Layers matter because replaceability, security, and business meaning should not depend on the same code path.",
-    linkedinShort:
-      "Layered architecture is sometimes framed as style. In long-lived systems it is really a risk-control mechanism. Clients, interfaces, workflows, domain rules, and infrastructure should not collapse into one another if you expect vendor replacement, mobile evolution, or governed AI paths later.",
-    linkedinTechnical:
-      "When interface code, workflow orchestration, domain policy, and adapters blur together, every change becomes a coupled change. I wrote a short note on why software layers are risk boundaries, especially for mobile programs, enterprise integration, AI-assisted workflows, and future vendor replacement.",
     relatedSlugs: [
       "secure-platform-integration-is-not-plumbing",
       "ai-pipelines-need-control-boundaries",

@@ -37,19 +37,17 @@ export const Card: React.FC<Props> = ({
           </div>
         )}
         <div className="min-w-0">
-          <HeadingTag className="text-xl font-bold leading-tight break-words">
+          <HeadingTag className="text-[1.15rem] font-semibold leading-[1.28] tracking-[-0.02em] break-words text-slate-900">
             {title}
           </HeadingTag>
           {subtitle && (
-            <p className="mt-1 text-sm leading-snug text-gray-500 break-words">
+            <p className="mt-1 text-sm leading-6 text-slate-500 break-words">
               {subtitle}
             </p>
           )}
         </div>
       </div>
-      <p className="mt-4 grow text-base text-gray-700 leading-relaxed">
-        {children}
-      </p>
+      <div className="page-copy mt-4 grow">{children}</div>
     </>
   )
 

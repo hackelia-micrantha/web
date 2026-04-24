@@ -17,9 +17,6 @@ type LoaderData = {
     date: string
     excerpt: string
     tags: string[]
-    teaser: string
-    linkedinShort: string
-    linkedinTechnical: string
   }
 }
 
@@ -38,9 +35,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       date: post.date,
       excerpt: post.excerpt,
       tags: post.tags,
-      teaser: post.teaser,
-      linkedinShort: post.linkedinShort,
-      linkedinTechnical: post.linkedinTechnical,
     },
   })
 }
@@ -87,67 +81,29 @@ export default function BlogPostRoute() {
   const relatedPosts = getRelatedPosts(post)
 
   return (
-    <article className="space-y-8">
-      <div className="space-y-4">
-        <Link className="article-meta-link text-sm" to="/blog">
+    <article className="space-y-10">
+      <div className="space-y-5">
+        <Link className="article-meta-link inline-flex text-sm" to="/blog">
           Back to blog
         </Link>
         <PageTitle title={post.title} subtitle={post.description} />
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-600">
+        <div className="article-meta-row flex flex-wrap items-center gap-x-4 gap-y-2">
           <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
           <span aria-hidden="true">/</span>
           <span>{post.tags.join(", ")}</span>
         </div>
-        <p className="max-w-3xl text-lg leading-8 text-slate-700">
-          {post.excerpt}
-        </p>
+        <p className="article-lead">{post.excerpt}</p>
       </div>
 
       <div className="article-prose">
         <post.Content />
       </div>
 
-      <section className="max-w-3xl space-y-4 rounded-[1.5rem] border border-slate-200 bg-white/80 px-6 py-6 shadow-[0_18px_36px_rgba(31,42,42,0.06)]">
-        <h2 className="text-xl tracking-tight">LinkedIn and teaser copy</h2>
-        <div className="space-y-3">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Short LinkedIn
-            </p>
-            <p className="mt-1 text-base leading-7 text-slate-700">
-              {post.linkedinShort}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Technical LinkedIn
-            </p>
-            <p className="mt-1 text-base leading-7 text-slate-700">
-              {post.linkedinTechnical}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Teaser
-            </p>
-            <p className="mt-1 text-base leading-7 text-slate-700">
-              {post.teaser}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Suggested tags
-            </p>
-            <p className="mt-1 text-base leading-7 text-slate-700">
-              {post.tags.join(", ")}
-            </p>
-          </div>
-        </div>
-      </section>
-
       {relatedPosts.length > 0 ? (
         <section className="max-w-3xl space-y-4 border-t border-gray-200 pt-8">
-          <h2 className="text-xl tracking-tight">Related notes</h2>
+          <h2 className="text-[1.35rem] font-semibold tracking-[-0.02em] text-slate-900">
+            Related notes
+          </h2>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {relatedPosts.map((relatedPost) => (
               <Link
@@ -155,10 +111,10 @@ export default function BlogPostRoute() {
                 to={`/blog/${relatedPost.slug}`}
                 className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-4 text-left text-base shadow-[0_10px_24px_rgba(31,42,42,0.05)] transition-colors hover:bg-white"
               >
-                <span className="block font-semibold text-slate-900">
+                <span className="block text-[1.02rem] font-semibold leading-7 tracking-[-0.015em] text-slate-900">
                   {relatedPost.title}
                 </span>
-                <span className="mt-2 block text-sm leading-6 text-slate-600">
+                <span className="mt-2 block text-sm leading-7 text-slate-600">
                   {relatedPost.excerpt}
                 </span>
               </Link>
