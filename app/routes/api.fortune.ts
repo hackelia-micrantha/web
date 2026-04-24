@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare"
 
 import { getFortune } from "~/services/fortune.server"
 import { resolveRuntimePlatform } from "~/services/platform.server"

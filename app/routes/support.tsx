@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node"
+import type { MetaFunction } from "@remix-run/cloudflare"
 import { PageTitle, Card, ExternalLink } from "~/components"
 import { EmailIcon, SlackIcon, IrcIcon } from "~/components/icons"
 import { cardStyles } from "~/utils/card-styles"

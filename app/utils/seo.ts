@@ -1,4 +1,4 @@
-import type { MetaDescriptor } from "@remix-run/node"
+import type { MetaDescriptor } from "@remix-run/cloudflare"
 
 const SITE_NAME = "Micrantha Software"
 const SITE_TITLE = "Micrantha Software"

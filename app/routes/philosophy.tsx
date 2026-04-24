@@ -1,10 +1,6 @@
-import type { MetaFunction } from "@remix-run/node"
-import { useEffect, useState } from "react"
+import type { MetaFunction } from "@remix-run/cloudflare"
 import { PageTitle } from "~/components"
 import { buildPageMeta } from "~/utils/seo"
-
-type WebsiteCarbonBadgeComponent =
-  (typeof import("react-websitecarbon-badge"))["WebsiteCarbonBadge"]
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
@@ -15,28 +11,6 @@ export const meta: MetaFunction = () =>
   })
 
 const Philosophy = () => {
-  const [mounted, setMounted] = useState(false)
-  const [WebsiteCarbonBadge, setWebsiteCarbonBadge] =
-    useState<WebsiteCarbonBadgeComponent | null>(null)
-
-  useEffect(() => {
-    setMounted(true)
-
-    let isActive = true
-
-    void import("react-websitecarbon-badge")
-      .then((module) => {
-        if (isActive) {
-          setWebsiteCarbonBadge(() => module.WebsiteCarbonBadge)
-        }
-      })
-      .catch(() => {})
-
-    return () => {
-      isActive = false
-    }
-  }, [])
-
   return (
     <div>
       <PageTitle
@@ -207,15 +181,9 @@ const Philosophy = () => {
         </div>
       </div>
 
-      {mounted && WebsiteCarbonBadge ? (
-        <div className="mt-8">
-          <WebsiteCarbonBadge
-            url="https://micrantha.com"
-            co2="0.003"
-            percentage="97"
-          />
-        </div>
-      ) : null}
+      <div className="mt-8 rounded-2xl border border-gray-200 bg-white/80 p-4 text-sm text-gray-700">
+        Estimated website carbon rating: 0.003g CO2 per page view.
+      </div>
     </div>
   )
 }

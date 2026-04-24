@@ -3,7 +3,7 @@ import type {
   LinksFunction,
   MetaFunction,
   LoaderFunctionArgs,
-} from "@remix-run/node"
+} from "@remix-run/cloudflare"
 import {
   Links,
   LiveReload,

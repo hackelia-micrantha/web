@@ -10,6 +10,9 @@ lerna-debug.log*
 /.cache
 /build
 /public/build
+/functions/[[path]].js
+/functions/metafile*.json
+/functions/version.txt
 .env
 /app/tailwind.css
 /public/tailwind.css

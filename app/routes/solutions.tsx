@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node"
+import type { MetaFunction } from "@remix-run/cloudflare"
 import { Card, ExternalLink, PageTitle } from "~/components"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"

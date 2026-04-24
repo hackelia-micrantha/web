@@ -1,4 +1,4 @@
-import type { AppLoadContext } from "@remix-run/node"
+import type { AppLoadContext } from "@remix-run/cloudflare"
 
 type CloudflareLoadContext = AppLoadContext & {
   cloudflare?: {

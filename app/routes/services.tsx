@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node"
+import type { MetaFunction } from "@remix-run/cloudflare"
 import { PageTitle } from "~/components"
 import { buildPageMeta } from "~/utils/seo"
 

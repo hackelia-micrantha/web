@@ -1,3 +1,6 @@
+const isCloudflarePagesBuild =
+  process.env.REMIX_DEPLOY_TARGET === "cloudflare-pages"
+
 /**
  * @type {import('@remix-run/dev').AppConfig}
  */
@@ -10,8 +13,14 @@ export default {
     v3_singleFetch: false,
     v3_throwAbortReason: true,
   },
-  // appDirectory: "app",
-  // assetsBuildDirectory: "public/build",
-  // serverBuildPath: "build/index.js",
-  // publicPath: "/build/",
+  ...(isCloudflarePagesBuild
+    ? {
+        serverBuildPath: "functions/[[path]].js",
+        serverConditions: ["worker"],
+        serverDependenciesToBundle: "all",
+        serverMainFields: ["browser", "module", "main"],
+        serverMinify: true,
+        serverPlatform: "neutral",
+      }
+    : {}),
 }
