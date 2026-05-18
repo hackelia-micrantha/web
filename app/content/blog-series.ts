@@ -1,5 +1,5 @@
 import type { BlogPost } from "~/content/blog"
-import { getBlogPosts, getBlogPostBySlug } from "~/content/blog"
+import { getBlogPosts, getBlogPostBySlug } from "~/content/blog-provider"
 
 export type BlogSeriesDefinition = {
   slug: string
@@ -54,10 +54,16 @@ export function getBlogSeriesBySlug(slug: string) {
   return getBlogSeriesGroups().find((series) => series.slug === slug) ?? null
 }
 
-export function getSeriesNavigation(post: BlogPost) {
-  const series = getBlogSeriesGroups().find((candidate) =>
-    candidate.posts.some((seriesPost) => seriesPost.slug === post.slug),
+export function getSeriesForPost(post: BlogPost) {
+  return (
+    getBlogSeriesGroups().find((series) =>
+      series.posts.some((seriesPost) => seriesPost.slug === post.slug),
+    ) ?? null
   )
+}
+
+export function getSeriesNavigation(post: BlogPost) {
+  const series = getSeriesForPost(post)
 
   if (!series) {
     return null
