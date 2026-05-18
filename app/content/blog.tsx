@@ -1,6 +1,12 @@
 import type { ReactNode } from "react"
 import { Link } from "@remix-run/react"
 
+export type BlogSeries = {
+  slug: string
+  title: string
+  order: number
+}
+
 export type BlogPost = {
   slug: string
   title: string
@@ -9,7 +15,14 @@ export type BlogPost = {
   excerpt: string
   tags: string[]
   relatedSlugs: string[]
+  series?: BlogSeries
   Content: () => ReactNode
+}
+
+export type BlogSeriesGroup = {
+  slug: string
+  title: string
+  posts: BlogPost[]
 }
 
 export const BLOG_TITLE = "Architecture Notes"
@@ -588,6 +601,58 @@ export function getRelatedPosts(post: BlogPost) {
   return post.relatedSlugs
     .map((slug) => getBlogPostBySlug(slug))
     .filter((candidate): candidate is BlogPost => candidate !== null)
+}
+
+export function getBlogSeriesGroups() {
+  const groups = new Map<string, BlogSeriesGroup>()
+
+  for (const post of blogPosts) {
+    if (!post.series) continue
+
+    const existingGroup = groups.get(post.series.slug)
+    const group = existingGroup ?? {
+      slug: post.series.slug,
+      title: post.series.title,
+      posts: [],
+    }
+
+    group.posts.push(post)
+    groups.set(post.series.slug, group)
+  }
+
+  return Array.from(groups.values()).map((group) => ({
+    ...group,
+    posts: [...group.posts].sort(
+      (left, right) => (left.series?.order ?? 0) - (right.series?.order ?? 0),
+    ),
+  }))
+}
+
+export function getBlogSeriesBySlug(slug: string) {
+  return getBlogSeriesGroups().find((series) => series.slug === slug) ?? null
+}
+
+export function getSeriesPosts(post: BlogPost) {
+  if (!post.series) return []
+  return getBlogSeriesBySlug(post.series.slug)?.posts ?? []
+}
+
+export function getSeriesNavigation(post: BlogPost) {
+  const seriesPosts = getSeriesPosts(post)
+  const index = seriesPosts.findIndex((candidate) => candidate.slug === post.slug)
+
+  if (index === -1 || !post.series) {
+    return null
+  }
+
+  return {
+    series: post.series,
+    index,
+    total: seriesPosts.length,
+    previous: seriesPosts[index - 1] ?? null,
+    next: seriesPosts[index + 1] ?? null,
+    posts: seriesPosts,
+  }
 }
 
 export function formatBlogDate(date: string) {
