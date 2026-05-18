@@ -1,3 +1,4 @@
+import { MermaidDiagram } from "~/components"
 import type { BlogPost } from "~/content/blog"
 
 const governanceNativeEngineeringContent = () => (
@@ -19,6 +20,18 @@ const governanceNativeEngineeringContent = () => (
         </p>
       </div>
     </section>
+
+    <MermaidDiagram
+      title="AI-native engineering control plane"
+      caption="Generation increases throughput; governance preserves intent, evidence, and reviewability."
+      chart={`flowchart LR
+  A[Human intent] --> B[Policy and review boundaries]
+  B --> C[Agent or model execution]
+  C --> D[Generated change]
+  D --> E[Evidence and replay envelope]
+  E --> F[Human comprehension loop]
+  F --> B`}
+    />
 
     <section className="space-y-4">
       <h2>The bottleneck has moved</h2>
@@ -98,6 +111,20 @@ const replayabilityGovernanceContent = () => (
       </div>
     </section>
 
+    <MermaidDiagram
+      title="Replayability as evidence lifecycle"
+      caption="Replay confidence depends on captured evidence and decays as provider and runtime facts expire."
+      chart={`flowchart TD
+  A[Execution request] --> B[Provider routing decision]
+  B --> C[Model response]
+  C --> D[Replay envelope]
+  D --> E[Audit or review]
+  D --> F[Evidence decay]
+  F --> G{Replay claim still valid?}
+  G -->|yes| E
+  G -->|no| H[Downgrade replayability claim]`}
+    />
+
     <section className="space-y-4">
       <h2>Replayability vs reproducibility</h2>
       <p>
@@ -170,6 +197,21 @@ const recursiveGovernanceContent = () => (
         not only orchestration. It is governed recursion.
       </p>
     </section>
+
+    <MermaidDiagram
+      title="Governed recursive execution"
+      caption="Recursive fan-out must preserve authority boundaries, lineage, and replay ceilings."
+      chart={`flowchart TD
+  A[Workflow request] --> B[Planner]
+  B --> C[Bounded task A]
+  B --> D[Bounded task B]
+  B --> E[Reviewer]
+  C --> F[Evidence]
+  D --> F
+  E --> F
+  F --> G[Governed synthesis]
+  G --> H[Human review boundary]`}
+    />
 
     <section className="space-y-4">
       <h2>The core tension</h2>
