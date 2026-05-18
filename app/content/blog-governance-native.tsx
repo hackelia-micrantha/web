@@ -24,7 +24,7 @@ const governanceNativeEngineeringContent = () => (
     <MermaidDiagram
       title="AI-native engineering control plane"
       caption="Generation increases throughput; governance preserves intent, evidence, and reviewability."
-      chart={`flowchart LR
+      chart={`flowchart TD
   A[Human intent] --> B[Policy and review boundaries]
   B --> C[Agent or model execution]
   C --> D[Generated change]

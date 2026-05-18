@@ -5,8 +5,9 @@ import {
   BLOG_DESCRIPTION,
   BLOG_TITLE,
   formatBlogDate,
-  getBlogPosts,
 } from "~/content/blog"
+import { getBlogPosts } from "~/content/blog-provider"
+import { getSeriesNavigation } from "~/content/blog-series"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 
@@ -51,30 +52,50 @@ export default function BlogIndexRoute() {
       </section>
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {posts.map((post, index) => (
-          <Card
-            key={post.slug}
-            title={post.title}
-            url={`/blog/${post.slug}`}
-            headingLevel={2}
-            className={
-              index === 0
-                ? `${cardStyles.neutral} editorial-card`
-                : index === 1
-                  ? `${cardStyles.blue} editorial-card`
-                  : `${cardStyles.green} editorial-card`
-            }
-          >
-            <>
-              <span className="meta-kicker mb-3 block">
-                {formatBlogDate(post.date)}
-              </span>
-              <span className="block text-[1.02rem] leading-8 text-slate-700">
-                {post.excerpt}
-              </span>
-            </>
-          </Card>
-        ))}
+        {posts.map((post, index) => {
+          const seriesNavigation = getSeriesNavigation(post)
+
+          return (
+            <Card
+              key={post.slug}
+              title={post.title}
+              url={`/blog/${post.slug}`}
+              headingLevel={2}
+              className={
+                index % 3 === 0
+                  ? `${cardStyles.neutral} editorial-card`
+                  : index % 3 === 1
+                    ? `${cardStyles.blue} editorial-card`
+                    : `${cardStyles.green} editorial-card`
+              }
+            >
+              <>
+                {seriesNavigation ? (
+                  <div className="meta-kicker mb-3 flex flex-wrap items-center gap-1.5">
+                    <span
+                      className="rounded-full border border-slate-300 bg-white text-slate-600"
+                      style={{
+                        fontSize: "0.58rem",
+                        letterSpacing: "0.14em",
+                        lineHeight: 1,
+                        padding: "0.14rem 0.38rem",
+                      }}
+                    >
+                      Part {seriesNavigation.index + 1}
+                    </span>
+                    <span>{seriesNavigation.series.title}</span>
+                  </div>
+                ) : null}
+                <span className="meta-kicker mb-3 block">
+                  {formatBlogDate(post.date)}
+                </span>
+                <span className="block text-[1.02rem] leading-8 text-slate-700">
+                  {post.excerpt}
+                </span>
+              </>
+            </Card>
+          )
+        })}
       </section>
 
       <section className="editorial-panel max-w-3xl space-y-4 bg-slate-50/80 px-6 py-6">
