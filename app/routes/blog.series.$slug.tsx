@@ -2,7 +2,8 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
-import { formatBlogDate, getBlogSeriesBySlug } from "~/content/blog"
+import { formatBlogDate } from "~/content/blog"
+import { getBlogSeriesBySlug } from "~/content/blog-series"
 import { cardStyles } from "~/utils/card-styles"
 import { buildPageMeta } from "~/utils/seo"
 
@@ -36,7 +37,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
         title: post.title,
         excerpt: post.excerpt,
         date: post.date,
-        order: post.series?.order,
       })),
     },
   })
@@ -89,7 +89,7 @@ export default function BlogSeriesRoute() {
           >
             <>
               <span className="meta-kicker mb-3 block">
-                Part {post.order} / {formatBlogDate(post.date)}
+                Part {index + 1} / {formatBlogDate(post.date)}
               </span>
               <span className="block text-[1.02rem] leading-8 text-slate-700">
                 {post.excerpt}

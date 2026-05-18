@@ -101,14 +101,23 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage).toBeTruthy()
   expect(collectionPage?.name).toBe("Blog")
   expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
-  expect(collectionPage?.mainEntity?.numberOfItems).toBe(3)
+  expect(collectionPage?.mainEntity?.numberOfItems).toBe(6)
   expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
-    "Secure Platform Integration Is Not Plumbing",
+    "Governance-Native Engineering and the AI Control Plane",
   )
   expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
-    "AI Pipelines Need Control Boundaries",
+    "Replayability Is a Governance Problem",
   )
   expect(collectionPage?.mainEntity?.itemListElement?.[2]?.item?.name).toBe(
+    "Recursive Governance and Agent Workflows",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[3]?.item?.name).toBe(
+    "Secure Platform Integration Is Not Plumbing",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[4]?.item?.name).toBe(
+    "AI Pipelines Need Control Boundaries",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[5]?.item?.name).toBe(
     "Software Layers Are Risk Boundaries",
   )
 })

@@ -84,6 +84,16 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Blog" })).toBeVisible()
   await expect(
+    page.locator("a", {
+      has: page.getByRole("heading", {
+        name: "Governance-Native Engineering and the AI Control Plane",
+      }),
+    }),
+  ).toHaveAttribute(
+    "href",
+    "/blog/governance-native-engineering-control-plane",
+  )
+  await expect(
     page.getByRole("link", {
       name: "Secure Platform Integration Is Not Plumbing",
       exact: true,
@@ -94,6 +104,19 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
       "Durable technical writing for proposals, partnerships, and delivery decisions.",
     ),
   ).toBeVisible()
+  await expect(
+    page
+      .locator(".editorial-card")
+      .getByText("Governance-Native Engineering", { exact: true }),
+  ).toHaveCount(3)
+  await expect(
+    page
+      .locator(".editorial-card")
+      .getByText("Architecture Control Boundaries", { exact: true }),
+  ).toHaveCount(3)
+  await expect(page.getByText("Part 1")).toHaveCount(2)
+  await expect(page.getByText("Part 2")).toHaveCount(2)
+  await expect(page.getByText("Part 3")).toHaveCount(2)
 })
 
 test("/blog/:slug exposes article content and related notes", async ({
@@ -112,10 +135,67 @@ test("/blog/:slug exposes article content and related notes", async ({
     ),
   ).toBeVisible()
   await expect(
-    page.getByRole("link", {
-      name: "Secure Platform Integration Is Not Plumbing",
-    }),
+    page
+      .getByRole("heading", { name: "Related notes" })
+      .locator("..")
+      .getByRole("link", {
+        name: /Secure Platform Integration Is Not Plumbing/,
+      }),
   ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
+})
+
+test("/blog/:slug exposes series navigation for governance-native posts", async ({
+  page,
+}) => {
+  await page.goto("/blog/governance-native-engineering-control-plane")
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Governance-Native Engineering and the AI Control Plane",
+    }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", {
+      name: "Governance-Native Engineering",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "/blog/series/governance-native-engineering")
+  await expect(page.getByText("Part 1 of 3")).toBeVisible()
+  await expect(
+    page.getByRole("link", {
+      name: "Next: Replayability Is a Governance Problem",
+    }),
+  ).toHaveAttribute("href", "/blog/replayability-is-a-governance-problem")
+})
+
+test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
+  await page.goto("/blog/series/governance-native-engineering")
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Governance-Native Engineering",
+      exact: true,
+    }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", {
+      name: "Governance-Native Engineering and the AI Control Plane",
+    }),
+  ).toHaveAttribute(
+    "href",
+    "/blog/governance-native-engineering-control-plane",
+  )
+  await expect(
+    page.getByRole("link", { name: "Replayability Is a Governance Problem" }),
+  ).toHaveAttribute("href", "/blog/replayability-is-a-governance-problem")
+  await expect(
+    page.getByRole("link", {
+      name: "Recursive Governance and Agent Workflows",
+    }),
+  ).toHaveAttribute("href", "/blog/recursive-governance-and-agent-workflows")
+  await expect(page.getByText(/Part 1 \/ May 18, 2026/)).toBeVisible()
+  await expect(page.getByText(/Part 2 \/ May 18, 2026/)).toBeVisible()
+  await expect(page.getByText(/Part 3 \/ May 18, 2026/)).toBeVisible()
 })
 
 test("/blog posts expose their diagram images", async ({ page }) => {
