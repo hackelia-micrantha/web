@@ -6,6 +6,7 @@ import {
   formatBlogDate,
   getBlogPostBySlug,
   getRelatedPosts,
+  getSeriesNavigation,
 } from "~/content/blog"
 import { buildArticleMeta, buildArticleStructuredData } from "~/utils/seo"
 
@@ -79,6 +80,7 @@ export default function BlogPostRoute() {
   }
 
   const relatedPosts = getRelatedPosts(post)
+  const seriesNavigation = getSeriesNavigation(post)
 
   return (
     <article className="space-y-10">
@@ -95,9 +97,84 @@ export default function BlogPostRoute() {
         <p className="article-lead">{post.excerpt}</p>
       </div>
 
+      {seriesNavigation ? (
+        <section className="max-w-3xl rounded-2xl border border-slate-200 bg-slate-50/80 px-5 py-5 shadow-[0_10px_24px_rgba(31,42,42,0.05)]">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="space-y-2">
+              <p className="meta-kicker">Series</p>
+              <h2 className="text-[1.25rem] font-semibold tracking-[-0.02em] text-slate-900">
+                <Link to={`/blog/series/${seriesNavigation.series.slug}`}>
+                  {seriesNavigation.series.title}
+                </Link>
+              </h2>
+              <p className="page-copy-sm">
+                Part {seriesNavigation.index + 1} of {seriesNavigation.total}
+              </p>
+            </div>
+            <nav
+              className="grid gap-2 text-sm md:min-w-[16rem]"
+              aria-label={`${seriesNavigation.series.title} series navigation`}
+            >
+              {seriesNavigation.previous ? (
+                <Link
+                  className="article-meta-link"
+                  to={`/blog/${seriesNavigation.previous.slug}`}
+                >
+                  Previous: {seriesNavigation.previous.title}
+                </Link>
+              ) : null}
+              {seriesNavigation.next ? (
+                <Link
+                  className="article-meta-link"
+                  to={`/blog/${seriesNavigation.next.slug}`}
+                >
+                  Next: {seriesNavigation.next.title}
+                </Link>
+              ) : null}
+            </nav>
+          </div>
+        </section>
+      ) : null}
+
       <div className="article-prose">
         <post.Content />
       </div>
+
+      {seriesNavigation ? (
+        <section className="max-w-3xl space-y-4 border-t border-gray-200 pt-8">
+          <h2 className="text-[1.35rem] font-semibold tracking-[-0.02em] text-slate-900">
+            In this series
+          </h2>
+          <div className="grid gap-3">
+            {seriesNavigation.posts.map((seriesPost) => {
+              const isCurrent = seriesPost.slug === post.slug
+
+              return (
+                <Link
+                  key={seriesPost.slug}
+                  to={`/blog/${seriesPost.slug}`}
+                  aria-current={isCurrent ? "page" : undefined}
+                  className={
+                    isCurrent
+                      ? "rounded-2xl border border-slate-300 bg-white px-4 py-4 text-left text-base shadow-[0_10px_24px_rgba(31,42,42,0.08)]"
+                      : "rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-4 text-left text-base shadow-[0_10px_24px_rgba(31,42,42,0.05)] transition-colors hover:bg-white"
+                  }
+                >
+                  <span className="meta-kicker mb-1 block">
+                    Part {seriesPost.series?.order}
+                  </span>
+                  <span className="block text-[1.02rem] font-semibold leading-7 tracking-[-0.015em] text-slate-900">
+                    {seriesPost.title}
+                  </span>
+                  <span className="mt-2 block text-sm leading-7 text-slate-600">
+                    {seriesPost.excerpt}
+                  </span>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      ) : null}
 
       {relatedPosts.length > 0 ? (
         <section className="max-w-3xl space-y-4 border-t border-gray-200 pt-8">
