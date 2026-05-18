@@ -14,6 +14,17 @@ export type BlogSeriesGroup = BlogSeriesDefinition & {
 
 const blogSeriesDefinitions: BlogSeriesDefinition[] = [
   {
+    slug: "governance-native-engineering",
+    title: "Governance-Native Engineering",
+    description:
+      "Essays exploring governance, replayability, recursive execution, and organizational comprehension in AI-native engineering systems.",
+    postSlugs: [
+      "governance-native-engineering-control-plane",
+      "replayability-is-a-governance-problem",
+      "recursive-governance-and-agent-workflows",
+    ],
+  },
+  {
     slug: "architecture-control-boundaries",
     title: "Architecture Control Boundaries",
     description:
