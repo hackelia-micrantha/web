@@ -6,8 +6,8 @@ import {
   formatBlogDate,
   getBlogPostBySlug,
   getRelatedPosts,
-  getSeriesNavigation,
 } from "~/content/blog"
+import { getSeriesNavigation } from "~/content/blog-series"
 import { buildArticleMeta, buildArticleStructuredData } from "~/utils/seo"
 
 type LoaderData = {
@@ -146,7 +146,7 @@ export default function BlogPostRoute() {
             In this series
           </h2>
           <div className="grid gap-3">
-            {seriesNavigation.posts.map((seriesPost) => {
+            {seriesNavigation.posts.map((seriesPost, index) => {
               const isCurrent = seriesPost.slug === post.slug
 
               return (
@@ -161,7 +161,7 @@ export default function BlogPostRoute() {
                   }
                 >
                   <span className="meta-kicker mb-1 block">
-                    Part {seriesPost.series?.order}
+                    Part {index + 1}
                   </span>
                   <span className="block text-[1.02rem] font-semibold leading-7 tracking-[-0.015em] text-slate-900">
                     {seriesPost.title}
