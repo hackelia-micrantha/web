@@ -1,7 +1,7 @@
-import type { MetaFunction } from "@remix-run/node"
-import { Card, PageTitle, ExternalLink } from "~/components"
-import { cardStyles } from "~/utils/card-styles"
-import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
+import type { MetaFunction } from "@remix-run/node";
+import { Card, PageTitle, ExternalLink } from "~/components";
+import { cardStyles } from "~/utils/card-styles";
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo";
 import {
   HyperionIcon,
   AchilleaIcon,
@@ -12,25 +12,27 @@ import {
   GardenIcon,
   CalatheaIcon,
   DubniumIcon,
-} from "~/components/icons"
+} from "~/components/icons";
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Laboratory",
-    description: "Projects in active growth from the Micrantha laboratory.",
+    description:
+      "Active Micrantha projects for platform automation, AI governance, repository control, mobile trust, and LLM workflow boundaries.",
     path: "/laboratory",
-  })
+  });
 
 export const handle = {
   structuredData: buildCollectionPageStructuredData({
     name: "Laboratory",
-    description: "Projects in active growth from the Micrantha laboratory.",
+    description:
+      "Active Micrantha projects for platform automation, AI governance, repository control, mobile trust, and LLM workflow boundaries.",
     path: "/laboratory",
     items: [
       {
         name: "Project Hyperion",
         description:
-          "Infrastructure for secure, reproducible laboratory environments, migrations, and deployments. Hyperion is the world's tallest living tree.",
+          "Infrastructure for secure, reproducible laboratory environments, migrations, deployments, GitOps-style operations, and secret-management design.",
         url: "https://hyperion.micrantha.com",
       },
       {
@@ -42,7 +44,7 @@ export const handle = {
       {
         name: "Project Calathea",
         description:
-          "CLI-first, AI-assisted system for deciding what work actually deserves focus—and continuously correcting that decision based on reality. Scientific name is 'Calathea orbifolia'.",
+          "CLI-first, AI-assisted system for deciding what work deserves focus and correcting delivery decisions as constraints change.",
         url: "https://calathea.micrantha.com",
       },
       {
@@ -54,7 +56,7 @@ export const handle = {
       {
         name: "Bluebell",
         description:
-          "A multiplatform mobile SDK and project template using AI to generate features. Scientific name is 'Hyacinthoides non-scripta'.",
+          "A multiplatform mobile SDK and project template that keeps AI-capable feature generation inside reusable client-platform boundaries.",
         url: "https://github.com/hackelia-micrantha/bluebell",
       },
       {
@@ -73,12 +75,12 @@ export const handle = {
         name: "Project Digitalis",
         url: "https://digitalis.micrantha.com",
         description:
-          "A backend and mobile SDK to attest for mobile clients. Once attested, provides mobile configuration that is stored in secure enclave, such as APIs and secrets. Scientific name is 'Digitalis obscura'.",
+          "A backend and mobile SDK concept for mobile client attestation, secure configuration, and client-server trust boundaries.",
       },
       {
         name: "Project Myotosis",
         description:
-          "An MCP and LLM registry for mobile clients. Mobile SDK registers and provides tools that can be incorporated into LLM results and Agentic workflows. Scientific name is 'Myotosis sylvatica'.",
+          "An MCP and LLM registry concept for mobile clients, tool registration, and governed agent workflow integration.",
         url: "https://myotosis.micrantha.com",
       },
       {
@@ -89,13 +91,13 @@ export const handle = {
       },
     ],
   }),
-}
+};
 
 const Laboratory = () => (
   <div>
     <PageTitle
       title="Laboratory"
-      subtitle="Projects listed here are still being grown. Recycled projects go to laboratory compost for reuse."
+      subtitle="Active project evidence for backend, platform, mobile trust, and AI-governance positioning."
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -107,8 +109,8 @@ const Laboratory = () => (
         className={cardStyles.neutral}
       >
         Infrastructure for secure, reproducible laboratory environments,
-        migrations, and deployments. Hyperion is the world's tallest living
-        tree.
+        migrations, deployments, GitOps-style operations, and secret-management
+        design.
       </Card>
 
       <Card
@@ -131,8 +133,8 @@ const Laboratory = () => (
         className={cardStyles.purple}
       >
         CLI-first, AI-assisted system for deciding what work actually deserves
-        focus—and continuously correcting that decision based on reality.
-        Scientific name is 'Calathea orbifolia'.
+        focus and continuously correcting delivery decisions as constraints
+        change.
       </Card>
 
       <Card
@@ -143,8 +145,8 @@ const Laboratory = () => (
         className={cardStyles.cyan}
       >
         A Micrantha hardware element: a policy-driven NixOS local
-        server/workstation and AI node with dual-GPU planning and desktop,
-        studio-local, and compute operating modes.
+        server/workstation and AI node for reproducible developer environments,
+        local model routing, and infrastructure automation.
       </Card>
 
       <Card
@@ -163,8 +165,8 @@ const Laboratory = () => (
           </ExternalLink>,
         ]}
       >
-        A multiplatform mobile SDK and project template using AI to generate
-        features. Scientific name is 'Hyacinthoides non-scripta'.
+        A multiplatform mobile SDK and project template that keeps AI-capable
+        feature generation inside reusable client-platform boundaries.
       </Card>
 
       <Card
@@ -175,8 +177,8 @@ const Laboratory = () => (
         className={cardStyles.red}
         actions={[<span key="achillea-demo">Asterwild Demo Game</span>]}
       >
-        Achillea is a dynamic feature platform for interactive applications.
-        Scientific name is 'Achillea millefolium'.
+        Dynamic feature platform work for interactive applications, useful as
+        evidence for runtime composition and client-platform delivery.
       </Card>
 
       <Card
@@ -187,8 +189,8 @@ const Laboratory = () => (
         className={cardStyles.yellow}
       >
         A mobile SDK that randomly obfuscates environment variables on mobile
-        clients per build. An extra-small security layer with a GitHub Action to
-        update it.
+        clients per build. Compact security-layer work with a GitHub Action to
+        update build-time configuration.
       </Card>
 
       <Card
@@ -198,9 +200,8 @@ const Laboratory = () => (
         headingLevel={2}
         className={cardStyles.purple}
       >
-        A backend and mobile SDK to attest for mobile clients. Once attested,
-        provides mobile configuration that is stored in secure enclave, such as
-        APIs and secrets. Scientific name is 'Digitalis obscura'.
+        A backend and mobile SDK concept for mobile client attestation, secure
+        configuration, and client-server trust boundaries.
       </Card>
 
       <Card
@@ -210,9 +211,8 @@ const Laboratory = () => (
         headingLevel={2}
         className={cardStyles.cyan}
       >
-        An MCP and LLM registry for mobile clients. Mobile SDK registers and
-        provides tools that can be incorporated into LLM results and Agentic
-        workflows. Scientific name is 'Myotosis sylvatica'.
+        An MCP and LLM registry concept for mobile clients, tool registration,
+        and governed agent workflow integration.
       </Card>
 
       <Card
@@ -227,6 +227,6 @@ const Laboratory = () => (
       </Card>
     </div>
   </div>
-)
+);
 
-export default Laboratory
+export default Laboratory;

@@ -1,39 +1,39 @@
-import type { MetaFunction } from "@remix-run/node"
-import { Card, ExternalLink, PageTitle } from "~/components"
-import { cardStyles } from "~/utils/card-styles"
-import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
+import type { MetaFunction } from "@remix-run/node";
+import { Card, ExternalLink, PageTitle } from "~/components";
+import { cardStyles } from "~/utils/card-styles";
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo";
 import {
   FortunesIcon,
   VeilIcon,
   AmaryllisIcon,
   AnthesisIcon,
-} from "~/components/icons"
+} from "~/components/icons";
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Solutions",
     description:
-      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and internally used Anthesis.",
+      "Micrantha systems showing governed AI workflows, mobile SDK boundaries, backend services, and secure product surfaces.",
     path: "/solutions",
-  })
+  });
 
 export const handle = {
   structuredData: buildCollectionPageStructuredData({
     name: "Solutions",
     description:
-      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and internally used Anthesis.",
+      "Micrantha systems showing governed AI workflows, mobile SDK boundaries, backend services, and secure product surfaces.",
     path: "/solutions",
     items: [
       {
         name: "Amaryllis",
         description:
-          "A React Native SDK for on-device mobile inference and ai-enabled components.",
+          "A React Native SDK for on-device mobile inference and AI-enabled components.",
         url: "https://amaryllis.micrantha.com",
       },
       {
         name: "Anthesis",
         description:
-          "Internally used agentic SDLC with governed autonomy, auditability and replayability.",
+          "Internally used agentic SDLC with governed autonomy, approval boundaries, auditability, and replayability.",
         url: "https://anthesis.dev",
       },
       {
@@ -50,13 +50,13 @@ export const handle = {
       },
     ],
   }),
-}
+};
 
 const Solutions = () => (
   <div>
     <PageTitle
       title="Solutions"
-      subtitle="Products that have grown into active use, including internal use."
+      subtitle="Active systems that make backend boundaries, mobile platform contracts, and AI governance concrete."
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -67,8 +67,9 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.neutral}
       >
-        A React Native SDK for on-device mobile inference and ai-enabled
-        components.
+        A React Native SDK for on-device mobile inference and reusable
+        AI-enabled components. Evidence for SDK engineering, client runtime
+        boundaries, and productized developer experience.
       </Card>
       <Card
         title="Anthesis"
@@ -77,8 +78,9 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.green}
       >
-        Internally used agentic SDLC with governed autonomy, auditability and
-        replayability.
+        Internally used agentic SDLC with governed autonomy, approval
+        boundaries, auditability, replayability, deterministic execution, and
+        human authority.
       </Card>
       <Card
         title="Fortunes Service"
@@ -96,7 +98,8 @@ const Solutions = () => (
           </ExternalLink>,
         ]}
       >
-        A microservice, progressive web and Slack app for UNIX fortunes.
+        A small backend service with progressive web and Slack app integration
+        surfaces.
       </Card>
       <Card
         title="Veil"
@@ -105,8 +108,8 @@ const Solutions = () => (
         headingLevel={2}
         className={cardStyles.blue}
       >
-        A microservice to pseudo-randomly obfuscate a profile photo for fun or
-        security.
+        A focused service for pseudo-random profile-photo obfuscation, useful as
+        a compact example of privacy-oriented product surface design.
       </Card>
     </div>
 
@@ -114,8 +117,9 @@ const Solutions = () => (
       <h2 className="text-xl">Related architecture notes</h2>
       <p>
         The blog tracks the architectural concerns behind these systems:
-        governed AI execution, integration control surfaces, and software
-        boundaries that keep platforms replaceable.
+        governed AI execution, integration control surfaces, secure platform
+        boundaries, and software layers that keep teams able to replace
+        providers without collapsing domain rules.
       </p>
       <p>
         Start with{" "}
@@ -130,6 +134,6 @@ const Solutions = () => (
       </p>
     </section>
   </div>
-)
+);
 
-export default Solutions
+export default Solutions;

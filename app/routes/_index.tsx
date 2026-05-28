@@ -1,8 +1,8 @@
-import type { MetaFunction } from "@remix-run/node"
-import { Link } from "@remix-run/react"
-import { Card } from "~/components"
-import { cardStyles } from "~/utils/card-styles"
-import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
+import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { Card } from "~/components";
+import { cardStyles } from "~/utils/card-styles";
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo";
 import {
   AnthesisIcon,
   BluebellIcon,
@@ -10,27 +10,27 @@ import {
   HyperionIcon,
   MyotosisIcon,
   AmaryllisIcon,
-} from "~/components/icons"
+} from "~/components/icons";
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Home",
     description:
-      "Micrantha helps teams build, govern, and ship software that can survive production, with depth in AI, mobile platforms, secure systems, and deployments.",
+      "Micrantha builds secure backend, platform, and AI-governance systems with evidence boundaries, delivery controls, and production-oriented architecture.",
     path: "/",
-  })
+  });
 
 export const handle = {
   structuredData: buildCollectionPageStructuredData({
     name: "Micrantha Software",
     description:
-      "Micrantha helps teams build, govern, and ship software that can survive production.",
+      "Micrantha builds secure backend, platform, and AI-governance systems.",
     path: "/",
     items: [
       {
         name: "Services",
         description:
-          "Engineering support across AI development, AI governance, mobile platforms, secure systems, and production delivery.",
+          "Principal-level engineering support across secure backend systems, platform architecture, AI governance, and production delivery.",
         url: "https://micrantha.com/services",
       },
       {
@@ -42,7 +42,7 @@ export const handle = {
       {
         name: "Laboratory",
         description:
-          "Projects in active growth, including Hyperion, Bluebell, and Myotosis.",
+          "Projects in active growth, including Hyperion, Anthesis, Dubnium, and Myotosis.",
         url: "https://micrantha.com/laboratory",
       },
       {
@@ -58,7 +58,7 @@ export const handle = {
       },
     ],
   }),
-}
+};
 
 export default function Index() {
   return (
@@ -82,12 +82,13 @@ export default function Index() {
               Micrantha Software
             </p>
             <h1 className="mt-4 max-w-3xl text-4xl leading-tight tracking-tight text-slate-900 md:text-5xl">
-              Software that grows with you.
+              Principal backend, platform, and AI-governance engineering.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-700 md:text-lg">
-              Broad engineering support across AI development, AI governance,
-              mobile platforms, secure authentication, and deployment systems
-              for teams turning fragile software into production systems.
+              Micrantha builds trust-sensitive software foundations: secure
+              backend services, platform control surfaces, agentic workflow
+              governance, and delivery systems that remain reviewable after the
+              demo.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link className="button" to="/services">
@@ -107,7 +108,8 @@ export default function Index() {
                   Delivery
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
-                  AI systems, mobile platforms, and deployment foundations.
+                  Backend services, mobile/client integrations, and production
+                  deployment paths.
                 </p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
@@ -115,8 +117,8 @@ export default function Index() {
                   Governance
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
-                  Auditability, policy, and operational control for durable
-                  teams.
+                  Approval gates, replayability, auditability, and evidence
+                  capture for AI-assisted work.
                 </p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
@@ -124,7 +126,8 @@ export default function Index() {
                   Reliability
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
-                  Architecture that keeps working after the demo is over.
+                  GitOps, CI/CD, secret boundaries, and failure-aware operating
+                  models.
                 </p>
               </div>
             </div>
@@ -141,8 +144,8 @@ export default function Index() {
             Fragile AI delivery
           </p>
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            We help teams move from isolated demos and brittle workflows to
-            systems that fit real engineering environments.
+            Agentic workflows need prompt contracts, execution envelopes,
+            approvals, and review traces before they can carry production work.
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
@@ -153,8 +156,8 @@ export default function Index() {
             Platform drift
           </p>
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            Mobile foundations, auth boundaries, and deployment paths tend to
-            decay unless someone restores structure and operational discipline.
+            Backends, mobile clients, auth boundaries, and deployment paths
+            decay when ownership and control surfaces stay implicit.
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
@@ -165,8 +168,8 @@ export default function Index() {
             Production-minded depth
           </p>
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            Clear tradeoffs, governed delivery, and systems thinking across AI,
-            mobile, security, and release engineering.
+            Hands-on architecture across backend services, client-server trust,
+            platform automation, secure delivery, and AI governance.
           </p>
         </div>
       </section>
@@ -180,23 +183,24 @@ export default function Index() {
             Services
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Broad engineering with depth in AI, mobile platforms, secure
-            systems, and production delivery.
+            Secure platform engineering for trust-sensitive systems.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            We help teams turn fragile products, platforms, and workflows into
-            production systems.
+            We help teams turn fragile workflows, backend boundaries, and
+            AI-assisted delivery paths into systems with explicit controls.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Card title="AI Development" className={cardStyles.neutral}>
-            Build AI-enabled products, internal tools, and workflows that
-            integrate with real software systems instead of living as isolated
-            demos.
+          <Card
+            title="Backend & Platform Architecture"
+            className={cardStyles.neutral}
+          >
+            Design services, integration boundaries, workflow state, and
+            platform capabilities that product teams can safely build on.
           </Card>
           <Card title="AI Governance" className={cardStyles.green}>
-            Add policy, review, auditability, and operational controls around
-            AI-assisted development and AI-enabled systems.
+            Add approval boundaries, replayability, auditability, and evidence
+            capture around AI-assisted development and agentic workflows.
           </Card>
           <Card title="Mobile Platforms" className={cardStyles.blue}>
             Modernize mobile foundations, untangle platform architecture, and
@@ -225,9 +229,9 @@ export default function Index() {
             Built for teams past the demo stage.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Micrantha works where software gets fragile: AI delivery that needs
-            governance, mobile platforms that need structure, and systems that
-            need to survive production.
+            Micrantha works where architecture has to carry risk: AI-assisted
+            delivery, verification-adjacent trust paths, backend integration,
+            mobile/client platforms, and production operations.
           </p>
         </div>
 
@@ -237,8 +241,9 @@ export default function Index() {
               Technical depth
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-700">
-              AI product work, mobile foundations, secure authentication,
-              deployment systems, and operational cleanup.
+              Backend services, API contracts, auth/session paths, mobile
+              runtime behavior, CI/CD, Kubernetes/GitOps, and controlled AI tool
+              surfaces.
             </p>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
@@ -246,8 +251,8 @@ export default function Index() {
               Engagement style
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-700">
-              Hands-on implementation, technical review, and decision support
-              for teams that need forward motion without extra noise.
+              Hands-on implementation, architecture review, threat-model
+              thinking, and decision support for teams carrying platform risk.
             </p>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
@@ -255,8 +260,8 @@ export default function Index() {
               Delivery bias
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-700">
-              Work scoped around production realities: constraints, failure
-              modes, maintainability, and governance.
+              Work scoped around production realities: correctness, failure
+              modes, maintainability, security boundaries, and governance.
             </p>
           </div>
         </div>
@@ -317,11 +322,11 @@ export default function Index() {
             Solutions
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Products in active use, including internal use.
+            Systems that show the operating thesis.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Products that teams can adopt directly, or internally used systems
-            that show the direction of durable delivery.
+            Products and internal systems that make backend boundaries, client
+            platforms, and governed AI execution concrete.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -332,7 +337,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.neutral}
           >
-            A React Native SDK for on-device mobile inference.
+            React Native SDK work for on-device inference and reusable
+            AI-capable mobile components.
           </Card>
           <Card
             title="Fortunes Service"
@@ -341,7 +347,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.yellow}
           >
-            A microservice and Slack app for UNIX fortunes.
+            Small backend service with progressive web and Slack integration
+            surfaces.
           </Card>
           <Card
             title="Anthesis"
@@ -350,8 +357,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.green}
           >
-            Internally used agentic SDLC with governed autonomy and
-            auditability.
+            Internally used agentic SDLC focused on approvals, replayability,
+            auditability, and human authority.
           </Card>
         </div>
         <Link className="inline-block text-sm" to="/solutions">
@@ -368,11 +375,12 @@ export default function Index() {
             Laboratory
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Projects in active growth.
+            Active project evidence.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Experimental systems, SDKs, and infrastructure work still being
-            refined in public.
+            Laboratory projects ground the positioning in working systems:
+            platform automation, repository governance, local AI infrastructure,
+            mobile trust, and LLM control surfaces.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -383,7 +391,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.neutral}
           >
-            Secure, reproducible lab environments, migrations, and deploys.
+            Secure, reproducible lab environments with Kubernetes/GitOps,
+            migrations, secret management, and deployment paths.
           </Card>
           <Card
             title="Bluebell"
@@ -392,7 +401,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.blue}
           >
-            Multiplatform mobile SDK with AI-capable features.
+            Multiplatform mobile SDK and template work that keeps AI-capable
+            features inside reusable client-platform boundaries.
           </Card>
           <Card
             title="Project Myotosis"
@@ -401,7 +411,8 @@ export default function Index() {
             headingLevel={3}
             className={cardStyles.green}
           >
-            MCP and LLM registry for mobile clients.
+            MCP and LLM registry concepts for mobile clients, tool registration,
+            and governed agent workflow integration.
           </Card>
         </div>
         <Link className="inline-block text-sm" to="/laboratory">
@@ -417,11 +428,12 @@ export default function Index() {
           Philosophy
         </p>
         <h2 className="text-2xl tracking-tight md:text-3xl">
-          Work that compounds.
+          Work that stays reviewable.
         </h2>
         <p className="max-w-3xl text-base leading-7 text-slate-700">
-          We build iteratively, guided by quality, time, and cost. Gardening is
-          our metaphor: tend the soil, grow the seeds, cultivate the garden.
+          We build iteratively, guided by quality, time, cost, trust boundaries,
+          and evidence. The goal is software teams can operate, review, and
+          change without losing control of the system.
         </p>
         <Link className="inline-block text-sm" to="/philosophy">
           Read the full philosophy
@@ -460,5 +472,5 @@ export default function Index() {
         </div>
       </section>
     </div>
-  )
+  );
 }

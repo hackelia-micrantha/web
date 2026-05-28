@@ -1,56 +1,101 @@
-import type { MetaFunction } from "@remix-run/node"
-import { useEffect, useState } from "react"
-import { PageTitle } from "~/components"
-import { buildPageMeta } from "~/utils/seo"
+import type { MetaFunction } from "@remix-run/node";
+import { useEffect, useState } from "react";
+import { PageTitle } from "~/components";
+import { buildPageMeta } from "~/utils/seo";
 
 type WebsiteCarbonBadgeComponent =
-  (typeof import("react-websitecarbon-badge"))["WebsiteCarbonBadge"]
+  (typeof import("react-websitecarbon-badge"))["WebsiteCarbonBadge"];
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Philosophy",
     description:
-      "Micrantha's philosophy on building software with quality, time, and cost in balance.",
+      "Micrantha's approach to secure backend, platform, and AI-governance engineering.",
     path: "/philosophy",
-  })
+  });
 
 const Philosophy = () => {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
   const [WebsiteCarbonBadge, setWebsiteCarbonBadge] =
-    useState<WebsiteCarbonBadgeComponent | null>(null)
+    useState<WebsiteCarbonBadgeComponent | null>(null);
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
 
-    let isActive = true
+    let isActive = true;
 
     void import("react-websitecarbon-badge")
       .then((module) => {
         if (isActive) {
-          setWebsiteCarbonBadge(() => module.WebsiteCarbonBadge)
+          setWebsiteCarbonBadge(() => module.WebsiteCarbonBadge);
         }
       })
-      .catch(() => {})
+      .catch(() => {});
 
     return () => {
-      isActive = false
-    }
-  }, [])
+      isActive = false;
+    };
+  }, []);
 
   return (
     <div>
       <PageTitle
-        title="Philosophy"
-        subtitle="Work that compounds through clear tradeoffs, iterative delivery, and durable foundations."
+        title="About Micrantha"
+        subtitle="Principal backend, platform, and AI-governance engineering grounded in concrete systems work."
       />
 
       <div className="space-y-12">
         <section className="space-y-4">
-          <h2 className="text-xl">Purpose</h2>
+          <h2 className="text-xl">Operating Position</h2>
           <p>
-            Micrantha aims to build durable software services that are private,
-            secure, functional, and continuously learning.
+            Micrantha focuses on trust-sensitive software foundations: backend
+            services, client-server integration, platform automation, secure
+            delivery, and AI-assisted workflows that remain auditable and under
+            human control.
           </p>
+          <p>
+            The strongest work sits where product teams need leverage without
+            weakening correctness: authentication and authorization paths,
+            integration control surfaces, release workflows, evidence capture,
+            replayability, and policy boundaries around automation.
+          </p>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-xl">Evidence</h2>
+          <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <dt className="font-bold">AI governance</dt>
+              <dd>
+                Anthesis models agentic SDLC work around governed autonomy,
+                approvals, replayability, auditability, deterministic execution,
+                and explicit human authority.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold">Platform engineering</dt>
+              <dd>
+                Hyperion and Dubnium provide hands-on lab infrastructure for
+                GitOps-style operations, secret-management design, reproducible
+                environments, and local AI platform experimentation.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold">Backend and repository control</dt>
+              <dd>
+                Repora explores repository mirroring, metadata governance,
+                RFC/ADR-driven control planes, and provider-neutral operations.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold">Client-server trust</dt>
+              <dd>
+                Amaryllis, Bluebell, Digitalis, and Myotosis keep mobile
+                inference, attestation, SDK behavior, and LLM tool boundaries
+                inside explicit platform contracts.
+              </dd>
+            </div>
+          </dl>
         </section>
 
         <section className="space-y-6">
@@ -60,7 +105,9 @@ const Philosophy = () => {
               <p>
                 Software is built iteratively inside a project triangle of{" "}
                 <b>quality</b>, <b>time</b>, and <b>cost</b>. The work improves
-                when those tradeoffs are explicit instead of implied.
+                when those tradeoffs are explicit instead of implied, especially
+                in systems where security, operational reliability, and AI
+                reviewability are part of the product surface.
               </p>
               <p>
                 The traditional iron triangle is treated as a management
@@ -165,7 +212,10 @@ const Philosophy = () => {
           <h2 className="text-xl">Metaphor</h2>
           <p>
             Our working metaphor is gardening: software grows through repeated
-            care, environmental support, and patient cultivation over time.
+            care, environmental support, and patient cultivation over time. In
+            practice, that means keeping foundations healthy: interfaces,
+            workflows, domain rules, infrastructure, security controls, and
+            governance evidence all need tending.
           </p>
           <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
@@ -217,7 +267,7 @@ const Philosophy = () => {
         </div>
       ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default Philosophy
+export default Philosophy;
