@@ -1,5 +1,6 @@
 import type { BlogPost } from "~/content/blog"
 import { blogPosts } from "~/content/blog"
+import { agentPermissionBlogPosts } from "~/content/blog-agent-permissions"
 import { governanceNativeBlogPosts } from "~/content/blog-governance-native"
 
 export interface BlogContentProvider {
@@ -8,6 +9,7 @@ export interface BlogContentProvider {
 }
 
 const tsxBlogPosts: BlogPost[] = [
+  ...agentPermissionBlogPosts,
   ...governanceNativeBlogPosts,
   ...blogPosts,
 ]
