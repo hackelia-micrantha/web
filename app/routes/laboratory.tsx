@@ -11,7 +11,7 @@ import {
   AnthesisIcon,
   GardenIcon,
   CalatheaIcon,
-  DubniumIcon,
+  ReporaIcon,
 } from "~/components/icons"
 
 export const meta: MetaFunction = () =>
@@ -46,10 +46,10 @@ export const handle = {
         url: "https://calathea.micrantha.com",
       },
       {
-        name: "Project Dubnium",
+        name: "Repora",
         description:
-          "A Micrantha hardware element: a policy-driven NixOS local server/workstation and AI node with dual-GPU planning and desktop, studio-local, and compute operating modes.",
-        url: "https://github.com/ryjen/dubnium",
+          "A deterministic, policy-driven repository control plane that defines and enforces the desired state of codebases at scale.",
+        url: "https://github.com/hackelia-micrantha/repora",
       },
       {
         name: "Bluebell",
@@ -136,15 +136,14 @@ const Laboratory = () => (
       </Card>
 
       <Card
-        title="Project Dubnium"
-        url="https://github.com/ryjen/dubnium"
-        icon={<DubniumIcon />}
+        title="Repora"
+        url="https://github.com/hackelia-micrantha/repora"
+        icon={<ReporaIcon />}
         headingLevel={2}
         className={cardStyles.cyan}
       >
-        A Micrantha hardware element: a policy-driven NixOS local
-        server/workstation and AI node with dual-GPU planning and desktop,
-        studio-local, and compute operating modes.
+        A deterministic, policy-driven repository control plane that defines and
+        enforces the desired state of codebases at scale.
       </Card>
 
       <Card

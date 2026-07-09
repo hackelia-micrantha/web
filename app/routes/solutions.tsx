@@ -7,6 +7,7 @@ import {
   VeilIcon,
   AmaryllisIcon,
   AnthesisIcon,
+  DubniumIcon,
 } from "~/components/icons"
 
 export const meta: MetaFunction = () =>
@@ -47,6 +48,12 @@ export const handle = {
         description:
           "A microservice to pseudo-randomly obfuscate a profile photo for fun or security.",
         url: "https://veil.micrantha.com",
+      },
+      {
+        name: "Project Dubnium",
+        description:
+          "A Micrantha hardware element: a policy-driven NixOS local server/workstation and AI node with dual-GPU planning and desktop, studio-local, and compute operating modes.",
+        url: "https://github.com/ryjen/dubnium",
       },
     ],
   }),
@@ -107,6 +114,17 @@ const Solutions = () => (
       >
         A microservice to pseudo-randomly obfuscate a profile photo for fun or
         security.
+      </Card>
+      <Card
+        title="Project Dubnium"
+        url="https://github.com/ryjen/dubnium"
+        icon={<DubniumIcon />}
+        headingLevel={2}
+        className={cardStyles.cyan}
+      >
+        A Micrantha hardware element: a policy-driven NixOS local
+        server/workstation and AI node with dual-GPU planning and desktop,
+        studio-local, and compute operating modes.
       </Card>
     </div>
 
