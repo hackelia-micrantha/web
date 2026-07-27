@@ -1,16 +1,46 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card } from "~/components"
-import { cardStyles } from "~/utils/card-styles"
-import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
   AnthesisIcon,
-  BluebellIcon,
-  FortunesIcon,
-  HyperionIcon,
-  MyotosisIcon,
-  AmaryllisIcon,
+  DubniumIcon,
+  MobuildIcon,
+  MyosotisIcon,
 } from "~/components/icons"
+import {
+  featuredHomepageProjectSlugs,
+  projectBySlug,
+  projectCollectionDescriptions,
+} from "~/data/project-catalog"
+import { cardStyles } from "~/utils/card-styles"
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
+
+const homepageProjectPresentation = {
+  dubnium: {
+    icon: <DubniumIcon />,
+    className: cardStyles.cyan,
+  },
+  anthesis: {
+    icon: <AnthesisIcon />,
+    className: cardStyles.green,
+  },
+  envuscator: {
+    icon: <MobuildIcon />,
+    className: cardStyles.yellow,
+  },
+  "anthesis-governance-lab": {
+    icon: <AnthesisIcon />,
+    className: cardStyles.green,
+  },
+  "dubnium-governed-agent-demo": {
+    icon: <DubniumIcon />,
+    className: cardStyles.cyan,
+  },
+  myosotis: {
+    icon: <MyosotisIcon />,
+    className: cardStyles.blue,
+  },
+} as const
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
@@ -35,14 +65,12 @@ export const handle = {
       },
       {
         name: "Solutions",
-        description:
-          "Products in active use, including Amaryllis, Fortunes Service, and internally used Anthesis.",
+        description: projectCollectionDescriptions.solution,
         url: "https://micrantha.com/solutions",
       },
       {
         name: "Laboratory",
-        description:
-          "Projects in active growth, including Hyperion, Bluebell, and Myotosis.",
+        description: projectCollectionDescriptions.laboratory,
         url: "https://micrantha.com/laboratory",
       },
       {
@@ -317,42 +345,30 @@ export default function Index() {
             Solutions
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Products in active use, including internal use.
+            Deployable systems for governed delivery.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Products that teams can adopt directly, or internally used systems
-            that show the direction of durable delivery.
+            {projectCollectionDescriptions.solution}
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card
-            title="Amaryllis"
-            url="https://amaryllis.micrantha.com"
-            icon={<AmaryllisIcon />}
-            headingLevel={3}
-            className={cardStyles.neutral}
-          >
-            A React Native SDK for on-device mobile inference.
-          </Card>
-          <Card
-            title="Fortunes Service"
-            url="https://fortunes.micrantha.com"
-            icon={<FortunesIcon />}
-            headingLevel={3}
-            className={cardStyles.yellow}
-          >
-            A microservice and Slack app for UNIX fortunes.
-          </Card>
-          <Card
-            title="Anthesis"
-            url="https://anthesis.dev"
-            icon={<AnthesisIcon />}
-            headingLevel={3}
-            className={cardStyles.green}
-          >
-            Internally used agentic SDLC with governed autonomy and
-            auditability.
-          </Card>
+          {featuredHomepageProjectSlugs.solution.map((slug) => {
+            const project = projectBySlug(slug)
+            const presentation = homepageProjectPresentation[slug]
+
+            return (
+              <Card
+                key={project.slug}
+                title={project.name}
+                url={project.url}
+                icon={presentation.icon}
+                headingLevel={3}
+                className={presentation.className}
+              >
+                {project.summary}
+              </Card>
+            )
+          })}
         </div>
         <Link className="inline-block text-sm" to="/solutions">
           View all solutions
@@ -368,41 +384,30 @@ export default function Index() {
             Laboratory
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Projects in active growth.
+            Testbeds that prove the architecture.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Experimental systems, SDKs, and infrastructure work still being
-            refined in public.
+            {projectCollectionDescriptions.laboratory}
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card
-            title="Project Hyperion"
-            icon={<HyperionIcon />}
-            url="https://hyperion.micrantha.com"
-            headingLevel={3}
-            className={cardStyles.neutral}
-          >
-            Secure, reproducible lab environments, migrations, and deploys.
-          </Card>
-          <Card
-            title="Bluebell"
-            icon={<BluebellIcon />}
-            url="https://github.com/hackelia-micrantha/bluebell"
-            headingLevel={3}
-            className={cardStyles.blue}
-          >
-            Multiplatform mobile SDK with AI-capable features.
-          </Card>
-          <Card
-            title="Project Myotosis"
-            url="https://myotosis.micrantha.com"
-            icon={<MyotosisIcon />}
-            headingLevel={3}
-            className={cardStyles.green}
-          >
-            MCP and LLM registry for mobile clients.
-          </Card>
+          {featuredHomepageProjectSlugs.laboratory.map((slug) => {
+            const project = projectBySlug(slug)
+            const presentation = homepageProjectPresentation[slug]
+
+            return (
+              <Card
+                key={project.slug}
+                title={project.name}
+                url={project.url}
+                icon={presentation.icon}
+                headingLevel={3}
+                className={presentation.className}
+              >
+                {project.summary}
+              </Card>
+            )
+          })}
         </div>
         <Link className="inline-block text-sm" to="/laboratory">
           Explore the lab
