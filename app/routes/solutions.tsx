@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node"
+import type { ReactNode } from "react"
 import { Card, ExternalLink, PageTitle } from "~/components"
 import {
   AmaryllisIcon,
@@ -20,7 +21,14 @@ const solutionsDescription =
 
 const solutionProjects = projectsByClassification("solution")
 
-const solutionCards = [
+type ProjectCard = {
+  project: ReturnType<typeof projectBySlug>
+  icon: ReactNode
+  className: string
+  actions?: ReactNode[]
+}
+
+const solutionCards: ProjectCard[] = [
   {
     project: projectBySlug("amaryllis"),
     icon: <AmaryllisIcon />,
