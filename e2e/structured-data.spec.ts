@@ -11,6 +11,7 @@ type StructuredDataEntry = {
     numberOfItems?: number
     itemListElement?: Array<{
       position?: number
+      url?: string
       item?: {
         name?: string
       }
@@ -73,6 +74,13 @@ for (const collection of [
         (entry) => entry.position,
       ),
     ).toEqual(expectedProjects.map((_, index) => index + 1))
+    expect(
+      collectionPage?.mainEntity?.itemListElement?.map((entry) => entry.url),
+    ).toEqual(
+      expectedProjects.map((project) =>
+        new URL(project.url, "https://micrantha.com").toString(),
+      ),
+    )
   })
 }
 
