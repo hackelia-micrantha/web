@@ -9,12 +9,14 @@ import {
   MobuildIcon,
   VeilIcon,
 } from "~/components/icons"
-import { projectsByClassification } from "~/data/project-catalog"
+import {
+  projectCollectionDescriptions,
+  projectsByClassification,
+} from "~/data/project-catalog"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 
-const solutionsDescription =
-  "Micrantha deployable systems, distributions, tools, and platforms for governed agentic development, mobile engineering, and secure delivery."
+const solutionsDescription = projectCollectionDescriptions.solution
 
 const solutionProjects = projectsByClassification("solution")
 
