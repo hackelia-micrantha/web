@@ -34,7 +34,9 @@ test("homepage project cards resolve identity and copy from the catalog", async 
       })
 
       await expect(projectLink).toHaveAttribute("href", project.url)
-      await expect(section.getByText(project.summary, { exact: true })).toBeVisible()
+      await expect(
+        section.getByText(project.summary, { exact: true }),
+      ).toBeVisible()
     }
   }
 })
