@@ -9,10 +9,7 @@ import {
   MobuildIcon,
   VeilIcon,
 } from "~/components/icons"
-import {
-  projectBySlug,
-  projectsByClassification,
-} from "~/data/project-catalog"
+import { projectsByClassification } from "~/data/project-catalog"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 
@@ -21,36 +18,30 @@ const solutionsDescription =
 
 const solutionProjects = projectsByClassification("solution")
 
-type ProjectCard = {
-  project: ReturnType<typeof projectBySlug>
+type ProjectCardPresentation = {
   icon: ReactNode
   className: string
   actions?: ReactNode[]
 }
 
-const solutionCards: ProjectCard[] = [
-  {
-    project: projectBySlug("amaryllis"),
+const solutionCardPresentation: Record<string, ProjectCardPresentation> = {
+  amaryllis: {
     icon: <AmaryllisIcon />,
     className: cardStyles.neutral,
   },
-  {
-    project: projectBySlug("anthesis"),
+  anthesis: {
     icon: <AnthesisIcon />,
     className: cardStyles.green,
   },
-  {
-    project: projectBySlug("dubnium"),
+  dubnium: {
     icon: <DubniumIcon />,
     className: cardStyles.cyan,
   },
-  {
-    project: projectBySlug("envuscator"),
+  envuscator: {
     icon: <MobuildIcon />,
     className: cardStyles.yellow,
   },
-  {
-    project: projectBySlug("fortunes"),
+  fortunes: {
     icon: <FortunesIcon />,
     className: cardStyles.yellow,
     actions: [
@@ -63,12 +54,21 @@ const solutionCards: ProjectCard[] = [
       </ExternalLink>,
     ],
   },
-  {
-    project: projectBySlug("veil"),
+  veil: {
     icon: <VeilIcon />,
     className: cardStyles.blue,
   },
-]
+}
+
+const presentationFor = (slug: string) => {
+  const presentation = solutionCardPresentation[slug]
+
+  if (!presentation) {
+    throw new Error(`Missing Solution card presentation for project: ${slug}`)
+  }
+
+  return presentation
+}
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
@@ -98,19 +98,23 @@ const Solutions = () => (
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {solutionCards.map(({ project, icon, className, actions }) => (
-        <Card
-          key={project.slug}
-          title={project.name}
-          url={project.url}
-          icon={icon}
-          headingLevel={2}
-          className={className}
-          actions={actions}
-        >
-          {project.summary}
-        </Card>
-      ))}
+      {solutionProjects.map((project) => {
+        const { icon, className, actions } = presentationFor(project.slug)
+
+        return (
+          <Card
+            key={project.slug}
+            title={project.name}
+            url={project.url}
+            icon={icon}
+            headingLevel={2}
+            className={className}
+            actions={actions}
+          >
+            {project.summary}
+          </Card>
+        )
+      })}
     </div>
 
     <section className="mt-10 max-w-3xl space-y-4">
