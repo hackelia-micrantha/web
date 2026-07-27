@@ -13,10 +13,7 @@ import {
   MyosotisIcon,
   ReporaIcon,
 } from "~/components/icons"
-import {
-  projectBySlug,
-  projectsByClassification,
-} from "~/data/project-catalog"
+import { projectsByClassification } from "~/data/project-catalog"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 
@@ -25,71 +22,69 @@ const laboratoryDescription =
 
 const laboratoryProjects = projectsByClassification("laboratory")
 
-type ProjectCard = {
-  project: ReturnType<typeof projectBySlug>
+type ProjectCardPresentation = {
   icon: ReactNode
   className: string
   actions?: ReactNode[]
 }
 
-const laboratoryCards: ProjectCard[] = [
-  {
-    project: projectBySlug("anthesis-governance-lab"),
+const laboratoryCardPresentation: Record<string, ProjectCardPresentation> = {
+  "anthesis-governance-lab": {
     icon: <AnthesisIcon />,
     className: cardStyles.green,
   },
-  {
-    project: projectBySlug("dubnium-governed-agent-demo"),
+  "dubnium-governed-agent-demo": {
     icon: <DubniumIcon />,
     className: cardStyles.cyan,
   },
-  {
-    project: projectBySlug("hyperion"),
+  hyperion: {
     icon: <HyperionIcon />,
     className: cardStyles.neutral,
   },
-  {
-    project: projectBySlug("calathea"),
+  calathea: {
     icon: <CalatheaIcon />,
     className: cardStyles.purple,
   },
-  {
-    project: projectBySlug("repora"),
+  repora: {
     icon: <ReporaIcon />,
     className: cardStyles.cyan,
   },
-  {
-    project: projectBySlug("bluebell"),
+  bluebell: {
     icon: <BluebellIcon />,
     className: cardStyles.blue,
   },
-  {
-    project: projectBySlug("achillea"),
+  achillea: {
     icon: <AchilleaIcon />,
     className: cardStyles.red,
     actions: [<span key="achillea-demo">Asterwild Demo Game</span>],
   },
-  {
-    project: projectBySlug("digitalis"),
+  digitalis: {
     icon: <MobuildIcon />,
     className: cardStyles.purple,
   },
-  {
-    project: projectBySlug("myosotis"),
+  myosotis: {
     icon: <MyosotisIcon />,
     className: cardStyles.cyan,
   },
-  {
-    project: projectBySlug("eyespie"),
+  eyespie: {
     icon: <BluebellIcon />,
     className: cardStyles.blue,
   },
-  {
-    project: projectBySlug("compost"),
+  compost: {
     icon: <GardenIcon />,
     className: cardStyles.lime,
   },
-]
+}
+
+const presentationFor = (slug: string) => {
+  const presentation = laboratoryCardPresentation[slug]
+
+  if (!presentation) {
+    throw new Error(`Missing Laboratory card presentation for project: ${slug}`)
+  }
+
+  return presentation
+}
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
@@ -119,19 +114,23 @@ const Laboratory = () => (
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {laboratoryCards.map(({ project, icon, className, actions }) => (
-        <Card
-          key={project.slug}
-          title={project.name}
-          url={project.url}
-          icon={icon}
-          headingLevel={2}
-          className={className}
-          actions={actions}
-        >
-          {project.summary}
-        </Card>
-      ))}
+      {laboratoryProjects.map((project) => {
+        const { icon, className, actions } = presentationFor(project.slug)
+
+        return (
+          <Card
+            key={project.slug}
+            title={project.name}
+            url={project.url}
+            icon={icon}
+            headingLevel={2}
+            className={className}
+            actions={actions}
+          >
+            {project.summary}
+          </Card>
+        )
+      })}
     </div>
   </div>
 )
