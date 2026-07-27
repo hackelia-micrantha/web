@@ -17,6 +17,13 @@ export type ProjectDefinition = {
   architectureRole: string
 }
 
+export const projectCollectionDescriptions = {
+  solution:
+    "Micrantha deployable systems, distributions, tools, and platforms for governed agentic development, mobile engineering, and secure delivery.",
+  laboratory:
+    "Micrantha testbeds and experimental projects that validate contracts, integrations, and emerging engineering capabilities.",
+} as const satisfies Record<ProjectClassification, string>
+
 export const projectCatalog = [
   {
     slug: "amaryllis",
@@ -193,6 +200,18 @@ export const projectCatalog = [
 ] as const satisfies readonly ProjectDefinition[]
 
 export type ProjectSlug = (typeof projectCatalog)[number]["slug"]
+
+export const featuredHomepageProjectSlugs = {
+  solution: ["dubnium", "anthesis", "envuscator"],
+  laboratory: [
+    "anthesis-governance-lab",
+    "dubnium-governed-agent-demo",
+    "myosotis",
+  ],
+} as const satisfies Record<
+  ProjectClassification,
+  readonly ProjectSlug[]
+>
 
 export const projectsByClassification = (
   classification: ProjectClassification,
