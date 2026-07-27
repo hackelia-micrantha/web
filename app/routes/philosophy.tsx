@@ -132,14 +132,16 @@ const Philosophy = () => {
               <dd>
                 Software systems, services, and tools are usually named from
                 living things. Anthesis, Calathea, Bluebell, Amaryllis, and
-                Myotosis belong to this line.
+                Myosotis belong to this line.
               </dd>
             </div>
             <div>
               <dt className="font-bold">Elements</dt>
               <dd>
-                Hardware is named from the periodic table. Dubnium is the local
-                server/workstation element; Zirconium names the phone, and
+                Hardware hosts and the systems that grow around them use names
+                from the periodic table. Dubnium began as the local
+                server/workstation name and now identifies Micrantha&apos;s
+                agentic development distribution; Zirconium names the phone, and
                 Technetium names the laptop.
               </dd>
             </div>
