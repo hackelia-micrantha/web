@@ -13,12 +13,14 @@ import {
   MyosotisIcon,
   ReporaIcon,
 } from "~/components/icons"
-import { projectsByClassification } from "~/data/project-catalog"
+import {
+  projectCollectionDescriptions,
+  projectsByClassification,
+} from "~/data/project-catalog"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 
-const laboratoryDescription =
-  "Micrantha testbeds and experimental projects that validate contracts, integrations, and emerging engineering capabilities."
+const laboratoryDescription = projectCollectionDescriptions.laboratory
 
 const laboratoryProjects = projectsByClassification("laboratory")
 
