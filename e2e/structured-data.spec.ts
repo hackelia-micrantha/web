@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test"
 import { expect, test } from "@playwright/test"
+import { projectsByClassification } from "../app/data/project-catalog"
 
 type StructuredDataEntry = {
   "@type"?: string
@@ -27,64 +28,53 @@ async function getStructuredData(page: Page) {
   return JSON.parse(jsonLdText ?? "[]") as StructuredDataEntry[]
 }
 
-test("/solutions exposes CollectionPage structured data", async ({ page }) => {
-  await page.goto("/solutions")
+for (const collection of [
+  {
+    path: "/solutions",
+    name: "Solutions",
+    classification: "solution" as const,
+  },
+  {
+    path: "/laboratory",
+    name: "Laboratory",
+    classification: "laboratory" as const,
+  },
+]) {
+  test(`${collection.path} exposes catalog-backed CollectionPage structured data`, async ({
+    page,
+  }) => {
+    await page.goto(collection.path)
 
-  await expect(page.getByRole("heading", { name: "Solutions" })).toBeVisible()
+    await expect(
+      page.getByRole("heading", { name: collection.name }),
+    ).toBeVisible()
 
-  const structuredData = await getStructuredData(page)
-  const collectionPage = structuredData.find(
-    (entry) =>
-      entry["@type"] === "CollectionPage" &&
-      entry.url === "https://micrantha.com/solutions",
-  )
+    const expectedProjects = projectsByClassification(collection.classification)
+    const structuredData = await getStructuredData(page)
+    const collectionPage = structuredData.find(
+      (entry) =>
+        entry["@type"] === "CollectionPage" &&
+        entry.url === `https://micrantha.com${collection.path}`,
+    )
 
-  expect(collectionPage).toBeTruthy()
-  expect(collectionPage?.name).toBe("Solutions")
-  expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
-  expect(collectionPage?.mainEntity?.numberOfItems).toBe(4)
-  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.position).toBe(1)
-  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
-    "Amaryllis",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
-    "Anthesis",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[2]?.item?.name).toBe(
-    "Fortunes Service",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[3]?.item?.name).toBe(
-    "Veil",
-  )
-})
-
-test("/laboratory exposes CollectionPage structured data", async ({ page }) => {
-  await page.goto("/laboratory")
-
-  await expect(page.getByRole("heading", { name: "Laboratory" })).toBeVisible()
-
-  const structuredData = await getStructuredData(page)
-  const collectionPage = structuredData.find(
-    (entry) =>
-      entry["@type"] === "CollectionPage" &&
-      entry.url === "https://micrantha.com/laboratory",
-  )
-
-  expect(collectionPage).toBeTruthy()
-  expect(collectionPage?.name).toBe("Laboratory")
-  expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
-  expect(collectionPage?.mainEntity?.numberOfItems).toBe(10)
-  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.position).toBe(1)
-  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
-    "Project Hyperion",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
-    "Project Anthesis",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[9]?.item?.name).toBe(
-    "Compost",
-  )
-})
+    expect(collectionPage).toBeTruthy()
+    expect(collectionPage?.name).toBe(collection.name)
+    expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
+    expect(collectionPage?.mainEntity?.numberOfItems).toBe(
+      expectedProjects.length,
+    )
+    expect(
+      collectionPage?.mainEntity?.itemListElement?.map(
+        (entry) => entry.item?.name,
+      ),
+    ).toEqual(expectedProjects.map((project) => project.name))
+    expect(
+      collectionPage?.mainEntity?.itemListElement?.map(
+        (entry) => entry.position,
+      ),
+    ).toEqual(expectedProjects.map((_, index) => index + 1))
+  })
+}
 
 test("/blog exposes CollectionPage structured data", async ({ page }) => {
   await page.goto("/blog")
