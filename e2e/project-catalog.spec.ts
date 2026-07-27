@@ -41,7 +41,7 @@ test("project catalog identifiers and public URLs are valid", () => {
       project.url.startsWith("https://") || project.url.startsWith("/"),
     ).toBe(true)
 
-    if (project.sourceUrl) {
+    if ("sourceUrl" in project) {
       expect(project.sourceUrl.startsWith("https://")).toBe(true)
     }
   }
