@@ -29,29 +29,73 @@ test("/services exposes the consultation path", async ({ page }) => {
   ).toBeVisible()
 })
 
-test("/laboratory exposes key collection content", async ({ page }) => {
+test("/solutions exposes the current solution taxonomy", async ({ page }) => {
+  await page.goto("/solutions")
+
+  await expect(page.getByRole("heading", { name: "Solutions" })).toBeVisible()
+  await expect(
+    page.locator("a", {
+      has: page.getByRole("heading", { name: "Dubnium", exact: true }),
+    }),
+  ).toHaveAttribute(
+    "href",
+    "https://github.com/hackelia-micrantha/dubnium-community",
+  )
+  await expect(
+    page.locator("a", {
+      has: page.getByRole("heading", { name: "Envuscator", exact: true }),
+    }),
+  ).toHaveAttribute("href", "https://envuscator.micrantha.com")
+  await expect(
+    page.getByRole("heading", { name: "Anthesis", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Fortunes Service", exact: true }),
+  ).toBeVisible()
+})
+
+test("/laboratory exposes the current laboratory taxonomy", async ({ page }) => {
   await page.goto("/laboratory")
 
   await expect(page.getByRole("heading", { name: "Laboratory" })).toBeVisible()
+  await expect(
+    page.locator("a", {
+      has: page.getByRole("heading", {
+        name: "Anthesis Governance Lab",
+        exact: true,
+      }),
+    }),
+  ).toHaveAttribute("href", "https://github.com/ryjen/anthesis-governance-lab")
+  await expect(
+    page.getByRole("heading", {
+      name: "Dubnium Governed Agent Demo",
+      exact: true,
+    }),
+  ).toBeVisible()
   await expect(
     page.getByRole("link", { name: /project hyperion/i }),
   ).toHaveAttribute("href", "https://hyperion.micrantha.com")
   await expect(
     page.locator("a", {
-      has: page.getByRole("heading", { name: "Bluebell" }),
+      has: page.getByRole("heading", { name: "Bluebell", exact: true }),
     }),
   ).toHaveAttribute("href", "https://github.com/hackelia-micrantha/bluebell")
+  await expect(
+    page.getByRole("heading", { name: "Myosotis", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Eyespie", exact: true }),
+  ).toBeVisible()
   await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
     "href",
     "/compost",
   )
   await expect(
-    page.getByRole("heading", { name: "Project Hyperion" }),
-  ).toBeVisible()
+    page.getByRole("heading", { name: "Project Anthesis", exact: true }),
+  ).toHaveCount(0)
   await expect(
-    page.getByRole("heading", { name: "Project Anthesis" }),
-  ).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Compost" })).toBeVisible()
+    page.getByRole("heading", { name: "Envuscator", exact: true }),
+  ).toHaveCount(0)
 })
 
 test("/privacy retains the tailored long-form policy copy", async ({
