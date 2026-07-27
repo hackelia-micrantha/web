@@ -1,61 +1,92 @@
 import type { MetaFunction } from "@remix-run/node"
+import type { ReactNode } from "react"
 import { Card, ExternalLink, PageTitle } from "~/components"
-import { cardStyles } from "~/utils/card-styles"
-import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 import {
-  FortunesIcon,
-  VeilIcon,
   AmaryllisIcon,
   AnthesisIcon,
   DubniumIcon,
+  FortunesIcon,
+  MobuildIcon,
+  VeilIcon,
 } from "~/components/icons"
+import { projectsByClassification } from "~/data/project-catalog"
+import { cardStyles } from "~/utils/card-styles"
+import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
+
+const solutionsDescription =
+  "Micrantha deployable systems, distributions, tools, and platforms for governed agentic development, mobile engineering, and secure delivery."
+
+const solutionProjects = projectsByClassification("solution")
+
+type ProjectCardPresentation = {
+  icon: ReactNode
+  className: string
+  actions?: ReactNode[]
+}
+
+const solutionCardPresentation: Record<string, ProjectCardPresentation> = {
+  amaryllis: {
+    icon: <AmaryllisIcon />,
+    className: cardStyles.neutral,
+  },
+  anthesis: {
+    icon: <AnthesisIcon />,
+    className: cardStyles.green,
+  },
+  dubnium: {
+    icon: <DubniumIcon />,
+    className: cardStyles.cyan,
+  },
+  envuscator: {
+    icon: <MobuildIcon />,
+    className: cardStyles.yellow,
+  },
+  fortunes: {
+    icon: <FortunesIcon />,
+    className: cardStyles.yellow,
+    actions: [
+      <ExternalLink
+        key="slack-app"
+        href="https://slack.com/apps/A8MAPLX53-fortunes"
+        newTab
+      >
+        Slack App
+      </ExternalLink>,
+    ],
+  },
+  veil: {
+    icon: <VeilIcon />,
+    className: cardStyles.blue,
+  },
+}
+
+const presentationFor = (slug: string) => {
+  const presentation = solutionCardPresentation[slug]
+
+  if (!presentation) {
+    throw new Error(`Missing Solution card presentation for project: ${slug}`)
+  }
+
+  return presentation
+}
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Solutions",
-    description:
-      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and internally used Anthesis.",
+    description: solutionsDescription,
     path: "/solutions",
   })
 
 export const handle = {
   structuredData: buildCollectionPageStructuredData({
     name: "Solutions",
-    description:
-      "Micrantha products in active use, including Fortunes Service, Veil, Amaryllis, and internally used Anthesis.",
+    description: solutionsDescription,
     path: "/solutions",
-    items: [
-      {
-        name: "Amaryllis",
-        description:
-          "A React Native SDK for on-device mobile inference and ai-enabled components.",
-        url: "https://amaryllis.micrantha.com",
-      },
-      {
-        name: "Anthesis",
-        description:
-          "Internally used agentic SDLC with governed autonomy, auditability and replayability.",
-        url: "https://anthesis.dev",
-      },
-      {
-        name: "Fortunes Service",
-        description:
-          "A microservice, progressive web and Slack app for UNIX fortunes.",
-        url: "https://fortunes.micrantha.com",
-      },
-      {
-        name: "Veil",
-        description:
-          "A microservice to pseudo-randomly obfuscate a profile photo for fun or security.",
-        url: "https://veil.micrantha.com",
-      },
-      {
-        name: "Project Dubnium",
-        description:
-          "A Micrantha hardware element: a policy-driven NixOS local server/workstation and AI node with dual-GPU planning and desktop, studio-local, and compute operating modes.",
-        url: "https://github.com/ryjen/dubnium",
-      },
-    ],
+    items: solutionProjects.map((project) => ({
+      name: project.name,
+      description: project.summary,
+      url: project.url,
+    })),
   }),
 }
 
@@ -63,69 +94,27 @@ const Solutions = () => (
   <div>
     <PageTitle
       title="Solutions"
-      subtitle="Products that have grown into active use, including internal use."
+      subtitle="Deployable systems, distributions, tools, and platforms."
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <Card
-        title="Amaryllis"
-        url="https://amaryllis.micrantha.com"
-        icon={<AmaryllisIcon />}
-        headingLevel={2}
-        className={cardStyles.neutral}
-      >
-        A React Native SDK for on-device mobile inference and ai-enabled
-        components.
-      </Card>
-      <Card
-        title="Anthesis"
-        url="https://anthesis.dev"
-        icon={<AnthesisIcon />}
-        headingLevel={2}
-        className={cardStyles.green}
-      >
-        Internally used agentic SDLC with governed autonomy, auditability and
-        replayability.
-      </Card>
-      <Card
-        title="Fortunes Service"
-        url="https://fortunes.micrantha.com"
-        icon={<FortunesIcon />}
-        headingLevel={2}
-        className={cardStyles.yellow}
-        actions={[
-          <ExternalLink
-            key="slack-app"
-            href="https://slack.com/apps/A8MAPLX53-fortunes"
-            newTab
+      {solutionProjects.map((project) => {
+        const { icon, className, actions } = presentationFor(project.slug)
+
+        return (
+          <Card
+            key={project.slug}
+            title={project.name}
+            url={project.url}
+            icon={icon}
+            headingLevel={2}
+            className={className}
+            actions={actions}
           >
-            Slack App
-          </ExternalLink>,
-        ]}
-      >
-        A microservice, progressive web and Slack app for UNIX fortunes.
-      </Card>
-      <Card
-        title="Veil"
-        icon={<VeilIcon />}
-        url="https://veil.micrantha.com"
-        headingLevel={2}
-        className={cardStyles.blue}
-      >
-        A microservice to pseudo-randomly obfuscate a profile photo for fun or
-        security.
-      </Card>
-      <Card
-        title="Project Dubnium"
-        url="https://github.com/ryjen/dubnium"
-        icon={<DubniumIcon />}
-        headingLevel={2}
-        className={cardStyles.cyan}
-      >
-        A Micrantha hardware element: a policy-driven NixOS local
-        server/workstation and AI node with dual-GPU planning and desktop,
-        studio-local, and compute operating modes.
-      </Card>
+            {project.summary}
+          </Card>
+        )
+      })}
     </div>
 
     <section className="mt-10 max-w-3xl space-y-4">
