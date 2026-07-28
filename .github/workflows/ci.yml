@@ -37,7 +37,16 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Check formatting
-        run: yarn format:check
+        run: yarn prettier --list-different . > formatting-files.txt
+
+      - name: Upload formatting differences
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatting-differences-${{ github.run_id }}
+          path: formatting-files.txt
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Lint
         run: yarn lint
