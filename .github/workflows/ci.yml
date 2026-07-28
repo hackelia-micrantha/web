@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -36,17 +38,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Check formatting
-        run: yarn prettier --list-different . > formatting-files.txt
-
-      - name: Upload formatting differences
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: formatting-differences-${{ github.run_id }}
-          path: formatting-files.txt
-          if-no-files-found: error
-          retention-days: 7
+      - name: Check changed-file formatting
+        env:
+          FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          FORMAT_HEAD_SHA: ${{ github.sha }}
+        run: yarn format:check:changed
 
       - name: Lint
         run: yarn lint
