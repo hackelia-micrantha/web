@@ -1,11 +1,11 @@
-import fs from "node:fs"
-import { defineConfig, devices } from "@playwright/test"
+import fs from "node:fs";
+import { defineConfig, devices } from "@playwright/test";
 
 const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   ? process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   : fs.existsSync("/usr/bin/chromium")
     ? "/usr/bin/chromium"
-    : undefined
+    : undefined;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -14,10 +14,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   outputDir: "test-results",
   reporter: process.env.CI
-    ? [
-        ["list"],
-        ["html", { outputFolder: "playwright-report", open: "never" }],
-      ]
+    ? [["list"], ["html", { outputFolder: "playwright-report", open: "never" }]]
     : "list",
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000",
@@ -46,4 +43,4 @@ export default defineConfig({
       use: { ...devices["Pixel 5"] },
     },
   ],
-})
+});
