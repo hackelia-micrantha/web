@@ -39,10 +39,29 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Check changed-file formatting
+        id: formatting
         env:
           FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           FORMAT_HEAD_SHA: ${{ github.sha }}
         run: yarn format:check:changed
+
+      - name: Generate formatting patch
+        if: failure() && steps.formatting.outcome == 'failure'
+        env:
+          FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          FORMAT_HEAD_SHA: ${{ github.sha }}
+        run: |
+          bash scripts/check-changed-format.sh --write
+          git diff -- . > formatting.patch
+
+      - name: Upload formatting patch
+        if: failure() && steps.formatting.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatting-patch-${{ github.run_id }}
+          path: formatting.patch
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Lint
         run: yarn lint
