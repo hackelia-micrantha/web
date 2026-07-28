@@ -1,11 +1,11 @@
-import fs from "node:fs";
-import { defineConfig, devices } from "@playwright/test";
+import fs from "node:fs"
+import { defineConfig, devices } from "@playwright/test"
 
 const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   ? process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   : fs.existsSync("/usr/bin/chromium")
     ? "/usr/bin/chromium"
-    : undefined;
+    : undefined
 
 export default defineConfig({
   testDir: "./e2e",
@@ -43,4 +43,4 @@ export default defineConfig({
       use: { ...devices["Pixel 5"] },
     },
   ],
-});
+})
