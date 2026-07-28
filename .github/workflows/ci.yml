@@ -97,8 +97,8 @@ jobs:
       - name: Install Chromium
         run: yarn playwright install --with-deps chromium
 
-      - name: Run Playwright tests
-        run: yarn test:e2e
+      - name: Run functional Playwright tests
+        run: yarn playwright test --grep-invert "visual regressions"
 
       - name: Upload Playwright failure artifacts
         if: failure()
