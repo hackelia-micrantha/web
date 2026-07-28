@@ -26,11 +26,8 @@ test("homepage project cards resolve identity and copy from the catalog", async 
 
     for (const slug of featuredHomepageProjectSlugs[classification]) {
       const project = projectBySlug(slug)
-      const projectLink = section.locator("a", {
-        has: section.getByRole("heading", {
-          name: project.name,
-          exact: true,
-        }),
+      const projectLink = section.getByRole("link", {
+        name: new RegExp(`^${project.name}\\b`),
       })
 
       await expect(projectLink).toHaveAttribute("href", project.url)
