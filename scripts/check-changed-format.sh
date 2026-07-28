@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+mode="${1:---check}"
 base_sha="${FORMAT_BASE_SHA:-}"
 head_sha="${FORMAT_HEAD_SHA:-HEAD}"
+
+if [[ "$mode" != "--check" && "$mode" != "--write" ]]; then
+  echo "Usage: $0 [--check|--write]" >&2
+  exit 2
+fi
 
 if [[ -z "$base_sha" || "$base_sha" =~ ^0+$ ]]; then
   if git rev-parse --verify "${head_sha}^" >/dev/null 2>&1; then
@@ -22,7 +28,7 @@ if (( ${#files[@]} == 0 )); then
   exit 0
 fi
 
-echo "Checking formatting for ${#files[@]} changed file(s):"
+echo "Running Prettier ${mode} for ${#files[@]} changed file(s):"
 printf '  %s\n' "${files[@]}"
 
-yarn prettier --check "${files[@]}"
+yarn prettier "$mode" "${files[@]}"
