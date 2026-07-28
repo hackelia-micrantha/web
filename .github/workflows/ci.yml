@@ -29,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: yarn
           cache-dependency-path: yarn.lock
 
@@ -37,16 +37,43 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Check formatting
-        run: yarn format:check
+        id: formatting
+        continue-on-error: true
+        run: yarn prettier --list-different . | tee formatting-files.txt
+
+      - name: Upload formatting differences
+        if: steps.formatting.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatting-differences-${{ github.run_id }}
+          path: formatting-files.txt
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Lint
+        id: lint
+        continue-on-error: true
         run: yarn lint
 
       - name: Typecheck
+        id: typecheck
+        continue-on-error: true
         run: yarn typecheck
 
       - name: Build
+        id: build
+        continue-on-error: true
         run: yarn build
+
+      - name: Verify quality checks
+        if: always()
+        run: |
+          if [[ "${{ steps.formatting.outcome }}" != "success" || \
+                "${{ steps.lint.outcome }}" != "success" || \
+                "${{ steps.typecheck.outcome }}" != "success" || \
+                "${{ steps.build.outcome }}" != "success" ]]; then
+            exit 1
+          fi
 
   end-to-end:
     name: End-to-end
@@ -60,7 +87,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: yarn
           cache-dependency-path: yarn.lock
 
