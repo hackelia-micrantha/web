@@ -1,0 +1,67 @@
+name: Normalize repository
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency:
+  group: normalize-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'agent/normalize-format-lint'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out normalization branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Normalize formatting
+        run: yarn prettier --write .
+
+      - name: Apply safe lint fixes
+        run: yarn eslint --fix .
+
+      - name: Re-normalize after lint fixes
+        run: yarn prettier --write .
+
+      - name: Validate patch whitespace
+        run: git diff --check
+
+      - name: Commit normalization
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+        run: |
+          if git diff --quiet; then
+            echo "Repository is already normalized."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit -m "Normalize repository formatting and lint"
+          git push origin "HEAD:${HEAD_BRANCH}"
