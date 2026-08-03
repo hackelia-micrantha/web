@@ -54,7 +54,8 @@ export const projectCatalog = [
       "Micrantha's reproducible, local-first distribution for agentic software development and operations.",
     url: "https://github.com/hackelia-micrantha/dubnium-community",
     sourceUrl: "https://github.com/ryjen/dubnium",
-    architectureRole: "Agentic development distribution and bounded execution environment",
+    architectureRole:
+      "Agentic development distribution and bounded execution environment",
   },
   {
     slug: "envuscator",
@@ -208,14 +209,12 @@ export const featuredHomepageProjectSlugs = {
     "dubnium-governed-agent-demo",
     "myosotis",
   ],
-} as const satisfies Record<
-  ProjectClassification,
-  readonly ProjectSlug[]
->
+} as const satisfies Record<ProjectClassification, readonly ProjectSlug[]>
 
 export const projectsByClassification = (
   classification: ProjectClassification,
-) => projectCatalog.filter((project) => project.classification === classification)
+) =>
+  projectCatalog.filter((project) => project.classification === classification)
 
 export const projectBySlug = (slug: ProjectSlug) => {
   const project = projectCatalog.find((candidate) => candidate.slug === slug)

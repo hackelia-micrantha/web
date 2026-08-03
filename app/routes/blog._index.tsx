@@ -1,11 +1,7 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
-import {
-  BLOG_DESCRIPTION,
-  BLOG_TITLE,
-  formatBlogDate,
-} from "~/content/blog"
+import { BLOG_DESCRIPTION, BLOG_TITLE, formatBlogDate } from "~/content/blog"
 import { getBlogPosts } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
 import { cardStyles } from "~/utils/card-styles"

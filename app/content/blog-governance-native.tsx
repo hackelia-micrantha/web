@@ -6,8 +6,8 @@ const governanceNativeEngineeringContent = () => (
     <section className="space-y-4">
       <h2>Generated code changes the control plane</h2>
       <p>
-        AI-native engineering creates a control-plane problem. Generated code can
-        increase implementation throughput, but without intent capture,
+        AI-native engineering creates a control-plane problem. Generated code
+        can increase implementation throughput, but without intent capture,
         execution evidence, review boundaries, replayability guarantees, and
         human comprehension loops, organizations accumulate technical,
         cognitive, and intent debt faster than they can repay it.
@@ -60,8 +60,8 @@ const governanceNativeEngineeringContent = () => (
       </p>
       <p>
         The same applies to prompts, tool access, execution plans, review gates,
-        workflow composition, and write-back operations. These are not incidental
-        implementation details. They are control surfaces.
+        workflow composition, and write-back operations. These are not
+        incidental implementation details. They are control surfaces.
       </p>
     </section>
 
@@ -223,8 +223,8 @@ const recursiveGovernanceContent = () => (
       </p>
       <div className="article-callout">
         <p>
-          A workflow cannot claim stronger governance properties than the weakest
-          materially contributing execution boundary.
+          A workflow cannot claim stronger governance properties than the
+          weakest materially contributing execution boundary.
         </p>
       </div>
     </section>
@@ -253,9 +253,7 @@ const recursiveGovernanceContent = () => (
         ceilings because it contributes to the delivered output without exposing
         the same evidence surface as explicit execution.
       </p>
-      <p>
-        Replayability therefore propagates across execution lineage.
-      </p>
+      <p>Replayability therefore propagates across execution lineage.</p>
     </section>
 
     <section className="space-y-4">
@@ -285,7 +283,12 @@ export const governanceNativeBlogPosts: BlogPost[] = [
     date: "2026-05-18",
     excerpt:
       "Generated code increases throughput, but without intent capture, evidence, review boundaries, replayability guarantees, and human comprehension loops, organizations accumulate governance debt.",
-    tags: ["ai-governance", "anthesis", "delivery-governance", "architecture-notes"],
+    tags: [
+      "ai-governance",
+      "anthesis",
+      "delivery-governance",
+      "architecture-notes",
+    ],
     relatedSlugs: [
       "replayability-is-a-governance-problem",
       "recursive-governance-and-agent-workflows",
@@ -315,7 +318,12 @@ export const governanceNativeBlogPosts: BlogPost[] = [
     date: "2026-05-18",
     excerpt:
       "Recursive systems can expand execution depth, authority propagation, context contamination, replay ambiguity, and provenance collapse faster than traditional orchestration can govern.",
-    tags: ["ai-governance", "recursive-systems", "anthesis", "architecture-notes"],
+    tags: [
+      "ai-governance",
+      "recursive-systems",
+      "anthesis",
+      "architecture-notes",
+    ],
     relatedSlugs: [
       "governance-native-engineering-control-plane",
       "replayability-is-a-governance-problem",

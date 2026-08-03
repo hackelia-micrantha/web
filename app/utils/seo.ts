@@ -147,9 +147,7 @@ export function buildCollectionPageStructuredData({
       itemListElement: items.map((item, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        ...(item.url
-          ? { url: new URL(item.url, SITE_URL).toString() }
-          : {}),
+        ...(item.url ? { url: new URL(item.url, SITE_URL).toString() } : {}),
         item: {
           "@type": "Thing",
           name: item.name,

@@ -54,7 +54,9 @@ test("/solutions exposes the current solution taxonomy", async ({ page }) => {
   ).toBeVisible()
 })
 
-test("/laboratory exposes the current laboratory taxonomy", async ({ page }) => {
+test("/laboratory exposes the current laboratory taxonomy", async ({
+  page,
+}) => {
   await page.goto("/laboratory")
 
   await expect(page.getByRole("heading", { name: "Laboratory" })).toBeVisible()
@@ -133,10 +135,7 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
         name: "Governance-Native Engineering and the AI Control Plane",
       }),
     }),
-  ).toHaveAttribute(
-    "href",
-    "/blog/governance-native-engineering-control-plane",
-  )
+  ).toHaveAttribute("href", "/blog/governance-native-engineering-control-plane")
   await expect(
     page.getByRole("link", {
       name: "Secure Platform Integration Is Not Plumbing",
@@ -225,10 +224,7 @@ test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
     page.getByRole("link", {
       name: "Governance-Native Engineering and the AI Control Plane",
     }),
-  ).toHaveAttribute(
-    "href",
-    "/blog/governance-native-engineering-control-plane",
-  )
+  ).toHaveAttribute("href", "/blog/governance-native-engineering-control-plane")
   await expect(
     page.getByRole("link", { name: "Replayability Is a Governance Problem" }),
   ).toHaveAttribute("href", "/blog/replayability-is-a-governance-problem")

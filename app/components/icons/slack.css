@@ -1,5 +1,18 @@
-.sti{enable-background:new 0 0 270 270;}
-.st0{fill:currentColor;}
-.st1{fill:currentColor;opacity:.82;}
-.st2{fill:currentColor;opacity:.64;}
-.st3{fill:currentColor;opacity:.46;}
+.sti {
+  enable-background: new 0 0 270 270;
+}
+.st0 {
+  fill: currentColor;
+}
+.st1 {
+  fill: currentColor;
+  opacity: 0.82;
+}
+.st2 {
+  fill: currentColor;
+  opacity: 0.64;
+}
+.st3 {
+  fill: currentColor;
+  opacity: 0.46;
+}
