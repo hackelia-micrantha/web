@@ -67,7 +67,10 @@ const manifest = JSON.parse(
 )
 assert.equal(manifest.schemaVersion, 2)
 assert.ok(manifest.sourceConfiguration.projectName)
-assert.match(manifest.sourceConfiguration.compatibilityDate, /^\d{4}-\d{2}-\d{2}$/)
+assert.match(
+  manifest.sourceConfiguration.compatibilityDate,
+  /^\d{4}-\d{2}-\d{2}$/,
+)
 assert.ok(
   manifest.sourceConfiguration.compatibilityFlags.includes("nodejs_compat"),
 )
