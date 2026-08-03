@@ -21,11 +21,13 @@ const cloudflareRoot = path.join(repositoryRoot, ".cloudflare")
 const bundleRoot = path.join(cloudflareRoot, "functions")
 const runtimeRoot = path.join(cloudflareRoot, "runtime")
 const runtimeAssets = path.join(runtimeRoot, "public")
+const runtimeWorker = path.join(runtimeRoot, "worker")
 const runtimeMetadata = path.join(runtimeRoot, "metadata")
+const pagesConfigPath = path.join(repositoryRoot, "wrangler.toml")
 
 const requiredInputs = [
   path.join(repositoryRoot, "public"),
-  path.join(repositoryRoot, "wrangler.toml"),
+  pagesConfigPath,
   path.join(bundleRoot, "index.js"),
   path.join(bundleRoot, "config.json"),
   path.join(bundleRoot, "build-metadata.json"),
@@ -39,19 +41,45 @@ for (const input of requiredInputs) {
   })
 }
 
+const pagesConfig = await readFile(pagesConfigPath, "utf8")
+const projectName = pagesConfig.match(/^name\s*=\s*"([^"]+)"\s*$/m)?.[1]
+const compatibilityDate = pagesConfig.match(
+  /^compatibility_date\s*=\s*"([^"]+)"\s*$/m,
+)?.[1]
+const compatibilityFlags = pagesConfig.match(
+  /^compatibility_flags\s*=\s*(\[[^\n]+\])\s*$/m,
+)?.[1]
+
+assert.ok(projectName, "expected name in the Pages Wrangler configuration")
+assert.ok(
+  compatibilityDate,
+  "expected compatibility_date in the Pages Wrangler configuration",
+)
+assert.ok(
+  compatibilityFlags,
+  "expected compatibility_flags in the Pages Wrangler configuration",
+)
+
 await rm(runtimeRoot, { recursive: true, force: true })
+await mkdir(runtimeWorker, { recursive: true })
 await mkdir(runtimeMetadata, { recursive: true })
 await cp(path.join(repositoryRoot, "public"), runtimeAssets, {
   recursive: true,
 })
 await copyFile(
-  path.join(repositoryRoot, "wrangler.toml"),
-  path.join(runtimeRoot, "wrangler.toml"),
-)
-await copyFile(
   path.join(bundleRoot, "index.js"),
-  path.join(runtimeAssets, "_worker.js"),
+  path.join(runtimeWorker, "index.js"),
 )
+
+try {
+  await copyFile(
+    path.join(bundleRoot, "index.js.map"),
+    path.join(runtimeWorker, "index.js.map"),
+  )
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error
+}
+
 await copyFile(
   path.join(bundleRoot, "config.json"),
   path.join(runtimeMetadata, "functions-config.json"),
@@ -60,6 +88,19 @@ await copyFile(
   path.join(bundleRoot, "build-metadata.json"),
   path.join(runtimeMetadata, "build-metadata.json"),
 )
+
+const runtimeConfig = `name = "${projectName}-runtime-contract"
+main = "./worker/index.js"
+compatibility_date = "${compatibilityDate}"
+compatibility_flags = ${compatibilityFlags}
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = false
+`
+
+await writeFile(path.join(runtimeRoot, "wrangler.toml"), runtimeConfig)
 
 async function collectFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true })
@@ -97,7 +138,7 @@ for (const file of stagedFiles) {
 
 const stagedPaths = new Set(manifestFiles.map((file) => file.path))
 assert.ok(stagedPaths.has("public/tailwind.css"), "missing generated CSS")
-assert.ok(stagedPaths.has("public/_worker.js"), "missing prebuilt Worker")
+assert.ok(stagedPaths.has("worker/index.js"), "missing prebuilt Worker")
 assert.ok(
   stagedPaths.has("metadata/functions-config.json"),
   "missing generated Function route metadata",
@@ -106,13 +147,14 @@ assert.ok(
   stagedPaths.has("metadata/build-metadata.json"),
   "missing Worker build metadata",
 )
-assert.ok(stagedPaths.has("wrangler.toml"), "missing Wrangler configuration")
+assert.ok(stagedPaths.has("wrangler.toml"), "missing runtime configuration")
 
 for (const forbiddenPrefix of [
   "app/",
   "build/",
   "functions/",
   "node_modules/",
+  "scripts/",
 ]) {
   assert.equal(
     manifestFiles.some((file) => file.path.startsWith(forbiddenPrefix)),
@@ -121,10 +163,29 @@ for (const forbiddenPrefix of [
   )
 }
 
+for (const forbiddenFile of ["package.json", "yarn.lock"]) {
+  assert.equal(
+    stagedPaths.has(forbiddenFile),
+    false,
+    `runtime stage unexpectedly contains ${forbiddenFile}`,
+  )
+}
+
 const manifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   contract:
-    "Static assets and a prebuilt advanced-mode Pages Worker are sufficient for local runtime execution.",
+    "Static assets are served before the prebuilt Pages Worker, and unknown paths execute under workerd without repository source or dependencies.",
+  sourceConfiguration: {
+    projectName,
+    compatibilityDate,
+    compatibilityFlags: JSON.parse(compatibilityFlags.replaceAll("'", '"')),
+  },
+  routing: {
+    assetsDirectory: "public",
+    workerEntry: "worker/index.js",
+    assetsBinding: "ASSETS",
+    runWorkerFirst: false,
+  },
   files: manifestFiles,
   totalBytes: manifestFiles.reduce((total, file) => total + file.bytes, 0),
 }
