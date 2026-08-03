@@ -46,18 +46,19 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command                  | Purpose                                                  |
-| ------------------------ | -------------------------------------------------------- |
-| `yarn dev`               | Run Remix and Tailwind in watch mode                     |
-| `yarn build`             | Build CSS and Remix for production                       |
-| `yarn start`             | Serve the production build locally through `remix-serve` |
-| `yarn lint`              | Run ESLint                                               |
-| `yarn lint:fix`          | Auto-fix lint issues                                     |
-| `yarn typecheck`         | Run the TypeScript build check                           |
-| `yarn test:e2e`          | Run the full Playwright suite                            |
-| `yarn test:e2e:mobile`   | Run the mobile Playwright project only                   |
-| `yarn test:e2e:headed`   | Run Playwright in headed mode                            |
-| `yarn deploy:cloudflare` | Typecheck, build, and deploy to Cloudflare Pages         |
+| Command                        | Purpose                                                  |
+| ------------------------------ | -------------------------------------------------------- |
+| `yarn dev`                     | Run Remix and Tailwind in watch mode                     |
+| `yarn build`                   | Build CSS and Remix for production                       |
+| `yarn start`                   | Serve the production build locally through `remix-serve` |
+| `yarn lint`                    | Run ESLint                                               |
+| `yarn lint:fix`                | Auto-fix lint issues                                     |
+| `yarn typecheck`               | Run the TypeScript build check                           |
+| `yarn test:cloudflare:adapter` | Exercise the built Pages Function entry and SSR contract |
+| `yarn test:e2e`                | Run the full Playwright suite                            |
+| `yarn test:e2e:mobile`         | Run the mobile Playwright project only                   |
+| `yarn test:e2e:headed`         | Run Playwright in headed mode                            |
+| `yarn deploy:cloudflare`       | Typecheck, build, and deploy to Cloudflare Pages         |
 
 ## Testing
 
@@ -72,6 +73,15 @@ Run the full suite:
 ```sh
 yarn test:e2e
 ```
+
+Run the initial Pages Function adapter contract after a production build:
+
+```sh
+yarn build
+yarn test:cloudflare:adapter
+```
+
+This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior. It is the first adapter gate; issue #56 extends it with pinned Wrangler bundling and Workers-runtime execution.
 
 Run a specific spec:
 
