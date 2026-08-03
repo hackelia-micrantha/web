@@ -66,6 +66,11 @@ const manifest = JSON.parse(
   await readFile(path.join(runtimeRoot, "manifest.json"), "utf8"),
 )
 assert.equal(manifest.schemaVersion, 2)
+assert.ok(manifest.sourceConfiguration.projectName)
+assert.match(manifest.sourceConfiguration.compatibilityDate, /^\d{4}-\d{2}-\d{2}$/)
+assert.ok(
+  manifest.sourceConfiguration.compatibilityFlags.includes("nodejs_compat"),
+)
 assert.equal(manifest.routing.assetsDirectory, "public")
 assert.equal(manifest.routing.workerEntry, "worker/index.js")
 assert.equal(manifest.routing.assetsBinding, "ASSETS")
