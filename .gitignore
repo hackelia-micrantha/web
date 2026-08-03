@@ -14,6 +14,9 @@ lerna-debug.log*
 /app/tailwind.css
 /public/tailwind.css
 
+# Cloudflare build output
+/.cloudflare
+
 /cypress/screenshots
 /cypress/videos
 /postgres-data
@@ -46,7 +49,7 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
+# Compiled binary addons (https://nodejs.org/api/addons)
 build/Release
 
 # Dependency directories
@@ -97,8 +100,7 @@ dist
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and *not* Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
-# public
+# https://nextjs.org/blog/next-9-1#public
 
 # vuepress build output
 .vuepress/dist
