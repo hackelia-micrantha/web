@@ -7,7 +7,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const stage = path.join(root, ".cloudflare/runtime")
 const stagedPublic = path.join(stage, "public")
 const workerSource = path.join(root, ".cloudflare/functions/index.js")
-const workerSourceMap = path.join(root, ".cloudflare/functions/index.js.map")
 
 await Promise.all([
   access(path.join(root, "public/tailwind.css")),
@@ -21,13 +20,6 @@ await cp(path.join(root, "public"), stagedPublic, {
   recursive: true,
 })
 await copyFile(workerSource, path.join(stagedPublic, "_worker.js"))
-
-try {
-  await copyFile(workerSourceMap, path.join(stagedPublic, "index.js.map"))
-} catch (error) {
-  if (error?.code !== "ENOENT") throw error
-}
-
 await copyFile(
   path.join(root, "wrangler.toml"),
   path.join(stage, "wrangler.toml"),
@@ -36,6 +28,7 @@ await copyFile(
 const stagedEntries = (await readdir(stage)).sort()
 assert.deepEqual(stagedEntries, ["public", "wrangler.toml"])
 await access(path.join(stagedPublic, "_worker.js"))
+await assert.rejects(access(path.join(stagedPublic, "index.js.map")))
 
 for (const sourceOnlyPath of [
   "app",
