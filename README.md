@@ -46,22 +46,22 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command                           | Purpose                                                    |
-| --------------------------------- | ---------------------------------------------------------- |
-| `yarn dev`                        | Run Remix and Tailwind in watch mode                       |
-| `yarn build`                      | Build CSS and Remix for production                         |
-| `yarn cloudflare:functions:build` | Bundle the Pages Function with pinned Wrangler             |
-| `yarn start`                      | Serve the production build locally through `remix-serve`   |
-| `yarn lint`                       | Run ESLint                                                 |
-| `yarn lint:fix`                   | Auto-fix lint issues                                       |
-| `yarn typecheck`                  | Run the TypeScript build check                             |
-| `yarn test:cloudflare:adapter`    | Exercise the built Pages Function entry directly           |
-| `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                |
-| `yarn test:cloudflare:runtime`    | Exercise a clean staged artifact through workerd            |
-| `yarn test:e2e`                   | Run the full Playwright suite                              |
-| `yarn test:e2e:mobile`            | Run the mobile Playwright project only                     |
-| `yarn test:e2e:headed`            | Run Playwright in headed mode                              |
-| `yarn deploy:cloudflare`          | Validate, bundle, and deploy to Cloudflare Pages           |
+| Command                              | Purpose                                                    |
+| ------------------------------------ | ---------------------------------------------------------- |
+| `yarn dev`                           | Run Remix and Tailwind in watch mode                       |
+| `yarn build`                         | Build CSS and Remix for production                         |
+| `yarn cloudflare:functions:build`    | Bundle the Pages Function with pinned Wrangler             |
+| `yarn start`                         | Serve the production build locally through `remix-serve`   |
+| `yarn lint`                          | Run ESLint                                                 |
+| `yarn lint:fix`                      | Auto-fix lint issues                                       |
+| `yarn typecheck`                     | Run the TypeScript build check                             |
+| `yarn test:cloudflare:adapter`       | Exercise the built Pages Function entry directly           |
+| `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                   |
+| `yarn test:cloudflare:runtime`       | Exercise a clean staged artifact through workerd           |
+| `yarn test:e2e`                      | Run the full Playwright suite                              |
+| `yarn test:e2e:mobile`               | Run the mobile Playwright project only                     |
+| `yarn test:e2e:headed`               | Run Playwright in headed mode                              |
+| `yarn deploy:cloudflare`             | Validate, bundle, and deploy to Cloudflare Pages           |
 
 ## Testing
 
@@ -95,7 +95,7 @@ yarn test:cloudflare:bundle-budget
 yarn test:cloudflare:runtime
 ```
 
-The runtime contract stages only static assets, the compiled Worker as `_worker.js`, and copied Wrangler configuration. It executes that clean artifact through `wrangler pages dev` and workerd with bundling disabled. Source TSX, the unbundled server build, Functions source, package metadata, and `node_modules` are absent from the request-time staging directory.
+The runtime contract stages static assets separately from the precompiled Pages Worker, derives a Workers Static Assets configuration from the checked-in Pages compatibility settings, and executes the Worker through workerd with bundling disabled. Matching assets are served first; unknown paths fall through to the Worker for Remix SSR. Source TSX, the unbundled server build, Functions source, package metadata, and `node_modules` are absent from the request-time staging directory.
 
 The generated bundle, config, reports, and build metadata are written under the ignored `.cloudflare/` directory. Required CI uploads the Pages Function output for inspection. Local workerd readiness is diagnostic only and is not treated as Cloudflare's production startup measurement.
 
@@ -178,7 +178,6 @@ make run
 ```text
 app/          Remix routes, components, services, and utilities
 config/       Enforced runtime and bundle policy
-
 docs/         Architecture and operational decisions
 e2e/          Playwright specs and visual baselines
 public/       Static assets and browser build output
