@@ -21,7 +21,7 @@ const cloudflareRoot = path.join(repositoryRoot, ".cloudflare")
 const bundleRoot = path.join(cloudflareRoot, "functions")
 const runtimeRoot = path.join(cloudflareRoot, "runtime")
 const runtimeAssets = path.join(runtimeRoot, "public")
-const runtimeWorker = path.join(runtimeRoot, "worker")
+const runtimeMetadata = path.join(runtimeRoot, "metadata")
 
 const requiredInputs = [
   path.join(repositoryRoot, "public"),
@@ -40,7 +40,7 @@ for (const input of requiredInputs) {
 }
 
 await rm(runtimeRoot, { recursive: true, force: true })
-await mkdir(runtimeWorker, { recursive: true })
+await mkdir(runtimeMetadata, { recursive: true })
 await cp(path.join(repositoryRoot, "public"), runtimeAssets, {
   recursive: true,
 })
@@ -50,15 +50,15 @@ await copyFile(
 )
 await copyFile(
   path.join(bundleRoot, "index.js"),
-  path.join(runtimeWorker, "index.js"),
+  path.join(runtimeAssets, "_worker.js"),
 )
 await copyFile(
   path.join(bundleRoot, "config.json"),
-  path.join(runtimeWorker, "config.json"),
+  path.join(runtimeMetadata, "functions-config.json"),
 )
 await copyFile(
   path.join(bundleRoot, "build-metadata.json"),
-  path.join(runtimeWorker, "build-metadata.json"),
+  path.join(runtimeMetadata, "build-metadata.json"),
 )
 
 async function collectFiles(directory) {
@@ -97,10 +97,13 @@ for (const file of stagedFiles) {
 
 const stagedPaths = new Set(manifestFiles.map((file) => file.path))
 assert.ok(stagedPaths.has("public/tailwind.css"), "missing generated CSS")
-assert.ok(stagedPaths.has("worker/index.js"), "missing bundled Worker")
-assert.ok(stagedPaths.has("worker/config.json"), "missing Worker route config")
+assert.ok(stagedPaths.has("public/_worker.js"), "missing prebuilt Worker")
 assert.ok(
-  stagedPaths.has("worker/build-metadata.json"),
+  stagedPaths.has("metadata/functions-config.json"),
+  "missing generated Function route metadata",
+)
+assert.ok(
+  stagedPaths.has("metadata/build-metadata.json"),
   "missing Worker build metadata",
 )
 assert.ok(stagedPaths.has("wrangler.toml"), "missing Wrangler configuration")
@@ -121,7 +124,7 @@ for (const forbiddenPrefix of [
 const manifest = {
   schemaVersion: 1,
   contract:
-    "Static assets and a prebuilt Pages Worker are sufficient for local runtime execution.",
+    "Static assets and a prebuilt advanced-mode Pages Worker are sufficient for local runtime execution.",
   files: manifestFiles,
   totalBytes: manifestFiles.reduce((total, file) => total + file.bytes, 0),
 }
