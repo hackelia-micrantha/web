@@ -7,8 +7,12 @@ const { onRequest } = await import("../functions/[[path]].js")
 const origin = "https://micrantha.example"
 const analyticsId = "adapter-contract-test"
 
-async function request(pathname, { userAgent = "adapter-contract" } = {}) {
+async function request(
+  pathname,
+  { userAgent = "adapter-contract", method = "GET" } = {},
+) {
   const request = new Request(new URL(pathname, origin), {
+    method,
     headers: {
       "User-Agent": userAgent,
     },
@@ -77,6 +81,10 @@ assert.match(home.body, /id="content"/)
 assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body)
 
+const contactRedirect = await read("/contact")
+assert.equal(contactRedirect.response.status, 301)
+assert.equal(contactRedirect.response.headers.get("location"), "/services")
+
 const article = await read("/blog/ai-pipelines-need-control-boundaries")
 assert.equal(article.response.status, 200)
 assert.match(article.body, /AI Pipelines Need Control Boundaries/)
@@ -92,6 +100,13 @@ const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
 assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
 assertDocumentHeaders(botArticle.response, botArticle.body)
+
+const methodNotAllowed = await read("/services", { method: "POST" })
+assert.equal(methodNotAllowed.response.status, 405)
+assert.match(methodNotAllowed.body, /405|Method Not Allowed/i)
+assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
+  requireNonce: false,
+})
 
 const missing = await read("/this-route-does-not-exist")
 assert.equal(missing.response.status, 404)
