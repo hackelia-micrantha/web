@@ -20,12 +20,13 @@
     "lint:fix": "eslint --fix .",
     "start": "remix-serve build/index.js",
     "test:cloudflare:adapter": "node scripts/test-cloudflare-adapter.js",
+    "test:cloudflare:bundle-budget": "node scripts/check-cloudflare-bundle-budget.js",
     "test:cloudflare:runtime": "node scripts/stage-cloudflare-runtime.js && node scripts/test-cloudflare-runtime.js",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:mobile": "playwright test --project=mobile-chromium",
     "typecheck": "tsc -b",
-    "deploy:cloudflare": "yarn typecheck && yarn build && yarn cloudflare:functions:build && yarn test:cloudflare:adapter && yarn test:cloudflare:runtime && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
+    "deploy:cloudflare": "yarn typecheck && yarn build && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:cloudflare:adapter && yarn test:cloudflare:runtime && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",
