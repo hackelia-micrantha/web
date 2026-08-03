@@ -44,10 +44,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data) {
-    return [
-      { title: "Blog Series" },
-      { name: "robots", content: "noindex" },
-    ]
+    return [{ title: "Blog Series" }, { name: "robots", content: "noindex" }]
   }
 
   return buildPageMeta({

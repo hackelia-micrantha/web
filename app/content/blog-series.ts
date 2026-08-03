@@ -69,7 +69,9 @@ export function getSeriesNavigation(post: BlogPost) {
     return null
   }
 
-  const index = series.posts.findIndex((seriesPost) => seriesPost.slug === post.slug)
+  const index = series.posts.findIndex(
+    (seriesPost) => seriesPost.slug === post.slug,
+  )
 
   if (index === -1) {
     return null

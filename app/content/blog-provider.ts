@@ -7,10 +7,7 @@ export interface BlogContentProvider {
   getPostBySlug(slug: string): BlogPost | null
 }
 
-const tsxBlogPosts: BlogPost[] = [
-  ...governanceNativeBlogPosts,
-  ...blogPosts,
-]
+const tsxBlogPosts: BlogPost[] = [...governanceNativeBlogPosts, ...blogPosts]
 
 export const tsxBlogProvider: BlogContentProvider = {
   getPosts() {

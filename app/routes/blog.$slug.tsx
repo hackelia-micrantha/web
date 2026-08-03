@@ -2,13 +2,8 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { PageTitle } from "~/components"
-import {
-  formatBlogDate,
-} from "~/content/blog"
-import {
-  getBlogPostBySlug,
-  getRelatedPosts,
-} from "~/content/blog-provider"
+import { formatBlogDate } from "~/content/blog"
+import { getBlogPostBySlug, getRelatedPosts } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
 import { buildArticleMeta, buildArticleStructuredData } from "~/utils/seo"
 

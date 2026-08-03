@@ -1,8 +1,8 @@
 type MermaidDiagramProps = {
-  title: string;
-  caption?: string;
-  chart: string;
-};
+  title: string
+  caption?: string
+  chart: string
+}
 
 export function MermaidDiagram({ title, caption, chart }: MermaidDiagramProps) {
   return (
@@ -21,5 +21,5 @@ export function MermaidDiagram({ title, caption, chart }: MermaidDiagramProps) {
         {chart}
       </pre>
     </figure>
-  );
+  )
 }

@@ -639,7 +639,9 @@ export function getSeriesPosts(post: BlogPost) {
 
 export function getSeriesNavigation(post: BlogPost) {
   const seriesPosts = getSeriesPosts(post)
-  const index = seriesPosts.findIndex((candidate) => candidate.slug === post.slug)
+  const index = seriesPosts.findIndex(
+    (candidate) => candidate.slug === post.slug,
+  )
 
   if (index === -1 || !post.series) {
     return null
