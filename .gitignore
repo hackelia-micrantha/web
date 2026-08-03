@@ -14,6 +14,9 @@ lerna-debug.log*
 /app/tailwind.css
 /public/tailwind.css
 
+# Cloudflare build output
+/.cloudflare
+
 /cypress/screenshots
 /cypress/videos
 /postgres-data
@@ -37,7 +40,7 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-tasks)
 .grunt
 
 # Bower dependency directory (https://bower.io/)
