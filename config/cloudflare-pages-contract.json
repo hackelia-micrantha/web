@@ -1,0 +1,14 @@
+{
+  "projectName": "micrantha-web",
+  "pagesBuildOutputDirectory": "./public",
+  "compatibilityDate": "2026-03-21",
+  "compatibilityFlags": ["nodejs_compat"],
+  "uploadSourceMaps": true,
+  "bindings": [
+    {
+      "name": "MICRANTHA_ANALYTICS_ID",
+      "required": false,
+      "sensitive": false
+    }
+  ]
+}
