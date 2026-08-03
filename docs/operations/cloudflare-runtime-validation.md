@@ -19,7 +19,6 @@ The staging command creates `.cloudflare/runtime/` with only:
   wrangler.toml
   public/
     _worker.js
-    index.js.map
     build/
     icon/
     tailwind.css
@@ -27,6 +26,8 @@ The staging command creates `.cloudflare/runtime/` with only:
 ```
 
 The compiled Worker from `.cloudflare/functions/index.js` is copied to `public/_worker.js`. Wrangler treats this as Pages advanced mode. The generated Worker already contains the Pages Functions route dispatcher and forwards unmatched requests to the `ASSETS` binding.
+
+Worker source maps remain under `.cloudflare/functions/` for CI inspection and the documented Cloudflare upload path. They are not copied into `public/` or exposed as staged static assets.
 
 The staged runtime intentionally excludes:
 
