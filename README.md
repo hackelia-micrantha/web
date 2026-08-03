@@ -46,20 +46,22 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command                           | Purpose                                                  |
-| --------------------------------- | -------------------------------------------------------- |
-| `yarn dev`                        | Run Remix and Tailwind in watch mode                     |
-| `yarn build`                      | Build CSS and Remix for production                       |
-| `yarn cloudflare:functions:build` | Bundle the Pages Function with pinned Wrangler           |
-| `yarn start`                      | Serve the production build locally through `remix-serve` |
-| `yarn lint`                       | Run ESLint                                               |
-| `yarn lint:fix`                   | Auto-fix lint issues                                     |
-| `yarn typecheck`                  | Run the TypeScript build check                           |
-| `yarn test:cloudflare:adapter`    | Exercise the built Pages Function entry and SSR contract |
-| `yarn test:e2e`                   | Run the full Playwright suite                            |
-| `yarn test:e2e:mobile`            | Run the mobile Playwright project only                   |
-| `yarn test:e2e:headed`            | Run Playwright in headed mode                            |
-| `yarn deploy:cloudflare`          | Validate, bundle, and deploy to Cloudflare Pages         |
+| Command                           | Purpose                                                        |
+| --------------------------------- | -------------------------------------------------------------- |
+| `yarn dev`                        | Run Remix and Tailwind in watch mode                           |
+| `yarn build`                      | Build CSS and Remix for production                             |
+| `yarn cloudflare:functions:build` | Bundle the Pages Function with pinned Wrangler                 |
+| `yarn cloudflare:runtime:stage`   | Stage only the deployable Pages assets and prebuilt Worker     |
+| `yarn start`                      | Serve the production build locally through `remix-serve`       |
+| `yarn lint`                       | Run ESLint                                                     |
+| `yarn lint:fix`                   | Auto-fix lint issues                                           |
+| `yarn typecheck`                  | Run the TypeScript build check                                 |
+| `yarn test:cloudflare:adapter`    | Exercise the built Pages Function entry directly               |
+| `yarn test:cloudflare:runtime`    | Exercise the staged Worker through the local Pages runtime     |
+| `yarn test:e2e`                   | Run the full Playwright suite                                  |
+| `yarn test:e2e:mobile`            | Run the mobile Playwright project only                         |
+| `yarn test:e2e:headed`            | Run Playwright in headed mode                                  |
+| `yarn deploy:cloudflare`          | Validate, bundle, runtime-test, and deploy to Cloudflare Pages |
 
 ## Testing
 
@@ -75,23 +77,33 @@ Run the full suite:
 yarn test:e2e
 ```
 
-Run the initial Pages Function adapter contract after a production build:
+Run the direct Pages Function adapter contract after a production build:
 
 ```sh
 yarn build
 yarn test:cloudflare:adapter
 ```
 
-This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior.
+This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior. It is a fast adapter-level diagnostic, not a Workers-runtime substitute.
 
-Bundle the Pages Function using the repository-pinned Wrangler version:
+Bundle the Pages Function using the repository-pinned Wrangler version, then run the authoritative local runtime contract:
 
 ```sh
 yarn build
 yarn cloudflare:functions:build
+yarn test:cloudflare:runtime
 ```
 
-The generated bundle, config, and build metadata are written under the ignored `.cloudflare/functions/` directory. Required CI uploads that output for inspection. Issue #56 extends this bundle gate with a Workers-runtime HTTP harness and an enforced bundle-size budget.
+The runtime test creates an ignored `.cloudflare/runtime/` stage containing only:
+
+- `public/` static assets and browser output;
+- the prebuilt Pages Worker;
+- generated Worker route and build metadata;
+- `wrangler.toml`.
+
+It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler starts that prebuilt Worker with `pages dev --script-path ... --no-bundle`, then the contract verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+
+The generated function bundle, config, build metadata, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Issue #56 retains the remaining plan-aware bundle budget and explicit redirect/controlled-error coverage.
 
 Run a specific spec:
 
@@ -102,8 +114,8 @@ yarn test:e2e e2e/visual.spec.ts
 Notes:
 
 - Playwright uses `http://127.0.0.1:3000` by default.
-- The current browser suite starts the app with `yarn build && PORT=3000 yarn start`.
-- This validates the production Remix build through `remix-serve`; it does not by itself prove Cloudflare Pages Functions compatibility.
+- The browser suite starts the app with `yarn build && PORT=3000 yarn start`.
+- This validates application behavior through `remix-serve`; the separate Cloudflare runtime contract proves the prebuilt Pages Worker and static artifact.
 - Desktop and mobile Chromium projects are configured.
 - The suite includes automated axe accessibility scans for key public routes.
 - On this machine, `/usr/bin/chromium` is used automatically when Playwright-managed browsers are unavailable.
@@ -121,7 +133,7 @@ yarn test:e2e e2e/visual.spec.ts --update-snapshots
 
 ## Deployment
 
-Cloudflare Pages Functions is the authoritative production runtime. The request adapter in `functions/[[path]].js` consumes the generated Remix server build, while `public/` supplies static assets and browser output.
+Cloudflare Pages Functions is the authoritative production runtime. The request adapter in `functions/[[path]].js` consumes the generated Remix server build during bundling, while `public/` supplies static assets and browser output.
 
 See [Cloudflare Pages SSR Architecture](docs/architecture/cloudflare-pages-ssr.md) for the production topology, compatibility boundary, artifact contract, and role of local Node and Docker paths.
 
@@ -129,7 +141,7 @@ Checked-in config:
 
 - `wrangler.toml`
 - `functions/[[path]].js`
-- `package.json` deploy and bundle scripts
+- `package.json` deploy, bundle, and runtime-test scripts
 - lockfile-pinned Wrangler dependency
 
 Expected environment variables:
@@ -144,7 +156,7 @@ Deploy manually:
 yarn deploy:cloudflare
 ```
 
-The deployment command runs typechecking, the application build, and the Pages Function bundle gate before invoking the pinned Wrangler binary.
+The deployment command runs typechecking, the application build, Pages Function bundling, the direct adapter contract, and the staged Pages runtime contract before invoking the pinned Wrangler binary.
 
 ## Docker
 
@@ -173,6 +185,7 @@ e2e/          Playwright specs and visual baselines
 public/       Static assets and browser build output
 build/        Remix server build produced by yarn build
 functions/    Cloudflare Pages Functions request adapter
+scripts/      Build, staging, and runtime-contract automation
 ```
 
 ## Development Notes
