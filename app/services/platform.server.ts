@@ -1,11 +1,14 @@
 import type { AppLoadContext } from "@remix-run/node"
 
+type RuntimeEnvironment = {
+  MICRANTHA_ANALYTICS_ID?: string
+  ANALYTICS_ID?: string
+}
+
 type CloudflareLoadContext = AppLoadContext & {
+  env?: RuntimeEnvironment
   cloudflare?: {
-    env?: {
-      MICRANTHA_ANALYTICS_ID?: string
-      ANALYTICS_ID?: string
-    }
+    env?: RuntimeEnvironment
   }
 }
 
@@ -25,6 +28,8 @@ export function resolveRuntimePlatform(
       ? (process.env.MICRANTHA_ANALYTICS_ID ?? process.env.ANALYTICS_ID ?? null)
       : null
   const analyticsId =
+    cloudflareContext.env?.MICRANTHA_ANALYTICS_ID ??
+    cloudflareContext.env?.ANALYTICS_ID ??
     cloudflareContext.cloudflare?.env?.MICRANTHA_ANALYTICS_ID ??
     cloudflareContext.cloudflare?.env?.ANALYTICS_ID ??
     nodeAnalyticsId ??
