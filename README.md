@@ -46,19 +46,20 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command                        | Purpose                                                  |
-| ------------------------------ | -------------------------------------------------------- |
-| `yarn dev`                     | Run Remix and Tailwind in watch mode                     |
-| `yarn build`                   | Build CSS and Remix for production                       |
-| `yarn start`                   | Serve the production build locally through `remix-serve` |
-| `yarn lint`                    | Run ESLint                                               |
-| `yarn lint:fix`                | Auto-fix lint issues                                     |
-| `yarn typecheck`               | Run the TypeScript build check                           |
-| `yarn test:cloudflare:adapter` | Exercise the built Pages Function entry and SSR contract |
-| `yarn test:e2e`                | Run the full Playwright suite                            |
-| `yarn test:e2e:mobile`         | Run the mobile Playwright project only                   |
-| `yarn test:e2e:headed`         | Run Playwright in headed mode                            |
-| `yarn deploy:cloudflare`       | Typecheck, build, and deploy to Cloudflare Pages         |
+| Command                           | Purpose                                                  |
+| --------------------------------- | -------------------------------------------------------- |
+| `yarn dev`                        | Run Remix and Tailwind in watch mode                     |
+| `yarn build`                      | Build CSS and Remix for production                       |
+| `yarn cloudflare:functions:build` | Bundle the Pages Function with pinned Wrangler           |
+| `yarn start`                      | Serve the production build locally through `remix-serve` |
+| `yarn lint`                       | Run ESLint                                               |
+| `yarn lint:fix`                   | Auto-fix lint issues                                     |
+| `yarn typecheck`                  | Run the TypeScript build check                           |
+| `yarn test:cloudflare:adapter`    | Exercise the built Pages Function entry and SSR contract |
+| `yarn test:e2e`                   | Run the full Playwright suite                            |
+| `yarn test:e2e:mobile`            | Run the mobile Playwright project only                   |
+| `yarn test:e2e:headed`            | Run Playwright in headed mode                            |
+| `yarn deploy:cloudflare`          | Validate, bundle, and deploy to Cloudflare Pages         |
 
 ## Testing
 
@@ -81,7 +82,16 @@ yarn build
 yarn test:cloudflare:adapter
 ```
 
-This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior. It is the first adapter gate; issue #56 extends it with pinned Wrangler bundling and Workers-runtime execution.
+This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior.
+
+Bundle the actual Pages Function with the repository-pinned Wrangler version:
+
+```sh
+yarn build
+yarn cloudflare:functions:build
+```
+
+The bundle and Wrangler build metadata are written under the ignored `.cloudflare/functions/` directory. Required CI uploads this output for inspection. Issue #56 extends the current bundle gate with a Workers-runtime HTTP harness and an enforced bundle-size budget.
 
 Run a specific spec:
 
@@ -119,7 +129,8 @@ Checked-in config:
 
 - `wrangler.toml`
 - `functions/[[path]].js`
-- `package.json` deploy script
+- `package.json` deploy and bundle scripts
+- lockfile-pinned Wrangler dependency
 
 Expected environment variables:
 
@@ -133,7 +144,7 @@ Deploy manually:
 yarn deploy:cloudflare
 ```
 
-The deployment command will be updated under issue #56 to use a repository-pinned Wrangler version and to validate the bundled Pages Function in CI.
+The deployment command runs typechecking, the application build, and the Pages Function bundle gate before invoking the pinned Wrangler binary.
 
 ## Docker
 
