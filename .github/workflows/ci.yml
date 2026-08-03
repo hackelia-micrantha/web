@@ -25,8 +25,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -38,20 +36,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Check changed-file formatting
+      - name: Check repository formatting
         id: formatting
-        env:
-          FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-          FORMAT_HEAD_SHA: ${{ github.sha }}
-        run: yarn format:check:changed
+        run: yarn format:check
 
       - name: Generate formatting patch
         if: failure() && steps.formatting.outcome == 'failure'
-        env:
-          FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-          FORMAT_HEAD_SHA: ${{ github.sha }}
         run: |
-          bash scripts/check-changed-format.sh --write
+          yarn prettier --write .
           git diff -- . > formatting.patch
 
       - name: Upload formatting patch
@@ -63,11 +55,8 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - name: Lint changed files
-        env:
-          LINT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-          LINT_HEAD_SHA: ${{ github.sha }}
-        run: bash scripts/check-changed-lint.sh
+      - name: Lint repository
+        run: yarn lint
 
       - name: Typecheck
         run: yarn typecheck
