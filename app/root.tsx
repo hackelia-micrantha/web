@@ -184,6 +184,7 @@ export default function App() {
           <Outlet />
         </main>
         <Footer />
+        <script nonce={state?.nonce} src="/navigation.js" defer />
         <ScrollRestoration nonce={state?.nonce} />
         <Scripts nonce={state?.nonce} />
         <Analytics id={state?.analyticsId} nonce={state?.nonce} />
