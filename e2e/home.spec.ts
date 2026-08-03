@@ -12,9 +12,7 @@ async function clickNavigationLink(page: Page, name: keyof typeof navTargets) {
   const visibleLink = navigation.locator(`a[href="${target}"]:visible`)
 
   if ((await visibleLink.count()) === 0) {
-    await navigation
-      .getByRole("button", { name: /navigation menu/i })
-      .click()
+    await navigation.getByRole("button", { name: /navigation menu/i }).click()
   }
 
   await visibleLink.click()
