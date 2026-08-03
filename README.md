@@ -46,22 +46,23 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command                           | Purpose                                                        |
-| --------------------------------- | -------------------------------------------------------------- |
-| `yarn dev`                        | Run Remix and Tailwind in watch mode                           |
-| `yarn build`                      | Build CSS and Remix for production                             |
-| `yarn cloudflare:functions:build` | Bundle the Pages Function with pinned Wrangler                 |
-| `yarn cloudflare:runtime:stage`   | Stage only the deployable Pages assets and prebuilt Worker     |
-| `yarn start`                      | Serve the production build locally through `remix-serve`       |
-| `yarn lint`                       | Run ESLint                                                     |
-| `yarn lint:fix`                   | Auto-fix lint issues                                           |
-| `yarn typecheck`                  | Run the TypeScript build check                                 |
-| `yarn test:cloudflare:adapter`    | Exercise the built Pages Function entry directly               |
-| `yarn test:cloudflare:runtime`    | Exercise the staged Worker through the local Pages runtime     |
-| `yarn test:e2e`                   | Run the full Playwright suite                                  |
-| `yarn test:e2e:mobile`            | Run the mobile Playwright project only                         |
-| `yarn test:e2e:headed`            | Run Playwright in headed mode                                  |
-| `yarn deploy:cloudflare`          | Validate, bundle, runtime-test, and deploy to Cloudflare Pages |
+| Command                              | Purpose                                                        |
+| ------------------------------------ | -------------------------------------------------------------- |
+| `yarn dev`                           | Run Remix and Tailwind in watch mode                           |
+| `yarn build`                         | Build CSS and Remix for production                             |
+| `yarn cloudflare:functions:build`    | Bundle the Pages Function with pinned Wrangler                 |
+| `yarn cloudflare:runtime:stage`      | Stage static assets, the prebuilt Worker, and runtime metadata |
+| `yarn start`                         | Serve the production build locally through `remix-serve`       |
+| `yarn lint`                          | Run ESLint                                                     |
+| `yarn lint:fix`                      | Auto-fix lint issues                                           |
+| `yarn typecheck`                     | Run the TypeScript build check                                 |
+| `yarn test:cloudflare:adapter`       | Exercise the built Pages Function entry directly               |
+| `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                       |
+| `yarn test:cloudflare:runtime`       | Exercise the clean staged artifact through workerd             |
+| `yarn test:e2e`                      | Run the full Playwright suite                                  |
+| `yarn test:e2e:mobile`               | Run the mobile Playwright project only                         |
+| `yarn test:e2e:headed`               | Run Playwright in headed mode                                  |
+| `yarn deploy:cloudflare`             | Validate, bundle, runtime-test, and deploy to Cloudflare Pages |
 
 ## Testing
 
@@ -86,24 +87,29 @@ yarn test:cloudflare:adapter
 
 This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior. It is a fast adapter-level diagnostic, not a Workers-runtime substitute.
 
-Bundle the Pages Function using the repository-pinned Wrangler version, then run the authoritative local runtime contract:
+Bundle the Pages Function, enforce its size budgets, and run the authoritative local runtime contract:
 
 ```sh
 yarn build
 yarn cloudflare:functions:build
+yarn test:cloudflare:bundle-budget
 yarn test:cloudflare:runtime
 ```
 
 The runtime test creates an ignored `.cloudflare/runtime/` stage containing only:
 
 - `public/` static assets and browser output;
-- the generated Pages Worker staged as `public/_worker.js`;
+- the generated Pages Worker under `worker/index.js`;
 - generated Worker route and build metadata;
-- `wrangler.toml`.
+- derived runtime configuration that preserves the checked-in compatibility date and flags.
 
-It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker’s `nodejs_compat` imports, and starts workerd with `pages dev public`. The contract then verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+The local harness uses Workers Static Assets with asset-first routing. Matching files are served before the Worker; unknown paths fall through to the exact precompiled Pages Functions Worker for Remix SSR. This preserves the production Pages boundary more faithfully than staging the catch-all Worker as advanced-mode `_worker.js`, where the Worker would control every request.
 
-The generated function bundle, config, build metadata, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Issue #56 retains the remaining plan-aware bundle budget and explicit redirect/controlled-error coverage.
+The stage deliberately excludes `app/`, `build/`, `functions/`, `scripts/`, `node_modules/`, `package.json`, and `yarn.lock`. The contract verifies SSR, nested and bot routes, canonical metadata and JSON-LD, 404 behavior, CSP nonce pairing, cache and security headers, generated CSS, the web manifest, and a generated browser bundle.
+
+The generated function bundle, budget report, config, build metadata, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Local workerd readiness is diagnostic only and is not treated as Cloudflare's production startup measurement.
+
+See [Cloudflare Runtime Validation](docs/operations/cloudflare-runtime-validation.md) for the artifact contract, routing model, bundle budgets, and remaining deployment-level checks.
 
 Run a specific spec:
 
@@ -115,7 +121,7 @@ Notes:
 
 - Playwright uses `http://127.0.0.1:3000` by default.
 - The browser suite starts the app with `yarn build && PORT=3000 yarn start`.
-- This validates application behavior through `remix-serve`; the separate Cloudflare runtime contract proves the staged Pages Worker and static artifact under workerd.
+- This validates application behavior through `remix-serve`; the separate Cloudflare runtime contract proves the source-isolated Worker and static artifact under workerd.
 - Desktop and mobile Chromium projects are configured.
 - The suite includes automated axe accessibility scans for key public routes.
 - On this machine, `/usr/bin/chromium` is used automatically when Playwright-managed browsers are unavailable.
@@ -141,7 +147,8 @@ Checked-in config:
 
 - `wrangler.toml`
 - `functions/[[path]].js`
-- `package.json` deploy, bundle, and runtime-test scripts
+- `package.json` deploy, bundle, budget, and runtime-test scripts
+- `config/cloudflare-bundle-budget.json`
 - lockfile-pinned Wrangler dependency
 
 Expected environment variables:
@@ -156,7 +163,7 @@ Deploy manually:
 yarn deploy:cloudflare
 ```
 
-The deployment command runs typechecking, the application build, Pages Function bundling, the direct adapter contract, and the staged Pages runtime contract before invoking the pinned Wrangler binary.
+The deployment command runs typechecking, the application build, Pages Function bundling, bundle-budget enforcement, the direct adapter contract, and the staged workerd runtime contract before invoking the pinned Wrangler binary.
 
 ## Docker
 
@@ -180,16 +187,17 @@ make run
 
 ```text
 app/          Remix routes, components, services, and utilities
+config/       Enforced runtime and bundle policy
 docs/         Architecture and operational decisions
 e2e/          Playwright specs and visual baselines
 public/       Static assets and browser build output
 build/        Remix server build produced by yarn build
 functions/    Cloudflare Pages Functions request adapter
-scripts/      Build, staging, and runtime-contract automation
+scripts/      Build, staging, budget, and runtime-contract automation
 ```
 
 ## Development Notes
 
 - Tailwind is compiled from `app/styles/app.css` into `public/tailwind.css`.
-- The philosophy triangle diagram is now served as SVG for sharper rendering.
+- The philosophy triangle diagram is served as SVG for sharper rendering.
 - This repository is mirrored from GitLab.
