@@ -26,7 +26,7 @@ for (const requiredPath of [
   wranglerExecutable,
   path.join(runtimeRoot, "manifest.json"),
   path.join(runtimeRoot, "public", "tailwind.css"),
-  path.join(runtimeRoot, "worker", "index.js"),
+  path.join(runtimeRoot, "public", "_worker.js"),
   path.join(runtimeRoot, "wrangler.toml"),
 ]) {
   await stat(requiredPath).catch(() => {
@@ -66,8 +66,6 @@ const runtime = spawn(
     "pages",
     "dev",
     "public",
-    "--script-path",
-    "worker/index.js",
     "--no-bundle",
     "--ip",
     host,
