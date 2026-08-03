@@ -40,13 +40,14 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
 
   await page.goto("/")
   const navigation = page.getByRole("navigation", { name: "Primary" })
-  const trigger = navigation.getByRole("button", {
-    name: /navigation menu/i,
-  })
+  const disclosure = navigation.locator("details[data-mobile-navigation]")
+  const trigger = disclosure.locator("summary")
 
+  await expect(trigger).toHaveAccessibleName("Navigation menu")
   await expect(trigger).toHaveAttribute("aria-expanded", "false")
   await trigger.focus()
   await page.keyboard.press("Enter")
+  await expect(disclosure).toHaveAttribute("open", "")
   await expect(trigger).toHaveAttribute("aria-expanded", "true")
 
   const solutionsLink = navigation.getByRole("link", {
@@ -56,17 +57,28 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   await expect(solutionsLink).toBeVisible()
   await solutionsLink.focus()
   await page.keyboard.press("Escape")
+  await expect(disclosure).not.toHaveAttribute("open", "")
   await expect(trigger).toHaveAttribute("aria-expanded", "false")
   await expect(trigger).toBeFocused()
 
   await trigger.click()
   await solutionsLink.click()
   await expect(page).toHaveURL(/\/solutions$/)
-  await expect(trigger).toHaveAttribute("aria-expanded", "false")
 
-  await trigger.click()
+  const updatedNavigation = page.getByRole("navigation", { name: "Primary" })
+  const updatedDisclosure = updatedNavigation.locator(
+    "details[data-mobile-navigation]",
+  )
+  const updatedTrigger = updatedDisclosure.locator("summary")
+
+  await expect(updatedDisclosure).not.toHaveAttribute("open", "")
+  await expect(updatedTrigger).toHaveAttribute("aria-expanded", "false")
+  await updatedTrigger.click()
   await expect(
-    navigation.getByRole("link", { name: "Solutions", exact: true }),
+    updatedNavigation.getByRole("link", {
+      name: "Solutions",
+      exact: true,
+    }),
   ).toHaveAttribute("aria-current", "page")
 })
 
@@ -82,9 +94,11 @@ test("mobile menu remains inside a 320px viewport", async ({
   await page.goto("/")
 
   const navigation = page.getByRole("navigation", { name: "Primary" })
-  await navigation.getByRole("button", { name: /navigation menu/i }).click()
+  const disclosure = navigation.locator("details[data-mobile-navigation]")
+  await disclosure.locator("summary").click()
 
   const panel = page.locator("#mobile-navigation")
+  await expect(disclosure).toHaveAttribute("open", "")
   await expect(panel).toBeVisible()
   const bounds = await panel.boundingBox()
 
