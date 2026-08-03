@@ -51,14 +51,14 @@ Open `http://localhost:3000`.
 | `yarn dev`                           | Run Remix and Tailwind in watch mode                           |
 | `yarn build`                         | Build CSS and Remix for production                             |
 | `yarn cloudflare:functions:build`    | Bundle the Pages Function with pinned Wrangler                 |
-| `yarn cloudflare:runtime:stage`      | Stage only the deployable Pages assets and prebuilt Worker     |
+| `yarn cloudflare:runtime:stage`      | Stage static assets, the prebuilt Worker, and runtime metadata |
 | `yarn start`                         | Serve the production build locally through `remix-serve`       |
 | `yarn lint`                          | Run ESLint                                                     |
 | `yarn lint:fix`                      | Auto-fix lint issues                                           |
 | `yarn typecheck`                     | Run the TypeScript build check                                 |
 | `yarn test:cloudflare:adapter`       | Exercise the built Pages Function entry directly               |
 | `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                       |
-| `yarn test:cloudflare:runtime`       | Exercise the staged Worker through the local Pages runtime     |
+| `yarn test:cloudflare:runtime`       | Exercise the clean staged artifact through workerd             |
 | `yarn test:e2e`                      | Run the full Playwright suite                                  |
 | `yarn test:e2e:mobile`               | Run the mobile Playwright project only                         |
 | `yarn test:e2e:headed`               | Run Playwright in headed mode                                  |
@@ -99,15 +99,19 @@ yarn test:cloudflare:runtime
 The runtime test creates an ignored `.cloudflare/runtime/` stage containing only:
 
 - `public/` static assets and browser output;
-- the generated Pages Worker staged as `public/_worker.js`;
+- the generated Pages Worker under `worker/index.js`;
 - generated Worker route and build metadata;
-- `wrangler.toml`.
+- derived runtime configuration preserving the checked-in compatibility date and flags.
 
-It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker’s `nodejs_compat` imports, and starts workerd with `pages dev public`. The contract then verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+The local harness uses Workers Static Assets with asset-first routing. Matching files are served before the Worker; unknown paths fall through to the exact precompiled Pages Functions Worker for Remix SSR. This preserves the Pages request boundary more faithfully than staging the catch-all generated Worker as advanced-mode `_worker.js`, where the Worker would control every request.
+
+It deliberately excludes `app/`, `build/`, `functions/`, `scripts/`, `node_modules/`, `package.json`, and `yarn.lock` from the staged runtime payload. The contract verifies SSR, nested and bot routes, canonical metadata and Article JSON-LD, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, the web manifest, and a generated browser bundle.
 
 `config/cloudflare-bundle-budget.json` records the current raw and gzip baselines, selected platform envelope, and enforced repository budgets. The budget command writes `.cloudflare/functions/bundle-budget.json` with actual sizes and baseline deltas; required CI uploads it with the generated Function bundle.
 
 The generated function bundle, config, build metadata, budget report, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Required jobs use clean frozen installs instead of setup-node’s Yarn cache because the Wrangler dependency graph produced approximately 1.9 GB cache archives; the lockfile remains the reproducibility control.
+
+See [Cloudflare Runtime Validation](docs/operations/cloudflare-runtime-validation.md) for the routing model, artifact boundary, and remaining deployment-level checks.
 
 Issue #56 retains explicit redirect and controlled-error coverage, dashboard/configuration parity, production startup measurement, and deeper CDN/cache validation.
 
@@ -199,5 +203,5 @@ scripts/      Build, staging, and runtime-contract automation
 ## Development Notes
 
 - Tailwind is compiled from `app/styles/app.css` into `public/tailwind.css`.
-- The philosophy triangle diagram is now served as SVG for sharper rendering.
+- The philosophy triangle diagram is served as SVG for sharper rendering.
 - This repository is mirrored from GitLab.
