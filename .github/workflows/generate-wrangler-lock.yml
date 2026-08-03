@@ -1,0 +1,37 @@
+name: Generate Wrangler Lockfile
+
+on:
+  push:
+    branches:
+      - agent/cloudflare-pages-wrangler-gate
+
+permissions:
+  contents: read
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Resolve pinned dependencies
+        run: yarn install --non-interactive
+
+      - name: Verify Wrangler version
+        run: yarn wrangler --version
+
+      - name: Upload generated lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrangler-yarn-lock-${{ github.run_id }}
+          path: yarn.lock
+          if-no-files-found: error
+          retention-days: 1
