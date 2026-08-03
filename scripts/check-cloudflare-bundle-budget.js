@@ -18,7 +18,10 @@ const compressedBytes = gzipSync(bundle, { level: 9 }).byteLength
 const uncompressedBytes = bundle.byteLength
 
 function assertPositiveInteger(value, label) {
-  assert.ok(Number.isInteger(value) && value > 0, `${label} must be a positive integer`)
+  assert.ok(
+    Number.isInteger(value) && value > 0,
+    `${label} must be a positive integer`,
+  )
 }
 
 for (const [label, value] of [
