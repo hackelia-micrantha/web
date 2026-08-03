@@ -91,12 +91,15 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
     "Cache-Control": cacheControl,
   }
 
-  if (!isDev && nonce) {
-    headers["Content-Security-Policy"] = buildContentSecurityPolicy(
-      nonce,
-      isDev,
-    )
+  if (!isDev) {
     headers["Strict-Transport-Security"] = "max-age=31536000"
+
+    if (nonce) {
+      headers["Content-Security-Policy"] = buildContentSecurityPolicy(
+        nonce,
+        isDev,
+      )
+    }
   }
 
   return headers
