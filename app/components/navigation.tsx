@@ -79,10 +79,7 @@ export const Navigation = () => {
           </ExternalLink>
         </div>
 
-        <details
-          data-mobile-navigation
-          className="group relative sm:hidden"
-        >
+        <details data-mobile-navigation className="group relative sm:hidden">
           <summary
             aria-controls={MOBILE_NAVIGATION_ID}
             className="flex h-11 w-11 list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:bg-slate-50 [&::-webkit-details-marker]:hidden"
