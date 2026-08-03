@@ -114,6 +114,43 @@ test("mobile menu remains inside a 320px viewport", async ({
   expect(hasDocumentOverflow).toBe(false)
 })
 
+test("mobile navigation remains usable without JavaScript", async ({
+  browser,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "The no-JavaScript contract only needs one browser-project assertion.",
+  )
+
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  })
+
+  try {
+    const page = await context.newPage()
+    await page.goto("/")
+
+    const navigation = page.getByRole("navigation", { name: "Primary" })
+    const disclosure = navigation.locator("details[data-mobile-navigation]")
+    const trigger = disclosure.locator("summary")
+
+    await expect(trigger).toHaveAccessibleName("Navigation menu")
+    await trigger.click()
+    await expect(disclosure).toHaveAttribute("open", "")
+
+    const solutionsLink = navigation.getByRole("link", {
+      name: "Solutions",
+      exact: true,
+    })
+    await expect(solutionsLink).toBeVisible()
+    await solutionsLink.click()
+    await expect(page).toHaveURL(/\/solutions$/)
+  } finally {
+    await context.close()
+  }
+})
+
 test("reduced-motion preference suppresses decorative movement", async ({
   page,
 }, testInfo) => {
