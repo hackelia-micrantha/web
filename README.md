@@ -51,13 +51,14 @@ Open `http://localhost:3000`.
 | `yarn dev`                           | Run Remix and Tailwind in watch mode                           |
 | `yarn build`                         | Build CSS and Remix for production                             |
 | `yarn cloudflare:functions:build`    | Bundle the Pages Function with pinned Wrangler                 |
-| `yarn cloudflare:runtime:stage`      | Stage only the deployable Pages assets and prebuilt Worker     |
+| `yarn cloudflare:runtime:stage`      | Stage only deployable Pages assets and the generated Worker    |
 | `yarn start`                         | Serve the production build locally through `remix-serve`       |
 | `yarn lint`                          | Run ESLint                                                     |
 | `yarn lint:fix`                      | Auto-fix lint issues                                           |
 | `yarn typecheck`                     | Run the TypeScript build check                                 |
 | `yarn test:cloudflare:adapter`       | Exercise the built Pages Function entry directly               |
 | `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                       |
+| `yarn test:cloudflare:config`        | Verify Wrangler, deploy-script, and configuration parity       |
 | `yarn test:cloudflare:runtime`       | Exercise the staged Worker through the local Pages runtime     |
 | `yarn test:e2e`                      | Run the full Playwright suite                                  |
 | `yarn test:e2e:mobile`               | Run the mobile Playwright project only                         |
@@ -85,11 +86,12 @@ yarn build
 yarn test:cloudflare:adapter
 ```
 
-This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior. It is a fast adapter-level diagnostic, not a Workers-runtime substitute.
+This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, exact cache policies, canonical and JSON-LD metadata, redirects, 404/405 status behavior, CSP nonce pairing, and security headers. It is a fast adapter-level diagnostic, not a Workers-runtime substitute.
 
-Bundle the Pages Function using the repository-pinned Wrangler version, enforce its size budgets, then run the authoritative local runtime contract:
+Validate the checked-in Cloudflare configuration, bundle the Pages Function using the repository-pinned Wrangler version, enforce its size budgets, then run the authoritative local runtime contract:
 
 ```sh
+yarn test:cloudflare:config
 yarn build
 yarn cloudflare:functions:build
 yarn test:cloudflare:bundle-budget
@@ -103,13 +105,25 @@ The runtime test creates an ignored `.cloudflare/runtime/` stage containing only
 - generated Worker route and build metadata;
 - `wrangler.toml`.
 
-It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker’s `nodejs_compat` imports, and starts workerd with `pages dev public`. The contract then verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker’s `nodejs_compat` imports, and starts workerd with `pages dev public`.
+
+The workerd contract verifies:
+
+- complete SSR for home, nested article, and bot requests;
+- exact application cache policies;
+- CSP nonce/header pairing and security headers;
+- canonical URL and Article JSON-LD output;
+- the permanent `/contact` to `/services` redirect;
+- 404 and controlled 405 error documents;
+- static CSS and a generated browser bundle;
+- Pages binding propagation;
+- local Pages readiness against `config/cloudflare-runtime-budget.json`.
 
 `config/cloudflare-bundle-budget.json` records the current raw and gzip baselines, selected platform envelope, and enforced repository budgets. The budget command writes `.cloudflare/functions/bundle-budget.json` with actual sizes and baseline deltas; required CI uploads it with the generated Function bundle.
 
-The generated function bundle, config, build metadata, budget report, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Required jobs use clean frozen installs instead of setup-node’s Yarn cache because the Wrangler dependency graph produced approximately 1.9 GB cache archives; the lockfile remains the reproducibility control.
+`config/cloudflare-pages-contract.json` records the repository-visible Pages configuration. `yarn test:cloudflare:config` rejects drift from `wrangler.toml`, the deploy script, and the expected Function entry. Dashboard-only parity and post-deploy CDN checks are documented in [Cloudflare Pages Configuration Parity](docs/operations/cloudflare-pages-configuration.md).
 
-Issue #56 retains explicit redirect and controlled-error coverage, dashboard/configuration parity, production startup measurement, and deeper CDN/cache validation.
+The generated function bundle, config, build metadata, budget report, runtime manifest, and runtime startup report are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Required jobs use clean frozen installs instead of setup-node’s Yarn cache because the Wrangler dependency graph produced approximately 1.9 GB cache archives; the lockfile remains the reproducibility control.
 
 Run a specific spec:
 
@@ -148,7 +162,9 @@ Checked-in config:
 - `wrangler.toml`
 - `functions/[[path]].js`
 - `config/cloudflare-bundle-budget.json`
-- `package.json` deploy, bundle, budget, and runtime-test scripts
+- `config/cloudflare-pages-contract.json`
+- `config/cloudflare-runtime-budget.json`
+- `package.json` deploy, bundle, budget, config, and runtime-test scripts
 - lockfile-pinned Wrangler dependency
 
 Expected environment variables:
@@ -163,7 +179,7 @@ Deploy manually:
 yarn deploy:cloudflare
 ```
 
-The deployment command runs typechecking, the application build, Pages Function bundling, bundle-budget enforcement, the direct adapter contract, and the staged Pages runtime contract before invoking the pinned Wrangler binary.
+The deployment command runs typechecking, configuration validation, the application build, Pages Function bundling, bundle-budget enforcement, the direct adapter contract, and the staged Pages runtime contract before invoking the pinned Wrangler binary.
 
 ## Docker
 
@@ -187,13 +203,13 @@ make run
 
 ```text
 app/          Remix routes, components, services, and utilities
-config/       Enforced runtime and bundle policy
+config/       Enforced deployment, runtime, and bundle policy
 docs/         Architecture and operational decisions
 e2e/          Playwright specs and visual baselines
 public/       Static assets and browser build output
 build/        Remix server build produced by yarn build
 functions/    Cloudflare Pages Functions request adapter
-scripts/      Build, staging, and runtime-contract automation
+scripts/      Build, staging, policy, and runtime-contract automation
 ```
 
 ## Development Notes
