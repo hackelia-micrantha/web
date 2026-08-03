@@ -11,10 +11,9 @@ test("skip link moves focus to the main content", async ({ page }) => {
   await expect(page.locator("main#content")).toBeFocused()
 })
 
-test("desktop navigation exposes the current route", async (
-  { page },
-  testInfo,
-) => {
+test("desktop navigation exposes the current route", async ({
+  page,
+}, testInfo) => {
   test.skip(
     testInfo.project.name !== "desktop-chromium",
     "Desktop navigation is visible only in the desktop project.",
@@ -31,10 +30,9 @@ test("desktop navigation exposes the current route", async (
   ).not.toHaveAttribute("aria-current", "page")
 })
 
-test("mobile navigation supports keyboard dismissal and route changes", async (
-  { page },
-  testInfo,
-) => {
+test("mobile navigation supports keyboard dismissal and route changes", async ({
+  page,
+}, testInfo) => {
   test.skip(
     testInfo.project.name !== "mobile-chromium",
     "Mobile disclosure behavior is exercised in the mobile project.",
@@ -72,10 +70,9 @@ test("mobile navigation supports keyboard dismissal and route changes", async (
   ).toHaveAttribute("aria-current", "page")
 })
 
-test("mobile menu remains inside a 320px viewport", async (
-  { page },
-  testInfo,
-) => {
+test("mobile menu remains inside a 320px viewport", async ({
+  page,
+}, testInfo) => {
   test.skip(
     testInfo.project.name !== "mobile-chromium",
     "Narrow mobile behavior is exercised in the mobile project.",
@@ -85,9 +82,7 @@ test("mobile menu remains inside a 320px viewport", async (
   await page.goto("/")
 
   const navigation = page.getByRole("navigation", { name: "Primary" })
-  await navigation
-    .getByRole("button", { name: /navigation menu/i })
-    .click()
+  await navigation.getByRole("button", { name: /navigation menu/i }).click()
 
   const panel = page.locator("#mobile-navigation")
   await expect(panel).toBeVisible()
@@ -98,15 +93,16 @@ test("mobile menu remains inside a 320px viewport", async (
   expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBeLessThanOrEqual(320)
 
   const hasDocumentOverflow = await page.evaluate(
-    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    () =>
+      document.documentElement.scrollWidth >
+      document.documentElement.clientWidth,
   )
   expect(hasDocumentOverflow).toBe(false)
 })
 
-test("reduced-motion preference suppresses decorative movement", async (
-  { page },
-  testInfo,
-) => {
+test("reduced-motion preference suppresses decorative movement", async ({
+  page,
+}, testInfo) => {
   test.skip(
     testInfo.project.name !== "desktop-chromium",
     "Reduced-motion styling only needs one browser-project assertion.",
@@ -119,8 +115,8 @@ test("reduced-motion preference suppresses decorative movement", async (
     .getByRole("link", { name: "Request a consultation" })
     .first()
   const maxTransitionDurationMs = await primaryButton.evaluate((element) => {
-    const durations = getComputedStyle(element).transitionDuration
-      .split(",")
+    const durations = getComputedStyle(element)
+      .transitionDuration.split(",")
       .map((value) => value.trim())
       .map((value) =>
         value.endsWith("ms")
