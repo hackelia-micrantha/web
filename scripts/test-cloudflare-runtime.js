@@ -51,8 +51,6 @@ const runtime = spawn(
     "pages",
     "dev",
     "public",
-    "--config",
-    "wrangler.toml",
     "--no-bundle",
     "--ip",
     "127.0.0.1",
