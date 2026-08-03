@@ -1,5 +1,4 @@
 import { Link, useLocation } from "@remix-run/react"
-import { useEffect, useRef, useState } from "react"
 import { GithubIcon } from "~/components/icons"
 import { ExternalLink } from "./external-link"
 
@@ -17,47 +16,10 @@ const navLinks = [
 export const Navigation = () => {
   const location = useLocation()
   const hideMobileLogo = location.pathname === "/"
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
-  const mobileMenuPanelRef = useRef<HTMLDivElement>(null)
-  const previousPathnameRef = useRef(location.pathname)
 
   const isActive = (to: string) => {
     if (to === "/") return location.pathname === to
     return location.pathname === to || location.pathname.startsWith(`${to}/`)
-  }
-
-  useEffect(() => {
-    if (previousPathnameRef.current === location.pathname) return
-
-    previousPathnameRef.current = location.pathname
-    setIsMobileMenuOpen(false)
-  }, [location.pathname])
-
-  useEffect(() => {
-    if (!isMobileMenuOpen) return
-
-    const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target
-      if (!(target instanceof Node)) return
-      if (mobileMenuTriggerRef.current?.contains(target)) return
-      if (mobileMenuPanelRef.current?.contains(target)) return
-
-      setIsMobileMenuOpen(false)
-    }
-
-    document.addEventListener("pointerdown", handlePointerDown)
-    return () => document.removeEventListener("pointerdown", handlePointerDown)
-  }, [isMobileMenuOpen])
-
-  const handleMobileMenuKeyDown = (
-    event: React.KeyboardEvent<HTMLDivElement>,
-  ) => {
-    if (event.key !== "Escape" || !isMobileMenuOpen) return
-
-    event.preventDefault()
-    setIsMobileMenuOpen(false)
-    requestAnimationFrame(() => mobileMenuTriggerRef.current?.focus())
   }
 
   return (
@@ -117,39 +79,24 @@ export const Navigation = () => {
           </ExternalLink>
         </div>
 
-        <div className="relative sm:hidden" onKeyDown={handleMobileMenuKeyDown}>
-          <button
-            ref={mobileMenuTriggerRef}
-            type="button"
+        <details
+          data-mobile-navigation
+          className="group relative sm:hidden"
+        >
+          <summary
             aria-controls={MOBILE_NAVIGATION_ID}
-            aria-expanded={isMobileMenuOpen}
-            aria-label={`${isMobileMenuOpen ? "Close" : "Open"} navigation menu`}
-            onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:bg-slate-50"
+            className="flex h-11 w-11 list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:bg-slate-50 [&::-webkit-details-marker]:hidden"
           >
+            <span className="sr-only">Navigation menu</span>
             <span aria-hidden="true" className="flex w-5 flex-col gap-1.5">
-              <span
-                className={`h-0.5 rounded bg-current transition-transform ${
-                  isMobileMenuOpen ? "translate-y-2 rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`h-0.5 rounded bg-current transition-opacity ${
-                  isMobileMenuOpen ? "opacity-0" : ""
-                }`}
-              />
-              <span
-                className={`h-0.5 rounded bg-current transition-transform ${
-                  isMobileMenuOpen ? "-translate-y-2 -rotate-45" : ""
-                }`}
-              />
+              <span className="h-0.5 rounded bg-current transition-transform group-open:translate-y-2 group-open:rotate-45" />
+              <span className="h-0.5 rounded bg-current transition-opacity group-open:opacity-0" />
+              <span className="h-0.5 rounded bg-current transition-transform group-open:-translate-y-2 group-open:-rotate-45" />
             </span>
-          </button>
+          </summary>
 
           <div
-            ref={mobileMenuPanelRef}
             id={MOBILE_NAVIGATION_ID}
-            hidden={!isMobileMenuOpen}
             className="mobile-nav-panel absolute right-0 top-full z-[60] mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_24px_50px_rgba(15,23,42,0.14)]"
           >
             <div className="flex flex-col gap-1">
@@ -161,7 +108,6 @@ export const Navigation = () => {
                     key={link.to}
                     to={link.to}
                     aria-current={active ? "page" : undefined}
-                    onClick={() => setIsMobileMenuOpen(false)}
                     className={`rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
                       active
                         ? "bg-slate-100 text-slate-950"
@@ -180,7 +126,7 @@ export const Navigation = () => {
               </ExternalLink>
             </div>
           </div>
-        </div>
+        </details>
       </div>
     </nav>
   )
