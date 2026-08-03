@@ -83,7 +83,10 @@ const manifestFiles = []
 
 for (const file of stagedFiles) {
   const content = await readFile(file)
-  const relativePath = path.relative(runtimeRoot, file).split(path.sep).join("/")
+  const relativePath = path
+    .relative(runtimeRoot, file)
+    .split(path.sep)
+    .join("/")
 
   manifestFiles.push({
     path: relativePath,
@@ -102,7 +105,12 @@ assert.ok(
 )
 assert.ok(stagedPaths.has("wrangler.toml"), "missing Wrangler configuration")
 
-for (const forbiddenPrefix of ["app/", "build/", "functions/", "node_modules/"]) {
+for (const forbiddenPrefix of [
+  "app/",
+  "build/",
+  "functions/",
+  "node_modules/",
+]) {
   assert.equal(
     manifestFiles.some((file) => file.path.startsWith(forbiddenPrefix)),
     false,
