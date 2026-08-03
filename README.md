@@ -46,22 +46,22 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command                              | Purpose                                                    |
-| ------------------------------------ | ---------------------------------------------------------- |
-| `yarn dev`                           | Run Remix and Tailwind in watch mode                       |
-| `yarn build`                         | Build CSS and Remix for production                         |
-| `yarn cloudflare:functions:build`    | Bundle the Pages Function with pinned Wrangler             |
-| `yarn start`                         | Serve the production build locally through `remix-serve`   |
-| `yarn lint`                          | Run ESLint                                                 |
-| `yarn lint:fix`                      | Auto-fix lint issues                                       |
-| `yarn typecheck`                     | Run the TypeScript build check                             |
-| `yarn test:cloudflare:adapter`       | Exercise the built Pages Function entry directly           |
-| `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                   |
-| `yarn test:cloudflare:runtime`       | Exercise a clean staged artifact through workerd           |
-| `yarn test:e2e`                      | Run the full Playwright suite                              |
-| `yarn test:e2e:mobile`               | Run the mobile Playwright project only                     |
-| `yarn test:e2e:headed`               | Run Playwright in headed mode                              |
-| `yarn deploy:cloudflare`             | Validate, bundle, and deploy to Cloudflare Pages           |
+| Command                              | Purpose                                                  |
+| ------------------------------------ | -------------------------------------------------------- |
+| `yarn dev`                           | Run Remix and Tailwind in watch mode                     |
+| `yarn build`                         | Build CSS and Remix for production                       |
+| `yarn cloudflare:functions:build`    | Bundle the Pages Function with pinned Wrangler           |
+| `yarn start`                         | Serve the production build locally through `remix-serve` |
+| `yarn lint`                          | Run ESLint                                               |
+| `yarn lint:fix`                      | Auto-fix lint issues                                     |
+| `yarn typecheck`                     | Run the TypeScript build check                           |
+| `yarn test:cloudflare:adapter`       | Exercise the built Pages Function entry directly         |
+| `yarn test:cloudflare:bundle-budget` | Enforce raw and gzip Worker size budgets                 |
+| `yarn test:cloudflare:runtime`       | Exercise a clean staged artifact through workerd         |
+| `yarn test:e2e`                      | Run the full Playwright suite                            |
+| `yarn test:e2e:mobile`               | Run the mobile Playwright project only                   |
+| `yarn test:e2e:headed`               | Run Playwright in headed mode                            |
+| `yarn deploy:cloudflare`             | Validate, bundle, and deploy to Cloudflare Pages         |
 
 ## Testing
 
