@@ -75,6 +75,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Test Cloudflare Pages adapter contract
+        run: yarn test:cloudflare:adapter
+
   end-to-end:
     name: End-to-end
     runs-on: ubuntu-latest
