@@ -1,9 +1,10 @@
 import assert from "node:assert/strict"
-import { once } from "node:events"
 import { spawn } from "node:child_process"
+import { once } from "node:events"
+import { createServer } from "node:net"
 import path from "node:path"
-import { fileURLToPath } from "node:url"
 import { setTimeout as delay } from "node:timers/promises"
+import { fileURLToPath } from "node:url"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const stage = path.join(root, ".cloudflare/runtime")
@@ -12,9 +13,33 @@ const wrangler = path.join(
   "node_modules/.bin",
   process.platform === "win32" ? "wrangler.cmd" : "wrangler",
 )
-const port = Number(process.env.CLOUDFLARE_RUNTIME_PORT ?? 8791)
-const origin = `http://127.0.0.1:${port}`
 const analyticsId = "runtime-contract-test"
+
+async function getAvailablePort() {
+  const server = createServer()
+
+  server.unref()
+
+  await new Promise((resolve, reject) => {
+    server.once("error", reject)
+    server.listen(0, "127.0.0.1", resolve)
+  })
+
+  const address = server.address()
+
+  assert.ok(address && typeof address === "object")
+
+  await new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()))
+  })
+
+  return address.port
+}
+
+const port = Number(
+  process.env.CLOUDFLARE_RUNTIME_PORT ?? (await getAvailablePort()),
+)
+const origin = `http://127.0.0.1:${port}`
 
 let logs = ""
 let exitResult = null
@@ -26,19 +51,17 @@ const runtime = spawn(
     "pages",
     "dev",
     "public",
-    "--script-path",
-    "worker/index.js",
+    "--config",
+    "wrangler.toml",
     "--no-bundle",
     "--ip",
     "127.0.0.1",
     "--port",
     String(port),
+    "--local-protocol",
+    "http",
     "--binding",
     `MICRANTHA_ANALYTICS_ID=${analyticsId}`,
-    "--persist-to",
-    ".wrangler/state",
-    "--log-level",
-    "warn",
   ],
   {
     cwd: stage,
@@ -46,13 +69,14 @@ const runtime = spawn(
       ...process.env,
       CI: "true",
       NO_COLOR: "1",
+      WRANGLER_SEND_METRICS: "false",
     },
     stdio: ["ignore", "pipe", "pipe"],
   },
 )
 
 function capture(chunk) {
-  logs = `${logs}${chunk}`.slice(-20000)
+  logs = `${logs}${chunk}`.slice(-200_000)
 }
 
 runtime.stdout.setEncoding("utf8")
@@ -67,26 +91,30 @@ runtime.on("exit", (code, signal) => {
 })
 
 async function stopRuntime() {
-  if (runtime.exitCode !== null || runtime.signalCode !== null) {
-    return
-  }
+  if (runtime.exitCode !== null || runtime.signalCode !== null) return
+
+  const gracefulExit = once(runtime, "exit")
 
   runtime.kill("SIGTERM")
-  await Promise.race([once(runtime, "exit"), delay(3000)])
 
-  if (runtime.exitCode === null && runtime.signalCode === null) {
-    runtime.kill("SIGKILL")
-    await once(runtime, "exit")
-  }
+  const stoppedGracefully = await Promise.race([
+    gracefulExit.then(() => true),
+    delay(3_000).then(() => false),
+  ])
+
+  if (stoppedGracefully || runtime.exitCode !== null) return
+
+  const forcedExit = once(runtime, "exit")
+
+  runtime.kill("SIGKILL")
+  await forcedExit
 }
 
 async function waitForRuntime() {
   const startedAt = Date.now()
 
   for (let attempt = 0; attempt < 120; attempt += 1) {
-    if (spawnError) {
-      throw spawnError
-    }
+    if (spawnError) throw spawnError
 
     if (exitResult) {
       throw new Error(
@@ -96,12 +124,12 @@ async function waitForRuntime() {
 
     try {
       const response = await fetch(origin, {
-        signal: AbortSignal.timeout(1000),
+        signal: AbortSignal.timeout(1_000),
       })
 
-      if (response.status > 0) {
-        return Date.now() - startedAt
-      }
+      await response.body?.cancel()
+
+      return Date.now() - startedAt
     } catch {
       // The local Pages runtime is still starting.
     }
@@ -144,11 +172,10 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
 
   const policy = response.headers.get("content-security-policy") ?? ""
 
-  if (!requireNonce && !policy) {
-    return
-  }
+  if (!requireNonce && !policy) return
 
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
+
   assert.ok(nonce, "expected a CSP nonce in the document response")
   assert.ok(
     body.includes(`nonce="${nonce}"`),
@@ -178,7 +205,7 @@ try {
     article.body,
     /https:\/\/micrantha\.com\/blog\/ai-pipelines-need-control-boundaries/,
   )
-  assert.match(article.body, /application\/ld\+json/)
+  assert.match(article.body, /"@type":"Article"/)
   assertDocumentHeaders(article.response, article.body)
 
   const botArticle = await read(articlePath, {
@@ -199,7 +226,7 @@ try {
     stylesheet.response.headers.get("content-type") ?? "",
     /^text\/css\b/,
   )
-  assert.match(stylesheet.body, /--color-|font-family|display:/)
+  assert.ok(stylesheet.body.length > 1_000, "expected generated Tailwind CSS")
 
   const manifestResponse = await fetch(
     new URL("/icon/site.webmanifest", origin),
@@ -212,9 +239,10 @@ try {
   assert.ok(browserAsset, "expected a generated browser asset reference")
   const assetResponse = await fetch(new URL(browserAsset, origin))
   assert.equal(assetResponse.status, 200)
+  await assetResponse.body?.cancel()
 
   console.log(
-    `Cloudflare Pages runtime contract passed; local runtime ready in ${readyMilliseconds} ms`,
+    `Cloudflare Pages runtime contract passed; local workerd ready in ${readyMilliseconds} ms`,
   )
 } catch (error) {
   console.error(logs)
