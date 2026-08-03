@@ -6,7 +6,7 @@ on:
       - agent/cloudflare-pages-wrangler-gate
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   lockfile:
@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          ref: agent/cloudflare-pages-wrangler-gate
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -28,10 +30,14 @@ jobs:
       - name: Verify Wrangler version
         run: yarn wrangler --version
 
-      - name: Upload generated lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: wrangler-yarn-lock-${{ github.run_id }}
-          path: yarn.lock
-          if-no-files-found: error
-          retention-days: 1
+      - name: Commit generated lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add yarn.lock
+          if git diff --cached --quiet; then
+            echo "Lockfile is already current"
+            exit 0
+          fi
+          git commit -m "Lock pinned Wrangler dependency"
+          git push origin HEAD:agent/cloudflare-pages-wrangler-gate
