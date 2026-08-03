@@ -19,12 +19,21 @@ await cp(path.join(root, "public"), path.join(stage, "public"), {
   recursive: true,
 })
 await copyFile(workerSource, path.join(stage, "worker/index.js"))
-await copyFile(path.join(root, "wrangler.toml"), path.join(stage, "wrangler.toml"))
+await copyFile(
+  path.join(root, "wrangler.toml"),
+  path.join(stage, "wrangler.toml"),
+)
 
 const stagedEntries = (await readdir(stage)).sort()
 assert.deepEqual(stagedEntries, ["public", "worker", "wrangler.toml"])
 
-for (const sourceOnlyPath of ["app", "build", "functions", "scripts", "node_modules"]) {
+for (const sourceOnlyPath of [
+  "app",
+  "build",
+  "functions",
+  "scripts",
+  "node_modules",
+]) {
   await assert.rejects(access(path.join(stage, sourceOnlyPath)))
 }
 
