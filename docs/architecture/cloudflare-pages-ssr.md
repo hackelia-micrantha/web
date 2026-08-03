@@ -250,10 +250,10 @@ Issue #55 extends this harness with MDX-specific and JavaScript-disabled article
 
 The repository budgets are intentionally stricter than the platform ceiling:
 
-| Measurement | Baseline | Repository budget | Platform envelope |
-| --- | ---: | ---: | ---: |
-| Raw Worker | 2,356,613 B | 3,000,000 B | 64,000,000 B |
-| Gzip Worker | 466,338 B | 2,500,000 B | 3,000,000 B |
+| Measurement |    Baseline | Repository budget | Platform envelope |
+| ----------- | ----------: | ----------------: | ----------------: |
+| Raw Worker  | 2,356,613 B |       3,000,000 B |      64,000,000 B |
+| Gzip Worker |   466,338 B |       2,500,000 B |       3,000,000 B |
 
 The generated `.cloudflare/functions/bundle-budget.json` records actual sizes and deltas from the baseline.
 
