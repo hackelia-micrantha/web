@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
-[![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare_Pages-F38020?logo=cloudflare)](https://pages.cloudflare.com/)
+[![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare_Pages-F38020?logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-111827.svg)](./LICENSE)
 
 Marketing site and web presence for [micrantha.com](https://micrantha.com), built with Remix, React, TypeScript, and a lean Tailwind CSS pipeline.
@@ -20,15 +20,15 @@ Marketing site and web presence for [micrantha.com](https://micrantha.com), buil
 
 ## Stack
 
-| Area | Tools |
-| --- | --- |
-| App framework | Remix 2 |
-| UI | React 18 |
-| Language | TypeScript |
-| Styling | Tailwind CSS 4 via CLI |
-| Quality | ESLint + Prettier |
-| Testing | Playwright |
-| Deployment | Cloudflare Pages Functions |
+| Area          | Tools                      |
+| ------------- | -------------------------- |
+| App framework | Remix 2                    |
+| UI            | React 18                   |
+| Language      | TypeScript                 |
+| Styling       | Tailwind CSS 4 via CLI     |
+| Quality       | ESLint + Prettier          |
+| Testing       | Playwright                 |
+| Deployment    | Cloudflare Pages Functions |
 
 ## Requirements
 
@@ -46,18 +46,18 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command | Purpose |
-| --- | --- |
-| `yarn dev` | Run Remix and Tailwind in watch mode |
-| `yarn build` | Build CSS and Remix for production |
-| `yarn start` | Serve the production build locally through `remix-serve` |
-| `yarn lint` | Run ESLint |
-| `yarn lint:fix` | Auto-fix lint issues |
-| `yarn typecheck` | Run the TypeScript build check |
-| `yarn test:e2e` | Run the full Playwright suite |
-| `yarn test:e2e:mobile` | Run the mobile Playwright project only |
-| `yarn test:e2e:headed` | Run Playwright in headed mode |
-| `yarn deploy:cloudflare` | Typecheck, build, and deploy to Cloudflare Pages |
+| Command                  | Purpose                                                  |
+| ------------------------ | -------------------------------------------------------- |
+| `yarn dev`               | Run Remix and Tailwind in watch mode                     |
+| `yarn build`             | Build CSS and Remix for production                       |
+| `yarn start`             | Serve the production build locally through `remix-serve` |
+| `yarn lint`              | Run ESLint                                               |
+| `yarn lint:fix`          | Auto-fix lint issues                                     |
+| `yarn typecheck`         | Run the TypeScript build check                           |
+| `yarn test:e2e`          | Run the full Playwright suite                            |
+| `yarn test:e2e:mobile`   | Run the mobile Playwright project only                   |
+| `yarn test:e2e:headed`   | Run Playwright in headed mode                            |
+| `yarn deploy:cloudflare` | Typecheck, build, and deploy to Cloudflare Pages         |
 
 ## Testing
 
