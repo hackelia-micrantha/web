@@ -6,7 +6,7 @@ The production contract is validated in three layers:
 
 1. `yarn build` produces the Remix browser and server artifacts.
 2. `yarn cloudflare:functions:build` uses the lockfile-pinned Wrangler version to compile the Pages Functions source into a Worker.
-3. `yarn test:cloudflare:runtime` stages and executes only the deployable runtime artifact through `wrangler pages dev` and workerd.
+3. `yarn test:cloudflare:runtime` stages and executes only the deployable runtime artifact through workerd.
 
 The existing adapter test remains useful for fast request-handler diagnostics, but the staged runtime contract is the authoritative local compatibility gate.
 
@@ -18,16 +18,24 @@ The staging command creates `.cloudflare/runtime/` with only:
 .cloudflare/runtime/
   wrangler.toml
   public/
-    _worker.js
     build/
     icon/
     tailwind.css
     ...static assets
+  worker/
+    index.js
+    index.js.map
 ```
 
-The compiled Worker from `.cloudflare/functions/index.js` is copied to `public/_worker.js`. Wrangler treats this as Pages advanced mode. The generated Worker already contains the Pages Functions route dispatcher and forwards unmatched requests to the `ASSETS` binding.
+The compiled Worker from `.cloudflare/functions/index.js` is copied unchanged to `worker/index.js`. The source map remains adjacent to the generated script rather than becoming a public asset.
 
-Worker source maps remain under `.cloudflare/functions/` for CI inspection and the documented Cloudflare upload path. They are not copied into `public/` or exposed as staged static assets.
+The staged Wrangler file is derived from the checked-in Pages configuration. It preserves the project compatibility date and compatibility flags, points `main` to the precompiled Worker, and configures Workers Static Assets with:
+
+- `public/` as the asset directory;
+- an `ASSETS` binding;
+- asset-first routing through `run_worker_first = false`.
+
+Asset-first routing is important because the generated Pages Functions Worker contains a catch-all route. Matching files must be served before invoking that Worker, while unknown paths must fall through to the Worker for Remix SSR.
 
 The staged runtime intentionally excludes:
 
@@ -43,10 +51,12 @@ Request handling therefore cannot read source TSX, import the unbundled Remix se
 
 ## Runtime contract
 
-The runtime test starts the staged artifact with the checked-in Wrangler configuration and `--no-bundle`. It verifies:
+The runtime test starts the staged artifact with `wrangler dev --no-bundle`. This is the equivalent Workers-runtime harness permitted by the Pages SSR architecture contract. It executes the exact precompiled Pages Worker while Workers Static Assets reproduce the production asset-first boundary.
+
+The contract verifies:
 
 - complete SSR for `/`;
-- Pages environment-binding propagation;
+- runtime environment-variable propagation;
 - a representative nested blog article;
 - canonical and Article structured metadata;
 - browser and bot responses;
