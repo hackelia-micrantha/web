@@ -20,6 +20,7 @@ export const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const mobileMenuPanelRef = useRef<HTMLDivElement>(null)
+  const previousPathnameRef = useRef(location.pathname)
 
   const isActive = (to: string) => {
     if (to === "/") return location.pathname === to
@@ -27,6 +28,9 @@ export const Navigation = () => {
   }
 
   useEffect(() => {
+    if (previousPathnameRef.current === location.pathname) return
+
+    previousPathnameRef.current = location.pathname
     setIsMobileMenuOpen(false)
   }, [location.pathname])
 
