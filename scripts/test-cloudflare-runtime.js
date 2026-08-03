@@ -1,6 +1,8 @@
 import assert from "node:assert/strict"
 import { spawn } from "node:child_process"
+import { once } from "node:events"
 import { readFile, stat } from "node:fs/promises"
+import { createServer } from "node:net"
 import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 import { fileURLToPath } from "node:url"
@@ -17,16 +19,40 @@ const wranglerExecutable = path.join(
   process.platform === "win32" ? "wrangler.cmd" : "wrangler",
 )
 const host = "127.0.0.1"
-const port = 8788
-const baseUrl = `http://${host}:${port}`
 const analyticsId = "cloudflare-runtime-contract"
 const runtimeLog = []
+
+async function getAvailablePort() {
+  const server = createServer()
+
+  server.unref()
+
+  await new Promise((resolve, reject) => {
+    server.once("error", reject)
+    server.listen(0, host, resolve)
+  })
+
+  const address = server.address()
+
+  assert.ok(address && typeof address === "object")
+
+  await new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()))
+  })
+
+  return address.port
+}
+
+const port = Number(
+  process.env.CLOUDFLARE_RUNTIME_PORT ?? (await getAvailablePort()),
+)
+const baseUrl = `http://${host}:${port}`
 
 for (const requiredPath of [
   wranglerExecutable,
   path.join(runtimeRoot, "manifest.json"),
   path.join(runtimeRoot, "public", "tailwind.css"),
-  path.join(runtimeRoot, "public", "_worker.js"),
+  path.join(runtimeRoot, "worker", "index.js"),
   path.join(runtimeRoot, "wrangler.toml"),
 ]) {
   await stat(requiredPath).catch(() => {
@@ -39,13 +65,27 @@ for (const requiredPath of [
 const manifest = JSON.parse(
   await readFile(path.join(runtimeRoot, "manifest.json"), "utf8"),
 )
-assert.equal(manifest.schemaVersion, 1)
+assert.equal(manifest.schemaVersion, 2)
+assert.equal(manifest.routing.assetsDirectory, "public")
+assert.equal(manifest.routing.workerEntry, "worker/index.js")
+assert.equal(manifest.routing.assetsBinding, "ASSETS")
+assert.equal(manifest.routing.runWorkerFirst, false)
 assert.ok(manifest.files.length > 0)
 assert.equal(
   manifest.files.some((file) =>
-    ["app/", "build/", "functions/", "node_modules/"].some((prefix) =>
-      file.path.startsWith(prefix),
-    ),
+    [
+      "app/",
+      "build/",
+      "functions/",
+      "node_modules/",
+      "scripts/",
+    ].some((prefix) => file.path.startsWith(prefix)),
+  ),
+  false,
+)
+assert.equal(
+  manifest.files.some((file) =>
+    ["package.json", "yarn.lock"].includes(file.path),
   ),
   false,
 )
@@ -63,21 +103,18 @@ const runtime = spawn(
   [
     "--cwd",
     runtimeRoot,
-    "pages",
     "dev",
-    "public",
+    "--config",
+    "wrangler.toml",
+    "--no-bundle",
     "--ip",
     host,
     "--port",
     String(port),
     "--local-protocol",
     "http",
-    "--binding",
-    `MICRANTHA_ANALYTICS_ID=${analyticsId}`,
-    "--persist-to",
-    ".wrangler-state",
-    "--log-level",
-    "warn",
+    "--var",
+    `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
     "--show-interactive-dev-session=false",
   ],
   {
@@ -87,6 +124,7 @@ const runtime = spawn(
       ...process.env,
       CI: "true",
       NO_COLOR: "1",
+      WRANGLER_SEND_METRICS: "false",
     },
     stdio: ["ignore", "pipe", "pipe"],
   },
@@ -117,19 +155,24 @@ async function stopRuntime() {
     return
   }
 
-  await Promise.race([runtimeExit, delay(3_000)])
+  const stoppedGracefully = await Promise.race([
+    runtimeExit.then(() => true),
+    delay(3_000).then(() => false),
+  ])
 
-  if (runtime.exitCode === null && runtime.signalCode === null) {
-    try {
-      if (process.platform !== "win32" && runtime.pid) {
-        process.kill(-runtime.pid, "SIGKILL")
-      } else {
-        runtime.kill("SIGKILL")
-      }
-    } catch {
-      return
+  if (stoppedGracefully || runtime.exitCode !== null) return
+
+  try {
+    if (process.platform !== "win32" && runtime.pid) {
+      process.kill(-runtime.pid, "SIGKILL")
+    } else {
+      runtime.kill("SIGKILL")
     }
+  } catch {
+    return
   }
+
+  await runtimeExit
 }
 
 async function fetchRuntime(pathname, options = {}) {
@@ -141,7 +184,8 @@ async function fetchRuntime(pathname, options = {}) {
 }
 
 async function waitForRuntime() {
-  const deadline = Date.now() + 30_000
+  const startedAt = Date.now()
+  const deadline = startedAt + 30_000
 
   while (Date.now() < deadline) {
     if (runtime.exitCode !== null || runtime.signalCode !== null) {
@@ -153,7 +197,10 @@ async function waitForRuntime() {
 
     try {
       const response = await fetchRuntime("/")
-      if (response.status === 200) return
+
+      await response.body?.cancel()
+
+      if (response.status === 200) return Date.now() - startedAt
     } catch {
       // The local socket is not ready yet.
     }
@@ -201,7 +248,7 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
 }
 
 try {
-  await waitForRuntime()
+  const readyMilliseconds = await waitForRuntime()
 
   const home = await readRuntime("/")
   assert.equal(home.response.status, 200)
@@ -216,6 +263,11 @@ try {
   assert.match(css.response.headers.get("content-type") ?? "", /^text\/css\b/)
   assert.ok(css.body.length > 1_000, "expected generated Tailwind CSS")
 
+  const manifestResponse = await fetchRuntime("/icon/site.webmanifest")
+  assert.equal(manifestResponse.status, 200)
+  const siteManifest = await manifestResponse.json()
+  assert.equal(siteManifest.name, "Micrantha Software")
+
   const browserAssetPath = home.body.match(
     /(?:src|href)="([^"?#]*\/build\/[^"?#]+\.js)"/,
   )?.[1]
@@ -229,23 +281,21 @@ try {
   )
   assert.ok(browserAsset.body.length > 1_000, "expected a browser bundle")
 
-  const article = await readRuntime(
-    "/blog/ai-pipelines-need-control-boundaries",
-  )
+  const articlePath = "/blog/ai-pipelines-need-control-boundaries"
+  const article = await readRuntime(articlePath)
   assert.equal(article.response.status, 200)
   assert.match(article.body, /AI Pipelines Need Control Boundaries/)
   assert.match(
     article.body,
     /AI is not the system of record\. AI is an untrusted reasoning component/,
   )
+  assert.match(article.body, new RegExp(`https://micrantha.com${articlePath}`))
+  assert.match(article.body, /"@type":"Article"/)
   assertDocumentHeaders(article.response, article.body)
 
-  const botArticle = await readRuntime(
-    "/blog/ai-pipelines-need-control-boundaries",
-    {
-      headers: { "User-Agent": "Googlebot/2.1" },
-    },
-  )
+  const botArticle = await readRuntime(articlePath, {
+    headers: { "User-Agent": "Googlebot/2.1" },
+  })
   assert.equal(botArticle.response.status, 200)
   assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
   assertDocumentHeaders(botArticle.response, botArticle.body)
@@ -255,7 +305,9 @@ try {
   assert.match(missing.body, /404|Not Found/i)
   assertDocumentHeaders(missing.response, missing.body, { requireNonce: false })
 
-  console.log("Cloudflare Pages runtime contract passed")
+  console.log(
+    `Cloudflare runtime contract passed; local workerd ready in ${readyMilliseconds} ms`,
+  )
 } catch (error) {
   error.message += formattedRuntimeLog()
   throw error
