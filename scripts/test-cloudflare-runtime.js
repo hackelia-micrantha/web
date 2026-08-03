@@ -66,7 +66,6 @@ const runtime = spawn(
     "pages",
     "dev",
     "public",
-    "--no-bundle",
     "--ip",
     host,
     "--port",
