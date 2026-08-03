@@ -7,9 +7,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "run-s build:*",
-    "build:cloudflare:functions": "wrangler pages functions build functions --outdir .cloudflare/functions --output-config-path .cloudflare/functions/config.json --build-metadata-path .cloudflare/functions/build-metadata.json --project-directory .",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
+    "cloudflare:functions:build": "wrangler pages functions build functions --outdir .cloudflare/functions --output-config-path .cloudflare/functions/config.json --build-metadata-path .cloudflare/functions/build-metadata.json --project-directory .",
     "dev": "run-p dev:*",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix dev",
@@ -24,7 +24,7 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:mobile": "playwright test --project=mobile-chromium",
     "typecheck": "tsc -b",
-    "deploy:cloudflare": "yarn typecheck && yarn build && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
+    "deploy:cloudflare": "yarn typecheck && yarn build && yarn cloudflare:functions:build && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",
