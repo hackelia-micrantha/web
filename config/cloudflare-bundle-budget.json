@@ -2,12 +2,12 @@
   "planCompatibility": "workers-free",
   "platformLimits": {
     "compressedBytes": 3000000,
-    "uncompressedBytes": 64000000,
-    "startupMilliseconds": 1000
+    "uncompressedBytes": 64000000
   },
   "baseline": {
     "measuredAt": "2026-08-03",
     "wranglerVersion": "4.114.0",
+    "compressedBytes": 466338,
     "uncompressedBytes": 2356613
   },
   "budgets": {
