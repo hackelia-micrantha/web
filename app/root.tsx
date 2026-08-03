@@ -50,6 +50,7 @@ function buildContentSecurityPolicy(nonce: string, isDev: boolean) {
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/tailwind.css" },
+  { rel: "stylesheet", href: "/accessibility.css" },
   { rel: "shortcut icon", href: "/icon/favicon.ico" },
   { rel: "manifest", href: "/icon/site.webmanifest" },
   {
@@ -177,6 +178,7 @@ export default function App() {
         <Navigation />
         <main
           id="content"
+          tabIndex={-1}
           className="body mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8"
         >
           <Outlet />
