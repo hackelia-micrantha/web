@@ -20,7 +20,7 @@ jobs:
   quality:
     name: Quality
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Check out repository
@@ -70,6 +70,15 @@ jobs:
       - name: Bundle Cloudflare Pages Function
         run: yarn cloudflare:functions:build
 
+      - name: Enforce Cloudflare Worker bundle budget
+        run: yarn test:cloudflare:bundle-budget
+
+      - name: Test Cloudflare Pages adapter contract
+        run: yarn test:cloudflare:adapter
+
+      - name: Test staged Cloudflare Pages runtime contract
+        run: yarn test:cloudflare:runtime
+
       - name: Report Pages Function bundle files
         run: find .cloudflare/functions -type f -printf '%p %s bytes\n' | sort
 
@@ -80,9 +89,6 @@ jobs:
           path: .cloudflare/functions
           if-no-files-found: error
           retention-days: 7
-
-      - name: Test Cloudflare Pages adapter contract
-        run: yarn test:cloudflare:adapter
 
   end-to-end:
     name: End-to-end
