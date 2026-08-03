@@ -97,11 +97,11 @@ yarn test:cloudflare:runtime
 The runtime test creates an ignored `.cloudflare/runtime/` stage containing only:
 
 - `public/` static assets and browser output;
-- the prebuilt Pages Worker staged as `public/_worker.js`;
+- the generated Pages Worker staged as `public/_worker.js`;
 - generated Worker route and build metadata;
 - `wrangler.toml`.
 
-It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler starts the prebuilt module through Pages advanced mode with `pages dev public --no-bundle`, then the contract verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker’s `nodejs_compat` imports, and starts workerd with `pages dev public`. The contract then verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
 
 The generated function bundle, config, build metadata, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Issue #56 retains the remaining plan-aware bundle budget and explicit redirect/controlled-error coverage.
 
@@ -115,7 +115,7 @@ Notes:
 
 - Playwright uses `http://127.0.0.1:3000` by default.
 - The browser suite starts the app with `yarn build && PORT=3000 yarn start`.
-- This validates application behavior through `remix-serve`; the separate Cloudflare runtime contract proves the prebuilt Pages Worker and static artifact.
+- This validates application behavior through `remix-serve`; the separate Cloudflare runtime contract proves the staged Pages Worker and static artifact under workerd.
 - Desktop and mobile Chromium projects are configured.
 - The suite includes automated axe accessibility scans for key public routes.
 - On this machine, `/usr/bin/chromium` is used automatically when Playwright-managed browsers are unavailable.
