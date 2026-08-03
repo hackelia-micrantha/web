@@ -1,6 +1,6 @@
 # Cloudflare Pages SSR Architecture
 
-- **Status:** Accepted baseline
+- **Status:** Accepted and implemented baseline
 - **Date:** 2026-08-03
 - **Issue:** #56
 - **Decision scope:** Production runtime, deployment artifacts, compatibility boundaries, and validation responsibilities
@@ -9,7 +9,7 @@
 
 Micrantha Web is a server-rendered Remix 2 application deployed to Cloudflare Pages. The repository also supports local Node serving through `remix-serve`, a Docker image, and Makefile wrappers. Those paths are useful for development and portability, but they do not execute the same adapter or runtime used by production.
 
-The production path is currently defined by:
+The production path is defined by:
 
 - `wrangler.toml`, including `pages_build_output_dir`, compatibility date, and `nodejs_compat`;
 - `functions/[[path]].js`, which creates the Remix request handler;
@@ -17,13 +17,13 @@ The production path is currently defined by:
 - `public/`, containing static assets and the browser build;
 - Cloudflare Pages Functions, which bundles the root `functions/` directory into a Worker.
 
-Current browser tests start `remix-serve`. That validates the Remix application and production build, but it does not prove that the Pages Function bundles, starts, preserves headers, or behaves correctly under the Workers runtime.
+Browser tests start `remix-serve` for fast application-level coverage. Separate adapter and workerd contracts prove that the Pages Function bundles, starts, preserves headers, and behaves correctly under the Workers runtime.
 
 ## Decision
 
 Cloudflare Pages Functions is the authoritative production runtime.
 
-The repository must treat the following pipeline as the production contract:
+The repository treats the following pipeline as the production contract:
 
 ```text
 source
@@ -31,6 +31,10 @@ source
   -> Tailwind CSS build
   -> Remix browser and server build
   -> Pages Functions bundle
+  -> compressed and raw Worker budget
+  -> source-isolated advanced-mode Pages stage
+  -> pinned Wrangler compatibility-aware final bundle
+  -> workerd runtime contract
   -> public static assets plus Worker artifact
   -> Cloudflare Pages request
   -> functions/[[path]].js
@@ -38,7 +42,7 @@ source
   -> streamed response
 ```
 
-A change is production-compatible only when it passes the Pages Functions build and runtime contract. Passing through `remix-serve`, the Remix development server, or Docker alone is insufficient.
+A change is production-compatible only when it passes the Pages Functions build, bundle budget, adapter contract, and workerd runtime contract. Passing through `remix-serve`, the Remix development server, or Docker alone is insufficient.
 
 ## Source of truth
 
@@ -58,9 +62,9 @@ Cloudflare dashboard configuration must not silently diverge from the checked-in
 
 `functions/[[path]].js` is the production request adapter. It imports the generated Remix server build and translates the Pages Function context into a Remix request.
 
-The adapter must depend only on declared packages and generated deployment artifacts. It must not rely on transitive dependency hoisting, TypeScript source, content source files, or compiler packages at request time.
+The adapter depends only on declared packages and generated deployment artifacts. It must not rely on transitive dependency hoisting, TypeScript source, content source files, or compiler packages at request time.
 
-### Build artifacts
+### Build and runtime artifacts
 
 The production deployment consists of:
 
@@ -68,11 +72,20 @@ The production deployment consists of:
 - the bundled Pages Function generated from `functions/`;
 - the generated Remix server build consumed by that Function during bundling.
 
-Source `.tsx`, `.md`, and `.mdx` files are build inputs, not runtime dependencies.
+The runtime contract stages only:
+
+- the static `public/` tree;
+- the generated Worker as advanced-mode `public/_worker.js`;
+- generated Worker route and build metadata;
+- `wrangler.toml`.
+
+The stage manifest records the byte size and SHA-256 digest of every file. It rejects `app/`, `build/`, `functions/`, and `node_modules/` paths. Source `.tsx`, `.md`, and `.mdx` files are build inputs, not runtime dependencies.
 
 ## Runtime compatibility boundary
 
 `nodejs_compat` is permitted only for APIs required by the current Remix server build or adapter. New Node-specific runtime dependencies require explicit review.
+
+The generated intermediate Worker preserves Node built-in imports such as `crypto`, `stream`, `util`, and `string_decoder`. Therefore, pinned Wrangler performs a final compatibility-aware bundle before workerd starts. `--no-bundle` is not a valid runtime path for this artifact.
 
 The application should prefer Web Platform APIs available in both Workers and modern Node runtimes:
 
@@ -84,25 +97,26 @@ The application should prefer Web Platform APIs available in both Workers and mo
 
 Direct filesystem access, child processes, native addons, and assumptions about a writable local filesystem are prohibited in request handling.
 
-The compatibility date is an operational API version. Updating it is a production change and must pass the Pages adapter suite before merge.
+The compatibility date is an operational API version. Updating it is a production change and must pass the complete Pages contract before merge.
 
 ## Request and response contract
 
-The Pages runtime must preserve the following externally observable behavior:
+The Pages runtime preserves the following externally observable behavior:
 
 ### Rendering
 
 - direct requests return meaningful server-rendered HTML;
 - normal browser requests may stream;
 - bot requests may wait for the full stream according to `app/entry.server.tsx`;
-- primary content must not require hydration unless a feature explicitly documents that trade-off.
+- primary content does not require hydration unless a feature explicitly documents that trade-off.
 
 ### Status and routing
 
 - successful routes preserve their intended status;
 - unknown routes return 404;
-- redirects preserve status and `Location`;
-- controlled server failures return the intended error document and status.
+- the legacy `/contact` path permanently redirects to `/services` with its `Location` preserved;
+- unsupported mutation requests return a controlled 405 error document;
+- redirect and error behavior are validated through both the direct adapter and workerd.
 
 ### Headers
 
@@ -121,15 +135,17 @@ The Pages runtime must preserve the following externally observable behavior:
 
 Application code defines response cache policy. Cloudflare may enforce or transform caching only through documented platform configuration.
 
-The adapter suite must verify representative `Cache-Control` behavior. Future authenticated, preview, draft, or user-specific routes must default to non-shared caching until explicitly classified.
+The adapter suite verifies representative `Cache-Control` behavior. Future authenticated, preview, draft, or user-specific routes must default to non-shared caching until explicitly classified.
 
-Per-response CSP nonces require the HTML document and CSP header to remain one cache object. Tests must detect header/body recombination or policy loss.
+Per-response CSP nonces require the HTML document and CSP header to remain one cache object. Tests detect policy loss and header/body nonce mismatches.
 
 ## Environment and analytics
 
 Runtime configuration is resolved through the Pages Function context and request environment. Secrets and bindings are not committed.
 
-The analytics identifier is optional. Missing analytics configuration must not prevent rendering. Adding a new runtime binding requires documentation of:
+The analytics identifier is optional. Missing analytics configuration must not prevent rendering. The runtime contract injects a test identifier and verifies that the Pages binding reaches the rendered response.
+
+Adding a new runtime binding requires documentation of:
 
 - its owner;
 - preview and production behavior;
@@ -142,7 +158,13 @@ The analytics identifier is optional. Missing analytics configuration must not p
 
 **Role:** Authoritative production runtime and deployment contract.
 
-Must be exercised by CI through a pinned Wrangler build and local Pages runtime harness.
+Required CI uses pinned Wrangler to build the Pages Function, enforce its budget, stage an advanced-mode Worker, and execute it under workerd.
+
+### Direct adapter contract
+
+**Role:** Fast request-adapter diagnostic.
+
+It imports `functions/[[path]].js` against the generated Remix build and verifies representative route, binding, status, header, redirect, and method-error behavior. It does not substitute for workerd.
 
 ### `remix-serve`
 
@@ -160,7 +182,7 @@ Development-only CSP allowances and WebSocket behavior must not leak into produc
 
 **Role:** Local Node portability and optional deployment-parity experiment.
 
-The current image runs `remix-serve`; it is not the Cloudflare production artifact. Docker documentation must state that distinction. If the image is retained as an operational artifact, it requires its own dependency and vulnerability policy.
+The current image runs `remix-serve`; it is not the Cloudflare production artifact. Docker documentation states that distinction. If the image is retained as an operational artifact, it requires its own dependency and vulnerability policy.
 
 ### Makefile
 
@@ -170,53 +192,69 @@ Package scripts and checked-in platform configuration remain authoritative. Make
 
 ## Toolchain requirements
 
-Wrangler must be declared and lockfile-controlled. Production compatibility checks and deployment scripts must not fetch an unspecified Wrangler version through `npx`.
+Wrangler is declared and lockfile-controlled. Production compatibility checks and deployment scripts must not fetch an unspecified Wrangler version through `npx`.
 
-The Pages Function adapter must use a direct, intentional dependency. The implementation must decide whether to:
-
-1. declare `@remix-run/server-runtime` directly; or
-2. use a public Cloudflare/Remix adapter package that owns the request-handler boundary.
-
-Relying on a transitive package being hoisted is not acceptable.
+`@remix-run/server-runtime` is a direct dependency because the Pages Function adapter owns that request-handler boundary. Relying on transitive dependency hoisting is prohibited.
 
 ## CI contract
 
-The required Pages adapter job will:
+The required Quality job:
 
-1. install dependencies with the frozen lockfile;
-2. build CSS and Remix production artifacts;
-3. bundle Pages Functions with the pinned Wrangler version and checked-in configuration;
-4. record Worker bundle metadata and size;
-5. start the bundled application with `wrangler pages dev` or an equivalent Workers-runtime harness;
-6. run HTTP contract tests against that runtime;
-7. fail on unresolved imports, unsupported runtime APIs, missing assets, incorrect statuses, or header regressions.
+1. installs dependencies with the frozen lockfile;
+2. validates repository formatting, lint, and types;
+3. builds CSS and Remix production artifacts;
+4. verifies the pinned Wrangler version;
+5. bundles Pages Functions with checked-in configuration;
+6. enforces compressed and raw Worker budgets;
+7. uploads Worker bundle metadata and the size report;
+8. runs the direct adapter contract;
+9. stages the source-isolated Pages runtime;
+10. starts workerd through pinned Wrangler;
+11. runs HTTP contracts against that runtime;
+12. uploads the deterministic runtime manifest.
 
-The baseline suite must cover:
+The baseline suite covers:
 
 - `/`;
-- one representative nested route;
+- a representative nested article route;
 - a bot request;
+- the `/contact` redirect;
 - a 404;
-- a controlled error route or test fixture;
-- a redirect;
+- a controlled 405 method error;
 - CSP nonce/header pairing;
-- cache headers;
-- static CSS and asset resolution;
-- canonical metadata and JSON-LD.
+- cache and security headers;
+- environment binding propagation;
+- static CSS and generated browser asset resolution;
+- canonical metadata and JSON-LD through existing route/browser contracts.
 
-The harness should run from a staged deployment context where practical, proving that source files and build-only packages are unnecessary at request time.
-
-Issue #55 will extend this established harness with MDX-specific and JavaScript-disabled article tests. Those extension tests are not part of the baseline closure criteria for #56.
+Issue #55 may extend this established harness with MDX-specific and JavaScript-disabled article tests without redefining the production topology.
 
 ## Bundle budget
 
-The first implementation slice must record the current compressed and uncompressed Worker size. The enforced limit should preserve explicit headroom below the applicable Cloudflare plan limit.
+The bundle gate measures the generated `.cloudflare/functions/index.js` artifact before deployment:
 
-Subsequent architectural changes must report their delta. Browser route splitting does not guarantee equivalent Worker splitting, so server bundle growth must be measured independently.
+- raw bytes;
+- deterministic gzip level-9 bytes;
+- platform limits for the selected plan;
+- internal budgets;
+- remaining headroom.
+
+The default plan is `free`. `CLOUDFLARE_WORKERS_PLAN=paid` is an explicit opt-in for deployments backed by a paid Workers plan.
+
+Both plans reserve 20% internal headroom:
+
+| Plan | Platform gzip limit | Enforced gzip budget |
+| ---- | -------------------: | -------------------: |
+| Free |         3,000,000 B |         2,400,000 B |
+| Paid |        10,000,000 B |         8,000,000 B |
+
+The platform's 64,000,000-byte uncompressed limit is enforced at an internal budget of 51,200,000 bytes.
+
+The generated `.cloudflare/functions/size-report.json` is uploaded with CI artifacts. Subsequent architectural changes must expose their size effect through the report. Browser route splitting does not imply equivalent Worker splitting, so server bundle growth is measured independently.
 
 ## Security considerations
 
-The production adapter is part of the trust boundary. Review must include:
+The production adapter is part of the trust boundary. Review includes:
 
 - declared dependency provenance;
 - compatibility flags;
@@ -225,33 +263,36 @@ The production adapter is part of the trust boundary. Review must include:
 - error-path header behavior;
 - source-map handling;
 - accidental inclusion of source content or build-time tooling;
-- cache behavior for any future non-public route.
+- cache behavior for future non-public routes;
+- Worker size growth that could force an unsafe or unplanned platform change.
 
-Detailed CSP and cross-origin policy hardening remains owned by #57, but the baseline adapter tests must prove that current headers survive production execution.
+Detailed CSP and cross-origin policy hardening remains owned by #57, but the baseline adapter and workerd tests prove that current headers survive production execution.
 
 ## Consequences
 
 ### Positive
 
-- Cloudflare compatibility becomes measurable rather than assumed.
-- MDX and framework migrations gain a stable production acceptance boundary.
-- Runtime-only and build-only dependencies become distinguishable.
-- deployment documentation, scripts, and CI converge on one topology.
-- Worker growth and compatibility-date changes become reviewable.
+- Cloudflare compatibility is measurable rather than assumed.
+- MDX and framework migrations have a stable production acceptance boundary.
+- Runtime-only and build-only dependencies are distinguishable.
+- Deployment documentation, scripts, and CI converge on one topology.
+- Worker growth and compatibility-date changes are reviewable.
+- Redirect and error behavior cannot silently diverge between Node and workerd.
 
 ### Costs
 
-- CI gains another build/runtime path in addition to browser tests.
-- Wrangler becomes a repository-managed dependency.
-- some Node-oriented dependencies may require replacement or explicit compatibility justification.
-- maintaining both Docker and Cloudflare paths requires clear scope to prevent false parity claims.
+- CI maintains an additional runtime path beyond browser tests.
+- Wrangler is a repository-managed dependency.
+- Node-oriented dependencies may require replacement or explicit compatibility justification.
+- Maintaining both Docker and Cloudflare paths requires clear scope to prevent false parity claims.
+- The current Yarn cache is large and should be optimized separately without weakening the production contract.
 
-## Follow-up implementation
+## Extension rules
 
-1. Pin Wrangler and replace unpinned invocations.
-2. resolve the direct Remix runtime dependency decision;
-3. add Pages Function bundle and runtime scripts;
-4. record the Worker bundle baseline and budget;
-5. add the Cloudflare adapter CI job and HTTP contract suite;
-6. align README, Docker, Makefile, and package script descriptions;
-7. extend the harness from #55, #57, and #58 without redefining the production topology.
+Future work from #55, #57, #58, or framework modernization may extend the established contract, but must not:
+
+- make `remix-serve` the production authority;
+- bypass the bundle budget;
+- remove source-isolation guarantees;
+- introduce unpinned runtime tooling;
+- weaken no-JavaScript content or current security-header coverage.
