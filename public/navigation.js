@@ -1,6 +1,4 @@
-const mobileNavigations = document.querySelectorAll(
-  "[data-mobile-navigation]",
-)
+const mobileNavigations = document.querySelectorAll("[data-mobile-navigation]")
 
 for (const navigation of mobileNavigations) {
   if (!(navigation instanceof HTMLDetailsElement)) continue
