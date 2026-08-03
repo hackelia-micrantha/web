@@ -1,9 +1,9 @@
 name: Generate Wrangler Lockfile
 
 on:
-  push:
+  pull_request:
     branches:
-      - agent/cloudflare-pages-wrangler-gate
+      - main
 
 permissions:
   contents: write
@@ -14,10 +14,10 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: Check out repository
+      - name: Check out feature branch
         uses: actions/checkout@v5
         with:
-          ref: agent/cloudflare-pages-wrangler-gate
+          ref: ${{ github.head_ref }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -40,4 +40,4 @@ jobs:
             exit 0
           fi
           git commit -m "Lock pinned Wrangler dependency"
-          git push origin HEAD:agent/cloudflare-pages-wrangler-gate
+          git push origin HEAD:${{ github.head_ref }}
