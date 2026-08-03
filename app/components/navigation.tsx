@@ -74,7 +74,9 @@ export const Navigation = () => {
             alt=""
             className={hideMobileLogo ? "hidden sm:block" : "block"}
           />
-          <span className="text-xl font-semibold tracking-tight">Micrantha</span>
+          <span className="text-xl font-semibold tracking-tight">
+            Micrantha
+          </span>
         </Link>
 
         <div className="hidden items-center gap-1 text-sm sm:flex">
@@ -96,9 +98,7 @@ export const Navigation = () => {
                 <span
                   aria-hidden="true"
                   className={`absolute inset-x-3 bottom-1 h-px origin-left bg-slate-900 transition-transform duration-200 ${
-                    active
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
+                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   }`}
                 />
               </Link>
@@ -113,10 +113,7 @@ export const Navigation = () => {
           </ExternalLink>
         </div>
 
-        <div
-          className="relative sm:hidden"
-          onKeyDown={handleMobileMenuKeyDown}
-        >
+        <div className="relative sm:hidden" onKeyDown={handleMobileMenuKeyDown}>
           <button
             ref={mobileMenuTriggerRef}
             type="button"
