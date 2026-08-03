@@ -84,6 +84,18 @@ jobs:
       - name: Test Cloudflare Pages adapter contract
         run: yarn test:cloudflare:adapter
 
+      - name: Test Cloudflare Pages runtime contract
+        run: yarn test:cloudflare:runtime
+
+      - name: Upload Cloudflare runtime manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-pages-runtime-${{ github.run_id }}
+          path: .cloudflare/runtime/manifest.json
+          if-no-files-found: ignore
+          retention-days: 7
+
   end-to-end:
     name: End-to-end
     runs-on: ubuntu-latest
