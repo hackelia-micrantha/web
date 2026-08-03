@@ -97,11 +97,11 @@ yarn test:cloudflare:runtime
 The runtime test creates an ignored `.cloudflare/runtime/` stage containing only:
 
 - `public/` static assets and browser output;
-- the prebuilt Pages Worker;
+- the prebuilt Pages Worker staged as `public/_worker.js`;
 - generated Worker route and build metadata;
 - `wrangler.toml`.
 
-It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler starts that prebuilt Worker with `pages dev --script-path ... --no-bundle`, then the contract verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler starts the prebuilt module through Pages advanced mode with `pages dev public --no-bundle`, then the contract verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
 
 The generated function bundle, config, build metadata, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Issue #56 retains the remaining plan-aware bundle budget and explicit redirect/controlled-error coverage.
 
