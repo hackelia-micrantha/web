@@ -47,7 +47,7 @@ coverage
 bower_components
 
 # node-waf configuration
-.lockwscript
+.lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
@@ -65,7 +65,7 @@ typings/
 # Optional npm cache directory
 .npm
 
-# Optional eslint cache directory
+# Optional eslint cache
 .eslintcache
 
 # Microbundle cache
