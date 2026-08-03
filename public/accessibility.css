@@ -19,9 +19,3 @@
     transform: none;
   }
 }
-
-.mobile-nav-panel {
-  opacity: 1;
-  pointer-events: auto;
-  transform: none;
-}
