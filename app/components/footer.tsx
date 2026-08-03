@@ -42,11 +42,14 @@ export const Footer = () => {
           <Link to="/philosophy">Philosophy</Link>
         </div>
 
-        {fortune ? (
-          <div className="max-w-3xl text-sm text-gray-700" aria-live="polite">
-            &#10077; {fortune} &#10078;
-          </div>
-        ) : null}
+        <div className="min-h-12 max-w-3xl text-sm text-gray-700">
+          {fortune ? (
+            <p>
+              <span aria-hidden="true">&#10077;</span> {fortune}{" "}
+              <span aria-hidden="true">&#10078;</span>
+            </p>
+          ) : null}
+        </div>
 
         <div className="text-sm text-gray-600">
           &copy; All Rights Reserved{" "}
