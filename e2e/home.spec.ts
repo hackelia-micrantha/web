@@ -56,9 +56,7 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
   await expect(page).toHaveURL(/\/solutions$/)
   await expect(page.getByRole("heading", { name: "Solutions" })).toBeVisible()
   await expect(
-    page.getByText(
-      "Products that have grown into active use, including internal use.",
-    ),
+    page.getByText("Deployable systems, distributions, tools, and platforms."),
   ).toBeVisible()
 
   await clickNavigationLink(page, "Blog")

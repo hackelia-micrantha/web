@@ -12,6 +12,8 @@
     "dev": "run-p dev:*",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix dev",
+    "format:check": "prettier --check .",
+    "format:check:changed": "bash scripts/check-changed-format.sh",
     "generate:css": "npx @tailwindcss/cli -i ./app/styles/app.css -o ./public/tailwind.css",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",

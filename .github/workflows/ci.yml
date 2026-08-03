@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+
+jobs:
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Check changed-file formatting
+        id: formatting
+        env:
+          FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          FORMAT_HEAD_SHA: ${{ github.sha }}
+        run: yarn format:check:changed
+
+      - name: Generate formatting patch
+        if: failure() && steps.formatting.outcome == 'failure'
+        env:
+          FORMAT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          FORMAT_HEAD_SHA: ${{ github.sha }}
+        run: |
+          bash scripts/check-changed-format.sh --write
+          git diff -- . > formatting.patch
+
+      - name: Upload formatting patch
+        if: failure() && steps.formatting.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatting-patch-${{ github.run_id }}
+          path: formatting.patch
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Lint changed files
+        env:
+          LINT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          LINT_HEAD_SHA: ${{ github.sha }}
+        run: bash scripts/check-changed-lint.sh
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Build
+        run: yarn build
+
+  end-to-end:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Install Chromium
+        run: yarn playwright install --with-deps chromium
+
+      - name: Run functional Playwright tests
+        run: yarn playwright test --grep-invert "visual regressions"
+
+      - name: Upload Playwright failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 7
