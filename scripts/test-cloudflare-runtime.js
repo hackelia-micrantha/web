@@ -195,10 +195,15 @@ try {
 
   const stylesheet = await read("/tailwind.css")
   assert.equal(stylesheet.response.status, 200)
-  assert.match(stylesheet.response.headers.get("content-type") ?? "", /^text\/css\b/)
+  assert.match(
+    stylesheet.response.headers.get("content-type") ?? "",
+    /^text\/css\b/,
+  )
   assert.match(stylesheet.body, /--color-|font-family|display:/)
 
-  const manifestResponse = await fetch(new URL("/icon/site.webmanifest", origin))
+  const manifestResponse = await fetch(
+    new URL("/icon/site.webmanifest", origin),
+  )
   assert.equal(manifestResponse.status, 200)
   const manifest = await manifestResponse.json()
   assert.equal(manifest.name, "Micrantha Software")
