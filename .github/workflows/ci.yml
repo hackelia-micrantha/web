@@ -30,8 +30,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
@@ -69,6 +67,9 @@ jobs:
 
       - name: Bundle Cloudflare Pages Function
         run: yarn cloudflare:functions:build
+
+      - name: Enforce Cloudflare Worker bundle budget
+        run: yarn test:cloudflare:bundle-budget
 
       - name: Report Pages Function bundle files
         run: find .cloudflare/functions -type f -printf '%p %s bytes\n' | sort
@@ -109,8 +110,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
