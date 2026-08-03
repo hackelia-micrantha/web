@@ -16,19 +16,19 @@ Marketing site and web presence for [micrantha.com](https://micrantha.com), buil
 - Marketing pages for services, solutions, philosophy, support, and laboratory work
 - Shared card palette and icon system for consistent presentation
 - Playwright route, accessibility, and visual regression coverage
-- Cloudflare Pages deployment path with checked-in Wrangler config
+- Cloudflare Pages Functions as the authoritative production runtime
 
 ## Stack
 
-| Area | Tools |
-| --- | --- |
-| App framework | Remix 2 |
-| UI | React 18 |
-| Language | TypeScript |
-| Styling | Tailwind CSS 4 via CLI |
-| Quality | ESLint + Prettier |
-| Testing | Playwright |
-| Deployment | Cloudflare Pages |
+| Area          | Tools                      |
+| ------------- | -------------------------- |
+| App framework | Remix 2                    |
+| UI            | React 18                   |
+| Language      | TypeScript                 |
+| Styling       | Tailwind CSS 4 via CLI     |
+| Quality       | ESLint + Prettier          |
+| Testing       | Playwright                 |
+| Deployment    | Cloudflare Pages Functions |
 
 ## Requirements
 
@@ -46,18 +46,18 @@ Open `http://localhost:3000`.
 
 ## Scripts
 
-| Command | Purpose |
-| --- | --- |
-| `yarn dev` | Run Remix and Tailwind in watch mode |
-| `yarn build` | Build CSS and Remix for production |
-| `yarn start` | Serve the production build |
-| `yarn lint` | Run ESLint |
-| `yarn lint:fix` | Auto-fix lint issues |
-| `yarn typecheck` | Run the TypeScript build check |
-| `yarn test:e2e` | Run the full Playwright suite |
-| `yarn test:e2e:mobile` | Run the mobile Playwright project only |
-| `yarn test:e2e:headed` | Run Playwright in headed mode |
-| `yarn deploy:cloudflare` | Typecheck, build, and deploy to Cloudflare Pages |
+| Command                  | Purpose                                                  |
+| ------------------------ | -------------------------------------------------------- |
+| `yarn dev`               | Run Remix and Tailwind in watch mode                     |
+| `yarn build`             | Build CSS and Remix for production                       |
+| `yarn start`             | Serve the production build locally through `remix-serve` |
+| `yarn lint`              | Run ESLint                                               |
+| `yarn lint:fix`          | Auto-fix lint issues                                     |
+| `yarn typecheck`         | Run the TypeScript build check                           |
+| `yarn test:e2e`          | Run the full Playwright suite                            |
+| `yarn test:e2e:mobile`   | Run the mobile Playwright project only                   |
+| `yarn test:e2e:headed`   | Run Playwright in headed mode                            |
+| `yarn deploy:cloudflare` | Typecheck, build, and deploy to Cloudflare Pages         |
 
 ## Testing
 
@@ -82,7 +82,8 @@ yarn test:e2e e2e/visual.spec.ts
 Notes:
 
 - Playwright uses `http://127.0.0.1:3000` by default.
-- The test config starts the app automatically with `yarn build && PORT=3000 yarn start`.
+- The current browser suite starts the app with `yarn build && PORT=3000 yarn start`.
+- This validates the production Remix build through `remix-serve`; it does not by itself prove Cloudflare Pages Functions compatibility.
 - Desktop and mobile Chromium projects are configured.
 - The suite includes automated axe accessibility scans for key public routes.
 - On this machine, `/usr/bin/chromium` is used automatically when Playwright-managed browsers are unavailable.
@@ -100,11 +101,14 @@ yarn test:e2e e2e/visual.spec.ts --update-snapshots
 
 ## Deployment
 
-Cloudflare Pages is the primary deployment target.
+Cloudflare Pages Functions is the authoritative production runtime. The request adapter in `functions/[[path]].js` consumes the generated Remix server build, while `public/` supplies static assets and browser output.
+
+See [Cloudflare Pages SSR Architecture](docs/architecture/cloudflare-pages-ssr.md) for the production topology, compatibility boundary, artifact contract, and role of local Node and Docker paths.
 
 Checked-in config:
 
 - `wrangler.toml`
+- `functions/[[path]].js`
 - `package.json` deploy script
 
 Expected environment variables:
@@ -119,7 +123,11 @@ Deploy manually:
 yarn deploy:cloudflare
 ```
 
+The deployment command will be updated under issue #56 to use a repository-pinned Wrangler version and to validate the bundled Pages Function in CI.
+
 ## Docker
+
+The Docker image runs the Remix production build through `remix-serve`. It is useful for local Node portability, but it is not the Cloudflare Pages production artifact or a substitute for the Pages Functions runtime contract.
 
 Build and run locally:
 
@@ -139,10 +147,11 @@ make run
 
 ```text
 app/          Remix routes, components, services, and utilities
+docs/         Architecture and operational decisions
 e2e/          Playwright specs and visual baselines
-public/       Static assets
-build/        Production output after yarn build
-functions/    Edge or platform-specific function code
+public/       Static assets and browser build output
+build/        Remix server build produced by yarn build
+functions/    Cloudflare Pages Functions request adapter
 ```
 
 ## Development Notes
