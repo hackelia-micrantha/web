@@ -5,7 +5,9 @@ import { fileURLToPath } from "node:url"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const stage = path.join(root, ".cloudflare/runtime")
+const stagedPublic = path.join(stage, "public")
 const workerSource = path.join(root, ".cloudflare/functions/index.js")
+const workerSourceMap = path.join(root, ".cloudflare/functions/index.js.map")
 
 await Promise.all([
   access(path.join(root, "public/tailwind.css")),
@@ -14,18 +16,26 @@ await Promise.all([
 ])
 
 await rm(stage, { recursive: true, force: true })
-await mkdir(path.join(stage, "worker"), { recursive: true })
-await cp(path.join(root, "public"), path.join(stage, "public"), {
+await mkdir(stagedPublic, { recursive: true })
+await cp(path.join(root, "public"), stagedPublic, {
   recursive: true,
 })
-await copyFile(workerSource, path.join(stage, "worker/index.js"))
+await copyFile(workerSource, path.join(stagedPublic, "_worker.js"))
+
+try {
+  await copyFile(workerSourceMap, path.join(stagedPublic, "index.js.map"))
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error
+}
+
 await copyFile(
   path.join(root, "wrangler.toml"),
   path.join(stage, "wrangler.toml"),
 )
 
 const stagedEntries = (await readdir(stage)).sort()
-assert.deepEqual(stagedEntries, ["public", "worker", "wrangler.toml"])
+assert.deepEqual(stagedEntries, ["public", "wrangler.toml"])
+await access(path.join(stagedPublic, "_worker.js"))
 
 for (const sourceOnlyPath of [
   "app",
@@ -33,6 +43,8 @@ for (const sourceOnlyPath of [
   "functions",
   "scripts",
   "node_modules",
+  "package.json",
+  "yarn.lock",
 ]) {
   await assert.rejects(access(path.join(stage, sourceOnlyPath)))
 }
