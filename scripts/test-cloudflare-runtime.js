@@ -73,13 +73,9 @@ assert.equal(manifest.routing.runWorkerFirst, false)
 assert.ok(manifest.files.length > 0)
 assert.equal(
   manifest.files.some((file) =>
-    [
-      "app/",
-      "build/",
-      "functions/",
-      "node_modules/",
-      "scripts/",
-    ].some((prefix) => file.path.startsWith(prefix)),
+    ["app/", "build/", "functions/", "node_modules/", "scripts/"].some(
+      (prefix) => file.path.startsWith(prefix),
+    ),
   ),
   false,
 )
