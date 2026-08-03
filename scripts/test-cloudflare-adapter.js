@@ -103,8 +103,7 @@ assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
 assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body, {
-  cacheControl:
-    "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
+  cacheControl: "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
 })
 
 const contactRedirect = await read("/contact")
@@ -120,8 +119,7 @@ assert.match(
 )
 assertArticleMetadata(article.body)
 assertDocumentHeaders(article.response, article.body, {
-  cacheControl:
-    "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+  cacheControl: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
 })
 
 const botArticle = await read(articlePath, {
@@ -131,8 +129,7 @@ assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
 assertArticleMetadata(botArticle.body)
 assertDocumentHeaders(botArticle.response, botArticle.body, {
-  cacheControl:
-    "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+  cacheControl: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
 })
 
 const methodNotAllowed = await read("/services", { method: "POST" })
