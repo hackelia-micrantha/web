@@ -43,8 +43,9 @@ export const Footer = () => {
         </div>
 
         {fortune ? (
-          <div className="max-w-3xl text-sm text-gray-700" aria-live="polite">
-            &#10077; {fortune} &#10078;
+          <div className="max-w-3xl text-sm text-gray-700">
+            <span aria-hidden="true">&#10077;</span> {fortune}{" "}
+            <span aria-hidden="true">&#10078;</span>
           </div>
         ) : null}
 

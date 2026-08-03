@@ -7,12 +7,12 @@ const navTargets = {
 }
 
 async function clickNavigationLink(page: Page, name: keyof typeof navTargets) {
-  const navigation = page.getByRole("navigation")
+  const navigation = page.getByRole("navigation", { name: "Primary" })
   const target = navTargets[name]
   const visibleLink = navigation.locator(`a[href="${target}"]:visible`)
 
   if ((await visibleLink.count()) === 0) {
-    await navigation.locator("summary:visible").click()
+    await navigation.locator("details[data-mobile-navigation] summary").click()
   }
 
   await visibleLink.click()
