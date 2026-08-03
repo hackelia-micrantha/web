@@ -93,6 +93,17 @@ assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
 assertDocumentHeaders(botArticle.response, botArticle.body)
 
+for (const contractPath of [
+  "/runtime-contract/redirect",
+  "/runtime-contract/error",
+]) {
+  const disabledContract = await read(contractPath)
+  assert.equal(disabledContract.response.status, 404)
+  assert.equal(disabledContract.response.headers.get("location"), null)
+  assert.match(disabledContract.body, /404|Not Found/i)
+  assertDocumentHeaders(disabledContract.response, disabledContract.body)
+}
+
 const missing = await read("/this-route-does-not-exist")
 assert.equal(missing.response.status, 404)
 assert.match(missing.body, /404|Not Found/i)
