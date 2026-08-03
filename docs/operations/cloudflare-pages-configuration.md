@@ -16,14 +16,14 @@ Required CI runs `yarn test:cloudflare:config` to reject drift between:
 
 ## Contracted values
 
-| Setting | Required value |
-| --- | --- |
-| Pages project | `micrantha-web` |
-| Build output directory | `./public` |
-| Compatibility date | `2026-03-21` |
-| Compatibility flags | `nodejs_compat` |
-| Upload source maps | enabled |
-| Pages Function entry | `functions/[[path]].js` |
+| Setting                | Required value          |
+| ---------------------- | ----------------------- |
+| Pages project          | `micrantha-web`         |
+| Build output directory | `./public`              |
+| Compatibility date     | `2026-03-21`            |
+| Compatibility flags    | `nodejs_compat`         |
+| Upload source maps     | enabled                 |
+| Pages Function entry   | `functions/[[path]].js` |
 
 ## Dashboard-only configuration
 
