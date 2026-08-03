@@ -244,9 +244,9 @@ The default plan is `free`. `CLOUDFLARE_WORKERS_PLAN=paid` is an explicit opt-in
 Both plans reserve 20% internal headroom:
 
 | Plan | Platform gzip limit | Enforced gzip budget |
-| ---- | -------------------: | -------------------: |
-| Free |         3,000,000 B |         2,400,000 B |
-| Paid |        10,000,000 B |         8,000,000 B |
+| ---- | ------------------: | -------------------: |
+| Free |         3,000,000 B |          2,400,000 B |
+| Paid |        10,000,000 B |          8,000,000 B |
 
 The platform's 64,000,000-byte uncompressed limit is enforced at an internal budget of 51,200,000 bytes.
 
