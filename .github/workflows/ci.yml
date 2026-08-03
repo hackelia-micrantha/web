@@ -59,6 +59,9 @@ jobs:
       - name: Typecheck
         run: yarn typecheck
 
+      - name: Verify Cloudflare Pages configuration
+        run: yarn test:cloudflare:config
+
       - name: Build
         run: yarn build
 
@@ -88,12 +91,14 @@ jobs:
       - name: Test Cloudflare Pages runtime contract
         run: yarn test:cloudflare:runtime
 
-      - name: Upload Cloudflare runtime manifest
+      - name: Upload Cloudflare runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cloudflare-pages-runtime-${{ github.run_id }}
-          path: .cloudflare/runtime/manifest.json
+          path: |
+            .cloudflare/runtime/manifest.json
+            .cloudflare/runtime/runtime-report.json
           if-no-files-found: ignore
           retention-days: 7
 
