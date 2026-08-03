@@ -48,9 +48,9 @@ let spawnError = null
 const runtime = spawn(
   wrangler,
   [
-    "pages",
     "dev",
-    "public",
+    "--config",
+    "wrangler.toml",
     "--no-bundle",
     "--ip",
     "127.0.0.1",
@@ -58,8 +58,8 @@ const runtime = spawn(
     String(port),
     "--local-protocol",
     "http",
-    "--binding",
-    `MICRANTHA_ANALYTICS_ID=${analyticsId}`,
+    "--var",
+    `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
   ],
   {
     cwd: stage,
@@ -129,13 +129,13 @@ async function waitForRuntime() {
 
       return Date.now() - startedAt
     } catch {
-      // The local Pages runtime is still starting.
+      // The local Workers runtime is still starting.
     }
 
     await delay(250)
   }
 
-  throw new Error(`Timed out waiting for Wrangler Pages runtime.\n${logs}`)
+  throw new Error(`Timed out waiting for the Workers runtime.\n${logs}`)
 }
 
 async function read(pathname, { userAgent = "runtime-contract" } = {}) {
@@ -240,7 +240,7 @@ try {
   await assetResponse.body?.cancel()
 
   console.log(
-    `Cloudflare Pages runtime contract passed; local workerd ready in ${readyMilliseconds} ms`,
+    `Cloudflare runtime contract passed; local workerd ready in ${readyMilliseconds} ms`,
   )
 } catch (error) {
   console.error(logs)
