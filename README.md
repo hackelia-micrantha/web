@@ -4,7 +4,7 @@
 [![React](https://img.shields.io/badge/React-18.3-149ECA?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
+[![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright)](https://playwright.dev/)
 [![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare_Pages-F38020?logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-111827.svg)](./LICENSE)
 
@@ -51,11 +51,12 @@ Open `http://localhost:3000`.
 | `yarn dev`                        | Run Remix and Tailwind in watch mode                           |
 | `yarn build`                      | Build CSS and Remix for production                             |
 | `yarn cloudflare:functions:build` | Bundle the Pages Function with pinned Wrangler                 |
-| `yarn cloudflare:runtime:stage`   | Stage only the deployable Pages assets and prebuilt Worker     |
+| `yarn cloudflare:runtime:stage`   | Stage only the deployable Pages assets and generated Worker    |
 | `yarn start`                      | Serve the production build locally through `remix-serve`       |
 | `yarn lint`                       | Run ESLint                                                     |
 | `yarn lint:fix`                   | Auto-fix lint issues                                           |
 | `yarn typecheck`                  | Run the TypeScript build check                                 |
+| `yarn test:cloudflare:size`       | Enforce compressed and raw Worker bundle budgets               |
 | `yarn test:cloudflare:adapter`    | Exercise the built Pages Function entry directly               |
 | `yarn test:cloudflare:runtime`    | Exercise the staged Worker through the local Pages runtime     |
 | `yarn test:e2e`                   | Run the full Playwright suite                                  |
@@ -84,15 +85,24 @@ yarn build
 yarn test:cloudflare:adapter
 ```
 
-This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, CSP nonce, cache, and security-header behavior. It is a fast adapter-level diagnostic, not a Workers-runtime substitute.
+This imports the checked-in Pages Function entry against the generated Remix server build and verifies representative SSR, binding, status, redirect, method-error, CSP nonce, cache, and security-header behavior. It is a fast adapter-level diagnostic, not a Workers-runtime substitute.
 
-Bundle the Pages Function using the repository-pinned Wrangler version, then run the authoritative local runtime contract:
+Bundle the Pages Function using the repository-pinned Wrangler version, enforce its bundle budget, and run the authoritative local runtime contract:
 
 ```sh
 yarn build
 yarn cloudflare:functions:build
+yarn test:cloudflare:size
 yarn test:cloudflare:runtime
 ```
+
+The size gate defaults to the Cloudflare Workers Free-plan compressed limit and reserves 20% internal headroom. It also enforces 20% headroom below the platform's uncompressed limit. Set `CLOUDFLARE_WORKERS_PLAN=paid` only when the deployed Pages project uses a paid Workers plan:
+
+```sh
+CLOUDFLARE_WORKERS_PLAN=paid yarn test:cloudflare:size
+```
+
+The report is written to `.cloudflare/functions/size-report.json` and retained with the CI bundle artifact.
 
 The runtime test creates an ignored `.cloudflare/runtime/` stage containing only:
 
@@ -101,9 +111,9 @@ The runtime test creates an ignored `.cloudflare/runtime/` stage containing only
 - generated Worker route and build metadata;
 - `wrangler.toml`.
 
-It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker’s `nodejs_compat` imports, and starts workerd with `pages dev public`. The contract then verifies SSR, nested and bot routes, 404 behavior, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
+It deliberately excludes `app/`, `build/`, `functions/`, and `node_modules/` from the staged runtime payload. Wrangler consumes that source-free stage through Pages advanced mode, performs the final compatibility-aware bundle required by the Worker's `nodejs_compat` imports, and starts workerd with `pages dev public`. The contract verifies SSR, nested and bot routes, the legacy `/contact` redirect, 404 and 405 responses, CSP nonce pairing, cache and security headers, static CSS, and a generated browser bundle.
 
-The generated function bundle, config, build metadata, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection. Issue #56 retains the remaining plan-aware bundle budget and explicit redirect/controlled-error coverage.
+The generated function bundle, config, build metadata, size report, and runtime manifest are written under the ignored `.cloudflare/` directory. Required CI uploads those outputs for inspection.
 
 Run a specific spec:
 
@@ -141,7 +151,7 @@ Checked-in config:
 
 - `wrangler.toml`
 - `functions/[[path]].js`
-- `package.json` deploy, bundle, and runtime-test scripts
+- `package.json` deploy, bundle, size, and runtime-test scripts
 - lockfile-pinned Wrangler dependency
 
 Expected environment variables:
@@ -149,6 +159,7 @@ Expected environment variables:
 - `CLOUDFLARE_API_TOKEN` or a compatible Pages token
 - `CLOUDFLARE_PAGES_PROJECT` to override the default project name
 - `CLOUDFLARE_PAGES_BRANCH` to override the branch name
+- `CLOUDFLARE_WORKERS_PLAN=paid` only for a paid Workers plan; otherwise the Free-plan budget is enforced
 
 Deploy manually:
 
@@ -156,7 +167,7 @@ Deploy manually:
 yarn deploy:cloudflare
 ```
 
-The deployment command runs typechecking, the application build, Pages Function bundling, the direct adapter contract, and the staged Pages runtime contract before invoking the pinned Wrangler binary.
+The deployment command runs typechecking, the application build, Pages Function bundling, the size budget, the direct adapter contract, and the staged Pages runtime contract before invoking the pinned Wrangler binary.
 
 ## Docker
 
@@ -185,7 +196,7 @@ e2e/          Playwright specs and visual baselines
 public/       Static assets and browser build output
 build/        Remix server build produced by yarn build
 functions/    Cloudflare Pages Functions request adapter
-scripts/      Build, staging, and runtime-contract automation
+scripts/      Build, staging, budget, and runtime-contract automation
 ```
 
 ## Development Notes
