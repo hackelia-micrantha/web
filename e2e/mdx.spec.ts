@@ -46,9 +46,12 @@ test.describe("representative MDX article", () => {
       "href",
       "https://micrantha.com/blog/ai-pipelines-need-control-boundaries",
     )
-    await expect(
-      page.locator('script[type="application/ld+json"]'),
-    ).toContainText('"@type":"Article"')
+
+    const structuredData = await page
+      .locator('script[type="application/ld+json"]')
+      .textContent()
+
+    expect(structuredData).toContain('"@type":"Article"')
   })
 
   test("supports hydrated client navigation", async ({ page }) => {
