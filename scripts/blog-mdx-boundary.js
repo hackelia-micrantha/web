@@ -97,7 +97,9 @@ function stripFrontmatter(source, filePath) {
   const closingIndex = lines.indexOf("---", 1)
 
   if (closingIndex === -1) {
-    throw new Error(`${filePath}: MDX frontmatter is missing its closing delimiter`)
+    throw new Error(
+      `${filePath}: MDX frontmatter is missing its closing delimiter`,
+    )
   }
 
   return lines.slice(closingIndex + 1).join("\n")
@@ -108,8 +110,15 @@ function isWhitespaceText(node) {
 }
 
 function validateExternalOrInternalLink(value, filePath, node) {
-  if (/^[\u0000-\u0020\u007f]/.test(value) || /[\u0000-\u001f\u007f]/.test(value)) {
-    boundaryError(filePath, node, `Link URL contains control characters: ${value}`)
+  if (
+    /^[\u0000-\u0020\u007f]/.test(value) ||
+    /[\u0000-\u001f\u007f]/.test(value)
+  ) {
+    boundaryError(
+      filePath,
+      node,
+      `Link URL contains control characters: ${value}`,
+    )
   }
 
   if (value.startsWith("#")) {
@@ -139,7 +148,11 @@ function validateExternalOrInternalLink(value, filePath, node) {
   }
 
   if (!["https:", "mailto:", "tel:"].includes(parsed.protocol)) {
-    boundaryError(filePath, node, `Unsupported link protocol: ${parsed.protocol}`)
+    boundaryError(
+      filePath,
+      node,
+      `Unsupported link protocol: ${parsed.protocol}`,
+    )
   }
 
   if (parsed.protocol === "https:" && (parsed.username || parsed.password)) {
@@ -153,7 +166,11 @@ function validateLocalBlogAsset(value, filePath, node) {
   try {
     decoded = decodeURIComponent(value)
   } catch {
-    boundaryError(filePath, node, `Asset path is not valid URL encoding: ${value}`)
+    boundaryError(
+      filePath,
+      node,
+      `Asset path is not valid URL encoding: ${value}`,
+    )
   }
 
   if (
@@ -176,11 +193,19 @@ function readLiteralProps(node, schema, filePath) {
 
   for (const attribute of node.attributes ?? []) {
     if (attribute.type !== "mdxJsxAttribute") {
-      boundaryError(filePath, attribute, "Spread and expression attributes are not allowed")
+      boundaryError(
+        filePath,
+        attribute,
+        "Spread and expression attributes are not allowed",
+      )
     }
 
     if (typeof attribute.name !== "string") {
-      boundaryError(filePath, attribute, "Namespaced JSX attributes are not allowed")
+      boundaryError(
+        filePath,
+        attribute,
+        "Namespaced JSX attributes are not allowed",
+      )
     }
 
     if (Object.hasOwn(values, attribute.name)) {
@@ -239,7 +264,11 @@ function validateComponent(node, parent, filePath, report) {
   }
 
   if (/^[a-z]/.test(node.name)) {
-    boundaryError(filePath, node, `Lowercase JSX element <${node.name}> is not allowed`)
+    boundaryError(
+      filePath,
+      node,
+      `Lowercase JSX element <${node.name}> is not allowed`,
+    )
   }
 
   const schema = componentSchemas[node.name]
@@ -275,8 +304,15 @@ function validateComponent(node, parent, filePath, report) {
   }
 
   if (node.name === "ControlRow") {
-    if (parent?.type !== "mdxJsxFlowElement" || parent.name !== "ControlTable") {
-      boundaryError(filePath, node, "<ControlRow> must be a direct child of <ControlTable>")
+    if (
+      parent?.type !== "mdxJsxFlowElement" ||
+      parent.name !== "ControlTable"
+    ) {
+      boundaryError(
+        filePath,
+        node,
+        "<ControlRow> must be a direct child of <ControlTable>",
+      )
     }
   }
 
@@ -286,7 +322,11 @@ function validateComponent(node, parent, filePath, report) {
 
   if (schema.children === "content") {
     if (node.children.length === 0 || node.children.every(isWhitespaceText)) {
-      boundaryError(filePath, node, `<${node.name}> must contain readable content`)
+      boundaryError(
+        filePath,
+        node,
+        `<${node.name}> must contain readable content`,
+      )
     }
   }
 
@@ -308,7 +348,11 @@ function validateComponent(node, parent, filePath, report) {
 
   if (schema.children === "rows") {
     if (node.children.length === 0 || node.children.every(isWhitespaceText)) {
-      boundaryError(filePath, node, "<ControlTable> must contain at least one row")
+      boundaryError(
+        filePath,
+        node,
+        "<ControlTable> must contain at least one row",
+      )
     }
 
     for (const child of node.children) {
@@ -326,7 +370,11 @@ function validateComponent(node, parent, filePath, report) {
 
 function validateMarkdownNode(node, filePath, report) {
   if (node.type === "heading" && (node.depth < 2 || node.depth > 6)) {
-    boundaryError(filePath, node, "Article headings must use levels 2 through 6")
+    boundaryError(
+      filePath,
+      node,
+      "Article headings must use levels 2 through 6",
+    )
   }
 
   if (node.type === "code") {
@@ -344,7 +392,11 @@ function validateMarkdownNode(node, filePath, report) {
 
   if (node.type === "image") {
     if (!node.alt || node.alt.trim() === "") {
-      boundaryError(filePath, node, "Markdown images require non-empty alt text")
+      boundaryError(
+        filePath,
+        node,
+        "Markdown images require non-empty alt text",
+      )
     }
     validateLocalBlogAsset(node.url, filePath, node)
     report.localAssets.add(node.url)
@@ -364,7 +416,11 @@ function validateTree(tree, filePath) {
       node.type === "mdxFlowExpression" ||
       node.type === "mdxTextExpression"
     ) {
-      boundaryError(filePath, node, "Executable MDX expressions, imports, and exports are not allowed")
+      boundaryError(
+        filePath,
+        node,
+        "Executable MDX expressions, imports, and exports are not allowed",
+      )
     }
 
     if (node.type === "html") {
@@ -379,7 +435,11 @@ function validateTree(tree, filePath) {
     } else if (allowedMarkdownNodes.has(node.type)) {
       validateMarkdownNode(node, filePath, report)
     } else {
-      boundaryError(filePath, node, `Unsupported Markdown/MDX node type: ${node.type}`)
+      boundaryError(
+        filePath,
+        node,
+        `Unsupported Markdown/MDX node type: ${node.type}`,
+      )
     }
 
     for (const child of node.children ?? []) {
@@ -396,7 +456,10 @@ function validateTree(tree, filePath) {
   }
 }
 
-export async function validateBlogMdxSource({ source, filePath = "<blog-mdx>" }) {
+export async function validateBlogMdxSource({
+  source,
+  filePath = "<blog-mdx>",
+}) {
   const body = stripFrontmatter(source, filePath)
   let report = null
 
