@@ -148,9 +148,9 @@ async function assertSeriesNavigation(page: Page, article: ArticleContract) {
       navigation.getByRole("link", { name: `Next: ${article.next}` }),
     ).toHaveAttribute("href", articlePath(articleByTitle(article.next)))
   } else {
-    await expect(
-      navigation.getByRole("link", { name: /^Next:/ }),
-    ).toHaveCount(0)
+    await expect(navigation.getByRole("link", { name: /^Next:/ })).toHaveCount(
+      0,
+    )
   }
 }
 
@@ -223,10 +223,16 @@ test.describe("canonical MDX articles", () => {
         const diagram = content.locator("[data-mermaid-diagram]")
 
         await expect(diagram).toContainText(article.mermaidTitle)
-        await expect(diagram).toHaveAttribute("data-mermaid-status", "rendered", {
-          timeout: 15_000,
-        })
-        await expect(diagram.locator("[data-mermaid-rendered] svg")).toBeVisible()
+        await expect(diagram).toHaveAttribute(
+          "data-mermaid-status",
+          "rendered",
+          {
+            timeout: 15_000,
+          },
+        )
+        await expect(
+          diagram.locator("[data-mermaid-rendered] svg"),
+        ).toBeVisible()
       }
     })
   }
@@ -266,7 +272,9 @@ test.describe("canonical MDX articles", () => {
   })
 })
 
-test("unpublished and unknown blog URLs remain unavailable", async ({ page }) => {
+test("unpublished and unknown blog URLs remain unavailable", async ({
+  page,
+}) => {
   for (const pathname of [
     "/blog/draft-publication-fixture",
     "/blog/future-publication-fixture",
@@ -284,7 +292,9 @@ test.describe("canonical MDX articles without JavaScript", () => {
   test.use({ javaScriptEnabled: false })
 
   for (const article of articles) {
-    test(`server-renders complete ${article.title} content`, async ({ page }) => {
+    test(`server-renders complete ${article.title} content`, async ({
+      page,
+    }) => {
       const response = await page.goto(articlePath(article))
 
       expect(response?.status()).toBe(200)
