@@ -1,484 +1,332 @@
 import { expect, test } from "@playwright/test"
+import type { Page } from "@playwright/test"
 
-const aiArticlePath = "/blog/ai-pipelines-need-control-boundaries"
-const integrationArticlePath =
-  "/blog/secure-platform-integration-is-not-plumbing"
-const softwareLayersArticlePath = "/blog/software-layers-are-risk-boundaries"
-const governanceArticlePath =
-  "/blog/governance-native-engineering-control-plane"
-const replayabilityArticlePath = "/blog/replayability-is-a-governance-problem"
-const legacyArticlePath = "/blog/recursive-governance-and-agent-workflows"
+type ArticleContract = {
+  callout?: string
+  finalText: string
+  imageAlt?: RegExp
+  mermaidSource?: string
+  mermaidTitle?: string
+  next?: string
+  part: number
+  previous?: string
+  relatedLink?: {
+    slug: string
+    title: string
+  }
+  series: string
+  slug: string
+  structuredData?: boolean
+  tableName?: string
+  tableRow?: {
+    name: RegExp
+    text: string
+  }
+  title: string
+}
 
-const unpublishedArticlePaths = [
-  "/blog/draft-publication-fixture",
-  "/blog/future-publication-fixture",
+const articles: ArticleContract[] = [
+  {
+    slug: "secure-platform-integration-is-not-plumbing",
+    title: "Secure Platform Integration Is Not Plumbing",
+    series: "Architecture Control Boundaries",
+    part: 1,
+    next: "AI Pipelines Need Control Boundaries",
+    callout: "Secure platform integration is not plumbing",
+    imageAlt: /channels and source systems flowing through an API gateway/i,
+    relatedLink: {
+      slug: "ai-pipelines-need-control-boundaries",
+      title: "AI Pipelines Need Control Boundaries",
+    },
+    finalText: "Integration layers deserve architectural attention",
+  },
+  {
+    slug: "ai-pipelines-need-control-boundaries",
+    title: "AI Pipelines Need Control Boundaries",
+    series: "Architecture Control Boundaries",
+    part: 2,
+    previous: "Secure Platform Integration Is Not Plumbing",
+    next: "Software Layers Are Risk Boundaries",
+    callout: "AI is not the system of record",
+    imageAlt: /sources flowing through preprocessing/i,
+    relatedLink: {
+      slug: "software-layers-are-risk-boundaries",
+      title: "Software Layers Are Risk Boundaries",
+    },
+    structuredData: true,
+    tableName: "AI pipeline failure modes",
+    tableRow: {
+      name: /Unsafe write-back/,
+      text: "Require approval gates and controlled adapter writes",
+    },
+    finalText: "The practical goal is not to remove AI from the workflow",
+  },
+  {
+    slug: "software-layers-are-risk-boundaries",
+    title: "Software Layers Are Risk Boundaries",
+    series: "Architecture Control Boundaries",
+    part: 3,
+    previous: "AI Pipelines Need Control Boundaries",
+    imageAlt: /clients flowing into interface and application layers/i,
+    relatedLink: {
+      slug: "secure-platform-integration-is-not-plumbing",
+      title: "Secure Platform Integration Is Not Plumbing",
+    },
+    finalText: "Software layers are not only a code-organization preference",
+  },
+  {
+    slug: "governance-native-engineering-control-plane",
+    title: "Governance-Native Engineering and the AI Control Plane",
+    series: "Governance-Native Engineering",
+    part: 1,
+    next: "Replayability Is a Governance Problem",
+    callout: "whether organizations can still govern",
+    mermaidTitle: "AI-native engineering control plane",
+    mermaidSource: "Human intent",
+    finalText:
+      "AI-native engineering therefore becomes a systems-governance discipline",
+  },
+  {
+    slug: "replayability-is-a-governance-problem",
+    title: "Replayability Is a Governance Problem",
+    series: "Governance-Native Engineering",
+    part: 2,
+    previous: "Governance-Native Engineering and the AI Control Plane",
+    next: "Recursive Governance and Agent Workflows",
+    callout: "not just reproducibility engineering",
+    mermaidTitle: "Replayability as evidence lifecycle",
+    mermaidSource: "Replay claim still valid?",
+    finalText: "The goal is bounded explainability and attributable execution",
+  },
+  {
+    slug: "recursive-governance-and-agent-workflows",
+    title: "Recursive Governance and Agent Workflows",
+    series: "Governance-Native Engineering",
+    part: 3,
+    previous: "Replayability Is a Governance Problem",
+    callout: "weakest materially contributing execution boundary",
+    mermaidTitle: "Governed recursive execution",
+    mermaidSource: "Workflow request",
+    finalText:
+      "ensuring humans remain capable of comprehension, intervention, replay, audit, and authority governance",
+  },
 ]
 
-test.describe("MDX articles", () => {
-  test("renders AI article content, components, metadata, and series navigation", async ({
-    page,
-  }) => {
-    await page.goto(aiArticlePath)
+function articlePath(article: ArticleContract) {
+  return `/blog/${article.slug}`
+}
 
-    await expect(page).toHaveTitle(
-      "Micrantha Software | AI Pipelines Need Control Boundaries",
-    )
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "AI Pipelines Need Control Boundaries",
-      }),
-    ).toBeVisible()
-    await expect(page.getByText("Part 2 of 3", { exact: true })).toBeVisible()
+function articleByTitle(title: string) {
+  const article = articles.find((candidate) => candidate.title === title)
 
-    const seriesNavigation = page.getByRole("navigation", {
-      name: "Architecture Control Boundaries series navigation",
-    })
+  if (!article) {
+    throw new Error(`Missing article fixture: ${title}`)
+  }
 
-    await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Previous: Secure Platform Integration Is Not Plumbing",
-      }),
-    ).toHaveAttribute("href", integrationArticlePath)
-    await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Next: Software Layers Are Risk Boundaries",
-      }),
-    ).toHaveAttribute("href", softwareLayersArticlePath)
+  return article
+}
 
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-
-    await expect(mdxContent).toBeVisible()
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "AI is not the system of record",
-    )
-    await expect(
-      mdxContent.getByRole("img", {
-        name: /sources flowing through preprocessing/i,
-      }),
-    ).toBeVisible()
-    await expect(
-      mdxContent.getByRole("table", { name: "AI pipeline failure modes" }),
-    ).toBeVisible()
-    await expect(
-      mdxContent.getByRole("row", { name: /Unsafe write-back/ }),
-    ).toContainText("Require approval gates and controlled adapter writes")
-    await expect(
-      mdxContent.getByRole("link", {
-        name: "Software Layers Are Risk Boundaries",
-        exact: true,
-      }),
-    ).toHaveAttribute("href", softwareLayersArticlePath)
-
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://micrantha.com/blog/ai-pipelines-need-control-boundaries",
-    )
-
-    const structuredData = await page
-      .locator('script[type="application/ld+json"]')
-      .textContent()
-
-    expect(structuredData).toContain('"@type":"Article"')
+async function assertSeriesNavigation(page: Page, article: ArticleContract) {
+  const navigation = page.getByRole("navigation", {
+    name: `${article.series} series navigation`,
   })
 
-  test("renders secure integration article from canonical MDX", async ({
-    page,
-  }) => {
-    await page.goto(integrationArticlePath)
-
-    await expect(page).toHaveTitle(
-      "Micrantha Software | Secure Platform Integration Is Not Plumbing",
-    )
+  if (article.previous) {
     await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Secure Platform Integration Is Not Plumbing",
+      navigation.getByRole("link", {
+        name: `Previous: ${article.previous}`,
       }),
-    ).toBeVisible()
-    await expect(page.getByText("Part 1 of 3", { exact: true })).toBeVisible()
-
-    const seriesNavigation = page.getByRole("navigation", {
-      name: "Architecture Control Boundaries series navigation",
-    })
-
+    ).toHaveAttribute("href", articlePath(articleByTitle(article.previous)))
+  } else {
     await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Next: AI Pipelines Need Control Boundaries",
-      }),
-    ).toHaveAttribute("href", aiArticlePath)
-    await expect(
-      seriesNavigation.getByRole("link", { name: /^Previous:/ }),
+      navigation.getByRole("link", { name: /^Previous:/ }),
     ).toHaveCount(0)
+  }
 
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-
-    await expect(mdxContent).toBeVisible()
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "Secure platform integration is not plumbing",
-    )
+  if (article.next) {
     await expect(
-      mdxContent.getByRole("img", {
-        name: /channels and source systems flowing through an API gateway/i,
-      }),
-    ).toBeVisible()
-    await expect(
-      mdxContent.getByRole("link", {
-        name: "AI Pipelines Need Control Boundaries",
-        exact: true,
-      }),
-    ).toHaveAttribute("href", aiArticlePath)
-    await expect(mdxContent).toContainText(
-      "Integration layers deserve architectural attention",
+      navigation.getByRole("link", { name: `Next: ${article.next}` }),
+    ).toHaveAttribute("href", articlePath(articleByTitle(article.next)))
+  } else {
+    await expect(navigation.getByRole("link", { name: /^Next:/ })).toHaveCount(
+      0,
     )
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://micrantha.com/blog/secure-platform-integration-is-not-plumbing",
-    )
-  })
+  }
+}
 
-  test("renders software layers article from canonical MDX", async ({
+test.describe("canonical MDX articles", () => {
+  for (const article of articles) {
+    test(`renders ${article.title}`, async ({ page }) => {
+      const response = await page.goto(articlePath(article))
+
+      expect(response?.status()).toBe(200)
+      await expect(page).toHaveTitle(`Micrantha Software | ${article.title}`)
+      await expect(
+        page.getByRole("heading", { level: 1, name: article.title }),
+      ).toBeVisible()
+      await expect(
+        page.getByText(`Part ${article.part} of 3`, { exact: true }),
+      ).toBeVisible()
+
+      const content = page.locator('[data-content-source="mdx"]')
+
+      await expect(content).toBeVisible()
+      await expect(content).toContainText(article.finalText)
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        `https://micrantha.com${articlePath(article)}`,
+      )
+      await assertSeriesNavigation(page, article)
+
+      if (article.callout) {
+        await expect(content.locator(".article-callout")).toContainText(
+          article.callout,
+        )
+      }
+
+      if (article.imageAlt) {
+        await expect(
+          content.getByRole("img", { name: article.imageAlt }),
+        ).toBeVisible()
+      }
+
+      if (article.relatedLink) {
+        await expect(
+          content.getByRole("link", {
+            name: article.relatedLink.title,
+            exact: true,
+          }),
+        ).toHaveAttribute("href", `/blog/${article.relatedLink.slug}`)
+      }
+
+      if (article.tableName) {
+        await expect(
+          content.getByRole("table", { name: article.tableName }),
+        ).toBeVisible()
+      }
+
+      if (article.tableRow) {
+        await expect(
+          content.getByRole("row", { name: article.tableRow.name }),
+        ).toContainText(article.tableRow.text)
+      }
+
+      if (article.structuredData) {
+        const structuredData = await page
+          .locator('script[type="application/ld+json"]')
+          .textContent()
+
+        expect(structuredData).toContain('"@type":"Article"')
+      }
+
+      if (article.mermaidTitle) {
+        const diagram = content.locator("[data-mermaid-diagram]")
+
+        await expect(diagram).toContainText(article.mermaidTitle)
+        await expect(diagram).toHaveAttribute(
+          "data-mermaid-status",
+          "rendered",
+          {
+            timeout: 15_000,
+          },
+        )
+        await expect(
+          diagram.locator("[data-mermaid-rendered] svg"),
+        ).toBeVisible()
+      }
+    })
+  }
+
+  test("navigates through the governance series without replacing the document", async ({
     page,
   }) => {
-    await page.goto(softwareLayersArticlePath)
-
-    await expect(page).toHaveTitle(
-      "Micrantha Software | Software Layers Are Risk Boundaries",
-    )
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Software Layers Are Risk Boundaries",
-      }),
-    ).toBeVisible()
-    await expect(page.getByText("Part 3 of 3", { exact: true })).toBeVisible()
-
-    const seriesNavigation = page.getByRole("navigation", {
-      name: "Architecture Control Boundaries series navigation",
+    await page.goto(articlePath(articles[3]))
+    await page.evaluate(() => {
+      document.documentElement.dataset.navigationMarker = "preserved"
     })
 
-    await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Previous: AI Pipelines Need Control Boundaries",
-      }),
-    ).toHaveAttribute("href", aiArticlePath)
-    await expect(
-      seriesNavigation.getByRole("link", { name: /^Next:/ }),
-    ).toHaveCount(0)
+    for (const target of [articles[4], articles[5]]) {
+      await page
+        .getByRole("navigation", {
+          name: "Governance-Native Engineering series navigation",
+        })
+        .getByRole("link", { name: `Next: ${target.title}` })
+        .click()
 
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-
-    await expect(mdxContent).toBeVisible()
-    await expect(
-      mdxContent.getByRole("img", {
-        name: /clients flowing into interface and application layers/i,
-      }),
-    ).toBeVisible()
-    await expect(
-      mdxContent.getByRole("link", {
-        name: "Secure Platform Integration Is Not Plumbing",
-        exact: true,
-      }),
-    ).toHaveAttribute("href", integrationArticlePath)
-    await expect(mdxContent).toContainText(
-      "Software layers are not only a code-organization preference",
-    )
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://micrantha.com/blog/software-layers-are-risk-boundaries",
-    )
-  })
-
-  test("renders governance control-plane article and Mermaid from canonical MDX", async ({
-    page,
-  }) => {
-    await page.goto(governanceArticlePath)
-
-    await expect(page).toHaveTitle(
-      "Micrantha Software | Governance-Native Engineering and the AI Control Plane",
-    )
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Governance-Native Engineering and the AI Control Plane",
-      }),
-    ).toBeVisible()
-    await expect(page.getByText("Part 1 of 3", { exact: true })).toBeVisible()
-
-    const seriesNavigation = page.getByRole("navigation", {
-      name: "Governance-Native Engineering series navigation",
-    })
-
-    await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Next: Replayability Is a Governance Problem",
-      }),
-    ).toHaveAttribute("href", replayabilityArticlePath)
-    await expect(
-      seriesNavigation.getByRole("link", { name: /^Previous:/ }),
-    ).toHaveCount(0)
-
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-    const diagram = mdxContent.locator("[data-mermaid-diagram]")
-
-    await expect(mdxContent).toBeVisible()
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "whether organizations can still govern",
-    )
-    await expect(diagram).toContainText("AI-native engineering control plane")
-    await expect(diagram).toHaveAttribute("data-mermaid-status", "rendered", {
-      timeout: 15_000,
-    })
-    await expect(diagram.locator("[data-mermaid-rendered] svg")).toBeVisible()
-    await expect(mdxContent).toContainText(
-      "AI-native engineering therefore becomes a systems-governance discipline",
-    )
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://micrantha.com/blog/governance-native-engineering-control-plane",
-    )
-  })
-
-  test("renders replayability article and Mermaid from canonical MDX", async ({
-    page,
-  }) => {
-    await page.goto(replayabilityArticlePath)
-
-    await expect(page).toHaveTitle(
-      "Micrantha Software | Replayability Is a Governance Problem",
-    )
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Replayability Is a Governance Problem",
-      }),
-    ).toBeVisible()
-    await expect(page.getByText("Part 2 of 3", { exact: true })).toBeVisible()
-
-    const seriesNavigation = page.getByRole("navigation", {
-      name: "Governance-Native Engineering series navigation",
-    })
-
-    await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Previous: Governance-Native Engineering and the AI Control Plane",
-      }),
-    ).toHaveAttribute("href", governanceArticlePath)
-    await expect(
-      seriesNavigation.getByRole("link", {
-        name: "Next: Recursive Governance and Agent Workflows",
-      }),
-    ).toHaveAttribute("href", legacyArticlePath)
-
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-    const diagram = mdxContent.locator("[data-mermaid-diagram]")
-
-    await expect(mdxContent).toBeVisible()
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "not just reproducibility engineering",
-    )
-    await expect(diagram).toContainText("Replayability as evidence lifecycle")
-    await expect(diagram).toHaveAttribute("data-mermaid-status", "rendered", {
-      timeout: 15_000,
-    })
-    await expect(diagram.locator("[data-mermaid-rendered] svg")).toBeVisible()
-    await expect(mdxContent).toContainText(
-      "The goal is not perfect determinism. The goal is bounded explainability",
-    )
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://micrantha.com/blog/replayability-is-a-governance-problem",
-    )
-  })
-
-  test("supports hydrated governance-series navigation", async ({ page }) => {
-    await page.goto(governanceArticlePath)
-    await page
-      .getByRole("navigation", {
-        name: "Governance-Native Engineering series navigation",
+      await expect(page).toHaveURL(new RegExp(`${articlePath(target)}$`))
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-navigation-marker",
+        "preserved",
+      )
+      await expect(
+        page.getByRole("heading", { level: 1, name: target.title }),
+      ).toBeVisible()
+      await expect(
+        page
+          .locator('[data-content-source="mdx"]')
+          .locator("[data-mermaid-diagram]"),
+      ).toHaveAttribute("data-mermaid-status", "rendered", {
+        timeout: 15_000,
       })
-      .getByRole("link", {
-        name: "Next: Replayability Is a Governance Problem",
-      })
-      .click()
-
-    await expect(page).toHaveURL(
-      /\/blog\/replayability-is-a-governance-problem$/,
-    )
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Replayability Is a Governance Problem",
-      }),
-    ).toBeVisible()
-    await expect(
-      page
-        .locator('[data-content-source="mdx"]')
-        .locator("[data-mermaid-diagram]"),
-    ).toHaveAttribute("data-mermaid-status", "rendered", { timeout: 15_000 })
+    }
   })
 })
 
-test("remaining legacy TSX article continues through the dynamic route", async ({
+test("unpublished and unknown blog URLs remain unavailable", async ({
   page,
 }) => {
-  const response = await page.goto(legacyArticlePath)
-
-  expect(response?.status()).toBe(200)
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "Recursive Governance and Agent Workflows",
-    }),
-  ).toBeVisible()
-  await expect(page.locator('[data-content-source="mdx"]')).toHaveCount(0)
-  await expect(page.locator("[data-mermaid-diagram]").first()).toBeVisible()
-})
-
-test("draft and future blog URLs remain unavailable", async ({ page }) => {
-  for (const pathname of unpublishedArticlePaths) {
+  for (const pathname of [
+    "/blog/draft-publication-fixture",
+    "/blog/future-publication-fixture",
+    "/blog/unknown-article",
+  ]) {
     const response = await page.goto(pathname)
 
     expect(response?.status()).toBe(404)
     await expect(page.getByText("Not Found", { exact: true })).toBeVisible()
+    await expect(page.locator('[data-content-source="mdx"]')).toHaveCount(0)
   }
 })
 
-test.describe("MDX articles without JavaScript", () => {
+test.describe("canonical MDX articles without JavaScript", () => {
   test.use({ javaScriptEnabled: false })
 
-  test("returns complete server-rendered AI article content", async ({
-    page,
-  }) => {
-    const response = await page.goto(aiArticlePath)
+  for (const article of articles) {
+    test(`server-renders complete ${article.title} content`, async ({
+      page,
+    }) => {
+      const response = await page.goto(articlePath(article))
 
-    expect(response?.status()).toBe(200)
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "AI Pipelines Need Control Boundaries",
-      }),
-    ).toBeVisible()
+      expect(response?.status()).toBe(200)
+      await expect(
+        page.getByRole("heading", { level: 1, name: article.title }),
+      ).toBeVisible()
 
-    const mdxContent = page.locator('[data-content-source="mdx"]')
+      const content = page.locator('[data-content-source="mdx"]')
 
-    await expect(mdxContent).toContainText(
-      "The practical goal is not to remove AI from the workflow",
-    )
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "untrusted reasoning component",
-    )
-    await expect(
-      mdxContent.getByRole("table", { name: "AI pipeline failure modes" }),
-    ).toBeVisible()
-  })
+      await expect(content).toContainText(article.finalText)
 
-  test("returns complete server-rendered integration article content", async ({
-    page,
-  }) => {
-    const response = await page.goto(integrationArticlePath)
+      if (article.imageAlt) {
+        await expect(
+          content.getByRole("img", { name: article.imageAlt }),
+        ).toBeVisible()
+      }
 
-    expect(response?.status()).toBe(200)
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Secure Platform Integration Is Not Plumbing",
-      }),
-    ).toBeVisible()
+      if (article.tableName) {
+        await expect(
+          content.getByRole("table", { name: article.tableName }),
+        ).toBeVisible()
+      }
 
-    const mdxContent = page.locator('[data-content-source="mdx"]')
+      if (article.mermaidSource) {
+        const diagram = content.locator("[data-mermaid-diagram]")
 
-    await expect(mdxContent).toContainText(
-      "Integration layers deserve architectural attention",
-    )
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "data contracts, trust boundaries, workflow semantics",
-    )
-    await expect(
-      mdxContent.getByRole("img", {
-        name: /channels and source systems flowing through an API gateway/i,
-      }),
-    ).toBeVisible()
-  })
-
-  test("returns complete server-rendered software layers content", async ({
-    page,
-  }) => {
-    const response = await page.goto(softwareLayersArticlePath)
-
-    expect(response?.status()).toBe(200)
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Software Layers Are Risk Boundaries",
-      }),
-    ).toBeVisible()
-
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-
-    await expect(mdxContent).toContainText(
-      "Software layers are not only a code-organization preference",
-    )
-    await expect(
-      mdxContent.getByRole("img", {
-        name: /clients flowing into interface and application layers/i,
-      }),
-    ).toBeVisible()
-    await expect(
-      mdxContent.getByRole("link", {
-        name: "Secure Platform Integration Is Not Plumbing",
-        exact: true,
-      }),
-    ).toHaveAttribute("href", integrationArticlePath)
-  })
-
-  test("returns governance article Mermaid source and complete content", async ({
-    page,
-  }) => {
-    const response = await page.goto(governanceArticlePath)
-
-    expect(response?.status()).toBe(200)
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Governance-Native Engineering and the AI Control Plane",
-      }),
-    ).toBeVisible()
-
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-    const diagram = mdxContent.locator("[data-mermaid-diagram]")
-
-    await expect(diagram).toHaveAttribute("data-mermaid-status", "source")
-    await expect(diagram.locator("[data-mermaid-source]")).toContainText(
-      "Human intent",
-    )
-    await expect(mdxContent).toContainText(
-      "AI-native engineering therefore becomes a systems-governance discipline",
-    )
-  })
-
-  test("returns replayability Mermaid source and complete content", async ({
-    page,
-  }) => {
-    const response = await page.goto(replayabilityArticlePath)
-
-    expect(response?.status()).toBe(200)
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Replayability Is a Governance Problem",
-      }),
-    ).toBeVisible()
-
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-    const diagram = mdxContent.locator("[data-mermaid-diagram]")
-
-    await expect(diagram).toHaveAttribute("data-mermaid-status", "source")
-    await expect(diagram.locator("[data-mermaid-source]")).toContainText(
-      "Execution request",
-    )
-    await expect(mdxContent).toContainText(
-      "The goal is not perfect determinism. The goal is bounded explainability",
-    )
-  })
+        await expect(diagram).toHaveAttribute("data-mermaid-status", "source")
+        await expect(diagram.locator("[data-mermaid-source]")).toContainText(
+          article.mermaidSource,
+        )
+        await expect(diagram.locator("[data-mermaid-rendered]")).toHaveCount(0)
+      }
+    })
+  }
 })

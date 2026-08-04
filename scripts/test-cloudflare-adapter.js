@@ -158,6 +158,22 @@ assert.match(
 assert.doesNotMatch(replayabilityArticle.body, /data-mermaid-rendered/)
 assertDocumentHeaders(replayabilityArticle.response, replayabilityArticle.body)
 
+const recursiveArticle = await read(
+  "/blog/recursive-governance-and-agent-workflows",
+)
+assert.equal(recursiveArticle.response.status, 200)
+assert.match(recursiveArticle.body, /Recursive Governance and Agent Workflows/)
+assert.match(recursiveArticle.body, /data-content-source="mdx"/)
+assert.match(recursiveArticle.body, /data-mermaid-status="source"/)
+assert.match(recursiveArticle.body, /data-mermaid-source="true"/)
+assert.match(recursiveArticle.body, /Workflow request/)
+assert.match(
+  recursiveArticle.body,
+  /humans remain capable of comprehension, intervention, replay, audit/,
+)
+assert.doesNotMatch(recursiveArticle.body, /data-mermaid-rendered/)
+assertDocumentHeaders(recursiveArticle.response, recursiveArticle.body)
+
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
   userAgent: "Googlebot/2.1",
 })
@@ -168,11 +184,13 @@ assertDocumentHeaders(botArticle.response, botArticle.body)
 for (const pathname of [
   "/blog/draft-publication-fixture",
   "/blog/future-publication-fixture",
+  "/blog/unknown-article",
 ]) {
   const unpublished = await read(pathname)
 
   assert.equal(unpublished.response.status, 404)
   assert.match(unpublished.body, /404|Not Found/i)
+  assert.doesNotMatch(unpublished.body, /data-content-source="mdx"/)
   assertDocumentHeaders(unpublished.response, unpublished.body, {
     requireNonce: false,
   })
