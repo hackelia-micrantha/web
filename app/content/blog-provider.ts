@@ -7,7 +7,7 @@ export interface BlogContentProvider {
   getPostBySlug(slug: string): BlogPost | null
 }
 
-const publishedBlogPosts = filterPublishedBlogPosts(blogPosts)
+const publishedBlogPosts: BlogPost[] = filterPublishedBlogPosts(blogPosts)
 
 export const blogContentProvider: BlogContentProvider = {
   getPosts() {
@@ -15,7 +15,9 @@ export const blogContentProvider: BlogContentProvider = {
   },
 
   getPostBySlug(slug: string) {
-    return publishedBlogPosts.find((post) => post.slug === slug) ?? null
+    return (
+      publishedBlogPosts.find((post: BlogPost) => post.slug === slug) ?? null
+    )
   },
 }
 
