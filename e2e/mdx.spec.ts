@@ -9,7 +9,7 @@ test.describe("representative MDX article", () => {
     await page.goto(articlePath)
 
     await expect(page).toHaveTitle(
-      /AI Pipelines Need Control Boundaries.*Micrantha Software/,
+      "Micrantha Software | AI Pipelines Need Control Boundaries",
     )
     await expect(
       page.getByRole("heading", {
@@ -17,15 +17,29 @@ test.describe("representative MDX article", () => {
         name: "AI Pipelines Need Control Boundaries",
       }),
     ).toBeVisible()
-    await expect(page.locator('[data-content-source="mdx"]')).toBeVisible()
-    await expect(page.locator(".article-callout")).toContainText(
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+
+    await expect(mdxContent).toBeVisible()
+    await expect(mdxContent.locator(".article-callout")).toContainText(
       "AI is not the system of record",
     )
     await expect(
-      page.getByRole("img", { name: /sources flowing through preprocessing/i }),
+      mdxContent.getByRole("img", {
+        name: /sources flowing through preprocessing/i,
+      }),
     ).toBeVisible()
     await expect(
-      page.getByRole("link", { name: "Software Layers Are Risk Boundaries" }),
+      mdxContent.getByRole("table", { name: "AI pipeline failure modes" }),
+    ).toBeVisible()
+    await expect(
+      mdxContent.getByRole("row", { name: /Unsafe write-back/ }),
+    ).toContainText("Require approval gates and controlled adapter writes")
+    await expect(
+      mdxContent.getByRole("link", {
+        name: "Software Layers Are Risk Boundaries",
+        exact: true,
+      }),
     ).toHaveAttribute("href", "/blog/software-layers-are-risk-boundaries")
 
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -40,7 +54,11 @@ test.describe("representative MDX article", () => {
   test("supports hydrated client navigation", async ({ page }) => {
     await page.goto(articlePath)
     await page
-      .getByRole("link", { name: "Software Layers Are Risk Boundaries" })
+      .locator('[data-content-source="mdx"]')
+      .getByRole("link", {
+        name: "Software Layers Are Risk Boundaries",
+        exact: true,
+      })
       .click()
 
     await expect(page).toHaveURL(/\/blog\/software-layers-are-risk-boundaries$/)
@@ -66,11 +84,17 @@ test.describe("representative MDX article without JavaScript", () => {
         name: "AI Pipelines Need Control Boundaries",
       }),
     ).toBeVisible()
-    await expect(page.locator('[data-content-source="mdx"]')).toContainText(
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+
+    await expect(mdxContent).toContainText(
       "The practical goal is not to remove AI from the workflow",
     )
-    await expect(page.locator(".article-callout")).toContainText(
+    await expect(mdxContent.locator(".article-callout")).toContainText(
       "untrusted reasoning component",
     )
+    await expect(
+      mdxContent.getByRole("table", { name: "AI pipeline failure modes" }),
+    ).toBeVisible()
   })
 })
