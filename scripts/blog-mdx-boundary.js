@@ -110,10 +110,12 @@ function isWhitespaceText(node) {
 }
 
 function validateExternalOrInternalLink(value, filePath, node) {
-  if (
-    /^[\u0000-\u0020\u007f]/.test(value) ||
-    /[\u0000-\u001f\u007f]/.test(value)
-  ) {
+  const hasControlCharacter = [...value].some((character) => {
+    const codePoint = character.codePointAt(0)
+    return codePoint <= 0x1f || codePoint === 0x7f
+  })
+
+  if (value !== value.trimStart() || hasControlCharacter) {
     boundaryError(
       filePath,
       node,
