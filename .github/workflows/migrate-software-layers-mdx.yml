@@ -1,0 +1,47 @@
+name: Migrate Software Layers to MDX
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.head_ref == 'agent/migrate-software-layers-mdx'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install frozen dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Remove legacy TSX renderer
+        run: node scripts/migrate-software-layers-to-mdx.js
+
+      - name: Format migrated registry
+        run: yarn prettier --write app/content/blog.tsx
+
+      - name: Commit migrated registry
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/content/blog.tsx
+          if git diff --cached --quiet; then
+            echo "Software layers registry is already migrated"
+            exit 0
+          fi
+          git commit -m "Remove software layers legacy TSX renderer"
+          git push origin HEAD:${{ github.head_ref }}
