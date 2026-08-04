@@ -16,7 +16,7 @@
     "dev:remix": "remix dev",
     "format:check": "prettier --check .",
     "generate:blog-content": "node scripts/generate-blog-content.js",
-    "generate:css": "npx @tailwindcss/cli -i ./app/styles/app.css -o ./public/tailwind.css",
+    "generate:css": "tailwindcss -i ./app/styles/app.css -o ./public/tailwind.css",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "remix-serve build/index.js",
@@ -32,9 +32,10 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:mobile": "playwright test --project=mobile-chromium",
     "test:integration": "run-s test:cloudflare:adapter test:cloudflare:runtime",
+    "test:performance-budgets": "node scripts/check-performance-budgets.js",
     "test:unit": "node --test --experimental-test-coverage --test-coverage-lines=95 --test-coverage-functions=100 --test-coverage-branches=90 tests/unit/*.test.js",
     "typecheck": "tsc -b",
-    "deploy:cloudflare": "yarn test:unit && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
+    "deploy:cloudflare": "yarn test:unit && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn test:performance-budgets && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",
