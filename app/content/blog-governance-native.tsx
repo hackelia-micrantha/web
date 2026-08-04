@@ -1,97 +1,6 @@
 import { MermaidDiagram } from "~/components"
 import type { BlogPost } from "~/content/blog"
 
-const governanceNativeEngineeringContent = () => (
-  <>
-    <section className="space-y-4">
-      <h2>Generated code changes the control plane</h2>
-      <p>
-        AI-native engineering creates a control-plane problem. Generated code
-        can increase implementation throughput, but without intent capture,
-        execution evidence, review boundaries, replayability guarantees, and
-        human comprehension loops, organizations accumulate technical,
-        cognitive, and intent debt faster than they can repay it.
-      </p>
-      <div className="article-callout">
-        <p>
-          The bottleneck is shifting from whether agents can produce code to
-          whether organizations can still govern, review, explain, and safely
-          change the systems agents help create.
-        </p>
-      </div>
-    </section>
-
-    <MermaidDiagram
-      title="AI-native engineering control plane"
-      caption="Generation increases throughput; governance preserves intent, evidence, and reviewability."
-      chart={`flowchart TD
-  A[Human intent] --> B[Policy and review boundaries]
-  B --> C[Agent or model execution]
-  C --> D[Generated change]
-  D --> E[Evidence and replay envelope]
-  E --> F[Human comprehension loop]
-  F --> B`}
-    />
-
-    <section className="space-y-4">
-      <h2>The bottleneck has moved</h2>
-      <p>
-        The bottleneck is no longer purely implementation throughput. It is now
-        increasingly governance, replayability, operational trust,
-        organizational memory, reviewability, and comprehension preservation.
-      </p>
-      <p>
-        Transport-compatible APIs and interchangeable model providers create
-        operational flexibility. They do not create governance equivalence. A
-        local model, an enterprise-hosted provider, a distributed inference
-        fabric, and a public shared service can expose similar APIs while
-        carrying very different trust, retention, locality, and replayability
-        properties.
-      </p>
-    </section>
-
-    <section className="space-y-4">
-      <h2>The governance surface</h2>
-      <p>
-        Inference-provider selection is not merely infrastructure configuration.
-        It is a governance decision involving locality, retention,
-        replayability, evidence quality, trust boundaries, and policy
-        constraints.
-      </p>
-      <p>
-        The same applies to prompts, tool access, execution plans, review gates,
-        workflow composition, and write-back operations. These are not
-        incidental implementation details. They are control surfaces.
-      </p>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Anthesis direction</h2>
-      <p>
-        Anthesis treats prompts, execution, provider routing, replay evidence,
-        workflow composition, approvals, and policy evaluation as explicit
-        governance surfaces. The point is not to eliminate agents. The point is
-        to ensure humans remain capable of review, replay, intervention,
-        attribution, and governance while agents accelerate execution.
-      </p>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Draft thesis</h2>
-      <p>
-        The next generation of engineering systems may differentiate less on raw
-        generation quality and more on governance clarity, replayability,
-        organizational comprehensibility, bounded autonomy, evidence quality,
-        and intent preservation.
-      </p>
-      <p>
-        AI-native engineering therefore becomes a systems-governance discipline,
-        not merely a prompting discipline.
-      </p>
-    </section>
-  </>
-)
-
 const replayabilityGovernanceContent = () => (
   <>
     <section className="space-y-4">
@@ -297,7 +206,6 @@ export const governanceNativeBlogPosts: BlogPost[] = [
       slug: "governance-native-engineering",
       order: 1,
     },
-    Content: governanceNativeEngineeringContent,
   },
   {
     slug: "replayability-is-a-governance-problem",
