@@ -74,6 +74,17 @@ jobs:
       - name: Verify blog browser chunk isolation
         run: yarn test:blog-chunk-isolation
 
+      - name: Enforce deterministic web performance budgets
+        run: yarn test:performance-budgets
+
+      - name: Upload web performance budget report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-performance-budget-${{ github.run_id }}
+          path: .performance/build-budget.json
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Verify pinned Wrangler
         run: yarn wrangler --version
 
