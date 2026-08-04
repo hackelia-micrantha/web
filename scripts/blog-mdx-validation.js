@@ -41,6 +41,13 @@ function stripFrontmatter(source, relativePath) {
   return normalized.slice(closingDelimiter + "\n---\n".length)
 }
 
+function hasControlCharacter(value) {
+  return [...value].some((character) => {
+    const codePoint = character.codePointAt(0)
+    return codePoint <= 0x1f || codePoint === 0x7f
+  })
+}
+
 function assertSafeLinkUrl(url, context) {
   assert.equal(
     url,
@@ -49,7 +56,7 @@ function assertSafeLinkUrl(url, context) {
   )
   assert.notEqual(url, "", `${context} URL must not be empty`)
   assert.equal(
-    /[\u0000-\u001f\u007f]/u.test(url),
+    hasControlCharacter(url),
     false,
     `${context} URL contains control characters`,
   )
