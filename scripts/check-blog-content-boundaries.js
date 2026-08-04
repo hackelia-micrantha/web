@@ -17,6 +17,7 @@ import { validateBlogMdxFile } from "./blog-mdx-validation.js"
 import { validateBlogMermaidBlocks } from "./blog-mermaid-validation.js"
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
+const legacyDynamicRoutePath = path.join(routesDirectory, "blog.$slug.tsx")
 const sitemapPath = path.join(repositoryRoot, "public/sitemap.xml")
 const publicationCutoff = resolvePublicationCutoff(
   process.env.BLOG_PUBLICATION_DATE,
@@ -136,16 +137,25 @@ for (const route of mdxRoutes) {
 }
 
 const mdxSlugs = mdxRoutes.map((route) => route.slug)
+const legacyPosts = inventory.posts.filter(
+  (post) => !mdxSlugs.includes(post.slug),
+)
 
-for (const post of inventory.posts) {
-  if (mdxSlugs.includes(post.slug)) continue
-
+for (const post of legacyPosts) {
   assert.equal(
     post.hasContent,
     true,
     `Legacy TSX post ${post.slug} is missing its Content renderer in ${post.source}`,
   )
 }
+
+assert.equal(
+  await pathExists(legacyDynamicRoutePath),
+  legacyPosts.length > 0,
+  legacyPosts.length > 0
+    ? "Legacy TSX posts require app/routes/blog.$slug.tsx"
+    : "app/routes/blog.$slug.tsx must be removed after the final TSX migration",
+)
 
 const expectedSitemap = buildSitemapXml(inventory)
 
@@ -156,7 +166,5 @@ assert.equal(
 )
 
 console.log(
-  `Blog content boundaries passed at ${publicationCutoff}: ${inventory.posts.length} published post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${
-    inventory.posts.length - mdxSlugs.length
-  } legacy TSX route(s), ${mermaidBlockCount} Mermaid block(s), MDX grammar enforced, sitemap current`,
+  `Blog content boundaries passed at ${publicationCutoff}: ${inventory.posts.length} published post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${legacyPosts.length} legacy TSX route(s), ${mermaidBlockCount} Mermaid block(s), MDX grammar enforced, sitemap current`,
 )
