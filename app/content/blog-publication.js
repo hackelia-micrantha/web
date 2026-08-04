@@ -105,6 +105,7 @@ export function assertRoutableBlogPublication(
     cutoff = resolvePublicationCutoff(),
   } = {},
 ) {
+  const validatedCutoff = resolvePublicationCutoff(cutoff)
   const routableSlugs = new Set()
 
   for (const [index, post] of posts.entries()) {
@@ -114,7 +115,7 @@ export function assertRoutableBlogPublication(
       throw new Error(`Duplicate routable blog slug ${post.slug}`)
     }
 
-    assertRoutableRecord(post, manifest, cutoff, context)
+    assertRoutableRecord(post, manifest, validatedCutoff, context)
     routableSlugs.add(post.slug)
   }
 
@@ -138,7 +139,14 @@ export function assertRoutableMdxPublication(
     cutoff = resolvePublicationCutoff(),
   } = {},
 ) {
-  assertRoutableRecord(post, manifest, cutoff, `MDX route ${post?.slug ?? ""}`)
+  const validatedCutoff = resolvePublicationCutoff(cutoff)
+
+  assertRoutableRecord(
+    post,
+    manifest,
+    validatedCutoff,
+    `MDX route ${post?.slug ?? ""}`,
+  )
 
   if (post.status !== "published") {
     throw new Error(`MDX route ${post.slug} must declare status published`)
