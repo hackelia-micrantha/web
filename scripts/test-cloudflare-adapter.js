@@ -97,6 +97,13 @@ assert.match(
 )
 assertDocumentHeaders(article.response, article.body)
 
+const unpublishedArticle = await read("/blog/publication-contract")
+assert.equal(unpublishedArticle.response.status, 404)
+assert.match(unpublishedArticle.body, /404|Not Found/i)
+assertDocumentHeaders(unpublishedArticle.response, unpublishedArticle.body, {
+  requireNonce: false,
+})
+
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
   userAgent: "Googlebot/2.1",
 })
