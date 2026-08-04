@@ -3,74 +3,24 @@ import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 
 import { Card, PageTitle } from "~/components"
-import {
-  AI_PIPELINE_POST_SLUG,
-  aiPipelinePost,
-} from "~/content/ai-pipeline-post.server"
 import { formatBlogDate } from "~/content/blog-format"
-import { getBlogSeriesBySlug } from "~/content/blog-series"
+import {
+  getBlogSeriesRouteData,
+  type BlogSeriesRouteData,
+} from "~/content/blog-series-route.server"
 import { cardStyles } from "~/utils/card-styles"
 import { buildPageMeta } from "~/utils/seo"
 
-type LoaderData = {
-  series: {
-    slug: string
-    title: string
-    posts: {
-      slug: string
-      title: string
-      excerpt: string
-      date: string
-      order: number
-    }[]
-  }
-}
+type LoaderData = BlogSeriesRouteData
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const series = getBlogSeriesBySlug(params.slug ?? "")
+  const data = getBlogSeriesRouteData(params.slug ?? "")
 
-  if (!series) {
+  if (!data) {
     throw new Response("Not Found", { status: 404 })
   }
 
-  const posts = series.posts.map((legacyPost, index) => {
-    if (legacyPost.slug !== AI_PIPELINE_POST_SLUG) {
-      return {
-        slug: legacyPost.slug,
-        title: legacyPost.title,
-        excerpt: legacyPost.excerpt,
-        date: legacyPost.date,
-        order: index + 1,
-      }
-    }
-
-    if (
-      !aiPipelinePost.series ||
-      aiPipelinePost.series.slug !== series.slug ||
-      aiPipelinePost.series.title !== series.title ||
-      aiPipelinePost.series.order !== index + 1
-    ) {
-      throw new Error(
-        `MDX series metadata drifted for ${AI_PIPELINE_POST_SLUG}`,
-      )
-    }
-
-    return {
-      slug: aiPipelinePost.slug,
-      title: aiPipelinePost.title,
-      excerpt: aiPipelinePost.excerpt,
-      date: aiPipelinePost.date,
-      order: aiPipelinePost.series.order,
-    }
-  })
-
-  return json<LoaderData>({
-    series: {
-      slug: series.slug,
-      title: series.title,
-      posts,
-    },
-  })
+  return json<LoaderData>(data)
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
