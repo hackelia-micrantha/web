@@ -5,6 +5,7 @@ import type {
   LoaderFunctionArgs,
 } from "@remix-run/node"
 import {
+  isRouteErrorResponse,
   Links,
   LiveReload,
   Meta,
@@ -13,6 +14,8 @@ import {
   ScrollRestoration,
   useLoaderData,
   useMatches,
+  useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react"
 
 import { Navigation, Footer, Analytics } from "./components"
@@ -74,8 +77,9 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => buildSiteMeta()
 
-export const headers: HeadersFunction = ({ loaderHeaders }) => {
+export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
   const cacheControl =
+    errorHeaders?.get("Cache-Control") ??
     loaderHeaders.get("Cache-Control") ??
     "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
   const nonce = loaderHeaders.get(NONCE_HEADER)
@@ -192,6 +196,66 @@ export default function App() {
         <Scripts nonce={state?.nonce} />
         <Analytics id={state?.analyticsId} nonce={state?.nonce} />
         {isDev ? <LiveReload nonce={state?.nonce} /> : null}
+      </body>
+    </html>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  const state = useRouteLoaderData("root") as State | undefined
+  const status = isRouteErrorResponse(error) ? error.status : 500
+  const title =
+    status === 404
+      ? "Not Found"
+      : status === 405
+        ? "Method Not Allowed"
+        : status >= 500
+          ? "Unexpected Server Error"
+          : "Request Error"
+  const message =
+    status === 404
+      ? "The requested page could not be found."
+      : status === 405
+        ? "The requested method is not supported for this page."
+        : status >= 500
+          ? "The request could not be completed. Please try again later."
+          : "The request could not be completed."
+
+  return (
+    <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{`${status} ${title} | Micrantha Software`}</title>
+        <Links />
+        {state?.nonce ? (
+          <script
+            nonce={state.nonce}
+            type="application/json"
+            dangerouslySetInnerHTML={{ __html: '{"error":true}' }}
+          />
+        ) : null}
+      </head>
+      <body>
+        <a className="skip-link" href="#content">
+          Skip to content
+        </a>
+        <main
+          id="content"
+          tabIndex={-1}
+          className="body mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 lg:px-8"
+        >
+          <p className="meta-kicker">Error {status}</p>
+          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-slate-900">
+            {title}
+          </h1>
+          <p className="page-copy mt-4">{message}</p>
+          <p className="mt-6">
+            <a className="article-meta-link" href="/">
+              Return to Micrantha Software
+            </a>
+          </p>
+        </main>
       </body>
     </html>
   )

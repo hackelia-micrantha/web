@@ -118,6 +118,8 @@ const runtime = spawn(
     "http",
     "--var",
     `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
+    "--var",
+    "MICRANTHA_RUNTIME_CONTRACT:enabled",
     "--show-interactive-dev-session=false",
   ],
   {
@@ -238,10 +240,9 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   )
   assert.ok(response.headers.get("cache-control"), "expected a cache policy")
 
+  if (!requireNonce) return
+
   const policy = response.headers.get("content-security-policy") ?? ""
-
-  if (!requireNonce && !policy) return
-
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
   assert.ok(nonce, "expected a CSP nonce in the document response")
   assert.ok(
@@ -314,6 +315,19 @@ try {
   assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
     requireNonce: false,
   })
+
+  const controlledError = await readRuntime("/runtime-contract/error")
+  assert.equal(controlledError.response.status, 500)
+  assert.match(controlledError.body, /Unexpected Server Error/i)
+  assert.doesNotMatch(
+    controlledError.body,
+    /Controlled Cloudflare runtime contract failure/,
+  )
+  assert.equal(
+    controlledError.response.headers.get("cache-control"),
+    "private, no-store",
+  )
+  assertDocumentHeaders(controlledError.response, controlledError.body)
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
