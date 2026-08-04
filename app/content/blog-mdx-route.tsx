@@ -3,15 +3,18 @@ import type { ElementType } from "react"
 
 import { BlogArticleLayout } from "~/components/blog-article-layout"
 import { blogMdxComponents } from "~/components/blog-mdx-components"
+import type { BlogPost } from "~/content/blog"
 import { getBlogPostBySlug } from "~/content/blog-provider"
 import { buildArticleMeta, buildArticleStructuredData } from "~/utils/seo"
 
 export function createBlogMdxRoute(slug: string, Content: ElementType) {
-  const post = getBlogPostBySlug(slug)
+  const resolvedPost = getBlogPostBySlug(slug)
 
-  if (!post) {
+  if (!resolvedPost) {
     throw new Error(`Missing generated metadata for MDX route: ${slug}`)
   }
+
+  const post: BlogPost = resolvedPost
 
   const meta: MetaFunction = () =>
     buildArticleMeta({
