@@ -15,6 +15,7 @@ import {
   useLoaderData,
   useMatches,
   useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react"
 
 import { Navigation, Footer, Analytics } from "./components"
@@ -202,14 +203,24 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError()
-  const state = useLoaderData() as State | null
-  const isResponse = isRouteErrorResponse(error)
-  const status = isResponse ? error.status : 500
-  const title = status === 404 ? "Not Found" : "Unexpected Server Error"
+  const state = useRouteLoaderData("root") as State | undefined
+  const status = isRouteErrorResponse(error) ? error.status : 500
+  const title =
+    status === 404
+      ? "Not Found"
+      : status === 405
+        ? "Method Not Allowed"
+        : status >= 500
+          ? "Unexpected Server Error"
+          : "Request Error"
   const message =
     status === 404
       ? "The requested page could not be found."
-      : "The request could not be completed. Please try again later."
+      : status === 405
+        ? "The requested method is not supported for this page."
+        : status >= 500
+          ? "The request could not be completed. Please try again later."
+          : "The request could not be completed."
 
   return (
     <html lang="en">
