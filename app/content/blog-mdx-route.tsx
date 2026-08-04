@@ -22,6 +22,7 @@ export function createBlogMdxRoute(slug: string, Content: ElementType) {
       description: post.description,
       path: `/blog/${post.slug}`,
       publishedTime: `${post.date}T00:00:00Z`,
+      modifiedTime: post.updatedAt ? `${post.updatedAt}T00:00:00Z` : undefined,
       tags: post.tags,
     })
 
@@ -31,6 +32,7 @@ export function createBlogMdxRoute(slug: string, Content: ElementType) {
       description: post.description,
       path: `/blog/${post.slug}`,
       datePublished: `${post.date}T00:00:00Z`,
+      dateModified: post.updatedAt ? `${post.updatedAt}T00:00:00Z` : undefined,
       keywords: post.tags,
     }),
   }

@@ -13,6 +13,7 @@ type PageMetaOptions = {
 
 type ArticleMetaOptions = PageMetaOptions & {
   publishedTime: string
+  modifiedTime?: string
   tags?: string[]
 }
 
@@ -34,6 +35,7 @@ type ArticleStructuredDataOptions = {
   description: string
   path: string
   datePublished: string
+  dateModified?: string
   keywords?: string[]
 }
 
@@ -66,6 +68,7 @@ export function buildArticleMeta({
   description,
   path,
   publishedTime,
+  modifiedTime,
   tags = [],
 }: ArticleMetaOptions): MetaDescriptor[] {
   const url = new URL(path, SITE_URL).toString()
@@ -81,6 +84,9 @@ export function buildArticleMeta({
     { property: "og:url", content: url },
     { property: "og:image", content: DEFAULT_IMAGE },
     { property: "article:published_time", content: publishedTime },
+    ...(modifiedTime
+      ? [{ property: "article:modified_time", content: modifiedTime }]
+      : []),
     ...tags.map((tag) => ({ property: "article:tag", content: tag })),
     { name: "twitter:card", content: "summary" },
     { name: "twitter:title", content: `${SITE_NAME} | ${title}` },
@@ -163,6 +169,7 @@ export function buildArticleStructuredData({
   description,
   path,
   datePublished,
+  dateModified,
   keywords = [],
 }: ArticleStructuredDataOptions) {
   const url = new URL(path, SITE_URL).toString()
@@ -174,6 +181,7 @@ export function buildArticleStructuredData({
     description,
     url,
     datePublished,
+    ...(dateModified ? { dateModified } : {}),
     author: {
       "@type": "Organization",
       name: SITE_NAME,

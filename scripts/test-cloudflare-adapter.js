@@ -172,6 +172,11 @@ assert.match(
   /humans remain capable of comprehension, intervention, replay, audit/,
 )
 assert.doesNotMatch(recursiveArticle.body, /data-mermaid-rendered/)
+assert.match(
+  recursiveArticle.body,
+  /property="article:modified_time" content="2026-08-03T00:00:00Z"/,
+)
+assert.match(recursiveArticle.body, /"dateModified":"2026-08-03T00:00:00Z"/)
 assertDocumentHeaders(recursiveArticle.response, recursiveArticle.body)
 
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {

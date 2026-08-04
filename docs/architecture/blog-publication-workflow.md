@@ -27,6 +27,7 @@ status: published
 title: Example Article
 description: A concise search and social description.
 date: "2026-08-03"
+updatedAt: "2026-08-03" # optional; must be on or after date
 excerpt: A concise index and related-content summary.
 tags:
   - architecture-notes
@@ -43,7 +44,7 @@ The supported publication statuses are:
 - `published`
 - `draft`
 
-The frontmatter parser is intentionally strict. Unknown structure, missing fields, invalid dates, duplicate tags or related posts, unknown related slugs, self-references, invalid series membership, duplicate order values, and series ordering gaps fail validation.
+The frontmatter parser is intentionally strict. Unknown top-level fields, unknown nested series fields, missing fields, invalid dates, an `updatedAt` value before `date`, duplicate tags or related posts, unknown related slugs, self-references, invalid series membership, duplicate order values, and series ordering gaps fail validation. When present, `updatedAt` is projected into article metadata and JSON-LD and becomes the sitemap `lastmod` value.
 
 ## Generated projections
 
