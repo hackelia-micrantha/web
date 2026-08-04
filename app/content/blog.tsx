@@ -1,9 +1,8 @@
 import type { ReactNode } from "react"
 import { Link } from "@remix-run/react"
 
-export type BlogSeries = {
+export type BlogSeriesMembership = {
   slug: string
-  title: string
   order: number
 }
 
@@ -15,16 +14,9 @@ export type BlogPost = {
   excerpt: string
   tags: string[]
   relatedSlugs: string[]
-  series?: BlogSeries
+  series?: BlogSeriesMembership
   Content?: () => ReactNode
 }
-
-export type BlogSeriesGroup = {
-  slug: string
-  title: string
-  posts: BlogPost[]
-}
-
 export const BLOG_TITLE = "Architecture Notes"
 export const BLOG_DESCRIPTION =
   "Architecture notes on secure platform integration, delivery governance, AI-assisted systems, and long-lived software design."
@@ -357,6 +349,10 @@ export const blogPosts: BlogPost[] = [
       "ai-pipelines-need-control-boundaries",
       "software-layers-are-risk-boundaries",
     ],
+    series: {
+      slug: "architecture-control-boundaries",
+      order: 1,
+    },
     Content: securePlatformIntegrationContent,
   },
   {
@@ -377,6 +373,10 @@ export const blogPosts: BlogPost[] = [
       "secure-platform-integration-is-not-plumbing",
       "software-layers-are-risk-boundaries",
     ],
+    series: {
+      slug: "architecture-control-boundaries",
+      order: 2,
+    },
   },
   {
     slug: "software-layers-are-risk-boundaries",
@@ -396,6 +396,10 @@ export const blogPosts: BlogPost[] = [
       "secure-platform-integration-is-not-plumbing",
       "ai-pipelines-need-control-boundaries",
     ],
+    series: {
+      slug: "architecture-control-boundaries",
+      order: 3,
+    },
     Content: softwareLayersRiskBoundariesContent,
   },
 ]
@@ -413,32 +417,6 @@ export function getRelatedPosts(post: BlogPost) {
     .map((slug) => getBlogPostBySlug(slug))
     .filter((candidate): candidate is BlogPost => candidate !== null)
 }
-
-export function getBlogSeriesGroups() {
-  const groups = new Map<string, BlogSeriesGroup>()
-
-  for (const post of blogPosts) {
-    if (!post.series) continue
-
-    const existingGroup = groups.get(post.series.slug)
-    const group = existingGroup ?? {
-      slug: post.series.slug,
-      title: post.series.title,
-      posts: [],
-    }
-
-    group.posts.push(post)
-    groups.set(post.series.slug, group)
-  }
-
-  return Array.from(groups.values()).map((group) => ({
-    ...group,
-    posts: [...group.posts].sort(
-      (left, right) => (left.series?.order ?? 0) - (right.series?.order ?? 0),
-    ),
-  }))
-}
-
 export function getBlogSeriesBySlug(slug: string) {
   return getBlogSeriesGroups().find((series) => series.slug === slug) ?? null
 }
