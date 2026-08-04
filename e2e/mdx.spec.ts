@@ -4,8 +4,7 @@ const aiArticlePath = "/blog/ai-pipelines-need-control-boundaries"
 const integrationArticlePath =
   "/blog/secure-platform-integration-is-not-plumbing"
 const softwareLayersArticlePath = "/blog/software-layers-are-risk-boundaries"
-const legacyArticlePath =
-  "/blog/governance-native-engineering-control-plane"
+const legacyArticlePath = "/blog/governance-native-engineering-control-plane"
 
 const unpublishedArticlePaths = [
   "/blog/draft-publication-fixture",
@@ -135,7 +134,9 @@ test.describe("MDX articles", () => {
     )
   })
 
-  test("renders software layers article from canonical MDX", async ({ page }) => {
+  test("renders software layers article from canonical MDX", async ({
+    page,
+  }) => {
     await page.goto(softwareLayersArticlePath)
 
     await expect(page).toHaveTitle(
