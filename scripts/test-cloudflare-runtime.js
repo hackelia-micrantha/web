@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { spawn } from "node:child_process"
-import { readFile, stat } from "node:fs/promises"
+import { readFile, stat, writeFile } from "node:fs/promises"
 import { createServer } from "node:net"
 import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
@@ -19,6 +19,8 @@ const wranglerExecutable = path.join(
 )
 const host = "127.0.0.1"
 const analyticsId = "cloudflare-runtime-contract"
+const articlePath = "/blog/ai-pipelines-need-control-boundaries"
+const articleUrl = `https://micrantha.com${articlePath}`
 const runtimeLog = []
 
 async function getAvailablePort() {
@@ -61,9 +63,13 @@ for (const requiredPath of [
   })
 }
 
-const manifest = JSON.parse(
-  await readFile(path.join(runtimeRoot, "manifest.json"), "utf8"),
-)
+const [manifest, runtimeBudget] = await Promise.all([
+  readFile(path.join(runtimeRoot, "manifest.json"), "utf8").then(JSON.parse),
+  readFile(
+    path.join(repositoryRoot, "config", "cloudflare-runtime-budget.json"),
+    "utf8",
+  ).then(JSON.parse),
+])
 assert.equal(manifest.schemaVersion, 2)
 assert.ok(manifest.sourceConfiguration.projectName)
 assert.match(
@@ -91,6 +97,11 @@ assert.equal(
     ["package.json", "yarn.lock"].includes(file.path),
   ),
   false,
+)
+assert.ok(
+  Number.isInteger(runtimeBudget.localWorkerdReadyMilliseconds) &&
+    runtimeBudget.localWorkerdReadyMilliseconds > 0,
+  "local workerd readiness budget must be a positive integer",
 )
 
 function appendRuntimeLog(chunk) {
@@ -220,7 +231,11 @@ async function readRuntime(pathname, options) {
   return { response, body }
 }
 
-function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
+function assertDocumentHeaders(
+  response,
+  body,
+  { requireNonce = true, cacheControl } = {},
+) {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/)
   assert.equal(response.headers.get("x-content-type-options"), "nosniff")
   assert.equal(response.headers.get("x-frame-options"), "DENY")
@@ -236,7 +251,12 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
     response.headers.get("strict-transport-security"),
     "max-age=31536000",
   )
-  assert.ok(response.headers.get("cache-control"), "expected a cache policy")
+
+  if (cacheControl) {
+    assert.equal(response.headers.get("cache-control"), cacheControl)
+  } else {
+    assert.ok(response.headers.get("cache-control"), "expected a cache policy")
+  }
 
   const policy = response.headers.get("content-security-policy") ?? ""
 
@@ -250,8 +270,39 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   )
 }
 
+function assertArticleMetadata(body) {
+  assert.ok(
+    body.includes(`rel="canonical" href="${articleUrl}"`),
+    "expected the article canonical URL",
+  )
+  assert.match(body, /"@type":"Article"/)
+  assert.ok(
+    body.includes(`"url":"${articleUrl}"`),
+    "expected Article JSON-LD to contain the canonical URL",
+  )
+}
+
 try {
   const readyMilliseconds = await waitForRuntime()
+  const runtimeReport = {
+    schemaVersion: 1,
+    measuredAt: new Date().toISOString(),
+    localWorkerdReadyMilliseconds: readyMilliseconds,
+    budgetMilliseconds: runtimeBudget.localWorkerdReadyMilliseconds,
+    headroomMilliseconds:
+      runtimeBudget.localWorkerdReadyMilliseconds - readyMilliseconds,
+    stagedFiles: manifest.files.length,
+    stagedBytes: manifest.totalBytes,
+  }
+
+  await writeFile(
+    path.join(runtimeRoot, "runtime-report.json"),
+    `${JSON.stringify(runtimeReport, null, 2)}\n`,
+  )
+  assert.ok(
+    readyMilliseconds <= runtimeBudget.localWorkerdReadyMilliseconds,
+    `local workerd readiness ${readyMilliseconds}ms exceeds budget ${runtimeBudget.localWorkerdReadyMilliseconds}ms`,
+  )
 
   const home = await readRuntime("/")
   assert.equal(home.response.status, 200)
@@ -259,7 +310,14 @@ try {
   assert.match(home.body, /id="content"/)
   assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
   assert.match(home.body, /https:\/\/micrantha\.com/)
-  assertDocumentHeaders(home.response, home.body)
+  assertDocumentHeaders(home.response, home.body, {
+    cacheControl:
+      "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
+  })
+
+  const contactRedirect = await readRuntime("/contact")
+  assert.equal(contactRedirect.response.status, 301)
+  assert.equal(contactRedirect.response.headers.get("location"), "/services")
 
   const css = await readRuntime("/tailwind.css")
   assert.equal(css.response.status, 200)
@@ -284,7 +342,6 @@ try {
   )
   assert.ok(browserAsset.body.length > 1_000, "expected a browser bundle")
 
-  const articlePath = "/blog/ai-pipelines-need-control-boundaries"
   const article = await readRuntime(articlePath)
   assert.equal(article.response.status, 200)
   assert.match(article.body, /AI Pipelines Need Control Boundaries/)
@@ -292,16 +349,29 @@ try {
     article.body,
     /AI is not the system of record\. AI is an untrusted reasoning component/,
   )
-  assert.match(article.body, new RegExp(`https://micrantha.com${articlePath}`))
-  assert.match(article.body, /"@type":"Article"/)
-  assertDocumentHeaders(article.response, article.body)
+  assertArticleMetadata(article.body)
+  assertDocumentHeaders(article.response, article.body, {
+    cacheControl:
+      "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+  })
 
   const botArticle = await readRuntime(articlePath, {
     headers: { "User-Agent": "Googlebot/2.1" },
   })
   assert.equal(botArticle.response.status, 200)
   assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
-  assertDocumentHeaders(botArticle.response, botArticle.body)
+  assertArticleMetadata(botArticle.body)
+  assertDocumentHeaders(botArticle.response, botArticle.body, {
+    cacheControl:
+      "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+  })
+
+  const methodNotAllowed = await readRuntime("/services", { method: "POST" })
+  assert.equal(methodNotAllowed.response.status, 405)
+  assert.match(methodNotAllowed.body, /405|Method Not Allowed/i)
+  assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
+    requireNonce: false,
+  })
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
