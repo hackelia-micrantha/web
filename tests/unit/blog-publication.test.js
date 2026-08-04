@@ -63,6 +63,17 @@ test("accepts published routable metadata at the cutoff", () => {
   )
 })
 
+test("rejects invalid explicit publication cutoffs", () => {
+  assert.throws(
+    () =>
+      assertRoutableBlogPublication([publishedPost], {
+        manifest: { "published-post": { status: "published" } },
+        cutoff: "2026-02-29",
+      }),
+    /valid YYYY-MM-DD/,
+  )
+})
+
 test("rejects missing, draft, future, duplicate, and stale publication metadata", () => {
   assert.throws(
     () =>
