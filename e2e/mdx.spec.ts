@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 const articlePath = "/blog/ai-pipelines-need-control-boundaries"
+const legacyArticlePath = "/blog/secure-platform-integration-is-not-plumbing"
 
 test.describe("representative MDX article", () => {
   test("renders canonical content, components, and metadata", async ({
@@ -72,6 +73,22 @@ test.describe("representative MDX article", () => {
       }),
     ).toBeVisible()
   })
+})
+
+test("legacy TSX articles continue through the dynamic route", async ({ page }) => {
+  const response = await page.goto(legacyArticlePath)
+
+  expect(response?.status()).toBe(200)
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Secure Platform Integration Is Not Plumbing",
+    }),
+  ).toBeVisible()
+  await expect(page.locator('[data-content-source="mdx"]')).toHaveCount(0)
+  await expect(page.locator("main")).toContainText(
+    "Secure platform integration is not plumbing",
+  )
 })
 
 test.describe("representative MDX article without JavaScript", () => {
