@@ -56,6 +56,9 @@ jobs:
       - name: Lint repository
         run: yarn lint
 
+      - name: Test blog MDX grammar validator
+        run: yarn test:blog-mdx-validation
+
       - name: Validate blog content boundaries
         run: yarn test:blog-content-boundaries
 
