@@ -14,12 +14,12 @@ private, no-store
 
 The explicit public classes are:
 
-| Class | Routes | Cache-Control |
-| --- | --- | --- |
-| `home` | `/`, `/contact` redirect path | `public, max-age=60, s-maxage=300, stale-while-revalidate=900` |
-| `catalog` | `/services`, `/solutions`, `/philosophy`, `/laboratory`, `/compost` | `public, max-age=60, s-maxage=600, stale-while-revalidate=1800` |
-| `reference` | `/privacy`, `/security`, `/support` | `public, max-age=60, s-maxage=1800, stale-while-revalidate=3600` |
-| `content` | `/blog`, blog series, published article routes | `public, max-age=60, s-maxage=600, stale-while-revalidate=1800` |
+| Class       | Routes                                                              | Cache-Control                                                    |
+| ----------- | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `home`      | `/`, `/contact` redirect path                                       | `public, max-age=60, s-maxage=300, stale-while-revalidate=900`   |
+| `catalog`   | `/services`, `/solutions`, `/philosophy`, `/laboratory`, `/compost` | `public, max-age=60, s-maxage=600, stale-while-revalidate=1800`  |
+| `reference` | `/privacy`, `/security`, `/support`                                 | `public, max-age=60, s-maxage=1800, stale-while-revalidate=3600` |
+| `content`   | `/blog`, blog series, published article routes                      | `public, max-age=60, s-maxage=600, stale-while-revalidate=1800`  |
 
 A newly added route is private until it is deliberately assigned. A dynamic blog path may enter the content class at the root loader, but an unpublished or unknown route becomes `private, no-store` when Remix produces its error response.
 
