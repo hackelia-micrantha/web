@@ -51,7 +51,9 @@ test("recognizes dynamic blog routes without creating a public fallback", () => 
 
 test("keeps actions and Remix data requests private", () => {
   assert.equal(
-    getRequestCacheControl(new Request("https://micrantha.com/services", { method: "POST" })),
+    getRequestCacheControl(
+      new Request("https://micrantha.com/services", { method: "POST" }),
+    ),
     PRIVATE_NO_STORE_CACHE_CONTROL,
   )
   assert.equal(
