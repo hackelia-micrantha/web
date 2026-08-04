@@ -42,7 +42,10 @@ async function read(pathname, options) {
 }
 
 function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/)
+  assert.match(
+    response.headers.get("content-type") ?? "",
+    /^text\/html;\s*charset=utf-8$/i,
+  )
   assert.equal(response.headers.get("x-content-type-options"), "nosniff")
   assert.equal(response.headers.get("x-frame-options"), "DENY")
   assert.equal(
