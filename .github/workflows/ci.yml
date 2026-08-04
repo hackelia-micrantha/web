@@ -56,6 +56,9 @@ jobs:
       - name: Lint repository
         run: yarn lint
 
+      - name: Validate blog content boundaries
+        run: yarn test:blog-content-boundaries
+
       - name: Typecheck
         run: yarn typecheck
 

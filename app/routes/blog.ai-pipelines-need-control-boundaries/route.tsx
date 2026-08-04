@@ -59,7 +59,6 @@ const post: BlogPost = {
   excerpt: requiredString("excerpt"),
   tags: requiredStringArray("tags"),
   relatedSlugs: requiredStringArray("relatedSlugs"),
-  Content: () => null,
 }
 
 const registryPost = getBlogPostBySlug(post.slug)

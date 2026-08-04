@@ -20,7 +20,7 @@ type LoaderData = {
 export async function loader({ params }: LoaderFunctionArgs) {
   const post = getBlogPostBySlug(params.slug ?? "")
 
-  if (!post) {
+  if (!post?.Content) {
     throw new Response("Not Found", { status: 404 })
   }
 
@@ -71,13 +71,15 @@ export default function BlogPostRoute() {
   const { post: postMeta } = useLoaderData<typeof loader>()
   const post = getBlogPostBySlug(postMeta.slug)
 
-  if (!post) {
-    throw new Error(`Missing blog post for slug: ${postMeta.slug}`)
+  if (!post?.Content) {
+    throw new Error(`Missing legacy blog renderer for slug: ${postMeta.slug}`)
   }
+
+  const Content = post.Content
 
   return (
     <BlogArticleLayout post={post}>
-      <post.Content />
+      <Content />
     </BlogArticleLayout>
   )
 }
