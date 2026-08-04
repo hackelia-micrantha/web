@@ -19,7 +19,10 @@ import {
 } from "@remix-run/react"
 
 import { Navigation, Footer, Analytics } from "./components"
-import { getDocumentCacheControl } from "./services/cache-policy.server"
+import {
+  PRIVATE_NO_STORE_CACHE_CONTROL,
+  getRequestCacheControl,
+} from "./services/cache-policy.server"
 import { resolveRuntimePlatform } from "./services/platform.server"
 import { buildSiteMeta } from "./utils/seo"
 
@@ -78,10 +81,9 @@ export const links: LinksFunction = () => [
 export const meta: MetaFunction = () => buildSiteMeta()
 
 export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
-  const cacheControl =
-    errorHeaders?.get("Cache-Control") ??
-    loaderHeaders.get("Cache-Control") ??
-    "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
+  const cacheControl = errorHeaders
+    ? (errorHeaders.get("Cache-Control") ?? PRIVATE_NO_STORE_CACHE_CONTROL)
+    : (loaderHeaders.get("Cache-Control") ?? PRIVATE_NO_STORE_CACHE_CONTROL)
   const nonce = loaderHeaders.get(NONCE_HEADER)
   const isDev =
     typeof process !== "undefined"
@@ -114,7 +116,7 @@ type State = { analyticsId: string | null; nonce: string }
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const runtime = resolveRuntimePlatform(context, request)
-  const cacheControl = getDocumentCacheControl(new URL(request.url).pathname)
+  const cacheControl = getRequestCacheControl(request)
   const nonce = globalThis.crypto.randomUUID()
 
   return new Response(
