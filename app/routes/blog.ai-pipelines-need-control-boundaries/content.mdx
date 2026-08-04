@@ -76,35 +76,33 @@ The write-back step should look like a normal governed integration: authorized a
 
 ## Threat and failure modes
 
-<ControlTable
-  rows={[
-    {
-      failureMode: "Over-broad tool access",
-      cause: "Convenience-driven integration and prompt-only policy",
-      response: "Scope tools by workflow, enforce authorization, audit calls",
-    },
-    {
-      failureMode: "Unverifiable output",
-      cause: "Missing provenance and no deterministic validation",
-      response: "Attach sources, run schema checks, retain review traces",
-    },
-    {
-      failureMode: "Unsafe write-back",
-      cause: "Model output sent directly to systems of record",
-      response: "Require approval gates and controlled adapter writes",
-    },
-    {
-      failureMode: "Prompt leakage of sensitive data",
-      cause: "Skipping normalization and redaction upstream",
-      response: "Pre-process inputs and minimize exposed fields",
-    },
-    {
-      failureMode: "Workflow drift",
-      cause: "AI-specific logic embedded in every consumer",
-      response: "Keep orchestration in an application boundary",
-    },
-  ]}
-/>
+<ControlTable label="AI pipeline failure modes">
+  <ControlRow
+    failureMode="Over-broad tool access"
+    cause="Convenience-driven integration and prompt-only policy"
+    response="Scope tools by workflow, enforce authorization, audit calls"
+  />
+  <ControlRow
+    failureMode="Unverifiable output"
+    cause="Missing provenance and no deterministic validation"
+    response="Attach sources, run schema checks, retain review traces"
+  />
+  <ControlRow
+    failureMode="Unsafe write-back"
+    cause="Model output sent directly to systems of record"
+    response="Require approval gates and controlled adapter writes"
+  />
+  <ControlRow
+    failureMode="Prompt leakage of sensitive data"
+    cause="Skipping normalization and redaction upstream"
+    response="Pre-process inputs and minimize exposed fields"
+  />
+  <ControlRow
+    failureMode="Workflow drift"
+    cause="AI-specific logic embedded in every consumer"
+    response="Keep orchestration in an application boundary"
+  />
+</ControlTable>
 
 ## Conclusion
 
