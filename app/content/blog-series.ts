@@ -1,11 +1,10 @@
 import type { BlogPost } from "~/content/blog"
-import { getBlogPosts, getBlogPostBySlug } from "~/content/blog-provider"
+import { getBlogPosts } from "~/content/blog-provider"
 
 export type BlogSeriesDefinition = {
   slug: string
   title: string
   description: string
-  postSlugs: string[]
 }
 
 export type BlogSeriesGroup = BlogSeriesDefinition & {
@@ -18,29 +17,23 @@ const blogSeriesDefinitions: BlogSeriesDefinition[] = [
     title: "Governance-Native Engineering",
     description:
       "Essays exploring governance, replayability, recursive execution, and organizational comprehension in AI-native engineering systems.",
-    postSlugs: [
-      "governance-native-engineering-control-plane",
-      "replayability-is-a-governance-problem",
-      "recursive-governance-and-agent-workflows",
-    ],
   },
   {
     slug: "architecture-control-boundaries",
     title: "Architecture Control Boundaries",
     description:
       "Architecture notes on integration, AI workflow boundaries, and layered software design as delivery-governance surfaces.",
-    postSlugs: [
-      "secure-platform-integration-is-not-plumbing",
-      "ai-pipelines-need-control-boundaries",
-      "software-layers-are-risk-boundaries",
-    ],
   },
 ]
 
 function resolveSeriesPosts(series: BlogSeriesDefinition) {
-  return series.postSlugs
-    .map((slug) => getBlogPostBySlug(slug))
-    .filter((post): post is BlogPost => post !== null)
+  return getBlogPosts()
+    .filter((post) => post.series?.slug === series.slug)
+    .sort(
+      (left, right) =>
+        (left.series?.order ?? Number.MAX_SAFE_INTEGER) -
+        (right.series?.order ?? Number.MAX_SAFE_INTEGER),
+    )
 }
 
 export function getBlogSeriesGroups(): BlogSeriesGroup[] {
@@ -55,17 +48,17 @@ export function getBlogSeriesBySlug(slug: string) {
 }
 
 export function getSeriesForPost(post: BlogPost) {
-  return (
-    getBlogSeriesGroups().find((series) =>
-      series.posts.some((seriesPost) => seriesPost.slug === post.slug),
-    ) ?? null
-  )
+  if (!post.series) {
+    return null
+  }
+
+  return getBlogSeriesBySlug(post.series.slug)
 }
 
 export function getSeriesNavigation(post: BlogPost) {
   const series = getSeriesForPost(post)
 
-  if (!series) {
+  if (!series || !post.series) {
     return null
   }
 
@@ -81,7 +74,7 @@ export function getSeriesNavigation(post: BlogPost) {
     series: {
       slug: series.slug,
       title: series.title,
-      order: index + 1,
+      order: post.series.order,
     },
     index,
     total: series.posts.length,
@@ -92,9 +85,5 @@ export function getSeriesNavigation(post: BlogPost) {
 }
 
 export function getNonSeriesBlogPosts() {
-  const seriesSlugs = new Set(
-    blogSeriesDefinitions.flatMap((series) => series.postSlugs),
-  )
-
-  return getBlogPosts().filter((post) => !seriesSlugs.has(post.slug))
+  return getBlogPosts().filter((post) => !post.series)
 }

@@ -40,6 +40,31 @@ function requiredStringArray(name: string) {
   return normalized
 }
 
+function requiredSeries() {
+  const value = attributes.series
+
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Invalid MDX frontmatter field: series")
+  }
+
+  const series = value as Record<string, unknown>
+  const slug = series.slug
+  const order = series.order
+
+  if (typeof slug !== "string" || slug.trim() === "") {
+    throw new Error("Invalid MDX frontmatter field: series.slug")
+  }
+
+  if (typeof order !== "number" || !Number.isInteger(order) || order < 1) {
+    throw new Error("Invalid MDX frontmatter field: series.order")
+  }
+
+  return {
+    slug: slug.trim(),
+    order,
+  }
+}
+
 const slug = requiredString("slug")
 const date = requiredString("date")
 
@@ -59,6 +84,7 @@ const post: BlogPost = {
   excerpt: requiredString("excerpt"),
   tags: requiredStringArray("tags"),
   relatedSlugs: requiredStringArray("relatedSlugs"),
+  series: requiredSeries(),
 }
 
 const registryPost = getBlogPostBySlug(post.slug)
@@ -73,7 +99,7 @@ for (const field of ["title", "description", "date", "excerpt"] as const) {
   }
 }
 
-for (const field of ["tags", "relatedSlugs"] as const) {
+for (const field of ["tags", "relatedSlugs", "series"] as const) {
   if (JSON.stringify(registryPost[field]) !== JSON.stringify(post[field])) {
     throw new Error(`MDX frontmatter differs from registry field: ${field}`)
   }
