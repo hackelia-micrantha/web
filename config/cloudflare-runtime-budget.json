@@ -1,0 +1,4 @@
+{
+  "localWorkerdReadyMilliseconds": 10000,
+  "description": "Maximum CI time from starting pinned Wrangler to the first successful SSR response. This is a local regression budget, not Cloudflare production CPU startup time."
+}
