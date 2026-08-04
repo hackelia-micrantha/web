@@ -59,6 +59,9 @@ jobs:
       - name: Test blog MDX grammar validator
         run: yarn test:blog-mdx-validation
 
+      - name: Test blog publication boundary
+        run: yarn test:blog-mdx-publication
+
       - name: Validate blog content boundaries
         run: yarn test:blog-content-boundaries
 
