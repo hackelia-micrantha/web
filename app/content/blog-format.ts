@@ -1,10 +1,10 @@
 export const BLOG_TITLE = "Architecture Notes"
 
 export const BLOG_DESCRIPTION =
-  "Practical notes on secure integration, delivery governance, AI-assisted systems, and durable software boundaries."
+  "Architecture notes on secure platform integration, delivery governance, AI-assisted systems, and long-lived software design."
 
 export function formatBlogDate(date: string) {
-  return new Intl.DateTimeFormat("en-CA", {
+  return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
