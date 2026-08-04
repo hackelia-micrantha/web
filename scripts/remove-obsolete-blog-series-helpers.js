@@ -6,6 +6,8 @@ import ts from "typescript"
 const repositoryRoot = process.cwd()
 const relativePath = "app/content/blog.tsx"
 const filePath = path.join(repositoryRoot, relativePath)
+const firstHelper = "export function getBlogSeriesBySlug"
+const nextLiveExport = "export function formatBlogDate"
 const helperNames = new Set([
   "getBlogSeriesBySlug",
   "getSeriesPosts",
@@ -13,43 +15,14 @@ const helperNames = new Set([
 ])
 
 let source = await readFile(filePath, "utf8")
-const sourceFile = ts.createSourceFile(
-  filePath,
-  source,
-  ts.ScriptTarget.Latest,
-  true,
-  ts.ScriptKind.TSX,
-)
+const start = source.indexOf(firstHelper)
+const end = source.indexOf(nextLiveExport)
 
-assert.equal(sourceFile.parseDiagnostics.length, 0)
+assert.notEqual(start, -1, `Unable to find ${firstHelper}`)
+assert.notEqual(end, -1, `Unable to find ${nextLiveExport}`)
+assert.ok(start < end, "Obsolete series helper block is out of order")
 
-const edits = sourceFile.statements
-  .filter(
-    (statement) =>
-      ts.isFunctionDeclaration(statement) &&
-      statement.name &&
-      helperNames.has(statement.name.text),
-  )
-  .map((statement) => {
-    let end = statement.end
-
-    while (source[end] === "\r" || source[end] === "\n") end += 1
-
-    return {
-      start: statement.getFullStart(),
-      end,
-    }
-  })
-
-assert.equal(
-  edits.length,
-  helperNames.size,
-  "Expected all obsolete local series helpers to exist exactly once",
-)
-
-for (const edit of edits.sort((left, right) => right.start - left.start)) {
-  source = `${source.slice(0, edit.start)}\n${source.slice(edit.end)}`
-}
+source = `${source.slice(0, start)}${source.slice(end)}`
 
 const migrated = ts.createSourceFile(
   filePath,
@@ -68,6 +41,15 @@ assert.equal(
       helperNames.has(statement.name.text),
   ),
   false,
+)
+assert.equal(
+  migrated.statements.some(
+    (statement) =>
+      ts.isFunctionDeclaration(statement) &&
+      statement.name?.text === "formatBlogDate",
+  ),
+  true,
+  "formatBlogDate must remain after cleanup",
 )
 
 await writeFile(filePath, source)
