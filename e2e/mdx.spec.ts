@@ -4,7 +4,7 @@ const articlePath = "/blog/ai-pipelines-need-control-boundaries"
 const legacyArticlePath = "/blog/secure-platform-integration-is-not-plumbing"
 
 test.describe("representative MDX article", () => {
-  test("renders canonical content, components, and metadata", async ({
+  test("renders canonical content, components, metadata, and series navigation", async ({
     page,
   }) => {
     await page.goto(articlePath)
@@ -18,6 +18,25 @@ test.describe("representative MDX article", () => {
         name: "AI Pipelines Need Control Boundaries",
       }),
     ).toBeVisible()
+    await expect(page.getByText("Part 2 of 3", { exact: true })).toBeVisible()
+
+    const seriesNavigation = page.getByRole("navigation", {
+      name: "Architecture Control Boundaries series navigation",
+    })
+
+    await expect(
+      seriesNavigation.getByRole("link", {
+        name: "Previous: Secure Platform Integration Is Not Plumbing",
+      }),
+    ).toHaveAttribute(
+      "href",
+      "/blog/secure-platform-integration-is-not-plumbing",
+    )
+    await expect(
+      seriesNavigation.getByRole("link", {
+        name: "Next: Software Layers Are Risk Boundaries",
+      }),
+    ).toHaveAttribute("href", "/blog/software-layers-are-risk-boundaries")
 
     const mdxContent = page.locator('[data-content-source="mdx"]')
 

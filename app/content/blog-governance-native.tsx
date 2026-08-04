@@ -293,6 +293,10 @@ export const governanceNativeBlogPosts: BlogPost[] = [
       "replayability-is-a-governance-problem",
       "recursive-governance-and-agent-workflows",
     ],
+    series: {
+      slug: "governance-native-engineering",
+      order: 1,
+    },
     Content: governanceNativeEngineeringContent,
   },
   {
@@ -308,6 +312,10 @@ export const governanceNativeBlogPosts: BlogPost[] = [
       "governance-native-engineering-control-plane",
       "recursive-governance-and-agent-workflows",
     ],
+    series: {
+      slug: "governance-native-engineering",
+      order: 2,
+    },
     Content: replayabilityGovernanceContent,
   },
   {
@@ -328,6 +336,10 @@ export const governanceNativeBlogPosts: BlogPost[] = [
       "governance-native-engineering-control-plane",
       "replayability-is-a-governance-problem",
     ],
+    series: {
+      slug: "governance-native-engineering",
+      order: 3,
+    },
     Content: recursiveGovernanceContent,
   },
 ]
