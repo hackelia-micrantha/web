@@ -159,7 +159,11 @@ function parseFrontmatter(source, relativePath) {
     const line = lines[index]
     if (line.trim() === "") continue
 
-    assert.equal(line.includes("\t"), false, `${relativePath} must not use tabs`)
+    assert.equal(
+      line.includes("\t"),
+      false,
+      `${relativePath} must not use tabs`,
+    )
     assert.equal(
       line.startsWith(" "),
       false,
@@ -197,7 +201,10 @@ function parseFrontmatter(source, relativePath) {
         )
         collectionKind = "array"
         collection.push(
-          parseScalar(child.slice(4), `${relativePath}.${name}[${collection.length}]`),
+          parseScalar(
+            child.slice(4),
+            `${relativePath}.${name}[${collection.length}]`,
+          ),
         )
         continue
       }
@@ -431,10 +438,7 @@ export async function loadBlogContentInventory() {
       seriesPosts,
       `Missing derived series collection for ${definition.slug}`,
     )
-    assert.ok(
-      seriesPosts.length > 0,
-      `Series ${definition.slug} has no posts`,
-    )
+    assert.ok(seriesPosts.length > 0, `Series ${definition.slug} has no posts`)
 
     seriesPosts.sort((left, right) => left.series.order - right.series.order)
 
