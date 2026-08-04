@@ -123,10 +123,14 @@ function buildFilePath(moduleReference, importerPath = buildDirectory) {
 
 function staticImportedModules(source) {
   const imports = new Set()
-  const pattern =
-    /(?:import|export)\s*(?:[^"'()]*?\s+from\s*)?["']([^"']+)["']/gu
+  const patterns = [
+    /\b(?:import|export)[^"'();]*?\bfrom\s*["']([^"']+)["']/gu,
+    /\bimport\s*["']([^"']+)["']/gu,
+  ]
 
-  for (const match of source.matchAll(pattern)) imports.add(match[1])
+  for (const pattern of patterns) {
+    for (const match of source.matchAll(pattern)) imports.add(match[1])
+  }
 
   return imports
 }
@@ -164,13 +168,22 @@ async function collectStaticGraph(moduleReferences) {
 function routeForPathname(manifest, pathname) {
   const expectedPath = pathname === "/" ? "" : pathname.slice(1)
   const routes = Object.values(manifest.routes)
-  const matches = routes.filter((route) => {
+  let matches = routes.filter((route) => {
     if (pathname === "/") {
       return route.index === true && route.parentId === "root"
     }
 
     return route.path === expectedPath
   })
+
+  if (matches.length === 0 && pathname !== "/") {
+    const finalSegment = expectedPath.split("/").at(-1)
+
+    matches = routes.filter(
+      (route) =>
+        route.path === finalSegment || route.id?.includes(finalSegment),
+    )
+  }
 
   assert.equal(
     matches.length,
