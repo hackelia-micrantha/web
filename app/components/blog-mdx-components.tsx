@@ -37,17 +37,17 @@ export function Figure({
   )
 }
 
-type ControlTableRow = {
-  cause: string
-  failureMode: string
-  response: string
-}
-
-export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
+export function ControlTable({
+  children,
+  label,
+}: {
+  children: ReactNode
+  label: string
+}) {
   return (
     <div className="overflow-x-auto">
       <table
-        aria-label="AI pipeline failure modes"
+        aria-label={label}
         className="min-w-[48rem] border-collapse text-left"
       >
         <thead>
@@ -57,17 +57,27 @@ export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
             <th scope="col">Control response</th>
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.failureMode}>
-              <th scope="row">{row.failureMode}</th>
-              <td>{row.cause}</td>
-              <td>{row.response}</td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{children}</tbody>
       </table>
     </div>
+  )
+}
+
+export function ControlRow({
+  cause,
+  failureMode,
+  response,
+}: {
+  cause: string
+  failureMode: string
+  response: string
+}) {
+  return (
+    <tr>
+      <th scope="row">{failureMode}</th>
+      <td>{cause}</td>
+      <td>{response}</td>
+    </tr>
   )
 }
 
@@ -83,6 +93,7 @@ export function PostLink({
 
 export const blogMdxComponents = {
   Callout,
+  ControlRow,
   ControlTable,
   Figure,
   PostLink,
