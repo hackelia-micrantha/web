@@ -9,8 +9,7 @@ const analyticsId = "cache-policy-contract"
 const cacheControls = {
   home: "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
   catalog: "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
-  reference:
-    "public, max-age=60, s-maxage=1800, stale-while-revalidate=3600",
+  reference: "public, max-age=60, s-maxage=1800, stale-while-revalidate=3600",
   content: "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
   private: "private, no-store",
 }
@@ -48,7 +47,10 @@ function assertNoncePair(response, body) {
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
 
   assert.ok(nonce, "expected a CSP nonce")
-  assert.ok(body.includes(`nonce="${nonce}"`), "expected body/header nonce parity")
+  assert.ok(
+    body.includes(`nonce="${nonce}"`),
+    "expected body/header nonce parity",
+  )
 
   return nonce
 }
@@ -72,7 +74,11 @@ const secondHome = await read("/")
 const firstNonce = assertNoncePair(firstHome.response, firstHome.body)
 const secondNonce = assertNoncePair(secondHome.response, secondHome.body)
 
-assert.notEqual(firstNonce, secondNonce, "each rendered document needs a fresh nonce")
+assert.notEqual(
+  firstNonce,
+  secondNonce,
+  "each rendered document needs a fresh nonce",
+)
 
 const dataResponse = await read("/?_data=root")
 assert.equal(dataResponse.response.status, 200)
