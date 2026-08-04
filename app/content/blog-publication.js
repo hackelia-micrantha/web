@@ -10,7 +10,8 @@ export function isCalendarDate(value) {
   const parsed = new Date(`${value}T00:00:00Z`)
 
   return (
-    !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value
+    !Number.isNaN(parsed.valueOf()) &&
+    parsed.toISOString().slice(0, 10) === value
   )
 }
 
@@ -97,11 +98,7 @@ export function assertRoutableMdxPublication(
 ) {
   const validatedCutoff = resolvePublicationCutoff(cutoff)
 
-  assertRoutableRecord(
-    post,
-    validatedCutoff,
-    `MDX route ${post?.slug ?? ""}`,
-  )
+  assertRoutableRecord(post, validatedCutoff, `MDX route ${post?.slug ?? ""}`)
 
   return post
 }
