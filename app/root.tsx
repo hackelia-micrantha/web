@@ -76,7 +76,7 @@ export const meta: MetaFunction = () => buildSiteMeta()
 
 export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
   const cacheControl =
-    errorHeaders.get("Cache-Control") ??
+    errorHeaders?.get("Cache-Control") ??
     loaderHeaders.get("Cache-Control") ??
     "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
   const nonce = loaderHeaders.get(NONCE_HEADER)
