@@ -59,12 +59,11 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   )
   assert.ok(response.headers.get("cache-control"), "expected a cache policy")
 
-  const policy = response.headers.get("content-security-policy") ?? ""
-
-  if (!requireNonce && !policy) {
+  if (!requireNonce) {
     return
   }
 
+  const policy = response.headers.get("content-security-policy") ?? ""
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
 
   assert.ok(nonce, "expected a CSP nonce in the document response")
@@ -112,6 +111,10 @@ assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
 const disabledErrorContract = await read("/runtime-contract/error")
 assert.equal(disabledErrorContract.response.status, 404)
 assert.match(disabledErrorContract.body, /404|Not Found/i)
+assert.equal(
+  disabledErrorContract.response.headers.get("cache-control"),
+  "private, no-store",
+)
 assertDocumentHeaders(
   disabledErrorContract.response,
   disabledErrorContract.body,
