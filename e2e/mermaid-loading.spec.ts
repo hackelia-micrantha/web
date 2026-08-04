@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test"
 
-test("loads Mermaid only after a diagram route mounts", async ({ page }, testInfo) => {
+test("loads Mermaid only after a diagram route mounts", async ({
+  page,
+}, testInfo) => {
   test.skip(
     testInfo.project.name === "mobile-chromium",
     "One browser project is sufficient for the demand-loading contract.",
