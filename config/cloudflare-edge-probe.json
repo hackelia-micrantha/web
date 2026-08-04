@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "projectName": "amaryllis-9ne",
+  "productionUrl": "https://micrantha.com",
+  "pagesUrl": "https://amaryllis-9ne.pages.dev",
+  "repetitions": 3,
+  "timeoutMilliseconds": 15000,
+  "documents": [
+    {
+      "pathname": "/",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
+      "contentType": "text/html",
+      "maximumBytes": 250000
+    },
+    {
+      "pathname": "/solutions",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
+      "contentType": "text/html",
+      "maximumBytes": 250000
+    },
+    {
+      "pathname": "/privacy",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=1800, stale-while-revalidate=3600",
+      "contentType": "text/html",
+      "maximumBytes": 250000
+    },
+    {
+      "pathname": "/blog",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
+      "contentType": "text/html",
+      "maximumBytes": 250000
+    },
+    {
+      "pathname": "/blog/governance-native-engineering-control-plane",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
+      "contentType": "text/html",
+      "maximumBytes": 350000
+    }
+  ],
+  "privateRequests": [
+    {
+      "pathname": "/?_data=root",
+      "method": "GET",
+      "status": 200,
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "maximumBytes": 50000
+    },
+    {
+      "pathname": "/edge-probe-not-found",
+      "method": "GET",
+      "status": 404,
+      "cacheControl": "private, no-store",
+      "contentType": "text/html",
+      "maximumBytes": 100000
+    },
+    {
+      "pathname": "/services",
+      "method": "POST",
+      "status": 405,
+      "cacheControl": "private, no-store",
+      "contentType": "text/html",
+      "maximumBytes": 100000
+    }
+  ]
+}
