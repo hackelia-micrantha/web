@@ -116,16 +116,16 @@ const softwareLayersArticle = await read(
   "/blog/software-layers-are-risk-boundaries",
 )
 assert.equal(softwareLayersArticle.response.status, 200)
-assert.match(
-  softwareLayersArticle.body,
-  /Software Layers Are Risk Boundaries/,
-)
+assert.match(softwareLayersArticle.body, /Software Layers Are Risk Boundaries/)
 assert.match(
   softwareLayersArticle.body,
   /Software layers are not only a code-organization preference/,
 )
 assert.match(softwareLayersArticle.body, /data-content-source="mdx"/)
-assertDocumentHeaders(softwareLayersArticle.response, softwareLayersArticle.body)
+assertDocumentHeaders(
+  softwareLayersArticle.response,
+  softwareLayersArticle.body,
+)
 
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
   userAgent: "Googlebot/2.1",
