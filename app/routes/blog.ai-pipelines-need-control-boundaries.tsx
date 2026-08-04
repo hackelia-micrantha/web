@@ -7,10 +7,7 @@ import {
   type BlogArticleSeriesNavigation,
 } from "~/components/blog-article-layout"
 import { blogMdxComponents } from "~/components/blog-mdx-components"
-import {
-  defineBlogMdxPost,
-  type BlogPostMetadata,
-} from "~/content/blog-mdx"
+import { defineBlogMdxPost, type BlogPostMetadata } from "~/content/blog-mdx"
 import { getBlogPostBySlug } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
 import ArticleContent, {
