@@ -14,6 +14,7 @@ import {
   repositoryRoot,
 } from "./blog-content-inventory.js"
 import { validateBlogMdxFile } from "./blog-mdx-validation.js"
+import { validateBlogMermaidBlocks } from "./blog-mermaid-validation.js"
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
 const sitemapPath = path.join(repositoryRoot, "public/sitemap.xml")
@@ -84,6 +85,7 @@ async function discoverMdxRoutes() {
       relativePath: path.relative(repositoryRoot, contentPath),
       slug,
       date: readFrontmatterField(frontmatter, "date", entry.name),
+      source,
       status: readFrontmatterField(frontmatter, "status", entry.name),
     })
   }
@@ -109,8 +111,15 @@ assertRoutableBlogPublication(inventory.posts, {
   cutoff: publicationCutoff,
 })
 
-await Promise.all(
-  mdxRoutes.map((route) => validateBlogMdxFile(route.relativePath, inventory)),
+const mermaidBlockCounts = await Promise.all(
+  mdxRoutes.map(async (route) => {
+    await validateBlogMdxFile(route.relativePath, inventory)
+    return validateBlogMermaidBlocks(route.source, route.relativePath)
+  }),
+)
+const mermaidBlockCount = mermaidBlockCounts.reduce(
+  (total, count) => total + count,
+  0,
 )
 
 for (const route of mdxRoutes) {
@@ -149,5 +158,5 @@ assert.equal(
 console.log(
   `Blog content boundaries passed at ${publicationCutoff}: ${inventory.posts.length} published post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${
     inventory.posts.length - mdxSlugs.length
-  } legacy TSX route(s), MDX grammar enforced, sitemap current`,
+  } legacy TSX route(s), ${mermaidBlockCount} Mermaid block(s), MDX grammar enforced, sitemap current`,
 )
