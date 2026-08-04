@@ -1,0 +1,86 @@
+---
+slug: ai-pipelines-need-control-boundaries
+title: AI Pipelines Need Control Boundaries
+description: Enterprise AI should be treated as an untrusted reasoning component inside a governed integration path.
+date: "2026-04-24"
+excerpt: Enterprise AI becomes safer and more useful when normalization, authorization, validation, and write-back controls are explicit around it.
+tags:
+  - architecture-notes
+  - ai-governance
+  - workflow-validation
+  - secure-integration
+relatedSlugs:
+  - secure-platform-integration-is-not-plumbing
+  - software-layers-are-risk-boundaries
+---
+
+## Start with the right mental model
+
+Enterprise AI work becomes risky when the model is treated like an authoritative component instead of a fallible part of a larger delivery path.
+
+<Callout>
+
+AI is not the system of record. AI is an untrusted reasoning component operating inside a governed integration path.
+
+</Callout>
+
+That framing changes the design. Prompts, tool access, retrieval, outputs, and write-back actions all need control boundaries of their own.
+
+## Pre-processing
+
+Input control starts before a model sees anything. Raw enterprise data usually needs normalization to reduce ambiguity, redaction to remove material the model does not need, enrichment to provide stable business context, and provenance markers so downstream reviewers can see what sources shaped the result.
+
+- Normalize structure and terminology so prompts do not depend on unstable source formatting.
+- Redact sensitive fields when they are not necessary for the reasoning task.
+- Enrich with identifiers, policy context, and known workflow state.
+- Attach provenance so outputs can be inspected against real evidence.
+
+## MCP and tool boundary
+
+Tool access should be scoped like any other privileged interface. Exposing a broad tool surface because a model might find it useful is the wrong default. The model should receive only the tools, methods, and data slices required for the current workflow step.
+
+- Scope access to the task and actor, not the whole platform.
+- Require authorization at the tool boundary, not only in prompts.
+- Audit tool invocations and carry the calling workflow identity.
+- Treat MCP or similar tool channels as integration surfaces subject to the same control design as any other API.
+
+## AI execution
+
+<Figure
+  title="Governed AI pipeline"
+  caption="AI lives inside a controlled path with explicit checks before and after reasoning."
+  src="/img/blog/ai_pipeline_diagram.svg"
+  alt="Diagram showing sources flowing through preprocessing, MCP boundary, AI layer, post-processing, and finally to controlled targets."
+  narrow
+/>
+
+Inside the execution zone, retrieval, model or agent selection, and tool calls are still just intermediate reasoning steps. They are useful, but they should not be confused with final system action. There needs to be a visible boundary between the reasoning process and the transaction that changes a real workflow.
+
+This is where a layered architecture matters. The same separation described in <PostLink slug="software-layers-are-risk-boundaries">Software Layers Are Risk Boundaries</PostLink> keeps AI-specific logic from leaking directly into systems of record.
+
+## Post-processing and approval
+
+Before anything is written back, the result needs to be validated, scored, compared with expected structures, and, where necessary, held for approval. This is the difference between an assistant and an uncontrolled actor.
+
+- Validate schema, policy requirements, and required fields.
+- Score confidence or rule conformance using deterministic checks rather than model self-assessment alone.
+- Diff proposed changes against current records so reviewers can see the exact effect.
+- Require explicit approval when the action changes regulated workflow, status, or customer-visible records.
+
+## Controlled write-back
+
+The write-back step should look like a normal governed integration: authorized actor, validated payload, logged decision, and a durable trace of what was changed. If that control surface does not exist, the pipeline is not ready for enterprise use.
+
+## Threat and failure modes
+
+| Failure mode | What usually causes it | Control response |
+| --- | --- | --- |
+| Over-broad tool access | Convenience-driven integration and prompt-only policy | Scope tools by workflow, enforce authorization, audit calls |
+| Unverifiable output | Missing provenance and no deterministic validation | Attach sources, run schema checks, retain review traces |
+| Unsafe write-back | Model output sent directly to systems of record | Require approval gates and controlled adapter writes |
+| Prompt leakage of sensitive data | Skipping normalization and redaction upstream | Pre-process inputs and minimize exposed fields |
+| Workflow drift | AI-specific logic embedded in every consumer | Keep orchestration in an application boundary |
+
+## Conclusion
+
+The practical goal is not to remove AI from the workflow. It is to put AI in a governed part of the workflow without letting it become the implicit owner of security, state, or business truth. Once the control boundaries are explicit, enterprise AI becomes easier to test, review, and replace.
