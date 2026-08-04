@@ -3,7 +3,10 @@ import { readFile, readdir } from "node:fs/promises"
 import path from "node:path"
 import vm from "node:vm"
 
-import { loadBlogContentInventory, repositoryRoot } from "./blog-content-inventory.js"
+import {
+  loadBlogContentInventory,
+  repositoryRoot,
+} from "./blog-content-inventory.js"
 
 const buildDirectory = path.join(repositoryRoot, "public/build")
 const bodyMarkers = new Map([
@@ -48,11 +51,14 @@ function buildFilePath(moduleReference, importerPath = buildDirectory) {
 }
 
 function importedModules(source) {
-  const imports = []
-  const pattern = /(?:from\s*|import\s*\()\s*["']([^"']+)["']/gu
+  const imports = new Set()
+  const patterns = [
+    /(?:from\s*|import\s*\(\s*)["']([^"']+)["']/gu,
+    /\bimport\s*["']([^"']+)["']/gu,
+  ]
 
-  for (const match of source.matchAll(pattern)) {
-    imports.push(match[1])
+  for (const pattern of patterns) {
+    for (const match of source.matchAll(pattern)) imports.add(match[1])
   }
 
   return imports
@@ -81,13 +87,16 @@ async function readManifest() {
 }
 
 async function collectModuleGraph(route) {
-  const pending = [route.module, ...(route.imports ?? [])]
+  const pending = [route.module, ...(route.imports ?? [])].map((reference) => ({
+    importerPath: buildDirectory,
+    reference,
+  }))
   const visited = new Set()
   const sources = new Map()
 
   while (pending.length > 0) {
-    const reference = pending.pop()
-    const filePath = buildFilePath(reference)
+    const { importerPath, reference } = pending.pop()
+    const filePath = buildFilePath(reference, importerPath)
 
     if (!filePath || visited.has(filePath)) continue
     visited.add(filePath)
@@ -97,7 +106,8 @@ async function collectModuleGraph(route) {
 
     for (const imported of importedModules(source)) {
       const importedPath = buildFilePath(imported, filePath)
-      if (importedPath && !visited.has(importedPath)) pending.push(imported)
+      if (!importedPath || visited.has(importedPath)) continue
+      pending.push({ importerPath: filePath, reference: imported })
     }
   }
 
