@@ -209,7 +209,7 @@ function parseFrontmatter(source, relativePath) {
         continue
       }
 
-      const nested = child.match(/^  ([A-Za-z][A-Za-z0-9]*):(.*)$/)
+      const nested = child.match(/^ {2}([A-Za-z][A-Za-z0-9]*):(.*)$/)
       assert.ok(
         nested,
         `${relativePath}:${index + 2} has invalid nested frontmatter`,
