@@ -118,6 +118,8 @@ const runtime = spawn(
     "http",
     "--var",
     `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
+    "--var",
+    "MICRANTHA_RUNTIME_CONTRACT:enabled",
     "--show-interactive-dev-session=false",
   ],
   {
@@ -302,6 +304,17 @@ try {
   assert.equal(botArticle.response.status, 200)
   assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
   assertDocumentHeaders(botArticle.response, botArticle.body)
+
+  const redirectResponse = await fetchRuntime("/runtime-contract/redirect")
+  assert.equal(redirectResponse.status, 302)
+  assert.equal(redirectResponse.headers.get("location"), articlePath)
+  assert.equal(redirectResponse.headers.get("cache-control"), "private, no-store")
+  await redirectResponse.body?.cancel()
+
+  const controlledError = await readRuntime("/runtime-contract/error")
+  assert.equal(controlledError.response.status, 500)
+  assert.match(controlledError.body, /Unexpected Server Error|Internal Server Error/i)
+  assertDocumentHeaders(controlledError.response, controlledError.body)
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
