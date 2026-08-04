@@ -64,10 +64,7 @@ export function readOptionalBlogUpdatedAt(attributes, date, context) {
     `${context}.updatedAt`,
   )
 
-  assert.ok(
-    updatedAt >= date,
-    `${context}.updatedAt must not precede date`,
-  )
+  assert.ok(updatedAt >= date, `${context}.updatedAt must not precede date`)
 
   return updatedAt
 }

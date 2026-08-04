@@ -11,6 +11,7 @@ export type BlogPost = {
   title: string
   description: string
   date: string
+  updatedAt?: string
   excerpt: string
   tags: string[]
   relatedSlugs: string[]

@@ -22,7 +22,9 @@ const requiredAttributes = {
 }
 
 test("accepts the documented top-level and series fields", () => {
-  assert.doesNotThrow(() => assertKnownBlogFrontmatterFields(requiredAttributes, "post"))
+  assert.doesNotThrow(() =>
+    assertKnownBlogFrontmatterFields(requiredAttributes, "post"),
+  )
   assert.doesNotThrow(() =>
     assertKnownBlogSeriesFields(requiredAttributes.series, "post"),
   )
@@ -49,13 +51,26 @@ test("rejects unknown top-level and nested series fields", () => {
 
 test("validates real calendar dates", () => {
   assert.equal(parseBlogCalendarDate("2024-02-29", "date"), "2024-02-29")
-  assert.throws(() => parseBlogCalendarDate(20260803, "date"), /must be a string/)
+  assert.throws(
+    () => parseBlogCalendarDate(20260803, "date"),
+    /must be a string/,
+  )
   assert.throws(() => parseBlogCalendarDate("2026/08/03", "date"), /YYYY-MM-DD/)
-  assert.throws(() => parseBlogCalendarDate("2026-02-29", "date"), /valid calendar date/)
+  assert.throws(
+    () => parseBlogCalendarDate("2026-02-29", "date"),
+    /valid calendar date/,
+  )
 })
 
 test("accepts optional updatedAt on or after publication date", () => {
-  assert.equal(readOptionalBlogUpdatedAt(requiredAttributes, requiredAttributes.date, "post"), null)
+  assert.equal(
+    readOptionalBlogUpdatedAt(
+      requiredAttributes,
+      requiredAttributes.date,
+      "post",
+    ),
+    null,
+  )
   assert.equal(
     readOptionalBlogUpdatedAt(
       { ...requiredAttributes, updatedAt: "2026-08-03" },

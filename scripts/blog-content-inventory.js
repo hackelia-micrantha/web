@@ -3,6 +3,14 @@ import { readdir, readFile, stat } from "node:fs/promises"
 import path from "node:path"
 import ts from "typescript"
 
+import {
+  assertKnownBlogFrontmatterFields,
+  assertKnownBlogSeriesFields,
+  getBlogLastModifiedDate,
+  parseBlogCalendarDate,
+  readOptionalBlogUpdatedAt,
+} from "./blog-frontmatter-schema.js"
+
 export const repositoryRoot = process.cwd()
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
@@ -106,24 +114,6 @@ function findArrayDeclaration(sourceFile, declarationName, relativePath) {
   }
 
   throw new Error(`Unable to find ${declarationName} in ${relativePath}`)
-}
-
-function parseCalendarDate(value, context) {
-  assert.match(value, /^\d{4}-\d{2}-\d{2}$/, `${context} must be YYYY-MM-DD`)
-
-  const parsed = new Date(`${value}T00:00:00Z`)
-  assert.equal(
-    Number.isNaN(parsed.valueOf()),
-    false,
-    `${context} must be a valid calendar date`,
-  )
-  assert.equal(
-    parsed.toISOString().slice(0, 10),
-    value,
-    `${context} must be a valid calendar date`,
-  )
-
-  return value
 }
 
 function assertUnique(values, context) {
@@ -274,6 +264,7 @@ function optionalSeries(attributes, relativePath) {
     value && typeof value === "object" && !Array.isArray(value),
     `${relativePath}.series must be an object`,
   )
+  assertKnownBlogSeriesFields(value, relativePath)
   assert.equal(
     typeof value.slug,
     "string",
@@ -310,6 +301,7 @@ async function discoverBlogPosts() {
     const relativePath = path.relative(repositoryRoot, contentPath)
     const sourceText = await readFile(contentPath, "utf8")
     const attributes = parseFrontmatter(sourceText, relativePath)
+    assertKnownBlogFrontmatterFields(attributes, relativePath)
     const slug = requiredString(attributes, "slug", relativePath)
     const routeSlug = entry.name.slice("blog.".length)
 
@@ -320,6 +312,11 @@ async function discoverBlogPosts() {
     )
 
     const status = requiredString(attributes, "status", relativePath)
+    const date = parseBlogCalendarDate(
+      requiredString(attributes, "date", relativePath),
+      `${relativePath}.date`,
+    )
+    const updatedAt = readOptionalBlogUpdatedAt(attributes, date, relativePath)
     const tags = requiredStringArray(attributes, "tags", relativePath)
     const relatedSlugs = requiredStringArray(
       attributes,
@@ -338,10 +335,8 @@ async function discoverBlogPosts() {
       status,
       title: requiredString(attributes, "title", relativePath),
       description: requiredString(attributes, "description", relativePath),
-      date: parseCalendarDate(
-        requiredString(attributes, "date", relativePath),
-        `${relativePath}.date`,
-      ),
+      date,
+      ...(updatedAt ? { updatedAt } : {}),
       excerpt: requiredString(attributes, "excerpt", relativePath),
       tags,
       relatedSlugs,
@@ -467,6 +462,7 @@ function projectBlogPost(post) {
     title: post.title,
     description: post.description,
     date: post.date,
+    ...(post.updatedAt ? { updatedAt: post.updatedAt } : {}),
     excerpt: post.excerpt,
     tags: post.tags,
     relatedSlugs: post.relatedSlugs,
@@ -488,10 +484,7 @@ export function buildBlogMetadataModule(inventory) {
 
 function latestDate(posts) {
   assert.ok(posts.length > 0, "Cannot calculate a latest date for no posts")
-  return posts
-    .map((post) => post.date)
-    .sort()
-    .at(-1)
+  return posts.map(getBlogLastModifiedDate).sort().at(-1)
 }
 
 function escapeXml(value) {
@@ -536,7 +529,7 @@ export function buildSitemapXml(inventory) {
     for (const post of posts) {
       entries.push({
         pathname: `/blog/${post.slug}`,
-        lastmod: post.date,
+        lastmod: getBlogLastModifiedDate(post),
       })
     }
   }
@@ -545,7 +538,7 @@ export function buildSitemapXml(inventory) {
     if (post.series) continue
     entries.push({
       pathname: `/blog/${post.slug}`,
-      lastmod: post.date,
+      lastmod: getBlogLastModifiedDate(post),
     })
   }
 
