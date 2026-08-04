@@ -4,66 +4,23 @@ import { Link, useLoaderData } from "@remix-run/react"
 
 import { Card, PageTitle } from "~/components"
 import {
-  AI_PIPELINE_POST_SLUG,
-  aiPipelinePost,
-} from "~/content/ai-pipeline-post.server"
-import {
   BLOG_DESCRIPTION,
   BLOG_TITLE,
   formatBlogDate,
 } from "~/content/blog-format"
-import type { BlogPostMetadata } from "~/content/blog-mdx"
-import { getBlogPosts } from "~/content/blog-provider"
-import { getSeriesNavigation } from "~/content/blog-series"
+import {
+  getBlogIndexPosts,
+  type BlogIndexPost,
+} from "~/content/blog-index.server"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
-
-type BlogIndexPost = BlogPostMetadata & {
-  series?: {
-    slug: string
-    title: string
-    order: number
-  }
-}
 
 type LoaderData = {
   posts: BlogIndexPost[]
 }
 
-function toMetadata(candidate: BlogPostMetadata): BlogPostMetadata {
-  return {
-    slug: candidate.slug,
-    title: candidate.title,
-    description: candidate.description,
-    date: candidate.date,
-    excerpt: candidate.excerpt,
-    tags: [...candidate.tags],
-    relatedSlugs: [...candidate.relatedSlugs],
-    series: candidate.series ? { ...candidate.series } : undefined,
-  }
-}
-
 export async function loader() {
-  const posts = getBlogPosts().map((legacyPost) => {
-    if (legacyPost.slug === AI_PIPELINE_POST_SLUG) {
-      return aiPipelinePost
-    }
-
-    const series = getSeriesNavigation(legacyPost)
-
-    return {
-      ...toMetadata(legacyPost),
-      series: series
-        ? {
-            slug: series.series.slug,
-            title: series.series.title,
-            order: series.index + 1,
-          }
-        : undefined,
-    }
-  })
-
-  return json<LoaderData>({ posts })
+  return json<LoaderData>({ posts: getBlogIndexPosts() })
 }
 
 export const meta: MetaFunction<typeof loader> = () =>
