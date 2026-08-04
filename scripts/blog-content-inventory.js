@@ -66,9 +66,7 @@ function propertyName(property) {
 }
 
 function findProperty(object, name) {
-  return object.properties.find(
-    (candidate) => propertyName(candidate) === name,
-  )
+  return object.properties.find((candidate) => propertyName(candidate) === name)
 }
 
 function literalText(node, context) {
@@ -321,7 +319,10 @@ export async function loadBlogContentInventory() {
 
 function latestDate(posts) {
   assert.ok(posts.length > 0, "Cannot calculate a latest date for no posts")
-  return posts.map((post) => post.date).sort().at(-1)
+  return posts
+    .map((post) => post.date)
+    .sort()
+    .at(-1)
 }
 
 function escapeXml(value) {
@@ -334,7 +335,8 @@ function escapeXml(value) {
 }
 
 function renderUrl(pathname, lastmod) {
-  const location = pathname === "/" ? `${siteOrigin}/` : `${siteOrigin}${pathname}`
+  const location =
+    pathname === "/" ? `${siteOrigin}/` : `${siteOrigin}${pathname}`
   const lines = ["  <url>", `    <loc>${escapeXml(location)}</loc>`]
 
   if (lastmod) {
