@@ -417,35 +417,6 @@ export function getRelatedPosts(post: BlogPost) {
     .map((slug) => getBlogPostBySlug(slug))
     .filter((candidate): candidate is BlogPost => candidate !== null)
 }
-export function getBlogSeriesBySlug(slug: string) {
-  return getBlogSeriesGroups().find((series) => series.slug === slug) ?? null
-}
-
-export function getSeriesPosts(post: BlogPost) {
-  if (!post.series) return []
-  return getBlogSeriesBySlug(post.series.slug)?.posts ?? []
-}
-
-export function getSeriesNavigation(post: BlogPost) {
-  const seriesPosts = getSeriesPosts(post)
-  const index = seriesPosts.findIndex(
-    (candidate) => candidate.slug === post.slug,
-  )
-
-  if (index === -1 || !post.series) {
-    return null
-  }
-
-  return {
-    series: post.series,
-    index,
-    total: seriesPosts.length,
-    previous: seriesPosts[index - 1] ?? null,
-    next: seriesPosts[index + 1] ?? null,
-    posts: seriesPosts,
-  }
-}
-
 export function formatBlogDate(date: string) {
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
