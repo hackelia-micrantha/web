@@ -1,8 +1,28 @@
+import { readFileSync } from "node:fs"
+
 import { expect, test } from "@playwright/test"
 import type { Response } from "@playwright/test"
 
-import performanceBudgets from "../config/performance-budgets.json"
+type BrowserRuntimeBudgets = {
+  documents: Array<{
+    pathname: string
+    uncompressedBytes: number
+  }>
+  externalRequests: {
+    count: number
+    transferBytes: number
+  }
+  timings: {
+    enforcement: string
+  }
+}
 
+const performanceBudgets = JSON.parse(
+  readFileSync(
+    new URL("../config/performance-budgets.json", import.meta.url),
+    "utf8",
+  ),
+) as { browserRuntime: BrowserRuntimeBudgets }
 const runtimeBudgets = performanceBudgets.browserRuntime
 
 for (const documentBudget of runtimeBudgets.documents) {
