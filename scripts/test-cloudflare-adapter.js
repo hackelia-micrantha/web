@@ -146,10 +146,7 @@ const replayabilityArticle = await read(
   "/blog/replayability-is-a-governance-problem",
 )
 assert.equal(replayabilityArticle.response.status, 200)
-assert.match(
-  replayabilityArticle.body,
-  /Replayability Is a Governance Problem/,
-)
+assert.match(replayabilityArticle.body, /Replayability Is a Governance Problem/)
 assert.match(replayabilityArticle.body, /data-content-source="mdx"/)
 assert.match(replayabilityArticle.body, /data-mermaid-status="source"/)
 assert.match(replayabilityArticle.body, /data-mermaid-source="true"/)
