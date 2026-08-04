@@ -71,6 +71,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Verify blog browser chunk isolation
+        run: yarn test:blog-chunk-isolation
+
       - name: Verify pinned Wrangler
         run: yarn wrangler --version
 
