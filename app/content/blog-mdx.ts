@@ -17,7 +17,10 @@ export type BlogPostMetadata = {
 
 type UnknownRecord = Record<string, unknown>
 
-function assertRecord(value: unknown, label: string): asserts value is UnknownRecord {
+function assertRecord(
+  value: unknown,
+  label: string,
+): asserts value is UnknownRecord {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`${label} must be an object`)
   }
@@ -39,7 +42,9 @@ function readStringArray(record: UnknownRecord, key: string): string[] {
   if (
     !Array.isArray(value) ||
     value.length === 0 ||
-    value.some((entry) => typeof entry !== "string" || entry.trim().length === 0)
+    value.some(
+      (entry) => typeof entry !== "string" || entry.trim().length === 0,
+    )
   ) {
     throw new Error(`MDX frontmatter ${key} must be a non-empty string array`)
   }
