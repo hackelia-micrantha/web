@@ -23,7 +23,9 @@ type FigureProps = {
 
 export function Figure({ alt, caption, src, title, narrow }: FigureProps) {
   return (
-    <figure className={`article-figure${narrow ? " article-figure-narrow" : ""}`}>
+    <figure
+      className={`article-figure${narrow ? " article-figure-narrow" : ""}`}
+    >
       <div className="article-figure-heading">
         <h2>{title}</h2>
         <p>{caption}</p>
