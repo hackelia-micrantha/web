@@ -142,6 +142,20 @@ assert.match(governanceArticle.body, /Human intent/)
 assert.doesNotMatch(governanceArticle.body, /data-mermaid-rendered/)
 assertDocumentHeaders(governanceArticle.response, governanceArticle.body)
 
+const replayabilityArticle = await read(
+  "/blog/replayability-is-a-governance-problem",
+)
+assert.equal(replayabilityArticle.response.status, 200)
+assert.match(
+  replayabilityArticle.body,
+  /Replayability Is a Governance Problem/,
+)
+assert.match(replayabilityArticle.body, /data-content-source="mdx"/)
+assert.match(replayabilityArticle.body, /data-mermaid-status="source"/)
+assert.match(replayabilityArticle.body, /Replay claim still valid\?/)
+assert.doesNotMatch(replayabilityArticle.body, /data-mermaid-rendered/)
+assertDocumentHeaders(replayabilityArticle.response, replayabilityArticle.body)
+
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
   userAgent: "Googlebot/2.1",
 })
