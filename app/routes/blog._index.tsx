@@ -4,19 +4,19 @@ import { Link, useLoaderData } from "@remix-run/react"
 
 import { Card, PageTitle } from "~/components"
 import {
+  AI_PIPELINE_POST_SLUG,
+  aiPipelinePost,
+} from "~/content/ai-pipeline-post.server"
+import {
   BLOG_DESCRIPTION,
   BLOG_TITLE,
   formatBlogDate,
 } from "~/content/blog-format"
-import { defineBlogMdxPost, type BlogPostMetadata } from "~/content/blog-mdx"
+import type { BlogPostMetadata } from "~/content/blog-mdx"
 import { getBlogPosts } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
-import { attributes as aiPipelineAttributes } from "~/content/posts/ai-pipelines-need-control-boundaries.mdx"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
-
-const MDX_SLUG = "ai-pipelines-need-control-boundaries"
-const aiPipelinePost = defineBlogMdxPost(aiPipelineAttributes, MDX_SLUG)
 
 type BlogIndexPost = BlogPostMetadata & {
   series?: {
@@ -45,7 +45,7 @@ function toMetadata(candidate: BlogPostMetadata): BlogPostMetadata {
 
 export async function loader() {
   const posts = getBlogPosts().map((legacyPost) => {
-    if (legacyPost.slug === MDX_SLUG) {
+    if (legacyPost.slug === AI_PIPELINE_POST_SLUG) {
       return aiPipelinePost
     }
 
