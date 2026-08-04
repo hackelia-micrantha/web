@@ -13,9 +13,3 @@ startTransition(() => {
     },
   })
 })
-
-void import("./client/mermaid.client")
-  .then(({ installMermaidRenderer }) => installMermaidRenderer())
-  .catch((error) => {
-    console.error("Failed to initialize Mermaid rendering", error)
-  })
