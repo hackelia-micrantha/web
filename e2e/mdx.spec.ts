@@ -4,7 +4,9 @@ const aiArticlePath = "/blog/ai-pipelines-need-control-boundaries"
 const integrationArticlePath =
   "/blog/secure-platform-integration-is-not-plumbing"
 const softwareLayersArticlePath = "/blog/software-layers-are-risk-boundaries"
-const legacyArticlePath = "/blog/governance-native-engineering-control-plane"
+const governanceArticlePath =
+  "/blog/governance-native-engineering-control-plane"
+const legacyArticlePath = "/blog/replayability-is-a-governance-problem"
 
 const unpublishedArticlePaths = [
   "/blog/draft-publication-fixture",
@@ -186,6 +188,56 @@ test.describe("MDX articles", () => {
     )
   })
 
+  test("renders governance control-plane article and Mermaid from canonical MDX", async ({
+    page,
+  }) => {
+    await page.goto(governanceArticlePath)
+
+    await expect(page).toHaveTitle(
+      "Micrantha Software | Governance-Native Engineering and the AI Control Plane",
+    )
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Governance-Native Engineering and the AI Control Plane",
+      }),
+    ).toBeVisible()
+    await expect(page.getByText("Part 1 of 3", { exact: true })).toBeVisible()
+
+    const seriesNavigation = page.getByRole("navigation", {
+      name: "Governance-Native Engineering series navigation",
+    })
+
+    await expect(
+      seriesNavigation.getByRole("link", {
+        name: "Next: Replayability Is a Governance Problem",
+      }),
+    ).toHaveAttribute("href", legacyArticlePath)
+    await expect(
+      seriesNavigation.getByRole("link", { name: /^Previous:/ }),
+    ).toHaveCount(0)
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+    const diagram = mdxContent.locator("[data-mermaid-diagram]")
+
+    await expect(mdxContent).toBeVisible()
+    await expect(mdxContent.locator(".article-callout")).toContainText(
+      "whether organizations can still govern",
+    )
+    await expect(diagram).toContainText("AI-native engineering control plane")
+    await expect(diagram).toHaveAttribute("data-mermaid-status", "rendered", {
+      timeout: 15_000,
+    })
+    await expect(diagram.locator("[data-mermaid-rendered] svg")).toBeVisible()
+    await expect(mdxContent).toContainText(
+      "AI-native engineering therefore becomes a systems-governance discipline",
+    )
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://micrantha.com/blog/governance-native-engineering-control-plane",
+    )
+  })
+
   test("supports hydrated client navigation", async ({ page }) => {
     await page.goto(softwareLayersArticlePath)
     await page
@@ -217,7 +269,7 @@ test("remaining legacy TSX article continues through the dynamic route", async (
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Governance-Native Engineering and the AI Control Plane",
+      name: "Replayability Is a Governance Problem",
     }),
   ).toBeVisible()
   await expect(page.locator('[data-content-source="mdx"]')).toHaveCount(0)
@@ -319,5 +371,30 @@ test.describe("MDX articles without JavaScript", () => {
         exact: true,
       }),
     ).toHaveAttribute("href", integrationArticlePath)
+  })
+
+  test("returns governance article Mermaid source and complete content", async ({
+    page,
+  }) => {
+    const response = await page.goto(governanceArticlePath)
+
+    expect(response?.status()).toBe(200)
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Governance-Native Engineering and the AI Control Plane",
+      }),
+    ).toBeVisible()
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+    const diagram = mdxContent.locator("[data-mermaid-diagram]")
+
+    await expect(diagram).toHaveAttribute("data-mermaid-status", "source")
+    await expect(diagram.locator("[data-mermaid-source]")).toContainText(
+      "Human intent",
+    )
+    await expect(mdxContent).toContainText(
+      "AI-native engineering therefore becomes a systems-governance discipline",
+    )
   })
 })
