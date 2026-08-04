@@ -6,9 +6,15 @@ const { onRequest } = await import("../functions/[[path]].js")
 
 const origin = "https://micrantha.example"
 const analyticsId = "adapter-contract-test"
+const articlePath = "/blog/ai-pipelines-need-control-boundaries"
+const articleUrl = `https://micrantha.com${articlePath}`
 
-async function request(pathname, { userAgent = "adapter-contract" } = {}) {
+async function request(
+  pathname,
+  { userAgent = "adapter-contract", method = "GET" } = {},
+) {
   const request = new Request(new URL(pathname, origin), {
+    method,
     headers: {
       "User-Agent": userAgent,
     },
@@ -37,7 +43,11 @@ async function read(pathname, options) {
   return { response, body }
 }
 
-function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
+function assertDocumentHeaders(
+  response,
+  body,
+  { requireNonce = true, cacheControl } = {},
+) {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/)
   assert.equal(response.headers.get("x-content-type-options"), "nosniff")
   assert.equal(response.headers.get("x-frame-options"), "DENY")
@@ -53,7 +63,12 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
     response.headers.get("strict-transport-security"),
     "max-age=31536000",
   )
-  assert.ok(response.headers.get("cache-control"), "expected a cache policy")
+
+  if (cacheControl) {
+    assert.equal(response.headers.get("cache-control"), cacheControl)
+  } else {
+    assert.ok(response.headers.get("cache-control"), "expected a cache policy")
+  }
 
   const policy = response.headers.get("content-security-policy") ?? ""
 
@@ -70,28 +85,59 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   )
 }
 
+function assertArticleMetadata(body) {
+  assert.ok(
+    body.includes(`rel="canonical" href="${articleUrl}"`),
+    "expected the article canonical URL",
+  )
+  assert.match(body, /"@type":"Article"/)
+  assert.ok(
+    body.includes(`"url":"${articleUrl}"`),
+    "expected Article JSON-LD to contain the canonical URL",
+  )
+}
+
 const home = await read("/")
 assert.equal(home.response.status, 200)
 assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
 assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
-assertDocumentHeaders(home.response, home.body)
+assertDocumentHeaders(home.response, home.body, {
+  cacheControl: "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
+})
 
-const article = await read("/blog/ai-pipelines-need-control-boundaries")
+const contactRedirect = await read("/contact")
+assert.equal(contactRedirect.response.status, 301)
+assert.equal(contactRedirect.response.headers.get("location"), "/services")
+
+const article = await read(articlePath)
 assert.equal(article.response.status, 200)
 assert.match(article.body, /AI Pipelines Need Control Boundaries/)
 assert.match(
   article.body,
   /AI is not the system of record\. AI is an untrusted reasoning component/,
 )
-assertDocumentHeaders(article.response, article.body)
+assertArticleMetadata(article.body)
+assertDocumentHeaders(article.response, article.body, {
+  cacheControl: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+})
 
-const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
+const botArticle = await read(articlePath, {
   userAgent: "Googlebot/2.1",
 })
 assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
-assertDocumentHeaders(botArticle.response, botArticle.body)
+assertArticleMetadata(botArticle.body)
+assertDocumentHeaders(botArticle.response, botArticle.body, {
+  cacheControl: "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+})
+
+const methodNotAllowed = await read("/services", { method: "POST" })
+assert.equal(methodNotAllowed.response.status, 405)
+assert.match(methodNotAllowed.body, /405|Method Not Allowed/i)
+assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
+  requireNonce: false,
+})
 
 const missing = await read("/this-route-does-not-exist")
 assert.equal(missing.response.status, 404)
