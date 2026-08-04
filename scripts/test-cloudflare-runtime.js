@@ -323,6 +323,10 @@ try {
     controlledError.body,
     /Unexpected Server Error|Internal Server Error/i,
   )
+  assert.equal(
+    controlledError.response.headers.get("cache-control"),
+    "private, no-store",
+  )
   assertDocumentHeaders(controlledError.response, controlledError.body)
 
   const missing = await readRuntime("/this-route-does-not-exist")
