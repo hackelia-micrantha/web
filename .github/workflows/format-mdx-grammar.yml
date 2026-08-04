@@ -1,0 +1,57 @@
+name: Format MDX Grammar
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.head_ref == 'agent/enforce-mdx-grammar'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install frozen dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Format MDX grammar files
+        run: |
+          yarn prettier --write \
+            scripts/blog-mdx-boundary.js \
+            scripts/test-blog-mdx-boundary.js \
+            scripts/check-blog-content-boundaries.js \
+            app/components/blog-mdx-components.tsx \
+            app/routes/blog.ai-pipelines-need-control-boundaries/content.mdx \
+            package.json
+
+      - name: Commit generated formatting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/blog-mdx-boundary.js \
+            scripts/test-blog-mdx-boundary.js \
+            scripts/check-blog-content-boundaries.js \
+            app/components/blog-mdx-components.tsx \
+            app/routes/blog.ai-pipelines-need-control-boundaries/content.mdx \
+            package.json
+          if git diff --cached --quiet; then
+            echo "MDX grammar files are already formatted"
+            exit 0
+          fi
+          git commit -m "Format MDX grammar validation"
+          git push origin HEAD:${{ github.head_ref }}
