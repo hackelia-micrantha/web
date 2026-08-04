@@ -13,12 +13,14 @@ import {
 
 const publishedPost = {
   slug: "published-post",
+  status: "published",
   date: "2026-08-03",
 }
 
-const manifest = {
-  "published-post": { status: "published" },
-  "draft-post": { status: "draft" },
+const draftPost = {
+  slug: "draft-post",
+  status: "draft",
+  date: "2026-08-03",
 }
 
 test("validates strict calendar dates", () => {
@@ -40,23 +42,19 @@ test("resolves explicit and current UTC publication cutoffs", () => {
   )
 })
 
-test("filters publication metadata without exposing drafts", () => {
-  const posts = [publishedPost, { slug: "draft-post", date: "2026-08-03" }]
-
-  assert.equal(
-    getBlogPublicationStatus("published-post", manifest),
-    "published",
-  )
-  assert.equal(getBlogPublicationStatus("missing-post", manifest), null)
-  assert.equal(isPublishedBlogPost(publishedPost, manifest), true)
-  assert.equal(isPublishedBlogPost(posts[1], manifest), false)
-  assert.deepEqual(filterPublishedBlogPosts(posts, manifest), [publishedPost])
+test("filters frontmatter publication metadata without exposing drafts", () => {
+  assert.equal(getBlogPublicationStatus(publishedPost), "published")
+  assert.equal(getBlogPublicationStatus(null), null)
+  assert.equal(isPublishedBlogPost(publishedPost), true)
+  assert.equal(isPublishedBlogPost(draftPost), false)
+  assert.deepEqual(filterPublishedBlogPosts([publishedPost, draftPost]), [
+    publishedPost,
+  ])
 })
 
 test("accepts published routable metadata at the cutoff", () => {
   assert.deepEqual(
     assertRoutableBlogPublication([publishedPost], {
-      manifest: { "published-post": { status: "published" } },
       cutoff: "2026-08-03",
     }),
     [publishedPost],
@@ -67,26 +65,24 @@ test("rejects invalid explicit publication cutoffs", () => {
   assert.throws(
     () =>
       assertRoutableBlogPublication([publishedPost], {
-        manifest: { "published-post": { status: "published" } },
         cutoff: "2026-02-29",
       }),
     /valid YYYY-MM-DD/,
   )
 })
 
-test("rejects missing, draft, future, duplicate, and stale publication metadata", () => {
+test("rejects missing, draft, future, and duplicate publication metadata", () => {
   assert.throws(
     () =>
-      assertRoutableBlogPublication([publishedPost], {
-        manifest: {},
-        cutoff: "2026-08-03",
-      }),
+      assertRoutableBlogPublication(
+        [{ slug: "missing-status", date: "2026-08-03" }],
+        { cutoff: "2026-08-03" },
+      ),
     /missing publication metadata/,
   )
   assert.throws(
     () =>
-      assertRoutableBlogPublication([publishedPost], {
-        manifest: { "published-post": { status: "draft" } },
+      assertRoutableBlogPublication([draftPost], {
         cutoff: "2026-08-03",
       }),
     /draft but remains routable/,
@@ -95,98 +91,56 @@ test("rejects missing, draft, future, duplicate, and stale publication metadata"
     () =>
       assertRoutableBlogPublication(
         [{ ...publishedPost, date: "2026-08-04" }],
-        {
-          manifest: { "published-post": { status: "published" } },
-          cutoff: "2026-08-03",
-        },
+        { cutoff: "2026-08-03" },
       ),
     /after publication cutoff/,
   )
   assert.throws(
     () =>
       assertRoutableBlogPublication([publishedPost, publishedPost], {
-        manifest: { "published-post": { status: "published" } },
         cutoff: "2026-08-03",
       }),
     /Duplicate routable blog slug/,
-  )
-  assert.throws(
-    () =>
-      assertRoutableBlogPublication([publishedPost], {
-        manifest: {
-          "published-post": { status: "published" },
-          "stale-post": { status: "published" },
-        },
-        cutoff: "2026-08-03",
-      }),
-    /missing routable metadata/,
   )
 })
 
 test("rejects malformed records and unsupported statuses", () => {
   assert.throws(
     () =>
-      assertRoutableBlogPublication([{ slug: "", date: "2026-08-03" }], {
-        manifest: {},
-        cutoff: "2026-08-03",
-      }),
+      assertRoutableBlogPublication(
+        [{ slug: "", status: "published", date: "2026-08-03" }],
+        { cutoff: "2026-08-03" },
+      ),
     /non-empty slug/,
   )
   assert.throws(
     () =>
       assertRoutableBlogPublication(
-        [{ slug: "published-post", date: "August 3" }],
-        {
-          manifest: { "published-post": { status: "published" } },
-          cutoff: "2026-08-03",
-        },
+        [{ slug: "published-post", status: "published", date: "August 3" }],
+        { cutoff: "2026-08-03" },
       ),
     /valid YYYY-MM-DD date/,
   )
   assert.throws(
     () =>
-      assertRoutableBlogPublication([publishedPost], {
-        manifest: { "published-post": { status: "scheduled" } },
-        cutoff: "2026-08-03",
-      }),
+      assertRoutableBlogPublication(
+        [{ ...publishedPost, status: "scheduled" }],
+        { cutoff: "2026-08-03" },
+      ),
     /unsupported publication status/,
   )
 })
 
-test("allows non-routable draft manifest entries", () => {
-  assert.doesNotThrow(() =>
-    assertRoutableBlogPublication([publishedPost], {
-      manifest,
-      cutoff: "2026-08-03",
-    }),
-  )
-})
-
-test("enforces published MDX frontmatter and manifest parity", () => {
-  const mdxPost = { ...publishedPost, status: "published" }
-
+test("enforces the same publication contract for MDX routes", () => {
   assert.deepEqual(
-    assertRoutableMdxPublication(mdxPost, {
-      manifest: { "published-post": { status: "published" } },
+    assertRoutableMdxPublication(publishedPost, {
       cutoff: "2026-08-03",
     }),
-    mdxPost,
+    publishedPost,
   )
   assert.throws(
     () =>
-      assertRoutableMdxPublication(
-        { ...mdxPost, status: "draft" },
-        {
-          manifest: { "published-post": { status: "published" } },
-          cutoff: "2026-08-03",
-        },
-      ),
-    /must declare status published/,
-  )
-  assert.throws(
-    () =>
-      assertRoutableMdxPublication(mdxPost, {
-        manifest: { "published-post": { status: "draft" } },
+      assertRoutableMdxPublication(draftPost, {
         cutoff: "2026-08-03",
       }),
     /draft but remains routable/,
