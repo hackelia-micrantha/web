@@ -160,7 +160,7 @@ await expectInvalid(
 )
 await expectInvalid(
   "invalid-post-link-slug",
-  '<PostLink slug="Unsafe Slug">Post</PostLink>',
+  'Continue <PostLink slug="Unsafe Slug">Post</PostLink> here.',
   /Invalid PostLink slug/,
 )
 await expectInvalid(
