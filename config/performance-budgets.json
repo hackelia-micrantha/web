@@ -48,5 +48,29 @@
   "images": {
     "totalBytes": 4000000,
     "largestBytes": 1200000
+  },
+  "browserRuntime": {
+    "documents": [
+      { "pathname": "/", "uncompressedBytes": 250000 },
+      { "pathname": "/solutions", "uncompressedBytes": 250000 },
+      { "pathname": "/laboratory", "uncompressedBytes": 250000 },
+      { "pathname": "/blog", "uncompressedBytes": 250000 },
+      {
+        "pathname": "/blog/governance-native-engineering-control-plane",
+        "uncompressedBytes": 350000
+      }
+    ],
+    "externalRequests": {
+      "count": 0,
+      "transferBytes": 0
+    },
+    "timings": {
+      "enforcement": "advisory",
+      "metrics": [
+        "responseStartMilliseconds",
+        "domContentLoadedMilliseconds",
+        "loadMilliseconds"
+      ]
+    }
   }
 }
