@@ -261,6 +261,11 @@ try {
   assert.match(home.body, /https:\/\/micrantha\.com/)
   assertDocumentHeaders(home.response, home.body)
 
+  const contactRedirect = await readRuntime("/contact")
+  assert.equal(contactRedirect.response.status, 301)
+  assert.equal(contactRedirect.response.headers.get("location"), "/services")
+  assert.equal(contactRedirect.body, "")
+
   const css = await readRuntime("/tailwind.css")
   assert.equal(css.response.status, 200)
   assert.match(css.response.headers.get("content-type") ?? "", /^text\/css\b/)
@@ -302,6 +307,13 @@ try {
   assert.equal(botArticle.response.status, 200)
   assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
   assertDocumentHeaders(botArticle.response, botArticle.body)
+
+  const methodNotAllowed = await readRuntime("/services", { method: "POST" })
+  assert.equal(methodNotAllowed.response.status, 405)
+  assert.match(methodNotAllowed.body, /405|Method Not Allowed/i)
+  assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
+    requireNonce: false,
+  })
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
