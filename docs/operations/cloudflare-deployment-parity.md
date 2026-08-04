@@ -10,18 +10,18 @@ This checklist prevents dashboard or API configuration from silently diverging f
 
 Verify the deployed Pages project against these committed inputs:
 
-| Concern | Repository source |
-| --- | --- |
-| Project name | `wrangler.toml` and the default in `deploy:cloudflare` |
-| Static output | `pages_build_output_dir` in `wrangler.toml` |
-| Compatibility date | `compatibility_date` in `wrangler.toml` |
-| Compatibility flags | `compatibility_flags` in `wrangler.toml` |
-| Source-map policy | `upload_source_maps` and the deploy command |
-| Pages Function entry | `functions/[[path]].js` |
-| Functions routing | `public/_routes.json` |
-| Build and validation sequence | `package.json` scripts and required CI |
-| Worker size policy | `config/cloudflare-bundle-budget.json` |
-| Runtime artifact contract | `docs/operations/cloudflare-runtime-validation.md` |
+| Concern                       | Repository source                                      |
+| ----------------------------- | ------------------------------------------------------ |
+| Project name                  | `wrangler.toml` and the default in `deploy:cloudflare` |
+| Static output                 | `pages_build_output_dir` in `wrangler.toml`            |
+| Compatibility date            | `compatibility_date` in `wrangler.toml`                |
+| Compatibility flags           | `compatibility_flags` in `wrangler.toml`               |
+| Source-map policy             | `upload_source_maps` and the deploy command            |
+| Pages Function entry          | `functions/[[path]].js`                                |
+| Functions routing             | `public/_routes.json`                                  |
+| Build and validation sequence | `package.json` scripts and required CI                 |
+| Worker size policy            | `config/cloudflare-bundle-budget.json`                 |
+| Runtime artifact contract     | `docs/operations/cloudflare-runtime-validation.md`     |
 
 The current checked-in baseline expects:
 
