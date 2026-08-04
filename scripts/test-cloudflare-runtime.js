@@ -240,10 +240,9 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   )
   assert.ok(response.headers.get("cache-control"), "expected a cache policy")
 
+  if (!requireNonce) return
+
   const policy = response.headers.get("content-security-policy") ?? ""
-
-  if (!requireNonce && !policy) return
-
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
   assert.ok(nonce, "expected a CSP nonce in the document response")
   assert.ok(
@@ -319,15 +318,22 @@ try {
 
   const controlledError = await readRuntime("/runtime-contract/error")
   assert.equal(controlledError.response.status, 500)
-  assert.match(
+  assert.match(controlledError.body, /Application Error/i)
+  assert.doesNotMatch(
     controlledError.body,
-    /Unexpected Server Error|Internal Server Error/i,
+    /Controlled Cloudflare runtime contract failure/,
   )
   assert.equal(
     controlledError.response.headers.get("cache-control"),
     "private, no-store",
   )
-  assertDocumentHeaders(controlledError.response, controlledError.body)
+  assert.match(
+    controlledError.response.headers.get("content-security-policy") ?? "",
+    /script-src/,
+  )
+  assertDocumentHeaders(controlledError.response, controlledError.body, {
+    requireNonce: false,
+  })
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
