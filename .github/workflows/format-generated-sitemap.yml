@@ -29,13 +29,13 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Apply repository formatting
-        run: yarn prettier --write scripts/blog-content-inventory.js scripts/check-blog-content-boundaries.js scripts/generate-sitemap.js public/sitemap.xml
+        run: yarn prettier --write scripts/blog-content-inventory.js scripts/check-blog-content-boundaries.js scripts/generate-sitemap.js
 
       - name: Commit formatting
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/blog-content-inventory.js scripts/check-blog-content-boundaries.js scripts/generate-sitemap.js public/sitemap.xml
+          git add scripts/blog-content-inventory.js scripts/check-blog-content-boundaries.js scripts/generate-sitemap.js
           if git diff --cached --quiet; then
             echo "Formatting is already current"
             exit 0
