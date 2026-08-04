@@ -24,7 +24,7 @@ The allowed statuses are:
 
 Every entry that remains in a runtime registry must have `published` status and a date on or before the publication cutoff. A draft manifest entry may exist without a runtime route, but a published manifest entry must have matching routable metadata.
 
-The representative MDX article also declares `status: published` in frontmatter. Its static route verifies status and manifest parity before rendering. The build validator owns the target-date cutoff so the server and browser do not independently recompute wall-clock publication state during hydration. As the remaining articles move to MDX, status ownership should move into their canonical frontmatter and the transitional manifest can be generated or removed.
+Static MDX articles also declare `status: published` in frontmatter. Their route modules verify status and manifest parity before rendering. The build validator owns the target-date cutoff so the server and browser do not independently recompute wall-clock publication state during hydration. As the remaining articles move to MDX, status ownership should move into their canonical frontmatter and the transitional manifest can be generated or removed.
 
 ## Publication cutoff
 
@@ -71,13 +71,40 @@ Future-dated content is therefore not silently indexed or deployed. It must stay
 
 6. Verify the article appears in the index, series navigation, related links, structured data, and sitemap.
 
+## Mermaid diagrams in MDX
+
+Mermaid diagrams use inert fenced code rather than JSX props or executable expressions. The first two source lines are required metadata comments, followed by the chart:
+
+````md
+```mermaid
+%% title: Governed execution
+%% caption: Evidence remains visible through the workflow.
+flowchart TD
+  A[Intent] --> B[Policy]
+  B --> C[Evidence]
+```
+````
+
+The MDX component map upgrades only `language-mermaid` code blocks. Server rendering and JavaScript-disabled clients receive the complete title, caption, and chart source. After hydration, the existing Mermaid client renders an SVG under `securityLevel: "strict"`.
+
+The shared parser and build boundary enforce:
+
+- required non-empty title and caption metadata;
+- a maximum title of 160 characters and caption of 320 characters;
+- a maximum chart source of 4,000 characters;
+- directed `flowchart` or `graph` syntax with an explicit direction;
+- no Mermaid initialization directives, links, callbacks, JavaScript URLs, HTML, or control characters.
+
+Malformed Mermaid content fails unit tests, content-boundary validation, integration tests, or browser tests before deployment. Authors must not import Mermaid, provide JSX expressions, or embed rendered SVG directly in MDX.
+
 ## Test layers
 
-- Unit tests exercise date parsing, cutoff behavior, manifest coverage, draft exclusion, future-date rejection, and MDX status rules.
-- Integration tests exercise the direct Cloudflare Pages adapter and the source-isolated workerd artifact, including 404 behavior for unpublished URLs.
-- End-to-end tests exercise published articles, client navigation, JavaScript-disabled rendering, and unpublished-route exclusion in Chromium.
+- Unit tests exercise date parsing, cutoff behavior, manifest coverage, draft exclusion, future-date rejection, MDX status rules, and constrained Mermaid source parsing.
+- Integration tests exercise the direct Cloudflare Pages adapter and the source-isolated workerd artifact, including 404 behavior for unpublished URLs and source-first Mermaid SSR.
+- End-to-end tests exercise published articles, client navigation, Mermaid enhancement, JavaScript-disabled rendering, and unpublished-route exclusion in Chromium.
 - The MDX grammar validator rejects unsupported syntax, executable expressions, unsafe component props, invalid local assets, and unknown cross-post targets.
+- The Mermaid boundary validator parses every routable fenced Mermaid block with the same policy used by the renderer.
 
 ## Follow-up
 
-Issue #55 still needs to migrate the remaining TSX article bodies, make frontmatter the complete metadata authority, and verify browser-chunk isolation across the expanded MDX route set.
+Issue #55 still needs to migrate the remaining governance-native TSX article bodies, make frontmatter the complete metadata authority, and verify browser-chunk isolation across the expanded MDX route set.

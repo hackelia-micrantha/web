@@ -1,5 +1,9 @@
-import type { ReactNode } from "react"
+import type { ComponentPropsWithoutRef, ReactNode } from "react"
+import { isValidElement } from "react"
 import { Link } from "@remix-run/react"
+
+import { MermaidDiagram } from "./mermaid-diagram"
+import { parseBlogMermaidSource } from "~/content/blog-mermaid.js"
 
 export function Callout({ children }: { children: ReactNode }) {
   return <div className="article-callout">{children}</div>
@@ -81,9 +85,33 @@ export function PostLink({
   return <Link to={`/blog/${slug}`}>{children}</Link>
 }
 
+type MermaidCodeElementProps = {
+  children?: ReactNode
+  className?: string
+}
+
+export function BlogMdxPre({
+  children,
+  ...props
+}: ComponentPropsWithoutRef<"pre">) {
+  if (
+    !isValidElement<MermaidCodeElementProps>(children) ||
+    children.props.className !== "language-mermaid"
+  ) {
+    return <pre {...props}>{children}</pre>
+  }
+
+  if (typeof children.props.children !== "string") {
+    throw new Error("Mermaid code block source must be plain text")
+  }
+
+  return <MermaidDiagram {...parseBlogMermaidSource(children.props.children)} />
+}
+
 export const blogMdxComponents = {
   Callout,
   ControlTable,
   Figure,
   PostLink,
+  pre: BlogMdxPre,
 }
