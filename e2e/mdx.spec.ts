@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test"
 
-const articlePath = "/blog/ai-pipelines-need-control-boundaries"
+const aiArticlePath = "/blog/ai-pipelines-need-control-boundaries"
+const softwareLayersArticlePath = "/blog/software-layers-are-risk-boundaries"
 const legacyArticlePath = "/blog/secure-platform-integration-is-not-plumbing"
 
 const unpublishedArticlePaths = [
@@ -8,11 +9,11 @@ const unpublishedArticlePaths = [
   "/blog/future-publication-fixture",
 ]
 
-test.describe("representative MDX article", () => {
-  test("renders canonical content, components, metadata, and series navigation", async ({
+test.describe("representative MDX articles", () => {
+  test("renders AI content, components, metadata, and series navigation", async ({
     page,
   }) => {
-    await page.goto(articlePath)
+    await page.goto(aiArticlePath)
 
     await expect(page).toHaveTitle(
       "Micrantha Software | AI Pipelines Need Control Boundaries",
@@ -41,7 +42,7 @@ test.describe("representative MDX article", () => {
       seriesNavigation.getByRole("link", {
         name: "Next: Software Layers Are Risk Boundaries",
       }),
-    ).toHaveAttribute("href", "/blog/software-layers-are-risk-boundaries")
+    ).toHaveAttribute("href", softwareLayersArticlePath)
 
     const mdxContent = page.locator('[data-content-source="mdx"]')
 
@@ -65,7 +66,7 @@ test.describe("representative MDX article", () => {
         name: "Software Layers Are Risk Boundaries",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/blog/software-layers-are-risk-boundaries")
+    ).toHaveAttribute("href", softwareLayersArticlePath)
 
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
@@ -79,8 +80,54 @@ test.describe("representative MDX article", () => {
     expect(structuredData).toContain('"@type":"Article"')
   })
 
-  test("supports hydrated client navigation", async ({ page }) => {
-    await page.goto(articlePath)
+  test("renders software layers from its static MDX route", async ({ page }) => {
+    const response = await page.goto(softwareLayersArticlePath)
+
+    expect(response?.status()).toBe(200)
+    await expect(page).toHaveTitle(
+      "Micrantha Software | Software Layers Are Risk Boundaries",
+    )
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Software Layers Are Risk Boundaries",
+      }),
+    ).toBeVisible()
+    await expect(page.getByText("Part 3 of 3", { exact: true })).toBeVisible()
+    await expect(page.locator('[data-content-source="mdx"]')).toContainText(
+      "Software layers are not only a code-organization preference",
+    )
+    await expect(
+      page.getByRole("img", {
+        name: /clients flowing into interface and application layers/i,
+      }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole("link", {
+        name: "Secure Platform Integration Is Not Plumbing",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", legacyArticlePath)
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://micrantha.com/blog/software-layers-are-risk-boundaries",
+    )
+  })
+
+  test("supports hydrated navigation between separate MDX routes", async ({
+    page,
+  }) => {
+    await page.goto(aiArticlePath)
+
+    const documentIdentity = await page.evaluate(() => {
+      const identity = globalThis.crypto.randomUUID()
+      Object.defineProperty(globalThis, "__mdxRouteDocumentIdentity", {
+        configurable: true,
+        value: identity,
+      })
+      return identity
+    })
+
     await page
       .locator('[data-content-source="mdx"]')
       .getByRole("link", {
@@ -89,13 +136,20 @@ test.describe("representative MDX article", () => {
       })
       .click()
 
-    await expect(page).toHaveURL(/\/blog\/software-layers-are-risk-boundaries$/)
+    await expect(page).toHaveURL(
+      new RegExp(`${softwareLayersArticlePath.replaceAll("/", "\\/")}$`),
+    )
     await expect(
       page.getByRole("heading", {
         level: 1,
         name: "Software Layers Are Risk Boundaries",
       }),
     ).toBeVisible()
+    expect(
+      await page.evaluate(() =>
+        Reflect.get(globalThis, "__mdxRouteDocumentIdentity"),
+      ),
+    ).toBe(documentIdentity)
   })
 })
 
@@ -126,30 +180,37 @@ test("draft and future blog URLs remain unavailable", async ({ page }) => {
   }
 })
 
-test.describe("representative MDX article without JavaScript", () => {
+test.describe("MDX articles without JavaScript", () => {
   test.use({ javaScriptEnabled: false })
 
-  test("returns complete server-rendered article content", async ({ page }) => {
-    const response = await page.goto(articlePath)
+  for (const article of [
+    {
+      path: aiArticlePath,
+      heading: "AI Pipelines Need Control Boundaries",
+      conclusion: "The practical goal is not to remove AI from the workflow",
+    },
+    {
+      path: softwareLayersArticlePath,
+      heading: "Software Layers Are Risk Boundaries",
+      conclusion:
+        "Software layers are not only a code-organization preference",
+    },
+  ]) {
+    test(`returns complete server-rendered content for ${article.heading}`, async ({
+      page,
+    }) => {
+      const response = await page.goto(article.path)
 
-    expect(response?.status()).toBe(200)
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "AI Pipelines Need Control Boundaries",
-      }),
-    ).toBeVisible()
-
-    const mdxContent = page.locator('[data-content-source="mdx"]')
-
-    await expect(mdxContent).toContainText(
-      "The practical goal is not to remove AI from the workflow",
-    )
-    await expect(mdxContent.locator(".article-callout")).toContainText(
-      "untrusted reasoning component",
-    )
-    await expect(
-      mdxContent.getByRole("table", { name: "AI pipeline failure modes" }),
-    ).toBeVisible()
-  })
+      expect(response?.status()).toBe(200)
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: article.heading,
+        }),
+      ).toBeVisible()
+      await expect(page.locator('[data-content-source="mdx"]')).toContainText(
+        article.conclusion,
+      )
+    })
+  }
 })
