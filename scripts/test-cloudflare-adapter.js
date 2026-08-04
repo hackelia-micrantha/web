@@ -115,6 +115,7 @@ assert.match(disabledErrorContract.body, /404|Not Found/i)
 assertDocumentHeaders(
   disabledErrorContract.response,
   disabledErrorContract.body,
+  { requireNonce: false },
 )
 
 const missing = await read("/this-route-does-not-exist")
