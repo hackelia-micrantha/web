@@ -185,7 +185,9 @@ test("draft and future blog URLs remain unavailable", async ({ page }) => {
 test.describe("MDX articles without JavaScript", () => {
   test.use({ javaScriptEnabled: false })
 
-  test("returns complete server-rendered AI article content", async ({ page }) => {
+  test("returns complete server-rendered AI article content", async ({
+    page,
+  }) => {
     const response = await page.goto(aiArticlePath)
 
     expect(response?.status()).toBe(200)
