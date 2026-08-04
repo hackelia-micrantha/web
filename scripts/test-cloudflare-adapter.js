@@ -127,6 +127,21 @@ assertDocumentHeaders(
   softwareLayersArticle.body,
 )
 
+const governanceArticle = await read(
+  "/blog/governance-native-engineering-control-plane",
+)
+assert.equal(governanceArticle.response.status, 200)
+assert.match(
+  governanceArticle.body,
+  /Governance-Native Engineering and the AI Control Plane/,
+)
+assert.match(governanceArticle.body, /data-content-source="mdx"/)
+assert.match(governanceArticle.body, /data-mermaid-status="source"/)
+assert.match(governanceArticle.body, /data-mermaid-source="true"/)
+assert.match(governanceArticle.body, /Human intent/)
+assert.doesNotMatch(governanceArticle.body, /data-mermaid-rendered/)
+assertDocumentHeaders(governanceArticle.response, governanceArticle.body)
+
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
   userAgent: "Googlebot/2.1",
 })
