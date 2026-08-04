@@ -1,23 +1,12 @@
 import assert from "node:assert/strict"
-import { readFile } from "node:fs/promises"
+import { readdir, readFile, stat } from "node:fs/promises"
 import path from "node:path"
 import ts from "typescript"
 
 export const repositoryRoot = process.cwd()
 
-const registryDefinitions = [
-  {
-    path: "app/content/blog-governance-native.tsx",
-    exportName: "governanceNativeBlogPosts",
-  },
-  {
-    path: "app/content/blog.tsx",
-    exportName: "blogPosts",
-  },
-]
-
+const routesDirectory = path.join(repositoryRoot, "app/routes")
 const seriesPath = "app/content/blog-series.ts"
-const blogTypePath = "app/content/blog.tsx"
 const siteOrigin = "https://micrantha.com"
 const staticPathsBeforeBlogContent = ["/", "/solutions"]
 const staticPathsAfterBlogContent = [
@@ -29,6 +18,16 @@ const staticPathsAfterBlogContent = [
   "/philosophy",
   "/privacy",
 ]
+
+async function pathExists(filePath) {
+  try {
+    await stat(filePath)
+    return true
+  } catch (error) {
+    if (error?.code === "ENOENT") return false
+    throw error
+  }
+}
 
 function parseSource(relativePath, source, scriptKind) {
   const filePath = path.join(repositoryRoot, relativePath)
@@ -90,67 +89,6 @@ function stringProperty(object, name, context) {
   return literalText(property.initializer, `${context}.${name}`)
 }
 
-function positiveIntegerProperty(object, name, context) {
-  const property = findProperty(object, name)
-
-  assert.ok(
-    property && ts.isPropertyAssignment(property),
-    `${context} is missing ${name}`,
-  )
-  assert.ok(
-    ts.isNumericLiteral(property.initializer),
-    `${context}.${name} must be a numeric literal`,
-  )
-
-  const value = Number(property.initializer.text)
-  assert.ok(
-    Number.isInteger(value) && value > 0,
-    `${context}.${name} must be a positive integer`,
-  )
-
-  return value
-}
-
-function stringArrayProperty(object, name, context) {
-  const property = findProperty(object, name)
-
-  assert.ok(
-    property && ts.isPropertyAssignment(property),
-    `${context} is missing ${name}`,
-  )
-  assert.ok(
-    ts.isArrayLiteralExpression(property.initializer),
-    `${context}.${name} must be an array literal`,
-  )
-
-  return property.initializer.elements.map((element, index) =>
-    literalText(element, `${context}.${name}[${index}]`),
-  )
-}
-
-function optionalSeriesProperty(object, context) {
-  const property = findProperty(object, "series")
-
-  if (!property) {
-    return null
-  }
-
-  assert.ok(
-    ts.isPropertyAssignment(property) &&
-      ts.isObjectLiteralExpression(property.initializer),
-    `${context}.series must be an object literal`,
-  )
-
-  return {
-    slug: stringProperty(property.initializer, "slug", `${context}.series`),
-    order: positiveIntegerProperty(
-      property.initializer,
-      "order",
-      `${context}.series`,
-    ),
-  }
-}
-
 function findArrayDeclaration(sourceFile, declarationName, relativePath) {
   for (const statement of sourceFile.statements) {
     if (!ts.isVariableStatement(statement)) continue
@@ -196,52 +134,225 @@ function assertUnique(values, context) {
   )
 }
 
-async function readPostRegistry(definition) {
-  const absolutePath = path.join(repositoryRoot, definition.path)
-  const source = await readFile(absolutePath, "utf8")
-  const sourceFile = parseSource(definition.path, source, ts.ScriptKind.TSX)
-  const array = findArrayDeclaration(
-    sourceFile,
-    definition.exportName,
-    definition.path,
+function parseScalar(rawValue, context) {
+  const value = rawValue.trim()
+  assert.notEqual(value, "", `${context} must not be empty`)
+
+  const quote = value[0]
+  if ((quote === '"' || quote === "'") && value.at(-1) === quote) {
+    return value.slice(1, -1)
+  }
+
+  return value
+}
+
+function parseFrontmatter(source, relativePath) {
+  const normalized = source.replaceAll("\r\n", "\n")
+  const match = normalized.match(/^---\n([\s\S]*?)\n---(?:\n|$)/)
+
+  assert.ok(match, `${relativePath} must begin with YAML frontmatter`)
+
+  const lines = match[1].split("\n")
+  const attributes = {}
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index]
+    if (line.trim() === "") continue
+
+    assert.equal(line.includes("\t"), false, `${relativePath} must not use tabs`)
+    assert.equal(
+      line.startsWith(" "),
+      false,
+      `${relativePath}:${index + 2} has unexpected indentation`,
+    )
+
+    const property = line.match(/^([A-Za-z][A-Za-z0-9]*):(.*)$/)
+    assert.ok(property, `${relativePath}:${index + 2} is invalid frontmatter`)
+
+    const [, name, rawValue] = property
+    assert.equal(
+      Object.hasOwn(attributes, name),
+      false,
+      `${relativePath} repeats frontmatter field ${name}`,
+    )
+
+    if (rawValue.trim() !== "") {
+      attributes[name] = parseScalar(rawValue, `${relativePath}.${name}`)
+      continue
+    }
+
+    const collection = []
+    const object = {}
+    let collectionKind = null
+
+    while (index + 1 < lines.length && lines[index + 1].startsWith("  ")) {
+      index += 1
+      const child = lines[index]
+
+      if (child.startsWith("  - ")) {
+        assert.notEqual(
+          collectionKind,
+          "object",
+          `${relativePath}.${name} mixes array and object values`,
+        )
+        collectionKind = "array"
+        collection.push(
+          parseScalar(child.slice(4), `${relativePath}.${name}[${collection.length}]`),
+        )
+        continue
+      }
+
+      const nested = child.match(/^  ([A-Za-z][A-Za-z0-9]*):(.*)$/)
+      assert.ok(
+        nested,
+        `${relativePath}:${index + 2} has invalid nested frontmatter`,
+      )
+      assert.notEqual(
+        collectionKind,
+        "array",
+        `${relativePath}.${name} mixes array and object values`,
+      )
+      collectionKind = "object"
+
+      const [, childName, childRawValue] = nested
+      assert.equal(
+        Object.hasOwn(object, childName),
+        false,
+        `${relativePath}.${name} repeats ${childName}`,
+      )
+      const parsed = parseScalar(
+        childRawValue,
+        `${relativePath}.${name}.${childName}`,
+      )
+      object[childName] = /^\d+$/u.test(parsed) ? Number(parsed) : parsed
+    }
+
+    assert.ok(collectionKind, `${relativePath}.${name} must not be empty`)
+    attributes[name] = collectionKind === "array" ? collection : object
+  }
+
+  return attributes
+}
+
+function requiredString(attributes, name, relativePath) {
+  const value = attributes[name]
+  assert.equal(
+    typeof value,
+    "string",
+    `${relativePath}.${name} must be a string`,
+  )
+  assert.notEqual(value.trim(), "", `${relativePath}.${name} must not be empty`)
+  return value
+}
+
+function requiredStringArray(attributes, name, relativePath) {
+  const value = attributes[name]
+  assert.ok(
+    Array.isArray(value) && value.length > 0,
+    `${relativePath}.${name} must be a non-empty array`,
+  )
+  assert.ok(
+    value.every((item) => typeof item === "string" && item.trim() !== ""),
+    `${relativePath}.${name} must contain non-empty strings`,
+  )
+  assertUnique(value, `${relativePath}.${name}`)
+  return value
+}
+
+function optionalSeries(attributes, relativePath) {
+  const value = attributes.series
+  if (value === undefined) return null
+
+  assert.ok(
+    value && typeof value === "object" && !Array.isArray(value),
+    `${relativePath}.series must be an object`,
+  )
+  assert.equal(
+    typeof value.slug,
+    "string",
+    `${relativePath}.series.slug must be a string`,
+  )
+  assert.ok(
+    Number.isInteger(value.order) && value.order > 0,
+    `${relativePath}.series.order must be a positive integer`,
   )
 
-  return array.elements.map((element, index) => {
-    const context = `${definition.exportName}[${index}]`
-    assert.ok(
-      ts.isObjectLiteralExpression(element),
-      `${context} must be an object literal`,
+  return {
+    slug: value.slug,
+    order: value.order,
+  }
+}
+
+async function discoverBlogPosts() {
+  const entries = await readdir(routesDirectory, { withFileTypes: true })
+  const posts = []
+
+  for (const entry of entries) {
+    if (!entry.isDirectory() || !entry.name.startsWith("blog.")) continue
+
+    const routeDirectory = path.join(routesDirectory, entry.name)
+    const contentPath = path.join(routeDirectory, "content.mdx")
+    if (!(await pathExists(contentPath))) continue
+
+    assert.equal(
+      await pathExists(path.join(routeDirectory, "route.tsx")),
+      true,
+      `MDX route ${entry.name} is missing route.tsx`,
     )
 
-    const slug = stringProperty(element, "slug", context)
-    const date = parseCalendarDate(
-      stringProperty(element, "date", context),
-      `${context}.date`,
-    )
-    const tags = stringArrayProperty(element, "tags", context)
-    const relatedSlugs = stringArrayProperty(element, "relatedSlugs", context)
+    const relativePath = path.relative(repositoryRoot, contentPath)
+    const sourceText = await readFile(contentPath, "utf8")
+    const attributes = parseFrontmatter(sourceText, relativePath)
+    const slug = requiredString(attributes, "slug", relativePath)
+    const routeSlug = entry.name.slice("blog.".length)
 
-    stringProperty(element, "title", context)
-    stringProperty(element, "description", context)
-    stringProperty(element, "excerpt", context)
-    assertUnique(tags, `${context}.tags`)
-    assertUnique(relatedSlugs, `${context}.relatedSlugs`)
+    assert.equal(
+      slug,
+      routeSlug,
+      `${relativePath}.slug must match route ${routeSlug}`,
+    )
+
+    const status = requiredString(attributes, "status", relativePath)
+    const tags = requiredStringArray(attributes, "tags", relativePath)
+    const relatedSlugs = requiredStringArray(
+      attributes,
+      "relatedSlugs",
+      relativePath,
+    )
+
     assert.equal(
       relatedSlugs.includes(slug),
       false,
-      `${context}.relatedSlugs must not reference itself`,
+      `${relativePath}.relatedSlugs must not reference itself`,
     )
 
-    return {
+    posts.push({
       slug,
-      date,
+      status,
+      title: requiredString(attributes, "title", relativePath),
+      description: requiredString(attributes, "description", relativePath),
+      date: parseCalendarDate(
+        requiredString(attributes, "date", relativePath),
+        `${relativePath}.date`,
+      ),
+      excerpt: requiredString(attributes, "excerpt", relativePath),
       tags,
       relatedSlugs,
-      series: optionalSeriesProperty(element, context),
-      hasContent: Boolean(findProperty(element, "Content")),
-      source: definition.path,
-    }
-  })
+      series: optionalSeries(attributes, relativePath),
+      relativePath,
+      source: relativePath,
+      sourceText,
+    })
+  }
+
+  return posts.sort(
+    (left, right) =>
+      right.date.localeCompare(left.date) ||
+      (left.series?.slug ?? "").localeCompare(right.series?.slug ?? "") ||
+      (left.series?.order ?? Number.MAX_SAFE_INTEGER) -
+        (right.series?.order ?? Number.MAX_SAFE_INTEGER) ||
+      left.slug.localeCompare(right.slug),
+  )
 }
 
 async function readSeriesDefinitions() {
@@ -269,56 +380,21 @@ async function readSeriesDefinitions() {
   })
 }
 
-export async function assertBlogPostContentOptional() {
-  const source = await readFile(path.join(repositoryRoot, blogTypePath), "utf8")
-  const sourceFile = parseSource(blogTypePath, source, ts.ScriptKind.TSX)
-
-  for (const statement of sourceFile.statements) {
-    if (
-      !ts.isTypeAliasDeclaration(statement) ||
-      statement.name.text !== "BlogPost"
-    ) {
-      continue
-    }
-
-    assert.ok(
-      ts.isTypeLiteralNode(statement.type),
-      "BlogPost must remain a type literal",
-    )
-
-    const contentMember = statement.type.members.find(
-      (member) =>
-        ts.isPropertySignature(member) &&
-        member.name &&
-        (ts.isIdentifier(member.name) || ts.isStringLiteral(member.name)) &&
-        member.name.text === "Content",
-    )
-
-    assert.ok(contentMember, "BlogPost is missing the Content contract")
-    assert.ok(
-      contentMember.questionToken,
-      "BlogPost.Content must be optional for metadata-only MDX entries",
-    )
-    return
-  }
-
-  throw new Error("Unable to find BlogPost type")
-}
-
 export async function loadBlogContentInventory() {
-  const [registryPosts, series] = await Promise.all([
-    Promise.all(registryDefinitions.map(readPostRegistry)).then((groups) =>
-      groups.flat(),
-    ),
+  const [posts, series] = await Promise.all([
+    discoverBlogPosts(),
     readSeriesDefinitions(),
   ])
 
-  const postSlugs = registryPosts.map((post) => post.slug)
-  assertUnique(postSlugs, "Blog registries")
+  assert.ok(posts.length > 0, "No canonical blog MDX routes were discovered")
+  assertUnique(
+    posts.map((post) => post.slug),
+    "Canonical blog frontmatter",
+  )
 
-  const postsBySlug = new Map(registryPosts.map((post) => [post.slug, post]))
+  const postsBySlug = new Map(posts.map((post) => [post.slug, post]))
 
-  for (const post of registryPosts) {
+  for (const post of posts) {
     for (const relatedSlug of post.relatedSlugs) {
       assert.ok(
         postsBySlug.has(relatedSlug),
@@ -339,7 +415,7 @@ export async function loadBlogContentInventory() {
     series.map((definition) => [definition.slug, []]),
   )
 
-  for (const post of registryPosts) {
+  for (const post of posts) {
     if (!post.series) continue
 
     assert.ok(
@@ -350,28 +426,60 @@ export async function loadBlogContentInventory() {
   }
 
   for (const definition of series) {
-    const posts = seriesPostsBySlug.get(definition.slug)
-    assert.ok(posts, `Missing derived series collection for ${definition.slug}`)
-    assert.ok(posts.length > 0, `Series ${definition.slug} has no posts`)
+    const seriesPosts = seriesPostsBySlug.get(definition.slug)
+    assert.ok(
+      seriesPosts,
+      `Missing derived series collection for ${definition.slug}`,
+    )
+    assert.ok(
+      seriesPosts.length > 0,
+      `Series ${definition.slug} has no posts`,
+    )
 
-    posts.sort((left, right) => left.series.order - right.series.order)
+    seriesPosts.sort((left, right) => left.series.order - right.series.order)
 
-    const orders = posts.map((post) => post.series.order)
+    const orders = seriesPosts.map((post) => post.series.order)
     assertUnique(orders, `Series ${definition.slug} order values`)
     assert.deepEqual(
       orders,
-      posts.map((_, index) => index + 1),
+      seriesPosts.map((_, index) => index + 1),
       `Series ${definition.slug} order values must be contiguous from 1`,
     )
   }
 
   return {
-    posts: registryPosts,
+    posts,
     postsBySlug,
     series,
     seriesBySlug,
     seriesPostsBySlug,
   }
+}
+
+function projectBlogPost(post) {
+  return {
+    slug: post.slug,
+    status: post.status,
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    excerpt: post.excerpt,
+    tags: post.tags,
+    relatedSlugs: post.relatedSlugs,
+    ...(post.series ? { series: post.series } : {}),
+  }
+}
+
+export function buildBlogMetadataModule(inventory) {
+  const posts = inventory.posts.map(projectBlogPost)
+
+  return [
+    "// Generated from canonical blog MDX frontmatter. Do not edit by hand.",
+    'import type { BlogPost } from "~/content/blog"',
+    "",
+    `export const blogPosts = ${JSON.stringify(posts, null, 2)} satisfies BlogPost[]`,
+    "",
+  ].join("\n")
 }
 
 function latestDate(posts) {
