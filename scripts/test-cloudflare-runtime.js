@@ -118,6 +118,8 @@ const runtime = spawn(
     "http",
     "--var",
     `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
+    "--var",
+    "MICRANTHA_RUNTIME_CONTRACT:enabled",
     "--show-interactive-dev-session=false",
   ],
   {
@@ -314,6 +316,14 @@ try {
   assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
     requireNonce: false,
   })
+
+  const controlledError = await readRuntime("/runtime-contract/error")
+  assert.equal(controlledError.response.status, 500)
+  assert.match(
+    controlledError.body,
+    /Unexpected Server Error|Internal Server Error/i,
+  )
+  assertDocumentHeaders(controlledError.response, controlledError.body)
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
