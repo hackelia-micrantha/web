@@ -8,15 +8,12 @@ import {
   BLOG_TITLE,
   formatBlogDate,
 } from "~/content/blog-format"
-import {
-  defineBlogMdxPost,
-  type BlogPostMetadata,
-} from "~/content/blog-mdx"
+import { defineBlogMdxPost, type BlogPostMetadata } from "~/content/blog-mdx"
 import { getBlogPosts } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
+import { attributes as aiPipelineAttributes } from "~/content/posts/ai-pipelines-need-control-boundaries.mdx"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
-import { attributes as aiPipelineAttributes } from "~/content/posts/ai-pipelines-need-control-boundaries.mdx"
 
 const MDX_SLUG = "ai-pipelines-need-control-boundaries"
 const aiPipelinePost = defineBlogMdxPost(aiPipelineAttributes, MDX_SLUG)
