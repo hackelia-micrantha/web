@@ -27,9 +27,8 @@ export function MermaidDiagram({ title, caption, chart }: MermaidDiagramProps) {
     const render = async () => {
       try {
         if (!window.__micranthaRenderMermaid) {
-          const { installMermaidRenderer } = await import(
-            "../client/mermaid.client"
-          )
+          const { installMermaidRenderer } =
+            await import("../client/mermaid.client")
           installMermaidRenderer()
         }
 
