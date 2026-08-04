@@ -29,14 +29,8 @@ assert.deepEqual(published, {
   status: "published",
   date: "2026-08-03",
 })
-assert.equal(
-  isBlogPublicationAvailable(published, "2026-08-03"),
-  true,
-)
-assert.equal(
-  isBlogPublicationAvailable(published, "2026-08-02"),
-  false,
-)
+assert.equal(isBlogPublicationAvailable(published, "2026-08-03"), true)
+assert.equal(isBlogPublicationAvailable(published, "2026-08-02"), false)
 assert.equal(
   isBlogPublicationAvailable(
     parseBlogMdxPublication(source("draft", "2026-08-03"), relativePath),
@@ -73,11 +67,13 @@ assert.throws(
   /future posts must remain outside app\/routes/u,
 )
 assert.throws(
-  () => parseBlogMdxPublication(source("scheduled", "2026-08-03"), relativePath),
+  () =>
+    parseBlogMdxPublication(source("scheduled", "2026-08-03"), relativePath),
   /must be draft or published/u,
 )
 assert.throws(
-  () => parseBlogMdxPublication(source("published", "2026-02-30"), relativePath),
+  () =>
+    parseBlogMdxPublication(source("published", "2026-02-30"), relativePath),
   /valid calendar date/u,
 )
 assert.throws(
