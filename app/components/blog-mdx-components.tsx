@@ -1,6 +1,8 @@
 import type { ReactNode } from "react"
 import { Link } from "@remix-run/react"
 
+import { MermaidDiagram } from "./mermaid-diagram"
+
 export function Callout({ children }: { children: ReactNode }) {
   return <div className="article-callout">{children}</div>
 }
@@ -85,5 +87,6 @@ export const blogMdxComponents = {
   Callout,
   ControlTable,
   Figure,
+  MermaidDiagram,
   PostLink,
 }
