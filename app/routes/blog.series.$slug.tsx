@@ -3,15 +3,14 @@ import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 
 import { Card, PageTitle } from "~/components"
+import {
+  AI_PIPELINE_POST_SLUG,
+  aiPipelinePost,
+} from "~/content/ai-pipeline-post.server"
 import { formatBlogDate } from "~/content/blog-format"
-import { defineBlogMdxPost } from "~/content/blog-mdx"
 import { getBlogSeriesBySlug } from "~/content/blog-series"
-import { attributes as aiPipelineAttributes } from "~/content/posts/ai-pipelines-need-control-boundaries.mdx"
 import { cardStyles } from "~/utils/card-styles"
 import { buildPageMeta } from "~/utils/seo"
-
-const MDX_SLUG = "ai-pipelines-need-control-boundaries"
-const aiPipelinePost = defineBlogMdxPost(aiPipelineAttributes, MDX_SLUG)
 
 type LoaderData = {
   series: {
@@ -35,7 +34,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   const posts = series.posts.map((legacyPost, index) => {
-    if (legacyPost.slug !== MDX_SLUG) {
+    if (legacyPost.slug !== AI_PIPELINE_POST_SLUG) {
       return {
         slug: legacyPost.slug,
         title: legacyPost.title,
@@ -51,7 +50,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
       aiPipelinePost.series.title !== series.title ||
       aiPipelinePost.series.order !== index + 1
     ) {
-      throw new Error(`MDX series metadata drifted for ${MDX_SLUG}`)
+      throw new Error(
+        `MDX series metadata drifted for ${AI_PIPELINE_POST_SLUG}`,
+      )
     }
 
     return {
