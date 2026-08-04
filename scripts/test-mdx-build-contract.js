@@ -17,6 +17,9 @@ const articleMarkers = [
   "Start with the right mental model",
   "AI is not the system of record",
 ]
+const unrelatedArticleMarkers = [
+  "The integration layer is where identity gets translated",
+]
 
 const buildFiles = await readdir(buildRoot)
 const manifestFiles = buildFiles.filter(
@@ -108,6 +111,16 @@ function filesContainingMarker(sources, marker) {
     .map(([file]) => file)
 }
 
+function assertMarkerAbsent(sources, marker, label) {
+  const matches = filesContainingMarker(sources, marker)
+
+  assert.deepEqual(
+    matches,
+    [],
+    `${label} leaked marker ${marker} through ${matches.join(", ")}`,
+  )
+}
+
 const articleRoute = requireRoute(routeIds.article)
 const indexRoute = requireRoute(routeIds.index)
 
@@ -124,16 +137,28 @@ const [articleClosure, indexClosure] = await Promise.all([
 
 for (const marker of articleMarkers) {
   const articleMatches = filesContainingMarker(articleClosure, marker)
-  const indexMatches = filesContainingMarker(indexClosure, marker)
 
   assert.ok(
     articleMatches.length > 0,
     `the MDX article route closure is missing marker: ${marker}`,
   )
-  assert.deepEqual(
-    indexMatches,
-    [],
-    `the blog index eager route closure leaked MDX body marker ${marker} through ${indexMatches.join(", ")}`,
+  assertMarkerAbsent(
+    indexClosure,
+    marker,
+    "the blog index eager route closure",
+  )
+}
+
+for (const marker of unrelatedArticleMarkers) {
+  assertMarkerAbsent(
+    articleClosure,
+    marker,
+    "the MDX article eager route closure",
+  )
+  assertMarkerAbsent(
+    indexClosure,
+    marker,
+    "the blog index eager route closure",
   )
 }
 
