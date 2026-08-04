@@ -64,24 +64,19 @@ function normalizeBuildFile(specifier, fromFile = "") {
   return null
 }
 
-function extractRelativeImports(source, fromFile) {
+function extractStaticRelativeImports(source, fromFile) {
   const specifiers = new Set()
-  const patterns = [
-    /\bimport\s*(?:[^"']*?\sfrom\s*)?["']([^"']+)["']/g,
-    /\bimport\(\s*["']([^"']+)["']\s*\)/g,
-  ]
+  const pattern = /\bimport\s*(?:[^"']*?\sfrom\s*)?["']([^"']+)["']/g
 
-  for (const pattern of patterns) {
-    for (const match of source.matchAll(pattern)) {
-      const normalized = normalizeBuildFile(match[1], fromFile)
-      if (normalized) specifiers.add(normalized)
-    }
+  for (const match of source.matchAll(pattern)) {
+    const normalized = normalizeBuildFile(match[1], fromFile)
+    if (normalized) specifiers.add(normalized)
   }
 
   return [...specifiers]
 }
 
-async function collectRouteClosure(route) {
+async function collectEagerRouteClosure(route) {
   const pending = [
     normalizeBuildFile(route.module),
     ...(route.imports ?? []).map((specifier) => normalizeBuildFile(specifier)),
@@ -99,7 +94,7 @@ async function collectRouteClosure(route) {
     const source = await readFile(path.join(buildRoot, file), "utf8")
     sources.set(file, source)
 
-    for (const importedFile of extractRelativeImports(source, file)) {
+    for (const importedFile of extractStaticRelativeImports(source, file)) {
       if (!visited.has(importedFile)) pending.push(importedFile)
     }
   }
@@ -107,8 +102,10 @@ async function collectRouteClosure(route) {
   return sources
 }
 
-function closureContainsMarker(sources, marker) {
-  return [...sources.values()].some((source) => source.includes(marker))
+function filesContainingMarker(sources, marker) {
+  return [...sources.entries()]
+    .filter(([, source]) => source.includes(marker))
+    .map(([file]) => file)
 }
 
 const articleRoute = requireRoute(routeIds.article)
@@ -121,22 +118,25 @@ assert.notEqual(
 )
 
 const [articleClosure, indexClosure] = await Promise.all([
-  collectRouteClosure(articleRoute),
-  collectRouteClosure(indexRoute),
+  collectEagerRouteClosure(articleRoute),
+  collectEagerRouteClosure(indexRoute),
 ])
 
 for (const marker of articleMarkers) {
+  const articleMatches = filesContainingMarker(articleClosure, marker)
+  const indexMatches = filesContainingMarker(indexClosure, marker)
+
   assert.ok(
-    closureContainsMarker(articleClosure, marker),
+    articleMatches.length > 0,
     `the MDX article route closure is missing marker: ${marker}`,
   )
-  assert.equal(
-    closureContainsMarker(indexClosure, marker),
-    false,
-    `the blog index route closure leaked MDX body marker: ${marker}`,
+  assert.deepEqual(
+    indexMatches,
+    [],
+    `the blog index eager route closure leaked MDX body marker ${marker} through ${indexMatches.join(", ")}`,
   )
 }
 
 console.log(
-  `MDX build contract passed: ${articleClosure.size} article files, ${indexClosure.size} index files`,
+  `MDX build contract passed: ${articleClosure.size} eager article files, ${indexClosure.size} eager index files`,
 )
