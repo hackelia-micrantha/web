@@ -2,74 +2,132 @@
 
 ## Decision
 
-The current Remix application uses a fail-closed publication model.
+Canonical MDX frontmatter is the complete source of truth for article metadata.
 
-Only content that is publishable for the target build may appear in either of these routable locations:
+Every published article lives in a native Remix route directory:
 
-- the runtime blog metadata registries consumed by `app/content/blog-provider.ts`;
-- a static `app/routes/blog.<slug>/` MDX route directory.
+```text
+app/routes/blog.<slug>/
+├── content.mdx
+└── route.tsx
+```
 
-Draft and future content must remain outside both locations. Hiding an entry only from the blog index or sitemap is not sufficient because a direct URL would still exist.
+The route imports its own `content.mdx` at build time and passes that component to the shared route adapter. There is no generic article loader, request-time filesystem access, runtime MDX compilation, or external content evaluation.
 
-This preserves complete server rendering, JavaScript-disabled access, deterministic Cloudflare builds, and native Remix route splitting without request-time MDX compilation.
+This preserves complete server rendering, JavaScript-disabled access, deterministic Cloudflare builds, and independent browser chunks for each article.
 
-## Publication metadata
+## Canonical frontmatter
 
-`app/content/blog-publication.js` is the transitional publication manifest while legacy TSX articles remain. It records the status of every routable registry slug.
+Each `content.mdx` file must define:
 
-The allowed statuses are:
+```yaml
+---
+slug: example-article
+status: published
+title: Example Article
+description: A concise search and social description.
+date: "2026-08-03"
+excerpt: A concise index and related-content summary.
+tags:
+  - architecture-notes
+relatedSlugs:
+  - another-article
+series:
+  slug: example-series
+  order: 1
+---
+```
+
+The supported publication statuses are:
 
 - `published`
 - `draft`
 
-Every entry that remains in a runtime registry must have `published` status and a date on or before the publication cutoff. A draft manifest entry may exist without a runtime route, but a published manifest entry must have matching routable metadata.
+The frontmatter parser is intentionally strict. Unknown structure, missing fields, invalid dates, duplicate tags or related posts, unknown related slugs, self-references, invalid series membership, duplicate order values, and series ordering gaps fail validation.
 
-Static MDX articles also declare `status: published` in frontmatter. Their route modules verify status and manifest parity before rendering. The build validator owns the target-date cutoff so the server and browser do not independently recompute wall-clock publication state during hydration. As the remaining articles move to MDX, status ownership should move into their canonical frontmatter and the transitional manifest can be generated or removed.
+## Generated projections
+
+Runtime code does not parse MDX or import article bodies into shared modules. Instead, the repository checks in two deterministic projections:
+
+- `app/content/blog.generated.ts` — metadata-only runtime records;
+- `public/sitemap.xml` — public URL and `lastmod` records.
+
+Generate both files with:
+
+```sh
+yarn generate:blog-content
+```
+
+The generator discovers canonical route frontmatter, validates relationships, formats the TypeScript projection with the repository Prettier configuration, and writes both outputs from the same inventory.
+
+Required CI compares both files byte-for-byte with freshly generated output. Editing a projection by hand or changing frontmatter without regenerating it fails the build.
 
 ## Publication cutoff
 
 Validation uses the current UTC calendar date by default.
 
-`BLOG_PUBLICATION_DATE=YYYY-MM-DD` may be supplied explicitly to validate a scheduled publication build or preview. Production CI and normal deployment must leave this variable unset unless an intentional dated release is being exercised.
+`BLOG_PUBLICATION_DATE=YYYY-MM-DD` may be supplied explicitly for a scheduled build or dated preview. Production CI and normal deployment leave this variable unset unless an intentional dated release is being exercised.
 
-The cutoff is enforced by:
+A routable article must:
 
-- `scripts/check-blog-content-boundaries.js` before CI and deployment builds;
-- `scripts/generate-sitemap.js` before sitemap generation.
+- declare `status: published`;
+- use a valid calendar date;
+- have a date on or before the publication cutoff.
 
-Static MDX route modules enforce published status and manifest parity without consulting the browser clock. This lets an explicitly dated preview hydrate deterministically while the build pipeline remains authoritative for whether the route may exist.
-
-Future-dated content is therefore not silently indexed or deployed. It must stay non-routable until its publication build is intentional.
+Draft or future content must remain outside the routable `app/routes/blog.<slug>/` namespace until publication. Hiding a route only from the index or sitemap is insufficient because its direct URL would still exist.
 
 ## Authoring a draft
 
-1. Keep the draft outside `app/routes` and outside the runtime metadata registries.
-2. Use `status: draft` in canonical MDX frontmatter when the draft content pipeline supports it.
-3. Do not add the slug as a published entry in the publication manifest.
-4. Preview through a non-production authoring workflow rather than creating a public route.
+1. Author the MDX outside the routable route namespace.
+2. Use the same canonical frontmatter schema with `status: draft`.
+3. Keep draft assets local and validate them through a non-production authoring workflow.
+4. Move the article into `app/routes/blog.<slug>/` only when publication is intentional.
+5. Change `status` to `published`, verify the date, and regenerate projections.
 
 ## Publishing an article
 
-1. Confirm the article date is on or before the target publication cutoff.
-2. Set canonical MDX frontmatter to `status: published`.
-3. Add or generate the static route and runtime metadata projection.
-4. Add the publication manifest entry while legacy registries remain.
-5. Run:
+1. Add `app/routes/blog.<slug>/content.mdx` with canonical frontmatter and approved MDX syntax.
+2. Add a minimal native route wrapper:
+
+   ```tsx
+   import { createBlogMdxRoute } from "~/content/blog-mdx-route"
+
+   import Content from "./content.mdx"
+
+   const route = createBlogMdxRoute("example-article", Content)
+
+   export const meta = route.meta
+   export const handle = route.handle
+   export default route.Component
+   ```
+
+3. Run:
 
    ```sh
+   yarn generate:blog-content
    yarn test:unit
    yarn test:blog-mdx-validation
    yarn test:blog-content-boundaries
-   node scripts/generate-sitemap.js
    yarn typecheck
    yarn build
+   yarn test:blog-chunk-isolation
    yarn cloudflare:functions:build
    yarn test:integration
    yarn test:e2e
    yarn test:e2e:cloudflare
    ```
 
-6. Verify the article appears in the index, series navigation, related links, structured data, and sitemap.
+4. Verify the article appears in the index, series navigation, related links, structured data, sitemap, and its own browser route chunk.
+
+## Browser chunk isolation
+
+Every article route must have a distinct browser module. The build check reads the generated Remix browser manifest, follows each route's static import graph, and verifies:
+
+- the graph contains that article's unique body marker;
+- the graph contains none of the other article bodies;
+- every article has a distinct route module.
+
+Shared metadata contains titles, descriptions, excerpts, tags, and relationships only. Full article prose remains in route-local MDX chunks and is not pulled into the blog index, series pages, or unrelated article routes.
 
 ## Mermaid diagrams in MDX
 
@@ -95,16 +153,11 @@ The shared parser and build boundary enforce:
 - directed `flowchart` or `graph` syntax with an explicit direction;
 - no Mermaid initialization directives, links, callbacks, JavaScript URLs, HTML, or control characters.
 
-Malformed Mermaid content fails unit tests, content-boundary validation, integration tests, or browser tests before deployment. Authors must not import Mermaid, provide JSX expressions, or embed rendered SVG directly in MDX.
+Malformed Mermaid content fails before deployment. Authors must not import Mermaid, provide JSX expressions, or embed rendered SVG directly in MDX.
 
 ## Test layers
 
-- Unit tests exercise date parsing, cutoff behavior, manifest coverage, draft exclusion, future-date rejection, MDX status rules, and constrained Mermaid source parsing.
-- Integration tests exercise the direct Cloudflare Pages adapter and the source-isolated workerd artifact, including 404 behavior for unpublished URLs and source-first Mermaid SSR.
-- End-to-end tests exercise published articles, client navigation, Mermaid enhancement, JavaScript-disabled rendering, and unpublished-route exclusion in Chromium.
-- The MDX grammar validator rejects unsupported syntax, executable expressions, unsafe component props, invalid local assets, and unknown cross-post targets.
-- The Mermaid boundary validator parses every routable fenced Mermaid block with the same policy used by the renderer.
-
-## Follow-up
-
-Issue #55 still needs to migrate the remaining governance-native TSX article bodies, make frontmatter the complete metadata authority, and verify browser-chunk isolation across the expanded MDX route set.
+- Unit tests exercise publication dates, cutoff behavior, draft exclusion, future-date rejection, unsupported status rejection, and constrained Mermaid parsing.
+- Content-boundary integration validates canonical frontmatter, generated metadata and sitemap parity, publication rules, series and related-post relationships, MDX grammar, local assets, static-only routing, and every Mermaid block.
+- Build integration verifies browser chunk isolation, the direct Cloudflare Pages adapter, the source-isolated workerd artifact, and the Worker bundle budget.
+- End-to-end tests exercise all articles in desktop and mobile Chromium, hydrated client navigation, Mermaid enhancement, complete JavaScript-disabled rendering, and unpublished or unknown route exclusion.
