@@ -1,6 +1,5 @@
 import type { BlogPost } from "~/content/blog"
-import { blogPosts } from "~/content/blog"
-import { governanceNativeBlogPosts } from "~/content/blog-governance-native"
+import { blogPosts } from "~/content/blog.generated"
 import { filterPublishedBlogPosts } from "~/content/blog-publication.js"
 
 export interface BlogContentProvider {
@@ -8,22 +7,17 @@ export interface BlogContentProvider {
   getPostBySlug(slug: string): BlogPost | null
 }
 
-const tsxBlogPosts: BlogPost[] = filterPublishedBlogPosts([
-  ...governanceNativeBlogPosts,
-  ...blogPosts,
-])
+const publishedBlogPosts = filterPublishedBlogPosts(blogPosts)
 
-export const tsxBlogProvider: BlogContentProvider = {
+export const blogContentProvider: BlogContentProvider = {
   getPosts() {
-    return tsxBlogPosts
+    return publishedBlogPosts
   },
 
   getPostBySlug(slug: string) {
-    return tsxBlogPosts.find((post) => post.slug === slug) ?? null
+    return publishedBlogPosts.find((post) => post.slug === slug) ?? null
   },
 }
-
-export const blogContentProvider = tsxBlogProvider
 
 export function getBlogPosts() {
   return blogContentProvider.getPosts()
