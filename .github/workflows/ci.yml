@@ -103,7 +103,7 @@ jobs:
   end-to-end:
     name: End-to-end
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: Check out repository
@@ -123,6 +123,9 @@ jobs:
       - name: Run functional Playwright tests
         run: yarn playwright test --grep-invert "visual regressions"
 
+      - name: Run Cloudflare hydration browser contracts
+        run: yarn test:e2e:cloudflare
+
       - name: Upload Playwright failure artifacts
         if: failure()
         uses: actions/upload-artifact@v4
@@ -130,6 +133,8 @@ jobs:
           name: playwright-failure-${{ github.run_id }}
           path: |
             playwright-report
+            playwright-report-cloudflare
             test-results
+            test-results-cloudflare
           if-no-files-found: ignore
           retention-days: 7
