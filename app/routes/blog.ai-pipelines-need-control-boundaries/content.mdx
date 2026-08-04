@@ -73,13 +73,35 @@ The write-back step should look like a normal governed integration: authorized a
 
 ## Threat and failure modes
 
-| Failure mode                     | What usually causes it                                | Control response                                            |
-| -------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------- |
-| Over-broad tool access           | Convenience-driven integration and prompt-only policy | Scope tools by workflow, enforce authorization, audit calls |
-| Unverifiable output              | Missing provenance and no deterministic validation    | Attach sources, run schema checks, retain review traces     |
-| Unsafe write-back                | Model output sent directly to systems of record       | Require approval gates and controlled adapter writes        |
-| Prompt leakage of sensitive data | Skipping normalization and redaction upstream         | Pre-process inputs and minimize exposed fields              |
-| Workflow drift                   | AI-specific logic embedded in every consumer          | Keep orchestration in an application boundary               |
+<ControlTable
+  rows={[
+    {
+      failureMode: "Over-broad tool access",
+      cause: "Convenience-driven integration and prompt-only policy",
+      response: "Scope tools by workflow, enforce authorization, audit calls",
+    },
+    {
+      failureMode: "Unverifiable output",
+      cause: "Missing provenance and no deterministic validation",
+      response: "Attach sources, run schema checks, retain review traces",
+    },
+    {
+      failureMode: "Unsafe write-back",
+      cause: "Model output sent directly to systems of record",
+      response: "Require approval gates and controlled adapter writes",
+    },
+    {
+      failureMode: "Prompt leakage of sensitive data",
+      cause: "Skipping normalization and redaction upstream",
+      response: "Pre-process inputs and minimize exposed fields",
+    },
+    {
+      failureMode: "Workflow drift",
+      cause: "AI-specific logic embedded in every consumer",
+      response: "Keep orchestration in an application boundary",
+    },
+  ]}
+/>
 
 ## Conclusion
 
