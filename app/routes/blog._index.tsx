@@ -1,15 +1,75 @@
 import type { MetaFunction } from "@remix-run/node"
-import { Link } from "@remix-run/react"
+import { json } from "@remix-run/node"
+import { Link, useLoaderData } from "@remix-run/react"
+
 import { Card, PageTitle } from "~/components"
-import { BLOG_DESCRIPTION, BLOG_TITLE, formatBlogDate } from "~/content/blog"
+import {
+  BLOG_DESCRIPTION,
+  BLOG_TITLE,
+  formatBlogDate,
+} from "~/content/blog-format"
+import {
+  defineBlogMdxPost,
+  type BlogPostMetadata,
+} from "~/content/blog-mdx"
 import { getBlogPosts } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
+import { attributes as aiPipelineAttributes } from "~/content/posts/ai-pipelines-need-control-boundaries.mdx"
 
-const posts = getBlogPosts()
+const MDX_SLUG = "ai-pipelines-need-control-boundaries"
+const aiPipelinePost = defineBlogMdxPost(aiPipelineAttributes, MDX_SLUG)
 
-export const meta: MetaFunction = () =>
+type BlogIndexPost = BlogPostMetadata & {
+  series?: {
+    slug: string
+    title: string
+    order: number
+  }
+}
+
+type LoaderData = {
+  posts: BlogIndexPost[]
+}
+
+function toMetadata(candidate: BlogPostMetadata): BlogPostMetadata {
+  return {
+    slug: candidate.slug,
+    title: candidate.title,
+    description: candidate.description,
+    date: candidate.date,
+    excerpt: candidate.excerpt,
+    tags: [...candidate.tags],
+    relatedSlugs: [...candidate.relatedSlugs],
+    series: candidate.series ? { ...candidate.series } : undefined,
+  }
+}
+
+export async function loader() {
+  const posts = getBlogPosts().map((legacyPost) => {
+    if (legacyPost.slug === MDX_SLUG) {
+      return aiPipelinePost
+    }
+
+    const series = getSeriesNavigation(legacyPost)
+
+    return {
+      ...toMetadata(legacyPost),
+      series: series
+        ? {
+            slug: series.series.slug,
+            title: series.series.title,
+            order: series.index + 1,
+          }
+        : undefined,
+    }
+  })
+
+  return json<LoaderData>({ posts })
+}
+
+export const meta: MetaFunction<typeof loader> = () =>
   buildPageMeta({
     title: "Blog",
     description: BLOG_DESCRIPTION,
@@ -17,19 +77,25 @@ export const meta: MetaFunction = () =>
   })
 
 export const handle = {
-  structuredData: buildCollectionPageStructuredData({
-    name: "Blog",
-    description: BLOG_DESCRIPTION,
-    path: "/blog",
-    items: posts.map((post) => ({
-      name: post.title,
-      description: post.description,
-      url: `https://micrantha.com/blog/${post.slug}`,
-    })),
-  }),
+  structuredData(data: LoaderData | undefined) {
+    if (!data) return null
+
+    return buildCollectionPageStructuredData({
+      name: "Blog",
+      description: BLOG_DESCRIPTION,
+      path: "/blog",
+      items: data.posts.map((post) => ({
+        name: post.title,
+        description: post.description,
+        url: `https://micrantha.com/blog/${post.slug}`,
+      })),
+    })
+  },
 }
 
 export default function BlogIndexRoute() {
+  const { posts } = useLoaderData<typeof loader>()
+
   return (
     <div className="space-y-10">
       <PageTitle title="Blog" subtitle={BLOG_DESCRIPTION} />
@@ -48,50 +114,46 @@ export default function BlogIndexRoute() {
       </section>
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {posts.map((post, index) => {
-          const seriesNavigation = getSeriesNavigation(post)
-
-          return (
-            <Card
-              key={post.slug}
-              title={post.title}
-              url={`/blog/${post.slug}`}
-              headingLevel={2}
-              className={
-                index % 3 === 0
-                  ? `${cardStyles.neutral} editorial-card`
-                  : index % 3 === 1
-                    ? `${cardStyles.blue} editorial-card`
-                    : `${cardStyles.green} editorial-card`
-              }
-            >
-              <>
-                {seriesNavigation ? (
-                  <div className="meta-kicker mb-3 flex flex-wrap items-center gap-1.5">
-                    <span
-                      className="rounded-full border border-slate-300 bg-white text-slate-600"
-                      style={{
-                        fontSize: "0.58rem",
-                        letterSpacing: "0.14em",
-                        lineHeight: 1,
-                        padding: "0.14rem 0.38rem",
-                      }}
-                    >
-                      Part {seriesNavigation.index + 1}
-                    </span>
-                    <span>{seriesNavigation.series.title}</span>
-                  </div>
-                ) : null}
-                <span className="meta-kicker mb-3 block">
-                  {formatBlogDate(post.date)}
-                </span>
-                <span className="block text-[1.02rem] leading-8 text-slate-700">
-                  {post.excerpt}
-                </span>
-              </>
-            </Card>
-          )
-        })}
+        {posts.map((post, index) => (
+          <Card
+            key={post.slug}
+            title={post.title}
+            url={`/blog/${post.slug}`}
+            headingLevel={2}
+            className={
+              index % 3 === 0
+                ? `${cardStyles.neutral} editorial-card`
+                : index % 3 === 1
+                  ? `${cardStyles.blue} editorial-card`
+                  : `${cardStyles.green} editorial-card`
+            }
+          >
+            <>
+              {post.series ? (
+                <div className="meta-kicker mb-3 flex flex-wrap items-center gap-1.5">
+                  <span
+                    className="rounded-full border border-slate-300 bg-white text-slate-600"
+                    style={{
+                      fontSize: "0.58rem",
+                      letterSpacing: "0.14em",
+                      lineHeight: 1,
+                      padding: "0.14rem 0.38rem",
+                    }}
+                  >
+                    Part {post.series.order}
+                  </span>
+                  <span>{post.series.title}</span>
+                </div>
+              ) : null}
+              <span className="meta-kicker mb-3 block">
+                {formatBlogDate(post.date)}
+              </span>
+              <span className="block text-[1.02rem] leading-8 text-slate-700">
+                {post.excerpt}
+              </span>
+            </>
+          </Card>
+        ))}
       </section>
 
       <section className="editorial-panel max-w-3xl space-y-4 bg-slate-50/80 px-6 py-6">
