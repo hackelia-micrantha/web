@@ -102,7 +102,9 @@ export const handle = {
 export default function AiPipelinesNeedControlBoundariesRoute() {
   return (
     <BlogArticleLayout post={post}>
-      <Content components={blogMdxComponents} />
+      <div data-content-source="mdx">
+        <Content components={blogMdxComponents} />
+      </div>
     </BlogArticleLayout>
   )
 }
