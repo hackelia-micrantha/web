@@ -143,6 +143,8 @@ Cloudflare Pages Functions is the authoritative production runtime. The request 
 
 See [Cloudflare Pages SSR Architecture](docs/architecture/cloudflare-pages-ssr.md) for the production topology, compatibility boundary, artifact contract, and role of local Node and Docker paths.
 
+Before a production or topology-changing deployment, follow [Cloudflare Deployment Configuration Parity](docs/operations/cloudflare-deployment-parity.md) to compare repository-owned settings with the Pages project, production branch, domains, bindings, and dashboard-only rules.
+
 Checked-in config:
 
 - `wrangler.toml`
