@@ -3,7 +3,8 @@ import { expect, test } from "@playwright/test"
 const aiArticlePath = "/blog/ai-pipelines-need-control-boundaries"
 const integrationArticlePath =
   "/blog/secure-platform-integration-is-not-plumbing"
-const legacyArticlePath = "/blog/software-layers-are-risk-boundaries"
+const softwareLayersArticlePath = "/blog/software-layers-are-risk-boundaries"
+const legacyArticlePath = "/blog/governance-native-engineering-control-plane"
 
 const unpublishedArticlePaths = [
   "/blog/draft-publication-fixture",
@@ -40,7 +41,7 @@ test.describe("MDX articles", () => {
       seriesNavigation.getByRole("link", {
         name: "Next: Software Layers Are Risk Boundaries",
       }),
-    ).toHaveAttribute("href", legacyArticlePath)
+    ).toHaveAttribute("href", softwareLayersArticlePath)
 
     const mdxContent = page.locator('[data-content-source="mdx"]')
 
@@ -64,7 +65,7 @@ test.describe("MDX articles", () => {
         name: "Software Layers Are Risk Boundaries",
         exact: true,
       }),
-    ).toHaveAttribute("href", legacyArticlePath)
+    ).toHaveAttribute("href", softwareLayersArticlePath)
 
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
@@ -133,23 +134,75 @@ test.describe("MDX articles", () => {
     )
   })
 
+  test("renders software layers article from canonical MDX", async ({
+    page,
+  }) => {
+    await page.goto(softwareLayersArticlePath)
+
+    await expect(page).toHaveTitle(
+      "Micrantha Software | Software Layers Are Risk Boundaries",
+    )
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Software Layers Are Risk Boundaries",
+      }),
+    ).toBeVisible()
+    await expect(page.getByText("Part 3 of 3", { exact: true })).toBeVisible()
+
+    const seriesNavigation = page.getByRole("navigation", {
+      name: "Architecture Control Boundaries series navigation",
+    })
+
+    await expect(
+      seriesNavigation.getByRole("link", {
+        name: "Previous: AI Pipelines Need Control Boundaries",
+      }),
+    ).toHaveAttribute("href", aiArticlePath)
+    await expect(
+      seriesNavigation.getByRole("link", { name: /^Next:/ }),
+    ).toHaveCount(0)
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+
+    await expect(mdxContent).toBeVisible()
+    await expect(
+      mdxContent.getByRole("img", {
+        name: /clients flowing into interface and application layers/i,
+      }),
+    ).toBeVisible()
+    await expect(
+      mdxContent.getByRole("link", {
+        name: "Secure Platform Integration Is Not Plumbing",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", integrationArticlePath)
+    await expect(mdxContent).toContainText(
+      "Software layers are not only a code-organization preference",
+    )
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://micrantha.com/blog/software-layers-are-risk-boundaries",
+    )
+  })
+
   test("supports hydrated client navigation", async ({ page }) => {
-    await page.goto(integrationArticlePath)
+    await page.goto(softwareLayersArticlePath)
     await page
       .locator('[data-content-source="mdx"]')
       .getByRole("link", {
-        name: "AI Pipelines Need Control Boundaries",
+        name: "Secure Platform Integration Is Not Plumbing",
         exact: true,
       })
       .click()
 
     await expect(page).toHaveURL(
-      /\/blog\/ai-pipelines-need-control-boundaries$/,
+      /\/blog\/secure-platform-integration-is-not-plumbing$/,
     )
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "AI Pipelines Need Control Boundaries",
+        name: "Secure Platform Integration Is Not Plumbing",
       }),
     ).toBeVisible()
   })
@@ -164,13 +217,11 @@ test("remaining legacy TSX article continues through the dynamic route", async (
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Software Layers Are Risk Boundaries",
+      name: "Governance-Native Engineering and the AI Control Plane",
     }),
   ).toBeVisible()
   await expect(page.locator('[data-content-source="mdx"]')).toHaveCount(0)
-  await expect(page.locator("main")).toContainText(
-    "Software layers are not only a code-organization preference",
-  )
+  await expect(page.locator("[data-mermaid-diagram]").first()).toBeVisible()
 })
 
 test("draft and future blog URLs remain unavailable", async ({ page }) => {
@@ -237,5 +288,36 @@ test.describe("MDX articles without JavaScript", () => {
         name: /channels and source systems flowing through an API gateway/i,
       }),
     ).toBeVisible()
+  })
+
+  test("returns complete server-rendered software layers content", async ({
+    page,
+  }) => {
+    const response = await page.goto(softwareLayersArticlePath)
+
+    expect(response?.status()).toBe(200)
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Software Layers Are Risk Boundaries",
+      }),
+    ).toBeVisible()
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+
+    await expect(mdxContent).toContainText(
+      "Software layers are not only a code-organization preference",
+    )
+    await expect(
+      mdxContent.getByRole("img", {
+        name: /clients flowing into interface and application layers/i,
+      }),
+    ).toBeVisible()
+    await expect(
+      mdxContent.getByRole("link", {
+        name: "Secure Platform Integration Is Not Plumbing",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", integrationArticlePath)
   })
 })
