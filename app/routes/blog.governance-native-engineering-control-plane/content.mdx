@@ -28,11 +28,17 @@ The bottleneck is shifting from whether agents can produce code to whether organ
 
 </Callout>
 
-<MermaidDiagram
-  title="AI-native engineering control plane"
-  caption="Generation increases throughput; governance preserves intent, evidence, and reviewability."
-  chart="flowchart TD; A[Human intent] --> B[Policy and review boundaries]; B --> C[Agent or model execution]; C --> D[Generated change]; D --> E[Evidence and replay envelope]; E --> F[Human comprehension loop]; F --> B"
-/>
+```mermaid
+%% title: AI-native engineering control plane
+%% caption: Generation increases throughput; governance preserves intent, evidence, and reviewability.
+flowchart TD
+  A[Human intent] --> B[Policy and review boundaries]
+  B --> C[Agent or model execution]
+  C --> D[Generated change]
+  D --> E[Evidence and replay envelope]
+  E --> F[Human comprehension loop]
+  F --> B
+```
 
 ## The bottleneck has moved
 
