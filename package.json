@@ -27,7 +27,7 @@
     "test:cloudflare:adapter": "node scripts/test-cloudflare-adapter.js",
     "test:cloudflare:bundle-budget": "node scripts/check-cloudflare-bundle-budget.js",
     "test:cloudflare:cache-policy": "node scripts/test-cloudflare-cache-policy.js",
-    "test:cloudflare:runtime": "node scripts/stage-cloudflare-runtime.js && node scripts/test-cloudflare-runtime.js",
+    "test:cloudflare:runtime": "node scripts/stage-cloudflare-runtime.js && node scripts/run-cloudflare-runtime-contract.js",
     "test:e2e": "playwright test",
     "test:e2e:cloudflare": "playwright test --config playwright.cloudflare.config.ts",
     "test:e2e:headed": "playwright test --headed",
