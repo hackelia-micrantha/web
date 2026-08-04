@@ -13,7 +13,10 @@ for (const documentBudget of runtimeBudgets.documents) {
       testInfo.project.name === "mobile-chromium" &&
       documentBudget.pathname !== "/"
     ) {
-      test.skip(true, "The homepage supplies the pinned mobile performance sample.")
+      test.skip(
+        true,
+        "The homepage supplies the pinned mobile performance sample.",
+      )
     }
 
     const baseUrl = new URL(String(testInfo.project.use.baseURL))
