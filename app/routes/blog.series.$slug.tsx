@@ -1,11 +1,17 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
+
 import { Card, PageTitle } from "~/components"
-import { formatBlogDate } from "~/content/blog"
+import { formatBlogDate } from "~/content/blog-format"
+import { defineBlogMdxPost } from "~/content/blog-mdx"
 import { getBlogSeriesBySlug } from "~/content/blog-series"
+import { attributes as aiPipelineAttributes } from "~/content/posts/ai-pipelines-need-control-boundaries.mdx"
 import { cardStyles } from "~/utils/card-styles"
 import { buildPageMeta } from "~/utils/seo"
+
+const MDX_SLUG = "ai-pipelines-need-control-boundaries"
+const aiPipelinePost = defineBlogMdxPost(aiPipelineAttributes, MDX_SLUG)
 
 type LoaderData = {
   series: {
@@ -16,7 +22,7 @@ type LoaderData = {
       title: string
       excerpt: string
       date: string
-      order?: number
+      order: number
     }[]
   }
 }
@@ -28,16 +34,40 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Not Found", { status: 404 })
   }
 
+  const posts = series.posts.map((legacyPost, index) => {
+    if (legacyPost.slug !== MDX_SLUG) {
+      return {
+        slug: legacyPost.slug,
+        title: legacyPost.title,
+        excerpt: legacyPost.excerpt,
+        date: legacyPost.date,
+        order: index + 1,
+      }
+    }
+
+    if (
+      !aiPipelinePost.series ||
+      aiPipelinePost.series.slug !== series.slug ||
+      aiPipelinePost.series.title !== series.title ||
+      aiPipelinePost.series.order !== index + 1
+    ) {
+      throw new Error(`MDX series metadata drifted for ${MDX_SLUG}`)
+    }
+
+    return {
+      slug: aiPipelinePost.slug,
+      title: aiPipelinePost.title,
+      excerpt: aiPipelinePost.excerpt,
+      date: aiPipelinePost.date,
+      order: aiPipelinePost.series.order,
+    }
+  })
+
   return json<LoaderData>({
     series: {
       slug: series.slug,
       title: series.title,
-      posts: series.posts.map((post) => ({
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        date: post.date,
-      })),
+      posts,
     },
   })
 }
@@ -48,9 +78,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   }
 
   return buildPageMeta({
-    title: data.series.title + " Series",
-    description: "Posts in the " + data.series.title + " series.",
-    path: "/blog/series/" + data.series.slug,
+    title: `${data.series.title} Series`,
+    description: `Posts in the ${data.series.title} series.`,
+    path: `/blog/series/${data.series.slug}`,
   })
 }
 
@@ -74,19 +104,19 @@ export default function BlogSeriesRoute() {
           <Card
             key={post.slug}
             title={post.title}
-            url={"/blog/" + post.slug}
+            url={`/blog/${post.slug}`}
             headingLevel={2}
             className={
               index % 3 === 0
-                ? cardStyles.neutral + " editorial-card"
+                ? `${cardStyles.neutral} editorial-card`
                 : index % 3 === 1
-                  ? cardStyles.blue + " editorial-card"
-                  : cardStyles.green + " editorial-card"
+                  ? `${cardStyles.blue} editorial-card`
+                  : `${cardStyles.green} editorial-card`
             }
           >
             <>
               <span className="meta-kicker mb-3 block">
-                Part {index + 1} / {formatBlogDate(post.date)}
+                Part {post.order} / {formatBlogDate(post.date)}
               </span>
               <span className="block text-[1.02rem] leading-8 text-slate-700">
                 {post.excerpt}
