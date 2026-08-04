@@ -57,10 +57,7 @@ test("enforces metadata and chart size limits", () => {
     /caption exceeds 320 characters/u,
   )
   assert.throws(
-    () =>
-      parseBlogMermaidSource(
-        "%% title: Diagram\n%% caption: Caption\n",
-      ),
+    () => parseBlogMermaidSource("%% title: Diagram\n%% caption: Caption\n"),
     /between 1 and 4000 characters/u,
   )
   assert.throws(
