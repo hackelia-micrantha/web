@@ -10,9 +10,18 @@ type ArticleContract = {
   next?: string
   part: number
   previous?: string
+  relatedLink?: {
+    slug: string
+    title: string
+  }
   series: string
   slug: string
+  structuredData?: boolean
   tableName?: string
+  tableRow?: {
+    name: RegExp
+    text: string
+  }
   title: string
 }
 
@@ -25,6 +34,10 @@ const articles: ArticleContract[] = [
     next: "AI Pipelines Need Control Boundaries",
     callout: "Secure platform integration is not plumbing",
     imageAlt: /channels and source systems flowing through an API gateway/i,
+    relatedLink: {
+      slug: "ai-pipelines-need-control-boundaries",
+      title: "AI Pipelines Need Control Boundaries",
+    },
     finalText: "Integration layers deserve architectural attention",
   },
   {
@@ -36,7 +49,16 @@ const articles: ArticleContract[] = [
     next: "Software Layers Are Risk Boundaries",
     callout: "AI is not the system of record",
     imageAlt: /sources flowing through preprocessing/i,
+    relatedLink: {
+      slug: "software-layers-are-risk-boundaries",
+      title: "Software Layers Are Risk Boundaries",
+    },
+    structuredData: true,
     tableName: "AI pipeline failure modes",
+    tableRow: {
+      name: /Unsafe write-back/,
+      text: "Require approval gates and controlled adapter writes",
+    },
     finalText: "The practical goal is not to remove AI from the workflow",
   },
   {
@@ -46,6 +68,10 @@ const articles: ArticleContract[] = [
     part: 3,
     previous: "AI Pipelines Need Control Boundaries",
     imageAlt: /clients flowing into interface and application layers/i,
+    relatedLink: {
+      slug: "secure-platform-integration-is-not-plumbing",
+      title: "Secure Platform Integration Is Not Plumbing",
+    },
     finalText: "Software layers are not only a code-organization preference",
   },
   {
@@ -164,10 +190,33 @@ test.describe("canonical MDX articles", () => {
         ).toBeVisible()
       }
 
+      if (article.relatedLink) {
+        await expect(
+          content.getByRole("link", {
+            name: article.relatedLink.title,
+            exact: true,
+          }),
+        ).toHaveAttribute("href", `/blog/${article.relatedLink.slug}`)
+      }
+
       if (article.tableName) {
         await expect(
           content.getByRole("table", { name: article.tableName }),
         ).toBeVisible()
+      }
+
+      if (article.tableRow) {
+        await expect(
+          content.getByRole("row", { name: article.tableRow.name }),
+        ).toContainText(article.tableRow.text)
+      }
+
+      if (article.structuredData) {
+        const structuredData = await page
+          .locator('script[type="application/ld+json"]')
+          .textContent()
+
+        expect(structuredData).toContain('"@type":"Article"')
       }
 
       if (article.mermaidTitle) {
@@ -182,10 +231,13 @@ test.describe("canonical MDX articles", () => {
     })
   }
 
-  test("navigates through the governance series without document reloads", async ({
+  test("navigates through the governance series without replacing the document", async ({
     page,
   }) => {
     await page.goto(articlePath(articles[3]))
+    await page.evaluate(() => {
+      document.documentElement.dataset.navigationMarker = "preserved"
+    })
 
     for (const target of [articles[4], articles[5]]) {
       await page
@@ -196,6 +248,10 @@ test.describe("canonical MDX articles", () => {
         .click()
 
       await expect(page).toHaveURL(new RegExp(`${articlePath(target)}$`))
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-navigation-marker",
+        "preserved",
+      )
       await expect(
         page.getByRole("heading", { level: 1, name: target.title }),
       ).toBeVisible()
