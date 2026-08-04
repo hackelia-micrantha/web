@@ -82,6 +82,7 @@ export const Navigation = () => {
         <details data-mobile-navigation className="group relative sm:hidden">
           <summary
             aria-controls={MOBILE_NAVIGATION_ID}
+            aria-expanded="false"
             className="flex h-11 w-11 list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:bg-slate-50 [&::-webkit-details-marker]:hidden"
           >
             <span className="sr-only">Navigation menu</span>
