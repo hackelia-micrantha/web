@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 
 import { BlogArticleLayout } from "~/components/blog-article-layout"
 import { blogMdxComponents } from "~/components/blog-mdx-components"
@@ -66,13 +67,23 @@ function requiredSeries() {
 }
 
 const slug = requiredString("slug")
+const status = requiredString("status")
 const date = requiredString("date")
+const parsedDate = new Date(`${date}T00:00:00Z`)
 
 if (slug !== EXPECTED_SLUG) {
   throw new Error(`MDX slug ${slug} does not match route ${EXPECTED_SLUG}`)
 }
 
-if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date))) {
+if (!new Set(["draft", "published"]).has(status)) {
+  throw new Error(`Invalid MDX publication status: ${status}`)
+}
+
+if (
+  !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+  Number.isNaN(parsedDate.valueOf()) ||
+  parsedDate.toISOString().slice(0, 10) !== date
+) {
   throw new Error(`Invalid MDX publication date: ${date}`)
 }
 
@@ -105,23 +116,56 @@ for (const field of ["tags", "relatedSlugs", "series"] as const) {
   }
 }
 
-export const meta: MetaFunction = () =>
-  buildArticleMeta({
+type LoaderData = {
+  publication: {
+    date: string
+    status: string
+  }
+}
+
+export async function loader() {
+  const publicationDate = new Date().toISOString().slice(0, 10)
+
+  if (status !== "published" || date > publicationDate) {
+    throw new Response("Not Found", { status: 404 })
+  }
+
+  return json<LoaderData>({
+    publication: {
+      date,
+      status,
+    },
+  })
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) {
+    return [
+      { title: "Micrantha Software | Blog" },
+      { name: "robots", content: "noindex" },
+    ]
+  }
+
+  return buildArticleMeta({
     title: post.title,
     description: post.description,
     path: `/blog/${post.slug}`,
     publishedTime: `${post.date}T00:00:00Z`,
     tags: post.tags,
   })
+}
 
 export const handle = {
-  structuredData: buildArticleStructuredData({
-    title: post.title,
-    description: post.description,
-    path: `/blog/${post.slug}`,
-    datePublished: `${post.date}T00:00:00Z`,
-    keywords: post.tags,
-  }),
+  structuredData: (data: LoaderData | undefined) =>
+    data
+      ? buildArticleStructuredData({
+          title: post.title,
+          description: post.description,
+          path: `/blog/${post.slug}`,
+          datePublished: `${post.date}T00:00:00Z`,
+          keywords: post.tags,
+        })
+      : null,
 }
 
 export default function AiPipelinesNeedControlBoundariesRoute() {
