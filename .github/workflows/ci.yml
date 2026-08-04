@@ -62,6 +62,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Test MDX browser chunk isolation
+        run: yarn test:mdx:build
+
       - name: Verify pinned Wrangler
         run: yarn wrangler --version
 
