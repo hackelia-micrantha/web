@@ -2,27 +2,6 @@ const CALENDAR_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 
 export const BLOG_PUBLICATION_STATUSES = Object.freeze(["draft", "published"])
 
-export const blogPublicationManifest = Object.freeze({
-  "governance-native-engineering-control-plane": Object.freeze({
-    status: "published",
-  }),
-  "replayability-is-a-governance-problem": Object.freeze({
-    status: "published",
-  }),
-  "recursive-governance-and-agent-workflows": Object.freeze({
-    status: "published",
-  }),
-  "secure-platform-integration-is-not-plumbing": Object.freeze({
-    status: "published",
-  }),
-  "ai-pipelines-need-control-boundaries": Object.freeze({
-    status: "published",
-  }),
-  "software-layers-are-risk-boundaries": Object.freeze({
-    status: "published",
-  }),
-})
-
 export function isCalendarDate(value) {
   if (typeof value !== "string" || !CALENDAR_DATE_PATTERN.test(value)) {
     return false
@@ -31,8 +10,7 @@ export function isCalendarDate(value) {
   const parsed = new Date(`${value}T00:00:00Z`)
 
   return (
-    !Number.isNaN(parsed.valueOf()) &&
-    parsed.toISOString().slice(0, 10) === value
+    !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value
   )
 }
 
@@ -46,22 +24,16 @@ export function resolvePublicationCutoff(value, now = new Date()) {
   return cutoff
 }
 
-export function getBlogPublicationStatus(
-  slug,
-  manifest = blogPublicationManifest,
-) {
-  return manifest[slug]?.status ?? null
+export function getBlogPublicationStatus(post) {
+  return post?.status ?? null
 }
 
-export function isPublishedBlogPost(post, manifest = blogPublicationManifest) {
-  return getBlogPublicationStatus(post.slug, manifest) === "published"
+export function isPublishedBlogPost(post) {
+  return getBlogPublicationStatus(post) === "published"
 }
 
-export function filterPublishedBlogPosts(
-  posts,
-  manifest = blogPublicationManifest,
-) {
-  return posts.filter((post) => isPublishedBlogPost(post, manifest))
+export function filterPublishedBlogPosts(posts) {
+  return posts.filter(isPublishedBlogPost)
 }
 
 function assertKnownStatus(status, context) {
@@ -70,7 +42,7 @@ function assertKnownStatus(status, context) {
   }
 }
 
-function assertRoutableRecord(post, manifest, cutoff, context) {
+function assertRoutableRecord(post, cutoff, context) {
   if (!post || typeof post.slug !== "string" || post.slug.trim() === "") {
     throw new Error(`${context} must have a non-empty slug`)
   }
@@ -79,7 +51,7 @@ function assertRoutableRecord(post, manifest, cutoff, context) {
     throw new Error(`${context} must have a valid YYYY-MM-DD date`)
   }
 
-  const status = getBlogPublicationStatus(post.slug, manifest)
+  const status = getBlogPublicationStatus(post)
 
   if (status === null) {
     throw new Error(`${context} is missing publication metadata`)
@@ -100,10 +72,7 @@ function assertRoutableRecord(post, manifest, cutoff, context) {
 
 export function assertRoutableBlogPublication(
   posts,
-  {
-    manifest = blogPublicationManifest,
-    cutoff = resolvePublicationCutoff(),
-  } = {},
+  { cutoff = resolvePublicationCutoff() } = {},
 ) {
   const validatedCutoff = resolvePublicationCutoff(cutoff)
   const routableSlugs = new Set()
@@ -115,18 +84,8 @@ export function assertRoutableBlogPublication(
       throw new Error(`Duplicate routable blog slug ${post.slug}`)
     }
 
-    assertRoutableRecord(post, manifest, validatedCutoff, context)
+    assertRoutableRecord(post, validatedCutoff, context)
     routableSlugs.add(post.slug)
-  }
-
-  for (const [slug, publication] of Object.entries(manifest)) {
-    assertKnownStatus(publication?.status, `Publication entry ${slug}`)
-
-    if (publication.status === "published" && !routableSlugs.has(slug)) {
-      throw new Error(
-        `Published publication entry ${slug} is missing routable metadata`,
-      )
-    }
   }
 
   return posts
@@ -134,23 +93,15 @@ export function assertRoutableBlogPublication(
 
 export function assertRoutableMdxPublication(
   post,
-  {
-    manifest = blogPublicationManifest,
-    cutoff = resolvePublicationCutoff(),
-  } = {},
+  { cutoff = resolvePublicationCutoff() } = {},
 ) {
   const validatedCutoff = resolvePublicationCutoff(cutoff)
 
   assertRoutableRecord(
     post,
-    manifest,
     validatedCutoff,
     `MDX route ${post?.slug ?? ""}`,
   )
-
-  if (post.status !== "published") {
-    throw new Error(`MDX route ${post.slug} must declare status published`)
-  }
 
   return post
 }
