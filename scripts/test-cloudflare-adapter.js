@@ -109,6 +109,14 @@ assertDocumentHeaders(methodNotAllowed.response, methodNotAllowed.body, {
   requireNonce: false,
 })
 
+const disabledErrorContract = await read("/runtime-contract/error")
+assert.equal(disabledErrorContract.response.status, 404)
+assert.match(disabledErrorContract.body, /404|Not Found/i)
+assertDocumentHeaders(
+  disabledErrorContract.response,
+  disabledErrorContract.body,
+)
+
 const missing = await read("/this-route-does-not-exist")
 assert.equal(missing.response.status, 404)
 assert.match(missing.body, /404|Not Found/i)
