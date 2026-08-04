@@ -6,7 +6,8 @@ const integrationArticlePath =
 const softwareLayersArticlePath = "/blog/software-layers-are-risk-boundaries"
 const governanceArticlePath =
   "/blog/governance-native-engineering-control-plane"
-const legacyArticlePath = "/blog/replayability-is-a-governance-problem"
+const replayabilityArticlePath = "/blog/replayability-is-a-governance-problem"
+const legacyArticlePath = "/blog/recursive-governance-and-agent-workflows"
 
 const unpublishedArticlePaths = [
   "/blog/draft-publication-fixture",
@@ -212,7 +213,7 @@ test.describe("MDX articles", () => {
       seriesNavigation.getByRole("link", {
         name: "Next: Replayability Is a Governance Problem",
       }),
-    ).toHaveAttribute("href", legacyArticlePath)
+    ).toHaveAttribute("href", replayabilityArticlePath)
     await expect(
       seriesNavigation.getByRole("link", { name: /^Previous:/ }),
     ).toHaveCount(0)
@@ -235,6 +236,57 @@ test.describe("MDX articles", () => {
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       "https://micrantha.com/blog/governance-native-engineering-control-plane",
+    )
+  })
+
+  test("renders replayability article and Mermaid from canonical MDX", async ({
+    page,
+  }) => {
+    await page.goto(replayabilityArticlePath)
+
+    await expect(page).toHaveTitle(
+      "Micrantha Software | Replayability Is a Governance Problem",
+    )
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Replayability Is a Governance Problem",
+      }),
+    ).toBeVisible()
+    await expect(page.getByText("Part 2 of 3", { exact: true })).toBeVisible()
+
+    const seriesNavigation = page.getByRole("navigation", {
+      name: "Governance-Native Engineering series navigation",
+    })
+
+    await expect(
+      seriesNavigation.getByRole("link", {
+        name: "Previous: Governance-Native Engineering and the AI Control Plane",
+      }),
+    ).toHaveAttribute("href", governanceArticlePath)
+    await expect(
+      seriesNavigation.getByRole("link", {
+        name: "Next: Recursive Governance and Agent Workflows",
+      }),
+    ).toHaveAttribute("href", legacyArticlePath)
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+    const diagram = mdxContent.locator("[data-mermaid-diagram]")
+
+    await expect(mdxContent.locator(".article-callout")).toContainText(
+      "Replayability in AI-native systems is not just reproducibility engineering",
+    )
+    await expect(diagram).toContainText("Replayability as evidence lifecycle")
+    await expect(diagram).toHaveAttribute("data-mermaid-status", "rendered", {
+      timeout: 15_000,
+    })
+    await expect(diagram.locator("[data-mermaid-rendered] svg")).toBeVisible()
+    await expect(mdxContent).toContainText(
+      "The goal is bounded explainability and attributable execution",
+    )
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://micrantha.com/blog/replayability-is-a-governance-problem",
     )
   })
 
@@ -269,7 +321,7 @@ test("remaining legacy TSX article continues through the dynamic route", async (
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Replayability Is a Governance Problem",
+      name: "Recursive Governance and Agent Workflows",
     }),
   ).toBeVisible()
   await expect(page.locator('[data-content-source="mdx"]')).toHaveCount(0)
@@ -395,6 +447,31 @@ test.describe("MDX articles without JavaScript", () => {
     )
     await expect(mdxContent).toContainText(
       "AI-native engineering therefore becomes a systems-governance discipline",
+    )
+  })
+
+  test("returns replayability Mermaid source and complete content", async ({
+    page,
+  }) => {
+    const response = await page.goto(replayabilityArticlePath)
+
+    expect(response?.status()).toBe(200)
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Replayability Is a Governance Problem",
+      }),
+    ).toBeVisible()
+
+    const mdxContent = page.locator('[data-content-source="mdx"]')
+    const diagram = mdxContent.locator("[data-mermaid-diagram]")
+
+    await expect(diagram).toHaveAttribute("data-mermaid-status", "source")
+    await expect(diagram.locator("[data-mermaid-source]")).toContainText(
+      "Replay claim still valid?",
+    )
+    await expect(mdxContent).toContainText(
+      "The goal is bounded explainability and attributable execution",
     )
   })
 })
