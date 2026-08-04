@@ -308,12 +308,18 @@ try {
   const redirectResponse = await fetchRuntime("/runtime-contract/redirect")
   assert.equal(redirectResponse.status, 302)
   assert.equal(redirectResponse.headers.get("location"), articlePath)
-  assert.equal(redirectResponse.headers.get("cache-control"), "private, no-store")
+  assert.equal(
+    redirectResponse.headers.get("cache-control"),
+    "private, no-store",
+  )
   await redirectResponse.body?.cancel()
 
   const controlledError = await readRuntime("/runtime-contract/error")
   assert.equal(controlledError.response.status, 500)
-  assert.match(controlledError.body, /Unexpected Server Error|Internal Server Error/i)
+  assert.match(
+    controlledError.body,
+    /Unexpected Server Error|Internal Server Error/i,
+  )
   assertDocumentHeaders(controlledError.response, controlledError.body)
 
   const missing = await readRuntime("/this-route-does-not-exist")
