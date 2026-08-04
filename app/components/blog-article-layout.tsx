@@ -2,8 +2,8 @@ import type { ReactNode } from "react"
 import { Link } from "@remix-run/react"
 
 import { PageTitle } from "~/components"
+import { formatBlogDate } from "~/content/blog-format"
 import type { BlogPostMetadata } from "~/content/blog-mdx"
-import { formatBlogDate } from "~/content/blog"
 
 export type BlogArticleSeriesNavigation = {
   series: {
