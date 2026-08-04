@@ -29,11 +29,25 @@ jobs:
       - name: Build browser assets
         run: yarn build
 
-      - name: Report browser build structure
+      - name: Create focused inspection report
         run: |
-          echo '=== public/build files ==='
-          find public/build -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
-          echo '=== manifest candidates ==='
-          find public/build build -type f \( -iname '*manifest*' -o -iname '*.js' \) -maxdepth 3 -print | sort
-          echo '=== route references ==='
-          grep -R -n -E 'ai-pipelines-need-control-boundaries|software-layers-are-risk-boundaries' public/build build || true
+          {
+            echo '=== browser files ==='
+            find public/build -type f -printf '%p %s bytes\n' | sort
+            echo '=== manifests ==='
+            find public/build build -maxdepth 4 -type f -iname '*manifest*' -print | sort
+            echo '=== route slug references ==='
+            grep -R -n -E 'ai-pipelines-need-control-boundaries|software-layers-are-risk-boundaries' public/build build || true
+            echo '=== AI body marker files ==='
+            grep -R -l -F 'AI is not the system of record' public/build build || true
+            echo '=== software layers body marker files ==='
+            grep -R -l -F 'Software layers are not only a code-organization preference' public/build build || true
+          } > blog-build-inspection.txt
+
+      - name: Upload focused inspection report
+        uses: actions/upload-artifact@v4
+        with:
+          name: blog-build-inspection-${{ github.run_id }}
+          path: blog-build-inspection.txt
+          if-no-files-found: error
+          retention-days: 1
