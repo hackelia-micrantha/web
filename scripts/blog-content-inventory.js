@@ -19,7 +19,7 @@ const registryDefinitions = [
 const seriesPath = "app/content/blog-series.ts"
 const blogTypePath = "app/content/blog.tsx"
 const siteOrigin = "https://micrantha.com"
-const staticPathsBeforeBlogContent = ["/", "/solutions", "/blog"]
+const staticPathsBeforeBlogContent = ["/", "/solutions"]
 const staticPathsAfterBlogContent = [
   "/laboratory",
   "/compost",
@@ -74,6 +74,7 @@ function literalText(node, context) {
     ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node),
     `${context} must be a string literal`,
   )
+  assert.notEqual(node.text.trim(), "", `${context} must not be empty`)
 
   return node.text
 }
@@ -86,8 +87,27 @@ function stringProperty(object, name, context) {
     `${context} is missing ${name}`,
   )
 
-  const value = literalText(property.initializer, `${context}.${name}`)
-  assert.notEqual(value.trim(), "", `${context}.${name} must not be empty`)
+  return literalText(property.initializer, `${context}.${name}`)
+}
+
+function positiveIntegerProperty(object, name, context) {
+  const property = findProperty(object, name)
+
+  assert.ok(
+    property && ts.isPropertyAssignment(property),
+    `${context} is missing ${name}`,
+  )
+  assert.ok(
+    ts.isNumericLiteral(property.initializer),
+    `${context}.${name} must be a numeric literal`,
+  )
+
+  const value = Number(property.initializer.text)
+  assert.ok(
+    Number.isInteger(value) && value > 0,
+    `${context}.${name} must be a positive integer`,
+  )
+
   return value
 }
 
@@ -106,6 +126,29 @@ function stringArrayProperty(object, name, context) {
   return property.initializer.elements.map((element, index) =>
     literalText(element, `${context}.${name}[${index}]`),
   )
+}
+
+function optionalSeriesProperty(object, context) {
+  const property = findProperty(object, "series")
+
+  if (!property) {
+    return null
+  }
+
+  assert.ok(
+    ts.isPropertyAssignment(property) &&
+      ts.isObjectLiteralExpression(property.initializer),
+    `${context}.series must be an object literal`,
+  )
+
+  return {
+    slug: stringProperty(property.initializer, "slug", `${context}.series`),
+    order: positiveIntegerProperty(
+      property.initializer,
+      "order",
+      `${context}.series`,
+    ),
+  }
 }
 
 function findArrayDeclaration(sourceFile, declarationName, relativePath) {
@@ -194,6 +237,7 @@ async function readPostRegistry(definition) {
       date,
       tags,
       relatedSlugs,
+      series: optionalSeriesProperty(element, context),
       hasContent: Boolean(findProperty(element, "Content")),
       source: definition.path,
     }
@@ -217,14 +261,10 @@ async function readSeriesDefinitions() {
       `${context} must be an object literal`,
     )
 
-    const postSlugs = stringArrayProperty(element, "postSlugs", context)
-    assertUnique(postSlugs, `${context}.postSlugs`)
-
     return {
       slug: stringProperty(element, "slug", context),
       title: stringProperty(element, "title", context),
       description: stringProperty(element, "description", context),
-      postSlugs,
     }
   })
 }
@@ -292,28 +332,45 @@ export async function loadBlogContentInventory() {
     "Blog series definitions",
   )
 
-  const seriesMembership = new Map()
+  const seriesBySlug = new Map(
+    series.map((definition) => [definition.slug, definition]),
+  )
+  const seriesPostsBySlug = new Map(
+    series.map((definition) => [definition.slug, []]),
+  )
+
+  for (const post of registryPosts) {
+    if (!post.series) continue
+
+    assert.ok(
+      seriesBySlug.has(post.series.slug),
+      `Post ${post.slug} references unknown series ${post.series.slug}`,
+    )
+    seriesPostsBySlug.get(post.series.slug).push(post)
+  }
 
   for (const definition of series) {
-    for (const slug of definition.postSlugs) {
-      assert.ok(
-        postsBySlug.has(slug),
-        `Series ${definition.slug} references unknown post ${slug}`,
-      )
-      assert.equal(
-        seriesMembership.has(slug),
-        false,
-        `Post ${slug} belongs to multiple series`,
-      )
-      seriesMembership.set(slug, definition.slug)
-    }
+    const posts = seriesPostsBySlug.get(definition.slug)
+    assert.ok(posts, `Missing derived series collection for ${definition.slug}`)
+    assert.ok(posts.length > 0, `Series ${definition.slug} has no posts`)
+
+    posts.sort((left, right) => left.series.order - right.series.order)
+
+    const orders = posts.map((post) => post.series.order)
+    assertUnique(orders, `Series ${definition.slug} order values`)
+    assert.deepEqual(
+      orders,
+      posts.map((_, index) => index + 1),
+      `Series ${definition.slug} order values must be contiguous from 1`,
+    )
   }
 
   return {
     posts: registryPosts,
     postsBySlug,
     series,
-    seriesMembership,
+    seriesBySlug,
+    seriesPostsBySlug,
   }
 }
 
@@ -348,24 +405,16 @@ function renderUrl(pathname, lastmod) {
 }
 
 export function buildSitemapXml(inventory) {
-  const entries = staticPathsBeforeBlogContent.slice(0, 2).map((pathname) => ({
-    pathname,
-  }))
+  const entries = staticPathsBeforeBlogContent.map((pathname) => ({ pathname }))
 
   entries.push({
     pathname: "/blog",
     lastmod: latestDate(inventory.posts),
   })
 
-  const seriesPostSlugs = new Set()
-
   for (const definition of inventory.series) {
-    const posts = definition.postSlugs.map((slug) => {
-      const post = inventory.postsBySlug.get(slug)
-      assert.ok(post, `Missing post ${slug} while building sitemap`)
-      seriesPostSlugs.add(slug)
-      return post
-    })
+    const posts = inventory.seriesPostsBySlug.get(definition.slug)
+    assert.ok(posts, `Missing posts for series ${definition.slug}`)
 
     entries.push({
       pathname: `/blog/series/${definition.slug}`,
@@ -381,7 +430,7 @@ export function buildSitemapXml(inventory) {
   }
 
   for (const post of inventory.posts) {
-    if (seriesPostSlugs.has(post.slug)) continue
+    if (post.series) continue
     entries.push({
       pathname: `/blog/${post.slug}`,
       lastmod: post.date,
