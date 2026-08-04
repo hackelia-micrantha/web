@@ -77,9 +77,7 @@ for (const documentBudget of runtimeBudgets.documents) {
     const documentBody = await documentResponse?.body()
     expect(documentBody, "expected a document response body").toBeTruthy()
     const documentBytes = documentBody?.byteLength ?? 0
-    expect(documentBytes).toBeLessThanOrEqual(
-      documentBudget.uncompressedBytes,
-    )
+    expect(documentBytes).toBeLessThanOrEqual(documentBudget.uncompressedBytes)
 
     const externalTransferBytes = (
       await Promise.all(
