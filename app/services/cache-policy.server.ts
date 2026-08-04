@@ -18,6 +18,10 @@ const CACHE_MATRIX: CacheRule[] = [
 ]
 
 export function getDocumentCacheControl(pathname: string): string {
+  if (/^\/runtime-contract(?:\/|$)/.test(pathname)) {
+    return "private, no-store"
+  }
+
   const rule = CACHE_MATRIX.find((entry) => entry.pattern.test(pathname)) ?? {
     ttlSeconds: DEFAULT_TTL_SECONDS,
     staleSeconds: DEFAULT_STALE_SECONDS,
