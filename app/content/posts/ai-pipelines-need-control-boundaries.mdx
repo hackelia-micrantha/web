@@ -1,132 +1,91 @@
 ---
 slug: ai-pipelines-need-control-boundaries
 title: AI Pipelines Need Control Boundaries
-description: Why AI-assisted workflows need explicit state ownership, validation gates, and a deterministic system of record.
-date: 2026-03-22
-excerpt: AI is useful inside a pipeline, but it should not own truth. Reliable systems keep AI behind explicit inputs, validation, and deterministic write boundaries.
+description: Enterprise AI should be treated as an untrusted reasoning component inside a governed integration path.
+date: 2026-04-24
+excerpt: Enterprise AI becomes safer and more useful when normalization, authorization, validation, and write-back controls are explicit around it.
 tags:
-  - ai
-  - architecture
-  - governance
-  - pipelines
+  - architecture-notes
+  - ai-governance
+  - workflow-validation
+  - secure-integration
 relatedSlugs:
   - secure-platform-integration-is-not-plumbing
   - software-layers-are-risk-boundaries
+series:
+  slug: architecture-control-boundaries
+  title: Architecture Control Boundaries
+  order: 2
 ---
 
-## AI is a reasoning component, not the system of record
+## Start with the right mental model
 
-AI can classify, summarize, recommend, transform, and draft. Those are useful capabilities, but none of them make a model a safe owner of durable state.
-
-A dependable AI-assisted workflow separates four responsibilities:
-
-1. **Input ownership** — authoritative systems provide bounded, versioned inputs.
-2. **Reasoning** — the model proposes an interpretation or candidate change.
-3. **Validation** — deterministic policy and schema checks decide whether the proposal is admissible.
-4. **Commit** — an owned service writes the accepted result and records evidence.
+Enterprise AI work becomes risky when the model is treated like an authoritative component instead of a fallible part of a larger delivery path.
 
 <Callout>
   <p>
-    AI is not the system of record. AI is an untrusted reasoning component inside
-    a governed delivery pipeline.
+    AI is not the system of record. AI is an untrusted reasoning component
+    operating inside a governed integration path.
   </p>
 </Callout>
 
-Without that boundary, model output quietly becomes application state. A plausible response can then overwrite durable truth without provenance, replayability, or a clear recovery path.
+That framing changes the design. Prompts, tool access, retrieval, outputs, and write-back actions all need control boundaries of their own.
 
-## A bounded pipeline
+## Pre-processing
 
-A minimal control boundary looks like this:
+Input control starts before a model sees anything. Raw enterprise data usually needs normalization to reduce ambiguity, redaction to remove material the model does not need, enrichment to provide stable business context, and provenance markers so downstream reviewers can see what sources shaped the result.
+
+- Normalize structure and terminology so prompts do not depend on unstable source formatting.
+- Redact sensitive fields when they are not necessary for the reasoning task.
+- Enrich with identifiers, policy context, and known workflow state.
+- Attach provenance so outputs can be inspected against real evidence.
+
+## MCP and tool boundary
+
+Tool access should be scoped like any other privileged interface. Exposing a broad tool surface because a model might find it useful is the wrong default. The model should receive only the tools, methods, and data slices required for the current workflow step.
+
+- Scope access to the task and actor, not the whole platform.
+- Require authorization at the tool boundary, not only in prompts.
+- Audit tool invocations and carry the calling workflow identity.
+- Treat MCP or similar tool channels as integration surfaces subject to the same control design as any other API.
+
+## AI execution
 
 <Figure
-  title="AI pipeline control boundary"
-  caption="Authoritative inputs flow through an untrusted reasoning step, deterministic validation, and an owned commit boundary."
-  src="/img/architecture/ai-pipeline-boundary.svg"
-  alt="Flow diagram from source systems through an AI reasoning component, validation gate, and deterministic system of record"
+  title="Governed AI pipeline"
+  caption="AI lives inside a controlled path with explicit checks before and after reasoning."
+  src="/img/blog/ai_pipeline_diagram.svg"
+  alt="Diagram showing sources flowing through preprocessing, MCP boundary, AI layer, post-processing, and finally to controlled targets."
+  narrow
 />
 
-The model never receives ambient authority to write directly. It produces a proposal with enough context for deterministic checks and human review where required.
+Inside the execution zone, retrieval, model or agent selection, and tool calls are still just intermediate reasoning steps. They are useful, but they should not be confused with final system action. There needs to be a visible boundary between the reasoning process and the transaction that changes a real workflow.
 
-| Stage | Owns | Must not own |
+This is where a layered architecture matters. The same separation described in <PostLink slug="software-layers-are-risk-boundaries">Software Layers Are Risk Boundaries</PostLink> keeps AI-specific logic from leaking directly into systems of record.
+
+## Post-processing and approval
+
+Before anything is written back, the result needs to be validated, scored, compared with expected structures, and, where necessary, held for approval. This is the difference between an assistant and an uncontrolled actor.
+
+- Validate schema, policy requirements, and required fields.
+- Score confidence or rule conformance using deterministic checks rather than model self-assessment alone.
+- Diff proposed changes against current records so reviewers can see the exact effect.
+- Require explicit approval when the action changes regulated workflow, status, or customer-visible records.
+
+## Controlled write-back
+
+The write-back step should look like a normal governed integration: authorized actor, validated payload, logged decision, and a durable trace of what was changed. If that control surface does not exist, the pipeline is not ready for enterprise use.
+
+## Threat and failure modes
+
+| Failure mode | What usually causes it | Control response |
 | --- | --- | --- |
-| Source adapter | Input retrieval, normalization, source version | Business decisions |
-| AI reasoning | Candidate interpretation or transformation | Durable state, credentials, policy |
-| Validation gate | Schema, policy, authorization, confidence thresholds | Open-ended reasoning |
-| Commit service | Idempotent writes, evidence, audit trail | Hidden model behavior |
+| Over-broad tool access | Convenience-driven integration and prompt-only policy | Scope tools by workflow, enforce authorization, audit calls |
+| Unverifiable output | Missing provenance and no deterministic validation | Attach sources, run schema checks, retain review traces |
+| Unsafe write-back | Model output sent directly to systems of record | Require approval gates and controlled adapter writes |
+| Prompt leakage of sensitive data | Skipping normalization and redaction upstream | Pre-process inputs and minimize exposed fields |
+| Workflow drift | AI-specific logic embedded in every consumer | Keep orchestration in an application boundary |
 
-## Make uncertainty explicit
+## Conclusion
 
-A model response should be treated as a typed proposal, not free-form truth. Useful output contracts include:
-
-- the requested operation;
-- source identifiers and versions;
-- a confidence or ambiguity signal;
-- cited evidence;
-- validation warnings;
-- an idempotency key;
-- the policy version used for evaluation.
-
-The pipeline can reject incomplete or stale proposals before they reach a write boundary. This is easier to reason about than asking downstream code to infer whether arbitrary prose is safe.
-
-## Preserve deterministic ownership
-
-The service that owns a domain should remain the only component allowed to commit its state. An AI workflow can request a change through the same public command surface used by other clients, but it should not bypass that surface.
-
-That rule preserves:
-
-- authorization and tenancy checks;
-- invariants and transactions;
-- idempotency;
-- audit and provenance;
-- retries and compensation;
-- operational observability.
-
-This is the same principle described in <PostLink slug="secure-platform-integration-is-not-plumbing">Secure Platform Integration Is Not Plumbing</PostLink>: integration code is part of the trust boundary, not incidental glue.
-
-## Fail closed at the boundary
-
-A bounded workflow needs explicit outcomes. For example:
-
-- **accepted** — validation passed and the commit completed;
-- **rejected** — policy or schema validation failed;
-- **review required** — ambiguity or impact crossed a configured threshold;
-- **stale** — source versions changed before commit;
-- **indeterminate** — dependencies failed and no write occurred.
-
-A timeout or malformed model response must not be interpreted as approval. Missing evidence must not silently lower the standard of proof.
-
-## Record enough evidence to replay the decision
-
-The operational record should include the input references, model and prompt identifiers, normalized proposal, validation results, approver decisions, commit result, and resulting state version.
-
-That record does not guarantee that a nondeterministic model will produce identical text later. It does make the delivered decision explainable and allows the deterministic parts of the pipeline to be replayed.
-
-## Keep the boundary visible
-
-AI pipelines become risky when their authority is hidden inside a convenience function, agent tool, or background task. The architecture should make the transition from suggestion to durable effect visible in code, telemetry, and review.
-
-<Callout>
-  <p>
-    The important boundary is not where the model is called. It is where a model
-    proposal becomes an authorized, durable effect.
-  </p>
-</Callout>
-
-Layering helps expose that transition. <PostLink slug="software-layers-are-risk-boundaries">Software Layers Are Risk Boundaries</PostLink> describes why each layer should narrow authority rather than merely rearrange code.
-
-## Practical review questions
-
-Before shipping an AI-assisted workflow, ask:
-
-- Which system owns each input?
-- What exact output schema can the model produce?
-- Which checks are deterministic?
-- What authority does the model process possess?
-- Who or what can approve a high-impact action?
-- Which service owns the final write?
-- Can retries create duplicate effects?
-- What evidence is retained?
-- Can operators distinguish rejection, failure, and uncertainty?
-- Can the workflow be disabled without corrupting core state?
-
-When those answers are explicit, AI remains a useful component. When they are implicit, the model becomes an accidental control plane.
+The practical goal is not to remove AI from the workflow. It is to put AI in a governed part of the workflow without letting it become the implicit owner of security, state, or business truth. Once the control boundaries are explicit, enterprise AI becomes easier to test, review, and replace.
