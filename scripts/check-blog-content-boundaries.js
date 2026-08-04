@@ -8,9 +8,11 @@ import {
   loadBlogContentInventory,
   repositoryRoot,
 } from "./blog-content-inventory.js"
+import { validateBlogMdxSource } from "./blog-mdx-boundary.js"
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
-const sitemapPath = path.join(repositoryRoot, "public/sitemap.xml")
+const publicDirectory = path.join(repositoryRoot, "public")
+const sitemapPath = path.join(publicDirectory, "sitemap.xml")
 
 async function pathExists(filePath) {
   try {
@@ -22,15 +24,16 @@ async function pathExists(filePath) {
   }
 }
 
-async function discoverMdxSlugs() {
+async function discoverMdxRoutes() {
   const entries = await readdir(routesDirectory, { withFileTypes: true })
-  const slugs = []
+  const routes = []
 
   for (const entry of entries) {
     if (!entry.isDirectory() || !entry.name.startsWith("blog.")) continue
 
     const routeDirectory = path.join(routesDirectory, entry.name)
-    const hasMdx = await pathExists(path.join(routeDirectory, "content.mdx"))
+    const contentPath = path.join(routeDirectory, "content.mdx")
+    const hasMdx = await pathExists(contentPath)
 
     if (!hasMdx) continue
 
@@ -40,25 +43,70 @@ async function discoverMdxSlugs() {
       `MDX route ${entry.name} is missing route.tsx`,
     )
 
-    slugs.push(entry.name.slice("blog.".length))
+    routes.push({
+      contentPath,
+      slug: entry.name.slice("blog.".length),
+    })
   }
 
   assert.equal(
-    new Set(slugs).size,
-    slugs.length,
+    new Set(routes.map((route) => route.slug)).size,
+    routes.length,
     "Static MDX routes contain duplicate slugs",
   )
 
-  return slugs.sort()
+  return routes.sort((left, right) => left.slug.localeCompare(right.slug))
+}
+
+async function validateMdxRoute(route, inventory) {
+  const relativePath = path.relative(repositoryRoot, route.contentPath)
+  const source = await readFile(route.contentPath, "utf8")
+  const report = await validateBlogMdxSource({
+    source,
+    filePath: relativePath,
+  })
+
+  for (const linkedSlug of report.postLinks) {
+    assert.notEqual(
+      linkedSlug,
+      route.slug,
+      `${relativePath} contains a self-referencing PostLink`,
+    )
+    assert.ok(
+      inventory.postsBySlug.has(linkedSlug),
+      `${relativePath} references unknown PostLink slug ${linkedSlug}`,
+    )
+  }
+
+  for (const assetPath of report.localAssets) {
+    const filePath = path.resolve(publicDirectory, assetPath.slice(1))
+
+    assert.ok(
+      filePath.startsWith(`${publicDirectory}${path.sep}`),
+      `${relativePath} resolves outside public/: ${assetPath}`,
+    )
+    assert.equal(
+      await pathExists(filePath),
+      true,
+      `${relativePath} references missing local asset ${assetPath}`,
+    )
+  }
+
+  return report
 }
 
 await assertBlogPostContentOptional()
 
-const [mdxSlugs, inventory, currentSitemap] = await Promise.all([
-  discoverMdxSlugs(),
+const [mdxRoutes, inventory, currentSitemap] = await Promise.all([
+  discoverMdxRoutes(),
   loadBlogContentInventory(),
   readFile(sitemapPath, "utf8"),
 ])
+
+const mdxSlugs = mdxRoutes.map((route) => route.slug)
+const mdxReports = await Promise.all(
+  mdxRoutes.map((route) => validateMdxRoute(route, inventory)),
+)
 
 for (const slug of mdxSlugs) {
   const post = inventory.postsBySlug.get(slug)
@@ -89,8 +137,13 @@ assert.equal(
   "public/sitemap.xml is stale; run node scripts/generate-sitemap.js",
 )
 
+const componentCount = mdxReports.reduce(
+  (count, report) => count + report.components.length,
+  0,
+)
+
 console.log(
   `Blog content boundaries passed: ${inventory.posts.length} post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${
     inventory.posts.length - mdxSlugs.length
-  } legacy TSX route(s), sitemap current`,
+  } legacy TSX route(s), ${componentCount} approved component type(s), sitemap current`,
 )
