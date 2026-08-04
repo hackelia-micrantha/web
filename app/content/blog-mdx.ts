@@ -1,3 +1,9 @@
+export type BlogSeriesMetadata = {
+  slug: string
+  title: string
+  order: number
+}
+
 export type BlogPostMetadata = {
   slug: string
   title: string
@@ -6,6 +12,7 @@ export type BlogPostMetadata = {
   excerpt: string
   tags: string[]
   relatedSlugs: string[]
+  series?: BlogSeriesMetadata
 }
 
 type UnknownRecord = Record<string, unknown>
@@ -40,6 +47,26 @@ function readStringArray(record: UnknownRecord, key: string): string[] {
   return [...value]
 }
 
+function readSeries(record: UnknownRecord): BlogSeriesMetadata | undefined {
+  const value = record.series
+
+  if (value === undefined) return undefined
+
+  assertRecord(value, "MDX frontmatter series")
+
+  const order = value.order
+
+  if (!Number.isInteger(order) || Number(order) <= 0) {
+    throw new Error("MDX frontmatter series.order must be a positive integer")
+  }
+
+  return {
+    slug: readString(value, "slug"),
+    title: readString(value, "title"),
+    order: Number(order),
+  }
+}
+
 export function defineBlogMdxPost(
   attributes: unknown,
   expectedSlug: string,
@@ -54,6 +81,7 @@ export function defineBlogMdxPost(
     excerpt: readString(attributes, "excerpt"),
     tags: readStringArray(attributes, "tags"),
     relatedSlugs: readStringArray(attributes, "relatedSlugs"),
+    series: readSeries(attributes),
   }
 
   if (post.slug !== expectedSlug) {
