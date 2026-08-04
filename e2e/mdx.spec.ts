@@ -148,9 +148,9 @@ async function assertSeriesNavigation(page: Page, article: ArticleContract) {
       navigation.getByRole("link", { name: `Next: ${article.next}` }),
     ).toHaveAttribute("href", articlePath(articleByTitle(article.next)))
   } else {
-    await expect(navigation.getByRole("link", { name: /^Next:/ })).toHaveCount(
-      0,
-    )
+    await expect(
+      navigation.getByRole("link", { name: /^Next:/ }),
+    ).toHaveCount(0)
   }
 }
 
