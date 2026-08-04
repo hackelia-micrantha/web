@@ -91,7 +91,10 @@ function parseRegistry(source) {
   let postsArray = null
 
   for (const statement of sourceFile.statements) {
-    if (ts.isTypeAliasDeclaration(statement) && statement.name.text === "BlogPost") {
+    if (
+      ts.isTypeAliasDeclaration(statement) &&
+      statement.name.text === "BlogPost"
+    ) {
       assert.ok(
         ts.isTypeLiteralNode(statement.type),
         "BlogPost must remain a type literal",
