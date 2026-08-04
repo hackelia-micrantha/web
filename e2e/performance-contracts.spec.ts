@@ -1,4 +1,6 @@
 import { readFileSync } from "node:fs"
+import { mkdir, writeFile } from "node:fs/promises"
+import path from "node:path"
 
 import { expect, test } from "@playwright/test"
 import type { Response } from "@playwright/test"
@@ -24,6 +26,16 @@ const performanceBudgets = JSON.parse(
   ),
 ) as { browserRuntime: BrowserRuntimeBudgets }
 const runtimeBudgets = performanceBudgets.browserRuntime
+const evidenceDirectory = path.join(process.cwd(), ".performance/browser")
+
+function evidenceFilename(projectName: string, pathname: string) {
+  const routeName =
+    pathname === "/"
+      ? "root"
+      : pathname.replace(/^\//u, "").replace(/[^a-zA-Z0-9_-]+/gu, "-")
+
+  return `${projectName}-${routeName}.json`
+}
 
 for (const documentBudget of runtimeBudgets.documents) {
   test(`keeps ${documentBudget.pathname} within browser runtime budgets`, async ({
@@ -64,7 +76,8 @@ for (const documentBudget of runtimeBudgets.documents) {
     expect(documentResponse?.status()).toBe(200)
     const documentBody = await documentResponse?.body()
     expect(documentBody, "expected a document response body").toBeTruthy()
-    expect(documentBody?.byteLength ?? 0).toBeLessThanOrEqual(
+    const documentBytes = documentBody?.byteLength ?? 0
+    expect(documentBytes).toBeLessThanOrEqual(
       documentBudget.uncompressedBytes,
     )
 
@@ -98,20 +111,28 @@ for (const documentBudget of runtimeBudgets.documents) {
         loadMilliseconds: navigation.loadEventEnd,
       }
     })
+    const evidence = {
+      schemaVersion: 1,
+      pathname: documentBudget.pathname,
+      project: testInfo.project.name,
+      enforcement: runtimeBudgets.timings.enforcement,
+      documentBytes,
+      externalRequestCount: externalRequests.size,
+      externalTransferBytes,
+      timing,
+    }
+    const serializedEvidence = `${JSON.stringify(evidence, null, 2)}\n`
 
-    await testInfo.attach("performance-advisory.json", {
-      body: Buffer.from(
-        `${JSON.stringify(
-          {
-            pathname: documentBudget.pathname,
-            project: testInfo.project.name,
-            enforcement: runtimeBudgets.timings.enforcement,
-            timing,
-          },
-          null,
-          2,
-        )}\n`,
+    await mkdir(evidenceDirectory, { recursive: true })
+    await writeFile(
+      path.join(
+        evidenceDirectory,
+        evidenceFilename(testInfo.project.name, documentBudget.pathname),
       ),
+      serializedEvidence,
+    )
+    await testInfo.attach("performance-advisory.json", {
+      body: Buffer.from(serializedEvidence),
       contentType: "application/json",
     })
   })
