@@ -3,7 +3,9 @@ import { expect, test } from "@playwright/test"
 const articlePath = "/blog/ai-pipelines-need-control-boundaries"
 
 test.describe("representative MDX article", () => {
-  test("renders canonical content, components, and metadata", async ({ page }) => {
+  test("renders canonical content, components, and metadata", async ({
+    page,
+  }) => {
     await page.goto(articlePath)
 
     await expect(page).toHaveTitle(
@@ -30,9 +32,9 @@ test.describe("representative MDX article", () => {
       "href",
       "https://micrantha.com/blog/ai-pipelines-need-control-boundaries",
     )
-    await expect(page.locator('script[type="application/ld+json"]')).toContainText(
-      '"@type":"Article"',
-    )
+    await expect(
+      page.locator('script[type="application/ld+json"]'),
+    ).toContainText('"@type":"Article"')
   })
 
   test("supports hydrated client navigation", async ({ page }) => {
