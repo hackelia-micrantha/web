@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node"
+import type { MetaFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 
@@ -11,7 +11,7 @@ import {
   defineBlogMdxPost,
   type BlogPostMetadata,
 } from "~/content/blog-mdx"
-import { getBlogPostBySlug, getRelatedPosts } from "~/content/blog-provider"
+import { getBlogPostBySlug } from "~/content/blog-provider"
 import { getSeriesNavigation } from "~/content/blog-series"
 import ArticleContent, {
   attributes,
@@ -36,18 +36,40 @@ function toMetadata(candidate: BlogPostMetadata): BlogPostMetadata {
     excerpt: candidate.excerpt,
     tags: [...candidate.tags],
     relatedSlugs: [...candidate.relatedSlugs],
+    series: candidate.series ? { ...candidate.series } : undefined,
   }
 }
 
-function assertLegacyMetadataMatchesMdx(legacyPost: BlogPostMetadata) {
-  const comparableLegacy = toMetadata(legacyPost)
+function comparableMetadata(candidate: BlogPostMetadata) {
+  const metadata = toMetadata(candidate)
 
-  if (JSON.stringify(comparableLegacy) !== JSON.stringify(post)) {
+  delete metadata.series
+
+  return metadata
+}
+
+function assertLegacyMetadataMatchesMdx(legacyPost: BlogPostMetadata) {
+  if (
+    JSON.stringify(comparableMetadata(legacyPost)) !==
+    JSON.stringify(comparableMetadata(post))
+  ) {
     throw new Error(`Legacy metadata drifted from MDX frontmatter for ${SLUG}`)
   }
 }
 
-export async function loader(_args: LoaderFunctionArgs) {
+function resolveRelatedPosts() {
+  return post.relatedSlugs.map((slug) => {
+    const relatedPost = getBlogPostBySlug(slug)
+
+    if (!relatedPost) {
+      throw new Error(`MDX related post does not exist: ${slug}`)
+    }
+
+    return toMetadata(relatedPost)
+  })
+}
+
+export async function loader() {
   const legacyPost = getBlogPostBySlug(SLUG)
 
   if (!legacyPost) {
@@ -57,24 +79,35 @@ export async function loader(_args: LoaderFunctionArgs) {
   assertLegacyMetadataMatchesMdx(legacyPost)
 
   const series = getSeriesNavigation(legacyPost)
-  const seriesNavigation = series
-    ? {
-        series: {
-          slug: series.series.slug,
-          title: series.series.title,
-        },
-        index: series.index,
-        total: series.total,
-        previous: series.previous ? toMetadata(series.previous) : null,
-        next: series.next ? toMetadata(series.next) : null,
-        posts: series.posts.map(toMetadata),
-      }
-    : null
+
+  if (!series || !post.series) {
+    throw new Error(`MDX series metadata is missing for ${SLUG}`)
+  }
+
+  if (
+    post.series.slug !== series.series.slug ||
+    post.series.title !== series.series.title ||
+    post.series.order !== series.index + 1
+  ) {
+    throw new Error(`MDX series metadata drifted for ${SLUG}`)
+  }
 
   return json<LoaderData>({
     post,
-    relatedPosts: getRelatedPosts(legacyPost).map(toMetadata),
-    seriesNavigation,
+    relatedPosts: resolveRelatedPosts(),
+    seriesNavigation: {
+      series: {
+        slug: post.series.slug,
+        title: post.series.title,
+      },
+      index: post.series.order - 1,
+      total: series.total,
+      previous: series.previous ? toMetadata(series.previous) : null,
+      next: series.next ? toMetadata(series.next) : null,
+      posts: series.posts.map((seriesPost) =>
+        seriesPost.slug === SLUG ? post : toMetadata(seriesPost),
+      ),
+    },
   })
 }
 
@@ -90,7 +123,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     title: data.post.title,
     description: data.post.description,
     path: `/blog/${data.post.slug}`,
-    publishedTime: data.post.date,
+    publishedTime: `${data.post.date}T00:00:00Z`,
     tags: data.post.tags,
   })
 }
@@ -103,7 +136,7 @@ export const handle = {
       title: data.post.title,
       description: data.post.description,
       path: `/blog/${data.post.slug}`,
-      datePublished: data.post.date,
+      datePublished: `${data.post.date}T00:00:00Z`,
       keywords: data.post.tags,
     })
   },
