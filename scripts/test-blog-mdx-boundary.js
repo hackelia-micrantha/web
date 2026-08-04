@@ -155,7 +155,7 @@ await expectInvalid(
 )
 await expectInvalid(
   "empty-post-link",
-  '<PostLink slug="safe-post"></PostLink>',
+  'Continue <PostLink slug="safe-post"></PostLink> here.',
   /<PostLink> must contain link text/,
 )
 await expectInvalid(
