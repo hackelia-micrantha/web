@@ -1,7 +1,5 @@
 import mermaid from "mermaid"
 
-const MERMAID_READY_EVENT = "micrantha:mermaid-ready"
-
 export function installMermaidRenderer() {
   if (window.__micranthaRenderMermaid) return
 
@@ -21,5 +19,4 @@ export function installMermaidRenderer() {
     const result = await mermaid.render(id, chart)
     return result.svg
   }
-  window.dispatchEvent(new Event(MERMAID_READY_EVENT))
 }

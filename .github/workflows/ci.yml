@@ -74,6 +74,17 @@ jobs:
       - name: Verify blog browser chunk isolation
         run: yarn test:blog-chunk-isolation
 
+      - name: Enforce deterministic web performance budgets
+        run: yarn test:performance-budgets
+
+      - name: Upload web performance budget report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-performance-budget-${{ github.run_id }}
+          path: .performance/build-budget.json
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Verify pinned Wrangler
         run: yarn wrangler --version
 
@@ -97,12 +108,14 @@ jobs:
       - name: Run Cloudflare integration tests
         run: yarn test:integration
 
-      - name: Upload Cloudflare runtime manifest
+      - name: Upload Cloudflare runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cloudflare-pages-runtime-${{ github.run_id }}
-          path: .cloudflare/runtime/manifest.json
+          path: |
+            .cloudflare/runtime/manifest.json
+            .cloudflare/runtime/performance-report.json
           if-no-files-found: ignore
           retention-days: 7
 
@@ -128,6 +141,14 @@ jobs:
 
       - name: Run functional Playwright tests
         run: yarn playwright test --grep-invert "visual regressions"
+
+      - name: Upload advisory browser performance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-performance-advisory-${{ github.run_id }}
+          path: .performance/browser
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Run Cloudflare hydration browser contracts
         run: yarn test:e2e:cloudflare

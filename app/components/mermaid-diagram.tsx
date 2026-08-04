@@ -6,8 +6,6 @@ type MermaidDiagramProps = {
   chart: string
 }
 
-const MERMAID_READY_EVENT = "micrantha:mermaid-ready"
-
 declare global {
   interface Window {
     __micranthaRenderMermaid?: (id: string, chart: string) => Promise<string>
@@ -26,33 +24,36 @@ export function MermaidDiagram({ title, caption, chart }: MermaidDiagramProps) {
     setSvg(null)
     setFailed(false)
 
-    const render = () => {
-      const renderer = window.__micranthaRenderMermaid
+    const render = async () => {
+      try {
+        if (!window.__micranthaRenderMermaid) {
+          const { installMermaidRenderer } =
+            await import("../client/mermaid.client")
+          installMermaidRenderer()
+        }
 
-      if (!renderer) return
+        const renderer = window.__micranthaRenderMermaid
 
-      void renderer(diagramId, chart)
-        .then((renderedSvg) => {
-          if (active) {
-            setSvg(renderedSvg)
-          }
-        })
-        .catch(() => {
-          if (active) {
-            setFailed(true)
-          }
-        })
+        if (!renderer) {
+          throw new Error("Mermaid renderer did not initialize")
+        }
+
+        const renderedSvg = await renderer(diagramId, chart)
+
+        if (active) {
+          setSvg(renderedSvg)
+        }
+      } catch {
+        if (active) {
+          setFailed(true)
+        }
+      }
     }
 
-    if (window.__micranthaRenderMermaid) {
-      render()
-    } else {
-      window.addEventListener(MERMAID_READY_EVENT, render, { once: true })
-    }
+    void render()
 
     return () => {
       active = false
-      window.removeEventListener(MERMAID_READY_EVENT, render)
     }
   }, [chart, diagramId])
 

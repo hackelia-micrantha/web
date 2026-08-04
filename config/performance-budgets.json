@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "browserJavaScript": {
+    "allAssets": {
+      "uncompressedBytes": 8000000,
+      "compressedBytes": 2200000,
+      "largestUncompressedBytes": 3000000,
+      "largestCompressedBytes": 900000
+    },
+    "entry": {
+      "uncompressedBytes": 500000,
+      "compressedBytes": 150000
+    },
+    "routes": [
+      {
+        "pathname": "/",
+        "uncompressedBytes": 700000,
+        "compressedBytes": 210000
+      },
+      {
+        "pathname": "/solutions",
+        "uncompressedBytes": 800000,
+        "compressedBytes": 240000
+      },
+      {
+        "pathname": "/laboratory",
+        "uncompressedBytes": 800000,
+        "compressedBytes": 240000
+      },
+      {
+        "pathname": "/blog",
+        "uncompressedBytes": 800000,
+        "compressedBytes": 240000
+      },
+      {
+        "pathname": "/blog/governance-native-engineering-control-plane",
+        "uncompressedBytes": 1000000,
+        "compressedBytes": 300000
+      }
+    ]
+  },
+  "styles": {
+    "uncompressedBytes": 300000,
+    "compressedBytes": 50000,
+    "largestUncompressedBytes": 250000,
+    "largestCompressedBytes": 45000
+  },
+  "images": {
+    "totalBytes": 4000000,
+    "largestBytes": 1200000
+  },
+  "browserRuntime": {
+    "documents": [
+      { "pathname": "/", "uncompressedBytes": 250000 },
+      { "pathname": "/solutions", "uncompressedBytes": 250000 },
+      { "pathname": "/laboratory", "uncompressedBytes": 250000 },
+      { "pathname": "/blog", "uncompressedBytes": 250000 },
+      {
+        "pathname": "/blog/governance-native-engineering-control-plane",
+        "uncompressedBytes": 350000
+      }
+    ],
+    "externalRequests": {
+      "count": 0,
+      "transferBytes": 0
+    },
+    "timings": {
+      "enforcement": "advisory",
+      "metrics": [
+        "responseStartMilliseconds",
+        "domContentLoadedMilliseconds",
+        "loadMilliseconds"
+      ]
+    }
+  }
+}
