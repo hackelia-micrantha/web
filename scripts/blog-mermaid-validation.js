@@ -14,7 +14,9 @@ function stripFrontmatter(source, relativePath) {
   const closingDelimiter = normalized.indexOf("\n---\n", 4)
 
   if (closingDelimiter === -1) {
-    throw new Error(`${relativePath} is missing its closing frontmatter delimiter`)
+    throw new Error(
+      `${relativePath} is missing its closing frontmatter delimiter`,
+    )
   }
 
   return normalized.slice(closingDelimiter + "\n---\n".length)
