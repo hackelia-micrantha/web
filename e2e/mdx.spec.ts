@@ -75,7 +75,9 @@ test.describe("representative MDX article", () => {
   })
 })
 
-test("legacy TSX articles continue through the dynamic route", async ({ page }) => {
+test("legacy TSX articles continue through the dynamic route", async ({
+  page,
+}) => {
   const response = await page.goto(legacyArticlePath)
 
   expect(response?.status()).toBe(200)
