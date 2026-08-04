@@ -97,6 +97,21 @@ assert.match(
 )
 assertDocumentHeaders(article.response, article.body)
 
+const integrationArticle = await read(
+  "/blog/secure-platform-integration-is-not-plumbing",
+)
+assert.equal(integrationArticle.response.status, 200)
+assert.match(
+  integrationArticle.body,
+  /Secure Platform Integration Is Not Plumbing/,
+)
+assert.match(
+  integrationArticle.body,
+  /Secure platform integration is not plumbing\. It is the place where/,
+)
+assert.match(integrationArticle.body, /data-content-source="mdx"/)
+assertDocumentHeaders(integrationArticle.response, integrationArticle.body)
+
 const botArticle = await read("/blog/ai-pipelines-need-control-boundaries", {
   userAgent: "Googlebot/2.1",
 })
