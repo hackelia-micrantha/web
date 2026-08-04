@@ -9,6 +9,11 @@ import {
   repositoryRoot,
 } from "./blog-content-inventory.js"
 import { validateBlogMdxFile } from "./blog-mdx-validation.js"
+import {
+  assertPublishedRegistryPost,
+  assertRoutableBlogMdxPublished,
+  currentBlogPublicationDate,
+} from "./blog-mdx-publication.js"
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
 const sitemapPath = path.join(repositoryRoot, "public/sitemap.xml")
@@ -64,12 +69,30 @@ const [mdxRoutes, inventory, currentSitemap] = await Promise.all([
   loadBlogContentInventory(),
   readFile(sitemapPath, "utf8"),
 ])
+const publicationDate = currentBlogPublicationDate()
 
 await Promise.all(
-  mdxRoutes.map((route) => validateBlogMdxFile(route.relativePath, inventory)),
+  mdxRoutes.map(async (route) => {
+    await validateBlogMdxFile(route.relativePath, inventory)
+
+    const source = await readFile(
+      path.join(repositoryRoot, route.relativePath),
+      "utf8",
+    )
+
+    assertRoutableBlogMdxPublished({
+      asOfDate: publicationDate,
+      relativePath: route.relativePath,
+      source,
+    })
+  }),
 )
 
 const mdxSlugs = mdxRoutes.map((route) => route.slug)
+
+for (const post of inventory.posts) {
+  assertPublishedRegistryPost(post, publicationDate)
+}
 
 for (const slug of mdxSlugs) {
   const post = inventory.postsBySlug.get(slug)
@@ -101,7 +124,7 @@ assert.equal(
 )
 
 console.log(
-  `Blog content boundaries passed: ${inventory.posts.length} post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${
+  `Blog content boundaries passed for ${publicationDate}: ${inventory.posts.length} published post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${
     inventory.posts.length - mdxSlugs.length
-  } legacy TSX route(s), MDX grammar enforced, sitemap current`,
+  } legacy TSX route(s), MDX grammar and publication boundaries enforced, sitemap current`,
 )
