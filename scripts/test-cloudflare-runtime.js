@@ -318,7 +318,7 @@ try {
 
   const controlledError = await readRuntime("/runtime-contract/error")
   assert.equal(controlledError.response.status, 500)
-  assert.match(controlledError.body, /Application Error/i)
+  assert.match(controlledError.body, /Unexpected Server Error/i)
   assert.doesNotMatch(
     controlledError.body,
     /Controlled Cloudflare runtime contract failure/,
@@ -327,13 +327,7 @@ try {
     controlledError.response.headers.get("cache-control"),
     "private, no-store",
   )
-  assert.match(
-    controlledError.response.headers.get("content-security-policy") ?? "",
-    /script-src/,
-  )
-  assertDocumentHeaders(controlledError.response, controlledError.body, {
-    requireNonce: false,
-  })
+  assertDocumentHeaders(controlledError.response, controlledError.body)
 
   const missing = await readRuntime("/this-route-does-not-exist")
   assert.equal(missing.response.status, 404)
