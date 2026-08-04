@@ -16,7 +16,7 @@ export type BlogPost = {
   tags: string[]
   relatedSlugs: string[]
   series?: BlogSeries
-  Content: () => ReactNode
+  Content?: () => ReactNode
 }
 
 export type BlogSeriesGroup = {
@@ -196,194 +196,6 @@ const securePlatformIntegrationContent = () => (
     </section>
   </>
 )
-
-const aiPipelinesControlBoundariesContent = () => (
-  <>
-    <section className="space-y-4">
-      <h2>Start with the right mental model</h2>
-      <p>
-        Enterprise AI work becomes risky when the model is treated like an
-        authoritative component instead of a fallible part of a larger delivery
-        path.
-      </p>
-      <div className="article-callout">
-        <p>
-          AI is not the system of record. AI is an untrusted reasoning component
-          operating inside a governed integration path.
-        </p>
-      </div>
-      <p>
-        That framing changes the design. Prompts, tool access, retrieval,
-        outputs, and write-back actions all need control boundaries of their
-        own.
-      </p>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Pre-processing</h2>
-      <p>
-        Input control starts before a model sees anything. Raw enterprise data
-        usually needs normalization to reduce ambiguity, redaction to remove
-        material the model does not need, enrichment to provide stable business
-        context, and provenance markers so downstream reviewers can see what
-        sources shaped the result.
-      </p>
-      <ul>
-        <li>
-          Normalize structure and terminology so prompts do not depend on
-          unstable source formatting.
-        </li>
-        <li>
-          Redact sensitive fields when they are not necessary for the reasoning
-          task.
-        </li>
-        <li>
-          Enrich with identifiers, policy context, and known workflow state.
-        </li>
-        <li>
-          Attach provenance so outputs can be inspected against real evidence.
-        </li>
-      </ul>
-    </section>
-
-    <section className="space-y-4">
-      <h2>MCP and tool boundary</h2>
-      <p>
-        Tool access should be scoped like any other privileged interface.
-        Exposing a broad tool surface because a model might find it useful is
-        the wrong default. The model should receive only the tools, methods, and
-        data slices required for the current workflow step.
-      </p>
-      <ul>
-        <li>Scope access to the task and actor, not the whole platform.</li>
-        <li>
-          Require authorization at the tool boundary, not only in prompts.
-        </li>
-        <li>Audit tool invocations and carry the calling workflow identity.</li>
-        <li>
-          Treat MCP or similar tool channels as integration surfaces subject to
-          the same control design as any other API.
-        </li>
-      </ul>
-    </section>
-
-    <section className="space-y-4">
-      <h2>AI execution</h2>
-      <DiagramFrame
-        title="Governed AI pipeline"
-        caption="AI lives inside a controlled path with explicit checks before and after reasoning."
-      >
-        <img
-          className="article-diagram-image article-diagram-image-narrow"
-          src="/img/blog/ai_pipeline_diagram.svg"
-          alt="Diagram showing sources flowing through preprocessing, MCP boundary, AI layer, post-processing, and finally to controlled targets."
-        />
-      </DiagramFrame>
-      <p>
-        Inside the execution zone, retrieval, model or agent selection, and tool
-        calls are still just intermediate reasoning steps. They are useful, but
-        they should not be confused with final system action. There needs to be
-        a visible boundary between the reasoning process and the transaction
-        that changes a real workflow.
-      </p>
-      <p>
-        This is where a layered architecture matters. The same separation
-        described in{" "}
-        <PostLink slug="software-layers-are-risk-boundaries">
-          Software Layers Are Risk Boundaries
-        </PostLink>{" "}
-        keeps AI-specific logic from leaking directly into systems of record.
-      </p>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Post-processing and approval</h2>
-      <p>
-        Before anything is written back, the result needs to be validated,
-        scored, compared with expected structures, and, where necessary, held
-        for approval. This is the difference between an assistant and an
-        uncontrolled actor.
-      </p>
-      <ul>
-        <li>Validate schema, policy requirements, and required fields.</li>
-        <li>
-          Score confidence or rule conformance using deterministic checks rather
-          than model self-assessment alone.
-        </li>
-        <li>
-          Diff proposed changes against current records so reviewers can see the
-          exact effect.
-        </li>
-        <li>
-          Require explicit approval when the action changes regulated workflow,
-          status, or customer-visible records.
-        </li>
-      </ul>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Controlled write-back</h2>
-      <p>
-        The write-back step should look like a normal governed integration:
-        authorized actor, validated payload, logged decision, and a durable
-        trace of what was changed. If that control surface does not exist, the
-        pipeline is not ready for enterprise use.
-      </p>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Threat and failure modes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Failure mode</th>
-            <th>What usually causes it</th>
-            <th>Control response</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Over-broad tool access</td>
-            <td>Convenience-driven integration and prompt-only policy</td>
-            <td>Scope tools by workflow, enforce authorization, audit calls</td>
-          </tr>
-          <tr>
-            <td>Unverifiable output</td>
-            <td>Missing provenance and no deterministic validation</td>
-            <td>Attach sources, run schema checks, retain review traces</td>
-          </tr>
-          <tr>
-            <td>Unsafe write-back</td>
-            <td>Model output sent directly to systems of record</td>
-            <td>Require approval gates and controlled adapter writes</td>
-          </tr>
-          <tr>
-            <td>Prompt leakage of sensitive data</td>
-            <td>Skipping normalization and redaction upstream</td>
-            <td>Pre-process inputs and minimize exposed fields</td>
-          </tr>
-          <tr>
-            <td>Workflow drift</td>
-            <td>AI-specific logic embedded in every consumer</td>
-            <td>Keep orchestration in an application boundary</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section className="space-y-4">
-      <h2>Conclusion</h2>
-      <p>
-        The practical goal is not to remove AI from the workflow. It is to put
-        AI in a governed part of the workflow without letting it become the
-        implicit owner of security, state, or business truth. Once the control
-        boundaries are explicit, enterprise AI becomes easier to test, review,
-        and replace.
-      </p>
-    </section>
-  </>
-)
-
 const softwareLayersRiskBoundariesContent = () => (
   <>
     <section className="space-y-4">
@@ -565,7 +377,6 @@ export const blogPosts: BlogPost[] = [
       "secure-platform-integration-is-not-plumbing",
       "software-layers-are-risk-boundaries",
     ],
-    Content: aiPipelinesControlBoundariesContent,
   },
   {
     slug: "software-layers-are-risk-boundaries",
