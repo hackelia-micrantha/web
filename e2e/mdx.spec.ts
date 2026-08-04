@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test"
+import type { Page } from "@playwright/test"
 
 type ArticleContract = {
   callout?: string
@@ -99,10 +100,7 @@ function articleByTitle(title: string) {
   return article
 }
 
-async function assertSeriesNavigation(
-  page: Parameters<typeof test>[0] extends never ? never : any,
-  article: ArticleContract,
-) {
+async function assertSeriesNavigation(page: Page, article: ArticleContract) {
   const navigation = page.getByRole("navigation", {
     name: `${article.series} series navigation`,
   })
