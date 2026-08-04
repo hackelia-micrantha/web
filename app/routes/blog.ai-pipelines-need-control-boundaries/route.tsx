@@ -4,6 +4,7 @@ import { BlogArticleLayout } from "~/components/blog-article-layout"
 import { blogMdxComponents } from "~/components/blog-mdx-components"
 import type { BlogPost } from "~/content/blog"
 import { getBlogPostBySlug } from "~/content/blog-provider"
+import { assertRoutableMdxPublication } from "~/content/blog-publication.js"
 import { buildArticleMeta, buildArticleStructuredData } from "~/utils/seo"
 
 import Content, { attributes } from "./content.mdx"
@@ -67,6 +68,7 @@ function requiredSeries() {
 
 const slug = requiredString("slug")
 const date = requiredString("date")
+const status = requiredString("status")
 
 if (slug !== EXPECTED_SLUG) {
   throw new Error(`MDX slug ${slug} does not match route ${EXPECTED_SLUG}`)
@@ -75,6 +77,11 @@ if (slug !== EXPECTED_SLUG) {
 if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date))) {
   throw new Error(`Invalid MDX publication date: ${date}`)
 }
+
+// The build validator owns the target-date cutoff. The route module validates
+// status and manifest parity without recomputing a wall-clock value in the
+// browser, which keeps scheduled preview hydration deterministic.
+assertRoutableMdxPublication({ slug, date, status }, { cutoff: date })
 
 const post: BlogPost = {
   slug,

@@ -104,6 +104,19 @@ assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
 assertDocumentHeaders(botArticle.response, botArticle.body)
 
+for (const pathname of [
+  "/blog/draft-publication-fixture",
+  "/blog/future-publication-fixture",
+]) {
+  const unpublished = await read(pathname)
+
+  assert.equal(unpublished.response.status, 404)
+  assert.match(unpublished.body, /404|Not Found/i)
+  assertDocumentHeaders(unpublished.response, unpublished.body, {
+    requireNonce: false,
+  })
+}
+
 const methodNotAllowed = await read("/services", { method: "POST" })
 assert.equal(methodNotAllowed.response.status, 405)
 assert.match(methodNotAllowed.body, /405|Method Not Allowed/i)

@@ -1,13 +1,17 @@
 import type { BlogPost } from "~/content/blog"
 import { blogPosts } from "~/content/blog"
 import { governanceNativeBlogPosts } from "~/content/blog-governance-native"
+import { filterPublishedBlogPosts } from "~/content/blog-publication.js"
 
 export interface BlogContentProvider {
   getPosts(): BlogPost[]
   getPostBySlug(slug: string): BlogPost | null
 }
 
-const tsxBlogPosts: BlogPost[] = [...governanceNativeBlogPosts, ...blogPosts]
+const tsxBlogPosts: BlogPost[] = filterPublishedBlogPosts([
+  ...governanceNativeBlogPosts,
+  ...blogPosts,
+])
 
 export const tsxBlogProvider: BlogContentProvider = {
   getPosts() {

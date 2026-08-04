@@ -3,6 +3,11 @@ import { expect, test } from "@playwright/test"
 const articlePath = "/blog/ai-pipelines-need-control-boundaries"
 const legacyArticlePath = "/blog/secure-platform-integration-is-not-plumbing"
 
+const unpublishedArticlePaths = [
+  "/blog/draft-publication-fixture",
+  "/blog/future-publication-fixture",
+]
+
 test.describe("representative MDX article", () => {
   test("renders canonical content, components, metadata, and series navigation", async ({
     page,
@@ -110,6 +115,15 @@ test("legacy TSX articles continue through the dynamic route", async ({
   await expect(page.locator("main")).toContainText(
     "Secure platform integration is not plumbing",
   )
+})
+
+test("draft and future blog URLs remain unavailable", async ({ page }) => {
+  for (const pathname of unpublishedArticlePaths) {
+    const response = await page.goto(pathname)
+
+    expect(response?.status()).toBe(404)
+    await expect(page.getByText("Not Found", { exact: true })).toBeVisible()
+  }
 })
 
 test.describe("representative MDX article without JavaScript", () => {
