@@ -8,6 +8,7 @@ import {
   loadBlogContentInventory,
   repositoryRoot,
 } from "./blog-content-inventory.js"
+import { validateBlogMdxFile } from "./blog-mdx-validation.js"
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
 const sitemapPath = path.join(repositoryRoot, "public/sitemap.xml")
@@ -22,15 +23,16 @@ async function pathExists(filePath) {
   }
 }
 
-async function discoverMdxSlugs() {
+async function discoverMdxRoutes() {
   const entries = await readdir(routesDirectory, { withFileTypes: true })
-  const slugs = []
+  const routes = []
 
   for (const entry of entries) {
     if (!entry.isDirectory() || !entry.name.startsWith("blog.")) continue
 
     const routeDirectory = path.join(routesDirectory, entry.name)
-    const hasMdx = await pathExists(path.join(routeDirectory, "content.mdx"))
+    const contentPath = path.join(routeDirectory, "content.mdx")
+    const hasMdx = await pathExists(contentPath)
 
     if (!hasMdx) continue
 
@@ -40,25 +42,34 @@ async function discoverMdxSlugs() {
       `MDX route ${entry.name} is missing route.tsx`,
     )
 
-    slugs.push(entry.name.slice("blog.".length))
+    routes.push({
+      relativePath: path.relative(repositoryRoot, contentPath),
+      slug: entry.name.slice("blog.".length),
+    })
   }
 
   assert.equal(
-    new Set(slugs).size,
-    slugs.length,
+    new Set(routes.map((route) => route.slug)).size,
+    routes.length,
     "Static MDX routes contain duplicate slugs",
   )
 
-  return slugs.sort()
+  return routes.sort((left, right) => left.slug.localeCompare(right.slug))
 }
 
 await assertBlogPostContentOptional()
 
-const [mdxSlugs, inventory, currentSitemap] = await Promise.all([
-  discoverMdxSlugs(),
+const [mdxRoutes, inventory, currentSitemap] = await Promise.all([
+  discoverMdxRoutes(),
   loadBlogContentInventory(),
   readFile(sitemapPath, "utf8"),
 ])
+
+await Promise.all(
+  mdxRoutes.map((route) => validateBlogMdxFile(route.relativePath, inventory)),
+)
+
+const mdxSlugs = mdxRoutes.map((route) => route.slug)
 
 for (const slug of mdxSlugs) {
   const post = inventory.postsBySlug.get(slug)
@@ -92,5 +103,5 @@ assert.equal(
 console.log(
   `Blog content boundaries passed: ${inventory.posts.length} post(s), ${inventory.series.length} series, ${mdxSlugs.length} MDX route(s), ${
     inventory.posts.length - mdxSlugs.length
-  } legacy TSX route(s), sitemap current`,
+  } legacy TSX route(s), MDX grammar enforced, sitemap current`,
 )
