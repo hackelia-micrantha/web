@@ -19,9 +19,7 @@ const allowedComponents = new Set([
 
 function contextFor(relativePath, node) {
   const start = node?.position?.start
-  return start
-    ? `${relativePath}:${start.line}:${start.column}`
-    : relativePath
+  return start ? `${relativePath}:${start.line}:${start.column}` : relativePath
 }
 
 function stripFrontmatter(source, relativePath) {
@@ -44,7 +42,11 @@ function stripFrontmatter(source, relativePath) {
 }
 
 function assertSafeLinkUrl(url, context) {
-  assert.equal(url, url.trim(), `${context} URL must not contain outer whitespace`)
+  assert.equal(
+    url,
+    url.trim(),
+    `${context} URL must not contain outer whitespace`,
+  )
   assert.notEqual(url, "", `${context} URL must not be empty`)
   assert.equal(
     /[\u0000-\u001f\u007f]/u.test(url),
