@@ -123,7 +123,8 @@ function buildFilePath(moduleReference, importerPath = buildDirectory) {
 
 function staticImportedModules(source) {
   const imports = new Set()
-  const pattern = /(?:import|export)\s*(?:[^"'()]*?\s+from\s*)?["']([^"']+)["']/gu
+  const pattern =
+    /(?:import|export)\s*(?:[^"'()]*?\s+from\s*)?["']([^"']+)["']/gu
 
   for (const match of source.matchAll(pattern)) imports.add(match[1])
 
@@ -193,7 +194,9 @@ function routeChain(manifest, route) {
 }
 
 function manifestReferences(entryOrRoute) {
-  return [entryOrRoute?.module, ...(entryOrRoute?.imports ?? [])].filter(Boolean)
+  return [entryOrRoute?.module, ...(entryOrRoute?.imports ?? [])].filter(
+    Boolean,
+  )
 }
 
 async function measureGraph(references) {
@@ -240,7 +243,10 @@ javascriptFiles.sort((left, right) => left.path.localeCompare(right.path))
 const javascriptTotal = addMeasurements(javascriptFiles)
 const largestJavaScript = javascriptFiles.reduce(
   (largest, file) => ({
-    uncompressedBytes: Math.max(largest.uncompressedBytes, file.uncompressedBytes),
+    uncompressedBytes: Math.max(
+      largest.uncompressedBytes,
+      file.uncompressedBytes,
+    ),
     compressedBytes: Math.max(largest.compressedBytes, file.compressedBytes),
   }),
   { uncompressedBytes: 0, compressedBytes: 0 },
@@ -303,7 +309,10 @@ for (const filePath of stylePaths) {
 const styleTotal = addMeasurements(styleFiles)
 const largestStyle = styleFiles.reduce(
   (largest, file) => ({
-    uncompressedBytes: Math.max(largest.uncompressedBytes, file.uncompressedBytes),
+    uncompressedBytes: Math.max(
+      largest.uncompressedBytes,
+      file.uncompressedBytes,
+    ),
     compressedBytes: Math.max(largest.compressedBytes, file.compressedBytes),
   }),
   { uncompressedBytes: 0, compressedBytes: 0 },
@@ -326,7 +335,9 @@ const imagePaths = (
   )
 )
   .flat()
-  .filter((filePath) => imageExtensions.has(path.extname(filePath).toLowerCase()))
+  .filter((filePath) =>
+    imageExtensions.has(path.extname(filePath).toLowerCase()),
+  )
 const imageFiles = []
 for (const filePath of imagePaths) {
   const fileStats = await stat(filePath)
@@ -336,7 +347,10 @@ for (const filePath of imagePaths) {
   })
 }
 imageFiles.sort((left, right) => left.path.localeCompare(right.path))
-const totalImageBytes = imageFiles.reduce((total, file) => total + file.bytes, 0)
+const totalImageBytes = imageFiles.reduce(
+  (total, file) => total + file.bytes,
+  0,
+)
 const largestImageBytes = imageFiles.reduce(
   (largest, file) => Math.max(largest, file.bytes),
   0,
