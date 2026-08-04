@@ -1,0 +1,39 @@
+name: Inspect Blog Browser Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    if: github.head_ref == 'agent/migrate-software-layers-mdx'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install frozen dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Build browser assets
+        run: yarn build
+
+      - name: Report browser build structure
+        run: |
+          echo '=== public/build files ==='
+          find public/build -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+          echo '=== manifest candidates ==='
+          find public/build build -type f \( -iname '*manifest*' -o -iname '*.js' \) -maxdepth 3 -print | sort
+          echo '=== route references ==='
+          grep -R -n -E 'ai-pipelines-need-control-boundaries|software-layers-are-risk-boundaries' public/build build || true
