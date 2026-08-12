@@ -212,8 +212,8 @@ export default function Index() {
             systems, and production delivery.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Micrantha helps teams turn fragile products, platforms, and workflows
-            into production systems.
+            Micrantha helps teams turn fragile products, platforms, and
+            workflows into production systems.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
