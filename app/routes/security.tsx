@@ -26,8 +26,8 @@ const Security = () => (
     </p>
     <p>
       Include the affected URL, product, component, impact, reproduction steps,
-      proof-of-concept details, and any logs or screenshots that help validate
-      the issue quickly.
+      proof-of-concept details, and any logs or screenshots that help Micrantha
+      validate the issue quickly.
     </p>
 
     <p className="mt-8 font-bold">Scope</p>
@@ -40,8 +40,8 @@ const Security = () => (
 
     <p className="mt-8 font-bold">Good-Faith Research</p>
     <p>
-      Good-faith security research is welcome when it helps improve the security
-      of Micrantha systems.
+      Micrantha welcomes good-faith security research that helps improve the
+      security of Micrantha systems.
     </p>
     <p>Please avoid:</p>
     <ul>
@@ -53,9 +53,9 @@ const Security = () => (
 
     <p className="mt-8 font-bold">What to Expect</p>
     <p>
-      Reports are reviewed, validated, and prioritized for remediation based on
-      severity and impact. For coordinated disclosure, note that in the report
-      and include your preferred contact details.
+      Micrantha reviews reports, validates issues, and prioritizes remediation
+      based on severity and impact. For coordinated disclosure, note that in the
+      report and include your preferred contact details.
     </p>
 
     <p className="mt-8 font-bold">Bug Bounty</p>
