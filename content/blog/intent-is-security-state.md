@@ -233,7 +233,7 @@ Natural-language interpretation remains probabilistic. The state machine around 
 
 A useful authorization principle is that interpreted intent should not silently grant more power than the underlying integration, policy, or approval already permits.
 
-Recent work on [Intent-Governed Tool Authorization](https://arxiv.org/abs/2606.22916) makes a similar distinction: static tool credentials answer whether an integration *can* perform an operation, while current user intent constrains whether that operation is justified for this task.
+Recent work on [Intent-Governed Tool Authorization](https://arxiv.org/abs/2606.22916) makes a similar distinction: static tool credentials answer whether an integration _can_ perform an operation, while current user intent constrains whether that operation is justified for this task.
 
 That suggests a layered rule:
 
@@ -354,4 +354,4 @@ Current intent governs the next effect.
 
 - Jihoon Tack, Philippe Laban, Jennifer Neville, [LLMs Get Lost in Evolving User Intent](https://arxiv.org/abs/2607.20734), 2026.
 - Genliang Zhu, Chu Wang, [Intent-Governed Tool Authorization for AI Agents](https://arxiv.org/abs/2606.22916), 2026.
-- Anthesis issue #153, *Add evolving-intent state-transition conformance and intent-revision binding*.
+- Anthesis issue #153, _Add evolving-intent state-transition conformance and intent-revision binding_.
