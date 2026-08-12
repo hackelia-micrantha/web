@@ -125,3 +125,5 @@ dist
 # AI
 .codex
 .serena
+.agents
+skills-lock.json

@@ -9,15 +9,13 @@ tags:
   - Governance
 ---
 
-# Recursive Governance and Agent Workflows
-
 Recursive agent systems are becoming increasingly attractive.
 
 Hierarchical planners, reviewer trees, recursive decomposition systems, and latent collaboration models promise better reasoning scalability than flat prompting alone.
 
 But recursive systems introduce governance problems.
 
-## The Core Tension
+## The core tension
 
 Recursive systems can expand:
 
@@ -34,7 +32,7 @@ The challenge is therefore not only orchestration.
 
 It is governed recursion.
 
-## Observable vs Latent Execution
+## Observable vs latent execution
 
 Not all recursive execution is equally observable.
 
@@ -56,7 +54,7 @@ Governance systems must distinguish between:
 
 without pretending complete introspection exists.
 
-## Replayability Boundaries
+## Replayability boundaries
 
 Recursive systems complicate replayability.
 
@@ -70,7 +68,19 @@ This creates a governed-delivery-path model:
 
 Replayability therefore propagates across execution lineage.
 
-## Anthesis Direction
+```mermaid
+%% title: Replayability propagates across execution lineage
+%% caption: Observable branches contribute evidence, while opaque or latent execution constrains the replay ceiling a workflow can claim.
+flowchart TD
+  A[Recursive workflow] --> B[Observable execution]
+  A --> C[Opaque execution]
+  A --> D[Latent execution]
+  B --> E[Evidence-linked output]
+  C -.-> F[Replay ceiling]
+  D -.-> F
+```
+
+## Anthesis direction
 
 Anthesis treats recursive coordination as:
 
@@ -92,7 +102,18 @@ This preserves:
 
 while still allowing recursive coordination.
 
-## Governance-Native Recursion
+```mermaid
+%% title: Governance-native recursion
+%% caption: Recursive coordination runs as governed execution graphs with bounded expansion, evidence-linked composition, and policy-governed delegation.
+flowchart LR
+  A[Governed execution graph] --> B[Bounded execution expansion]
+  B --> C[Evidence-linked composition]
+  C --> D[Policy-governed delegation]
+  D --> E[Review boundaries]
+  E --> F[Attribution and replay]
+```
+
+## Governance-native recursion
 
 The long-term challenge is not simply building more capable recursive agents.
 

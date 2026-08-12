@@ -9,13 +9,11 @@ tags:
   - SDLC
 ---
 
-# Governance-Native Engineering and the AI Control Plane
-
 AI-native engineering creates a control-plane problem.
 
-Generated code increases throughput, but without intent capture, evidence, review boundaries, replayability guarantees, and human comprehension loops, organizations accumulate technical, cognitive, and intent debt faster than they can repay it.
+Generated code increases throughput. Without intent capture, evidence, review boundaries, replayability guarantees, and human comprehension loops, organizations accumulate technical, cognitive, and intent debt faster than they can repay it.
 
-## The Bottleneck Has Moved
+## The bottleneck has moved
 
 The bottleneck is no longer purely implementation throughput.
 
@@ -30,7 +28,7 @@ It is increasingly:
 
 Transport-compatible APIs and interchangeable model providers create operational flexibility, but they do not create governance equivalence.
 
-## The Governance Surface
+## The governance surface
 
 Inference-provider selection is not merely infrastructure configuration.
 
@@ -45,7 +43,19 @@ It is a governance decision involving:
 
 This suggests AI-native systems require governance-native architecture.
 
-## Anthesis Direction
+```mermaid
+%% title: The AI-native control plane
+%% caption: Intent, evidence, and policy flow into bounded authority, and replay evidence returns so every decision stays attributable.
+flowchart LR
+  A[Intent capture] --> B[Evidence]
+  B --> C[Policy evaluation]
+  C --> D[Approval]
+  D --> E[Bounded authority]
+  E --> F[Execution]
+  F --> G[Replay evidence]
+```
+
+## Anthesis direction
 
 Anthesis treats:
 
@@ -71,7 +81,18 @@ The goal is to ensure humans remain capable of:
 
 while agents accelerate execution.
 
-## Draft Thesis
+```mermaid
+%% title: Humans govern while agents execute
+%% caption: Agents accelerate execution, while review, replay, intervention, attribution, and governance remain on the human side of the boundary.
+flowchart LR
+  A[Agent execution] --> B[Outcome evidence]
+  B --> C[Human governance]
+  C --> D[Review and replay]
+  C --> E[Intervention and attribution]
+  D --> A
+```
+
+## Differentiation moves to governance
 
 The next generation of engineering systems will likely differentiate not on raw generation quality, but on:
 

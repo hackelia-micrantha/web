@@ -18,8 +18,6 @@ series:
   order: 2
 ---
 
-# Intent Is Security State, Not Conversation History
-
 Agentic systems are often given a conversation and expected to infer what the user wants now.
 
 That is convenient for dialogue. It is a weak foundation for authority.
@@ -77,11 +75,13 @@ A system that treats the conversation as a bag of context may still contain the 
 
 That is close to a time-of-check/time-of-use problem:
 
-```text
-intent checked
-   -> authority granted
-   -> intent materially changes
-   -> old authority used anyway
+```mermaid
+%% title: Authority granted for stale intent
+%% caption: Authority granted for one intent survives a material change in intent, creating a time-of-check/time-of-use hazard.
+flowchart TD
+  A[Intent checked] --> B[Authority granted]
+  C[Intent changes materially] --> D[Old authority still usable]
+  B -.-> D
 ```
 
 The stale object is not only a cached prompt. It is a cached authorization decision.
@@ -92,20 +92,26 @@ The safe response is not to delete conversation history. The safe response is to
 
 A useful model is to give current intent an explicit revision.
 
-```text
-conversation event
-  -> intent reducer
-      -> reveal | revise | switch
-  -> structured current intent
-      - intent_revision
-      - current_goal
-      - active_constraints
-      - retained_state
-      - superseded_state
-      - invalidated_state
-      - state_digest
-  -> planning / governance / execution
+```mermaid
+%% title: Current intent as explicit state
+%% caption: Conversation events reduce through reveal, revise, or switch transitions into a structured current-intent object that drives planning, governance, and execution.
+flowchart TD
+  A[Conversation event] --> B[Intent reducer]
+  B --> C[Reveal / Revise / Switch]
+  C --> D[Structured current intent]
+  D --> E[Planning / governance / execution]
+  D --> F[Authority-relevant state]
 ```
+
+The structured object carries fields such as:
+
+- `intent_revision`
+- `current_goal`
+- `active_constraints`
+- `retained_state`
+- `superseded_state`
+- `invalidated_state`
+- `state_digest`
 
 The exact schema will vary by system. The important property is that authority-relevant intent becomes an identifiable state object rather than an implicit interpretation of a transcript.
 
@@ -164,10 +170,13 @@ Creating a new session for every conversational change would destroy useful cont
 
 The cleaner model is to bind consequential execution to both:
 
-```text
-session identity
-+ exact intent revision
-+ authority-relevant state digest
+```mermaid
+%% title: Binding execution to intent identity
+%% caption: Consequential execution binds session identity, the exact intent revision, and an authority-relevant state digest.
+flowchart LR
+  A[Session identity] --> D[Consequential execution]
+  B[Exact intent revision] --> D
+  C[Authority-relevant state digest] --> D
 ```
 
 Replay then becomes more meaningful as well. Replaying a prompt or session without identifying the exact intent revision used for authorization may reproduce context while failing to reproduce the decision state.
@@ -191,11 +200,14 @@ The problem begins when historical text is allowed to silently re-enter the auth
 
 The same rule should apply to retrieved memory. A previous preference, old task, prior approval, or historical instruction can inform reasoning, but retrieval should not automatically promote it into current authorized state.
 
-```text
-chat history        -> evidence / context
-retrieved memory    -> evidence / context
-model interpretation -> proposed state transition
-explicit current state -> governance input
+```mermaid
+%% title: Sources and their authority role
+%% caption: Chat history and retrieved memory count as evidence and context, while only explicit current state feeds governance input.
+flowchart LR
+  A[Chat history] --> D[Evidence / context]
+  B[Retrieved memory] --> D
+  C[Model interpretation] --> E[Proposed state transition]
+  F[Explicit current state] --> G[Governance input]
 ```
 
 This separation also limits the damage from stale or poisoned memory. A retrieved statement can influence a proposed update without becoming authoritative merely because it was found.
@@ -208,11 +220,12 @@ That would simply move the trust problem.
 
 The model can propose a normalized interpretation:
 
-```text
-"Actually, only review it"
-        ↓
-proposed transition:
-  revise effect from deploy -> review
+```mermaid
+%% title: A normalized intent transition
+%% caption: The model proposes a normalized state transition, while the deterministic state machine around authority decides whether it is accepted.
+flowchart TD
+  A["Actually, only review it"] --> B[Proposed transition]
+  B --> C[Revise effect from deploy to review]
 ```
 
 But consequential state transitions still need controlled semantics.
@@ -237,13 +250,15 @@ Recent work on [Intent-Governed Tool Authorization](https://arxiv.org/abs/2606.2
 
 That suggests a layered rule:
 
-```text
-platform capability
-    ∩ policy
-    ∩ current intent
-    ∩ current evidence
-    ∩ current approval
-    = usable authority
+```mermaid
+%% title: Usable authority as an intersection
+%% caption: Platform capability, policy, current intent, current evidence, and current approval all narrow what an agent may do.
+flowchart LR
+  A[Platform capability] --> F[Usable authority]
+  B[Policy] --> F
+  C[Current intent] --> F
+  D[Current evidence] --> F
+  E[Current approval] --> F
 ```
 
 Intent can narrow the available authority immediately.
@@ -291,14 +306,15 @@ CI/CD can establish that the change passes executable checks.
 
 Neither can answer whether the effect still corresponds to the user's current request if the authority layer cannot identify what "current" means.
 
-```text
-review evidence
-+ CI evidence
-+ current intent revision
-+ policy
-+ approval state
--------------------------
-bounded authority
+```mermaid
+%% title: Inputs to bounded authority
+%% caption: Review evidence, CI evidence, current intent revision, policy, and approval state combine into bounded authority.
+flowchart TD
+  A[Review evidence] --> F[Bounded authority]
+  B[CI evidence] --> F
+  C[Current intent revision] --> F
+  D[Policy] --> F
+  E[Approval state] --> F
 ```
 
 This is especially important for long-running agent workflows. The longer an agent operates, the more likely the user is to refine the task, change a constraint, redirect the work, or withdraw an earlier instruction.
