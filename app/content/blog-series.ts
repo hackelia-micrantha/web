@@ -14,9 +14,9 @@ export type BlogSeriesGroup = BlogSeriesDefinition & {
 const blogSeriesDefinitions: BlogSeriesDefinition[] = [
   {
     slug: "governance-native-engineering",
-    title: "Governance-Native Engineering",
+    title: "The Assurance Stack",
     description:
-      "Essays exploring governance, replayability, recursive execution, and organizational comprehension in AI-native engineering systems.",
+      "Essays on the assurance stack for agentic systems: review, evidence, policy, authority, replayability, and bounded execution.",
   },
   {
     slug: "architecture-control-boundaries",
