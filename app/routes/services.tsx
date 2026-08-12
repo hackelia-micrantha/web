@@ -21,7 +21,7 @@ export const Services = () => (
       <h2 className="text-xl">Request a consultation</h2>
       <p>
         Request a consultation if you need to turn a fragile product, platform,
-        or workflow into a production system. Reach us at{" "}
+        or workflow into a production system. Contact{" "}
         <a href="mailto:services@micrantha.com?subject=Consultation">
           services@micrantha.com
         </a>
