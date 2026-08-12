@@ -26,7 +26,7 @@ const Security = () => (
     </p>
     <p>
       Include the affected URL, product, component, impact, reproduction steps,
-      proof-of-concept details, and any logs or screenshots that help us
+      proof-of-concept details, and any logs or screenshots that help Micrantha
       validate the issue quickly.
     </p>
 
@@ -34,14 +34,14 @@ const Security = () => (
     <p>
       This disclosure channel covers public Micrantha-owned websites,
       applications, and services. If you are unsure whether a system is in
-      scope, include the hostname or repository reference in your report and we
-      will clarify.
+      scope, include the hostname or repository reference in your report so
+      Micrantha can clarify.
     </p>
 
     <p className="mt-8 font-bold">Good-Faith Research</p>
     <p>
-      We welcome reports from researchers acting in good faith to help us
-      improve the security of our systems.
+      Micrantha welcomes good-faith security research that helps improve the
+      security of Micrantha systems.
     </p>
     <p>Please avoid:</p>
     <ul>
@@ -53,9 +53,9 @@ const Security = () => (
 
     <p className="mt-8 font-bold">What to Expect</p>
     <p>
-      We will review reports, validate issues, and prioritize remediation based
-      on severity and impact. If you want coordinated disclosure, note that in
-      your report and include your preferred contact details.
+      Micrantha reviews reports, validates issues, and prioritizes remediation
+      based on severity and impact. For coordinated disclosure, note that in the
+      report and include your preferred contact details.
     </p>
 
     <p className="mt-8 font-bold">Bug Bounty</p>

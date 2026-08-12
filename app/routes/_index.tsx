@@ -169,8 +169,8 @@ export default function Index() {
             Fragile AI delivery
           </p>
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            We help teams move from isolated demos and brittle workflows to
-            systems that fit real engineering environments.
+            Micrantha helps teams move from isolated demos and brittle workflows
+            to systems that fit real engineering environments.
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
@@ -187,7 +187,7 @@ export default function Index() {
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
-            What We Bring
+            Engineering Approach
           </p>
           <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
             Production-minded depth
@@ -212,8 +212,8 @@ export default function Index() {
             systems, and production delivery.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            We help teams turn fragile products, platforms, and workflows into
-            production systems.
+            Micrantha helps teams turn fragile products, platforms, and
+            workflows into production systems.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -247,7 +247,7 @@ export default function Index() {
       <section className="space-y-6 border-t border-gray-200 pt-12">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            How We Work
+            Working Approach
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
             Built for teams past the demo stage.
@@ -425,8 +425,9 @@ export default function Index() {
           Work that compounds.
         </h2>
         <p className="max-w-3xl text-base leading-7 text-slate-700">
-          We build iteratively, guided by quality, time, and cost. Gardening is
-          our metaphor: tend the soil, grow the seeds, cultivate the garden.
+          Work develops iteratively, guided by quality, time, and cost.
+          Gardening is the metaphor: tend the soil, grow the seeds, cultivate
+          the garden.
         </p>
         <Link className="inline-block text-sm" to="/philosophy">
           Read the full philosophy
@@ -446,7 +447,8 @@ export default function Index() {
               Start the conversation.
             </h2>
             <p className="max-w-2xl text-base leading-7 text-slate-700">
-              For consultations or operational support, reach us directly.
+              For consultations or operational support, contact Micrantha
+              directly.
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
               <a href="mailto:services@micrantha.com">services@micrantha.com</a>
