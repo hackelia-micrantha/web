@@ -166,7 +166,7 @@ const Philosophy = () => {
         <section className="space-y-6">
           <h2 className="text-xl">Metaphor</h2>
           <p>
-            Our working metaphor is gardening: software grows through repeated
+            The working metaphor is gardening: software grows through repeated
             care, environmental support, and patient cultivation over time.
           </p>
           <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
