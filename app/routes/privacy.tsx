@@ -23,8 +23,8 @@ const Privacy = () => (
           related services.
         </p>
         <p>
-          This page explains how Micrantha collects, uses, and discloses personal
-          information when you use the services.
+          This page explains how Micrantha collects, uses, and discloses
+          personal information when you use the services.
         </p>
         <p>
           By using the service, you agree to the collection and use of
@@ -38,8 +38,8 @@ const Privacy = () => (
         <p>
           For a better experience, Micrantha may ask you to provide personally
           identifiable information, including your name, phone number, or postal
-          address. Micrantha may use that information to contact you, support the
-          service, and improve the experience.
+          address. Micrantha may use that information to contact you, support
+          the service, and improve the experience.
         </p>
       </section>
 
@@ -62,17 +62,17 @@ const Privacy = () => (
         </p>
         <p>
           Micrantha uses cookies to collect information and improve the service.
-          You can accept or refuse cookies, and most browsers let you know when a
-          cookie is being sent. If you refuse cookies, some parts of the service
-          may not function as expected.
+          You can accept or refuse cookies, and most browsers let you know when
+          a cookie is being sent. If you refuse cookies, some parts of the
+          service may not function as expected.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl">Service Providers</h2>
         <p>
-          Micrantha may use third-party companies and individuals to help operate
-          the service, provide service-related functions, or assist in
+          Micrantha may use third-party companies and individuals to help
+          operate the service, provide service-related functions, or assist in
           understanding how the service is used.
         </p>
         <p>
@@ -104,10 +104,11 @@ const Privacy = () => (
       <section className="space-y-3">
         <h2 className="text-xl">Children&apos;s Privacy</h2>
         <p>
-          Micrantha services are not directed to children under 13, and Micrantha
-          does not knowingly collect personal information from children under 13.
-          If you believe a child has provided personal information, contact
-          privacy@micrantha.com so Micrantha can take appropriate action.
+          Micrantha services are not directed to children under 13, and
+          Micrantha does not knowingly collect personal information from
+          children under 13. If you believe a child has provided personal
+          information, contact privacy@micrantha.com so Micrantha can take
+          appropriate action.
         </p>
       </section>
 
