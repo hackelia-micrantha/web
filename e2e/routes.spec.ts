@@ -132,7 +132,7 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
   await expect(
     page.locator("a", {
       has: page.getByRole("heading", {
-        name: "Governance-Native Engineering and the AI Control Plane",
+        name: "The Missing Layer in Agentic Development: Precise Governance",
       }),
     }),
   ).toHaveAttribute("href", "/blog/governance-native-engineering-control-plane")
@@ -150,7 +150,7 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
   await expect(
     page
       .locator(".editorial-card")
-      .getByText("Governance-Native Engineering", { exact: true }),
+      .getByText("The Assurance Stack", { exact: true }),
   ).toHaveCount(3)
   await expect(
     page
@@ -194,12 +194,12 @@ test("/blog/:slug exposes series navigation for governance-native posts", async 
 
   await expect(
     page.getByRole("heading", {
-      name: "Governance-Native Engineering and the AI Control Plane",
+      name: "The Missing Layer in Agentic Development: Precise Governance",
     }),
   ).toBeVisible()
   await expect(
     page.getByRole("link", {
-      name: "Governance-Native Engineering",
+      name: "The Assurance Stack",
       exact: true,
     }),
   ).toHaveAttribute("href", "/blog/series/governance-native-engineering")
@@ -216,13 +216,13 @@ test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
 
   await expect(
     page.getByRole("heading", {
-      name: "Governance-Native Engineering",
+      name: "The Assurance Stack",
       exact: true,
     }),
   ).toBeVisible()
   await expect(
     page.getByRole("link", {
-      name: "Governance-Native Engineering and the AI Control Plane",
+      name: "The Missing Layer in Agentic Development: Precise Governance",
     }),
   ).toHaveAttribute("href", "/blog/governance-native-engineering-control-plane")
   await expect(
