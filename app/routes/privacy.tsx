@@ -28,17 +28,17 @@ const Privacy = () => (
         </p>
         <p>
           By using the service, you agree to the collection and use of
-          information in accordance with this policy. Personal information is
-          used to provide, operate, and improve the service.
+          information in accordance with this policy. Micrantha uses personal
+          information to provide, operate, and improve the service.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl">Information Collection and Use</h2>
         <p>
-          For a better experience, the service may ask you to provide personally
+          For a better experience, Micrantha may ask you to provide personally
           identifiable information, including your name, phone number, or postal
-          address. That information may be used to contact you, support the
+          address. Micrantha may use that information to contact you, support the
           service, and improve the experience.
         </p>
       </section>
@@ -46,10 +46,10 @@ const Privacy = () => (
       <section className="space-y-3">
         <h2 className="text-xl">Log Data</h2>
         <p>
-          When you visit the service, information sent automatically by your
-          browser may be collected. This can include your IP address, browser
-          version, the pages you visit, the time and date of your visit, time
-          spent on those pages, and similar diagnostic data.
+          When you visit the service, Micrantha may collect information sent
+          automatically by your browser. This can include your IP address,
+          browser version, the pages you visit, the time and date of your visit,
+          time spent on those pages, and similar diagnostic data.
         </p>
       </section>
 
@@ -71,14 +71,14 @@ const Privacy = () => (
       <section className="space-y-3">
         <h2 className="text-xl">Service Providers</h2>
         <p>
-          Third-party companies and individuals may be used to help operate the
-          service, provide service-related functions, or assist in understanding
-          how the service is used.
+          Micrantha may use third-party companies and individuals to help operate
+          the service, provide service-related functions, or assist in
+          understanding how the service is used.
         </p>
         <p>
           These providers may have access to personal information only as needed
-          to perform those tasks and are expected not to disclose or use it for
-          other purposes.
+          to perform those tasks for Micrantha, and they are expected not to
+          disclose or use it for other purposes.
         </p>
       </section>
 
@@ -87,8 +87,8 @@ const Privacy = () => (
         <p>
           Micrantha uses commercially reasonable measures to protect personal
           information. No method of transmission over the internet or method of
-          electronic storage is completely secure, so absolute security cannot
-          be guaranteed.
+          electronic storage is completely secure, so Micrantha cannot guarantee
+          absolute security.
         </p>
       </section>
 
@@ -104,18 +104,18 @@ const Privacy = () => (
       <section className="space-y-3">
         <h2 className="text-xl">Children&apos;s Privacy</h2>
         <p>
-          Micrantha services are not directed to children under 13, and personal
-          information from children under 13 is not knowingly collected. If you
-          believe a child has provided personal information, contact
-          privacy@micrantha.com so appropriate action can be taken.
+          Micrantha services are not directed to children under 13, and Micrantha
+          does not knowingly collect personal information from children under 13.
+          If you believe a child has provided personal information, contact
+          privacy@micrantha.com so Micrantha can take appropriate action.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl">Changes to This Privacy Policy</h2>
         <p>
-          This Privacy Policy may be updated from time to time. Changes become
-          effective when they are posted on this page.
+          Micrantha may update this Privacy Policy from time to time. Changes
+          become effective when they are posted on this page.
         </p>
       </section>
 
