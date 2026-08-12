@@ -110,14 +110,14 @@ test("core article content remains usable without JavaScript", async ({
     await page.goto("/blog/governance-native-engineering-control-plane")
     await expect(
       page.getByRole("heading", {
-        name: "Governance-Native Engineering and the AI Control Plane",
+        name: "The Missing Layer in Agentic Development: Precise Governance",
       }),
     ).toBeVisible()
 
     const diagram = page.locator("[data-mermaid-diagram]").first()
     await expect(diagram).toHaveAttribute("data-mermaid-status", "source")
     await expect(diagram.locator("[data-mermaid-source]")).toContainText(
-      "Human intent",
+      "Proposed change or effect",
     )
 
     await page

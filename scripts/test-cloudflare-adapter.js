@@ -133,12 +133,12 @@ const governanceArticle = await read(
 assert.equal(governanceArticle.response.status, 200)
 assert.match(
   governanceArticle.body,
-  /Governance-Native Engineering and the AI Control Plane/,
+  /The Missing Layer in Agentic Development: Precise Governance/,
 )
 assert.match(governanceArticle.body, /data-content-source="mdx"/)
 assert.match(governanceArticle.body, /data-mermaid-status="source"/)
 assert.match(governanceArticle.body, /data-mermaid-source="true"/)
-assert.match(governanceArticle.body, /Human intent/)
+assert.match(governanceArticle.body, /Proposed change or effect/)
 assert.doesNotMatch(governanceArticle.body, /data-mermaid-rendered/)
 assertDocumentHeaders(governanceArticle.response, governanceArticle.body)
 

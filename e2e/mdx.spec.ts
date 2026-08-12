@@ -76,22 +76,21 @@ const articles: ArticleContract[] = [
   },
   {
     slug: "governance-native-engineering-control-plane",
-    title: "Governance-Native Engineering and the AI Control Plane",
-    series: "Governance-Native Engineering",
+    title: "The Missing Layer in Agentic Development: Precise Governance",
+    series: "The Assurance Stack",
     part: 1,
     next: "Replayability Is a Governance Problem",
-    callout: "whether organizations can still govern",
-    mermaidTitle: "AI-native engineering control plane",
-    mermaidSource: "Human intent",
-    finalText:
-      "AI-native engineering therefore becomes a systems-governance discipline",
+    callout: "AI review provides judgment",
+    mermaidTitle: "Assurance layers for agentic development",
+    mermaidSource: "Proposed change or effect",
+    finalText: "It can be the mechanism that makes more autonomy acceptable",
   },
   {
     slug: "replayability-is-a-governance-problem",
     title: "Replayability Is a Governance Problem",
-    series: "Governance-Native Engineering",
+    series: "The Assurance Stack",
     part: 2,
-    previous: "Governance-Native Engineering and the AI Control Plane",
+    previous: "The Missing Layer in Agentic Development: Precise Governance",
     next: "Recursive Governance and Agent Workflows",
     callout: "not just reproducibility engineering",
     mermaidTitle: "Replayability as evidence lifecycle",
@@ -101,7 +100,7 @@ const articles: ArticleContract[] = [
   {
     slug: "recursive-governance-and-agent-workflows",
     title: "Recursive Governance and Agent Workflows",
-    series: "Governance-Native Engineering",
+    series: "The Assurance Stack",
     part: 3,
     previous: "Replayability Is a Governance Problem",
     callout: "weakest materially contributing execution boundary",
@@ -248,7 +247,7 @@ test.describe("canonical MDX articles", () => {
     for (const target of [articles[4], articles[5]]) {
       await page
         .getByRole("navigation", {
-          name: "Governance-Native Engineering series navigation",
+          name: "The Assurance Stack series navigation",
         })
         .getByRole("link", { name: `Next: ${target.title}` })
         .click()

@@ -24,7 +24,7 @@ const bodyMarkers = new Map([
   ],
   [
     "governance-native-engineering-control-plane",
-    "AI-native engineering therefore becomes a systems-governance discipline",
+    "It can be the mechanism that makes more autonomy acceptable",
   ],
   [
     "replayability-is-a-governance-problem",

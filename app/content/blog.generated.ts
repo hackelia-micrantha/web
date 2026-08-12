@@ -5,16 +5,18 @@ export const blogPosts = [
   {
     slug: "governance-native-engineering-control-plane",
     status: "published",
-    title: "Governance-Native Engineering and the AI Control Plane",
+    title: "The Missing Layer in Agentic Development: Precise Governance",
     description:
-      "AI-native engineering shifts the bottleneck from implementation throughput toward governance, replayability, and organizational comprehension.",
+      "AI can generate and review code, and CI/CD can verify executable behavior. Agentic systems still need a precise policy layer that decides what evidence and authority an action requires.",
     date: "2026-05-18",
+    updatedAt: "2026-08-11",
     excerpt:
-      "Generated code increases throughput, but without intent capture, evidence, review boundaries, replayability guarantees, and human comprehension loops, organizations accumulate governance debt.",
+      "AI review provides judgment and CI/CD provides executable evidence. Precise governance determines which assurance is sufficient for a proposed consequence and what authority may follow.",
     tags: [
       "ai-governance",
       "anthesis",
       "delivery-governance",
+      "assurance",
       "architecture-notes",
     ],
     relatedSlugs: [

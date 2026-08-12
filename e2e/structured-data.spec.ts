@@ -101,7 +101,7 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
   expect(collectionPage?.mainEntity?.numberOfItems).toBe(6)
   expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
-    "Governance-Native Engineering and the AI Control Plane",
+    "The Missing Layer in Agentic Development: Precise Governance",
   )
   expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
     "Replayability Is a Governance Problem",
