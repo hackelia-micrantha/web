@@ -33,13 +33,14 @@ Marketing site and web presence for [micrantha.com](https://micrantha.com), buil
 ## Requirements
 
 - Node.js `>=18`
+- Node.js `24` recommended
 - Yarn
 
 ## Quick Start
 
 ```sh
-yarn install
-yarn dev
+mise run setup
+mise run dev
 ```
 
 Open `http://localhost:3000`.
@@ -178,11 +179,11 @@ docker build -t micrantha/web .
 docker run --rm -p 3000:3000 micrantha/web
 ```
 
-Or use the Makefile helpers:
+Or use the mise tasks:
 
 ```sh
-make image
-make run
+mise run image
+mise run serve
 ```
 
 ## Project Structure

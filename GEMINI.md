@@ -60,8 +60,8 @@ yarn start
 The project can also be containerized using Docker. The following commands can be used to build and run the Docker image:
 
 ```sh
-make image
-make run
+mise run image
+mise run serve
 ```
 
 Alternatively, you can use the standard Docker commands:

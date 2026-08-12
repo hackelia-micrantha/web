@@ -1,0 +1,75 @@
+[tasks.help]
+description = "Show available tasks and descriptions."
+run = "mise tasks ls"
+
+[tasks.all]
+description = "Alias for help."
+run = "mise run help"
+
+[tasks.setup]
+description = "Install dependencies if missing."
+run = "if [ ! -d ./node_modules ]; then yarn install; fi"
+
+[tasks.install]
+description = "Alias for setup."
+run = "mise run setup"
+
+[tasks.dev]
+description = "Run local development server."
+depends = ["setup"]
+run = "yarn dev"
+
+[tasks.build]
+description = "Build the app for production."
+depends = ["setup"]
+run = "yarn build"
+
+[tasks.start]
+description = "Serve the built app."
+depends = ["setup"]
+run = "yarn start"
+
+[tasks.css]
+description = "Generate Tailwind CSS once."
+depends = ["setup"]
+run = "yarn generate:css"
+
+[tasks.lint]
+description = "Run ESLint checks."
+depends = ["setup"]
+run = "yarn lint"
+
+[tasks.lint-fix]
+description = "Run ESLint with autofix."
+depends = ["setup"]
+run = "yarn lint:fix"
+
+[tasks.typecheck]
+description = "Run TypeScript type checks."
+depends = ["setup"]
+run = "yarn typecheck"
+
+[tasks.check]
+description = "Run lint, typecheck, and build."
+depends = ["setup"]
+run = "yarn lint && yarn typecheck && yarn build"
+
+[tasks.image]
+description = "Build the Docker image."
+depends = ["setup"]
+run = "docker build -t \"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}:${TAG:-latest}\" ."
+
+[tasks.serve]
+description = "Build and run the Docker image locally."
+depends = ["image"]
+run = "docker run -p \"${PORT:-3000}:3000\" \"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}:${TAG:-latest}\""
+
+[tasks.deploy]
+description = "Push image tags to the container registry."
+depends = ["image"]
+run = "image=\"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}:${TAG:-latest}\"; repository=\"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}\"; docker tag \"$image\" \"$repository:latest\"; docker push \"$repository\" --all-tags"
+
+[tasks.deploy-cloudflare]
+description = "Deploy the app to Cloudflare."
+depends = ["setup"]
+run = "yarn deploy:cloudflare"

@@ -7,7 +7,7 @@
 
 ## Context
 
-Micrantha Web is a server-rendered Remix 2 application deployed to Cloudflare Pages. The repository also supports local Node serving through `remix-serve`, a Docker image, and Makefile wrappers. Those paths are useful for development and portability, but they do not execute the same adapter or runtime used by production.
+Micrantha Web is a server-rendered Remix 2 application deployed to Cloudflare Pages. The repository also supports local Node serving through `remix-serve`, a Docker image, and mise task wrappers. Those paths are useful for development and portability, but they do not execute the same adapter or runtime used by production.
 
 The production path is currently defined by:
 
@@ -162,11 +162,11 @@ Development-only CSP allowances and WebSocket behavior must not leak into produc
 
 The current image runs `remix-serve`; it is not the Cloudflare production artifact. Docker documentation must state that distinction. If the image is retained as an operational artifact, it requires its own dependency and vulnerability policy.
 
-### Makefile
+### mise
 
-**Role:** Convenience aliases only.
+**Role:** Convenience tasks only.
 
-Package scripts and checked-in platform configuration remain authoritative. Make targets must not define a second deployment contract.
+Package scripts and checked-in platform configuration remain authoritative. mise tasks must not define a second deployment contract.
 
 ## Toolchain requirements
 
@@ -253,5 +253,5 @@ Detailed CSP and cross-origin policy hardening remains owned by #57, but the bas
 3. add Pages Function bundle and runtime scripts;
 4. record the Worker bundle baseline and budget;
 5. add the Cloudflare adapter CI job and HTTP contract suite;
-6. align README, Docker, Makefile, and package script descriptions;
+6. align README, Docker, mise, and package script descriptions;
 7. extend the harness from #55, #57, and #58 without redefining the production topology.
