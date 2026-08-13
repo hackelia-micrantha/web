@@ -3,6 +3,31 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
+    slug: "intent-is-security-state",
+    status: "published",
+    title: "Intent Is Security State, Not Conversation History",
+    description:
+      "Agentic systems need explicit, versioned current-intent state so policy decisions, approvals, capabilities, and verification cannot silently outlive the user intent that justified them.",
+    date: "2026-08-12",
+    excerpt:
+      "Conversation history can explain how an agent got here, but consequential authority should bind the exact current intent state the user has actually accepted.",
+    tags: [
+      "ai-governance",
+      "anthesis",
+      "authorization",
+      "assurance",
+      "architecture-notes",
+    ],
+    relatedSlugs: [
+      "governance-native-engineering-control-plane",
+      "replayability-is-a-governance-problem",
+    ],
+    series: {
+      slug: "governance-native-engineering",
+      order: 2,
+    },
+  },
+  {
     slug: "governance-native-engineering-control-plane",
     status: "published",
     title: "The Missing Layer in Agentic Development: Precise Governance",
@@ -26,31 +51,6 @@ export const blogPosts = [
     series: {
       slug: "governance-native-engineering",
       order: 1,
-    },
-  },
-  {
-    slug: "intent-is-security-state",
-    status: "published",
-    title: "Intent Is Security State, Not Conversation History",
-    description:
-      "Agentic systems need explicit, versioned current-intent state so policy decisions, approvals, capabilities, and verification cannot silently outlive the user intent that justified them.",
-    date: "2026-08-12",
-    excerpt:
-      "Conversation history can explain how an agent got here, but consequential authority should bind the exact current intent state the user has actually accepted.",
-    tags: [
-      "ai-governance",
-      "anthesis",
-      "authorization",
-      "assurance",
-      "architecture-notes",
-    ],
-    relatedSlugs: [
-      "governance-native-engineering-control-plane",
-      "replayability-is-a-governance-problem",
-    ],
-    series: {
-      slug: "governance-native-engineering",
-      order: 2,
     },
   },
   {
