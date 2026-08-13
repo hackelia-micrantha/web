@@ -101,10 +101,10 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
   expect(collectionPage?.mainEntity?.numberOfItems).toBe(7)
   expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
-    "The Missing Layer in Agentic Development: Precise Governance",
+    "Intent Is Security State, Not Conversation History",
   )
   expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
-    "Intent Is Security State, Not Conversation History",
+    "The Missing Layer in Agentic Development: Precise Governance",
   )
   expect(collectionPage?.mainEntity?.itemListElement?.[2]?.item?.name).toBe(
     "Replayability Is a Governance Problem",
