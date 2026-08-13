@@ -247,7 +247,7 @@ test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "/blog/recursive-governance-and-agent-workflows")
   await expect(page.getByText(/Part 1 \/ May 18, 2026/)).toBeVisible()
-  await expect(page.getByText(/Part 2 \/ Aug 12, 2026/)).toBeVisible()
+  await expect(page.getByText(/Part 2 \/ August 12, 2026/)).toBeVisible()
   await expect(page.getByText(/Part 3 \/ May 18, 2026/)).toBeVisible()
   await expect(page.getByText(/Part 4 \/ May 18, 2026/)).toBeVisible()
 })
