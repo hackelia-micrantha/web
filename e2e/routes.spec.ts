@@ -137,6 +137,13 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "/blog/governance-native-engineering-control-plane")
   await expect(
+    page.locator("a", {
+      has: page.getByRole("heading", {
+        name: "Intent Is Security State, Not Conversation History",
+      }),
+    }),
+  ).toHaveAttribute("href", "/blog/intent-is-security-state")
+  await expect(
     page.getByRole("link", {
       name: "Secure Platform Integration Is Not Plumbing",
       exact: true,
@@ -151,7 +158,7 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
     page
       .locator(".editorial-card")
       .getByText("The Assurance Stack", { exact: true }),
-  ).toHaveCount(3)
+  ).toHaveCount(4)
   await expect(
     page
       .locator(".editorial-card")
@@ -160,6 +167,7 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
   await expect(page.getByText("Part 1")).toHaveCount(2)
   await expect(page.getByText("Part 2")).toHaveCount(2)
   await expect(page.getByText("Part 3")).toHaveCount(2)
+  await expect(page.getByText("Part 4")).toHaveCount(1)
 })
 
 test("/blog/:slug exposes article content and related notes", async ({
@@ -187,7 +195,7 @@ test("/blog/:slug exposes article content and related notes", async ({
   ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
 })
 
-test("/blog/:slug exposes series navigation for governance-native posts", async ({
+test("/blog/:slug exposes series navigation for assurance-stack posts", async ({
   page,
 }) => {
   await page.goto("/blog/governance-native-engineering-control-plane")
@@ -203,12 +211,12 @@ test("/blog/:slug exposes series navigation for governance-native posts", async 
       exact: true,
     }),
   ).toHaveAttribute("href", "/blog/series/governance-native-engineering")
-  await expect(page.getByText("Part 1 of 3")).toBeVisible()
+  await expect(page.getByText("Part 1 of 4")).toBeVisible()
   await expect(
     page.getByRole("link", {
-      name: "Next: Replayability Is a Governance Problem",
+      name: "Next: Intent Is Security State, Not Conversation History",
     }),
-  ).toHaveAttribute("href", "/blog/replayability-is-a-governance-problem")
+  ).toHaveAttribute("href", "/blog/intent-is-security-state")
 })
 
 test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
@@ -226,6 +234,11 @@ test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "/blog/governance-native-engineering-control-plane")
   await expect(
+    page.getByRole("link", {
+      name: "Intent Is Security State, Not Conversation History",
+    }),
+  ).toHaveAttribute("href", "/blog/intent-is-security-state")
+  await expect(
     page.getByRole("link", { name: "Replayability Is a Governance Problem" }),
   ).toHaveAttribute("href", "/blog/replayability-is-a-governance-problem")
   await expect(
@@ -234,8 +247,9 @@ test("/blog/series/:slug exposes ordered series posts", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "/blog/recursive-governance-and-agent-workflows")
   await expect(page.getByText(/Part 1 \/ May 18, 2026/)).toBeVisible()
-  await expect(page.getByText(/Part 2 \/ May 18, 2026/)).toBeVisible()
+  await expect(page.getByText(/Part 2 \/ August 12, 2026/)).toBeVisible()
   await expect(page.getByText(/Part 3 \/ May 18, 2026/)).toBeVisible()
+  await expect(page.getByText(/Part 4 \/ May 18, 2026/)).toBeVisible()
 })
 
 test("/blog posts expose their diagram images", async ({ page }) => {

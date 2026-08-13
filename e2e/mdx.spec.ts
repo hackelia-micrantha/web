@@ -79,18 +79,30 @@ const articles: ArticleContract[] = [
     title: "The Missing Layer in Agentic Development: Precise Governance",
     series: "The Assurance Stack",
     part: 1,
-    next: "Replayability Is a Governance Problem",
+    next: "Intent Is Security State, Not Conversation History",
     callout: "AI review provides judgment",
     mermaidTitle: "Assurance layers for agentic development",
     mermaidSource: "Proposed change or effect",
     finalText: "It can be the mechanism that makes more autonomy acceptable",
   },
   {
-    slug: "replayability-is-a-governance-problem",
-    title: "Replayability Is a Governance Problem",
+    slug: "intent-is-security-state",
+    title: "Intent Is Security State, Not Conversation History",
     series: "The Assurance Stack",
     part: 2,
     previous: "The Missing Layer in Agentic Development: Precise Governance",
+    next: "Replayability Is a Governance Problem",
+    callout: "Current intent is security state",
+    mermaidTitle: "Evolving intent becomes an authority problem",
+    mermaidSource: "Conversation event",
+    finalText: "Current intent governs the next decision",
+  },
+  {
+    slug: "replayability-is-a-governance-problem",
+    title: "Replayability Is a Governance Problem",
+    series: "The Assurance Stack",
+    part: 3,
+    previous: "Intent Is Security State, Not Conversation History",
     next: "Recursive Governance and Agent Workflows",
     callout: "not just reproducibility engineering",
     mermaidTitle: "Replayability as evidence lifecycle",
@@ -101,7 +113,7 @@ const articles: ArticleContract[] = [
     slug: "recursive-governance-and-agent-workflows",
     title: "Recursive Governance and Agent Workflows",
     series: "The Assurance Stack",
-    part: 3,
+    part: 4,
     previous: "Replayability Is a Governance Problem",
     callout: "weakest materially contributing execution boundary",
     mermaidTitle: "Governed recursive execution",
@@ -123,6 +135,10 @@ function articleByTitle(title: string) {
   }
 
   return article
+}
+
+function seriesArticles(article: ArticleContract) {
+  return articles.filter((candidate) => candidate.series === article.series)
 }
 
 async function assertSeriesNavigation(page: Page, article: ArticleContract) {
@@ -164,7 +180,10 @@ test.describe("canonical MDX articles", () => {
         page.getByRole("heading", { level: 1, name: article.title }),
       ).toBeVisible()
       await expect(
-        page.getByText(`Part ${article.part} of 3`, { exact: true }),
+        page.getByText(
+          `Part ${article.part} of ${seriesArticles(article).length}`,
+          { exact: true },
+        ),
       ).toBeVisible()
 
       const content = page.locator('[data-content-source="mdx"]')
@@ -239,12 +258,16 @@ test.describe("canonical MDX articles", () => {
   test("navigates through the governance series without replacing the document", async ({
     page,
   }) => {
-    await page.goto(articlePath(articles[3]))
+    const assuranceStackArticles = articles.filter(
+      (article) => article.series === "The Assurance Stack",
+    )
+
+    await page.goto(articlePath(assuranceStackArticles[0]))
     await page.evaluate(() => {
       document.documentElement.dataset.navigationMarker = "preserved"
     })
 
-    for (const target of [articles[4], articles[5]]) {
+    for (const target of assuranceStackArticles.slice(1)) {
       await page
         .getByRole("navigation", {
           name: "The Assurance Stack series navigation",

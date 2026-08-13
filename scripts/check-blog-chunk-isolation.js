@@ -24,8 +24,9 @@ const bodyMarkers = new Map([
   ],
   [
     "governance-native-engineering-control-plane",
-    "It can be the mechanism that makes more autonomy acceptable",
+    "which assurance is sufficient for which consequence",
   ],
+  ["intent-is-security-state", "Conversation history explains the path"],
   [
     "replayability-is-a-governance-problem",
     "bounded explainability and attributable execution",
