@@ -19,7 +19,7 @@ env:
 jobs:
   quality:
     name: Quality
-    runs-on: ubuntu-latest
+    runs-on: runner-web
     timeout-minutes: 15
 
     steps:
@@ -121,7 +121,7 @@ jobs:
 
   end-to-end:
     name: End-to-end
-    runs-on: ubuntu-latest
+    runs-on: runner-web
     timeout-minutes: 25
 
     steps:
