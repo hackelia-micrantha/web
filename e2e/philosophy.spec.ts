@@ -7,8 +7,12 @@ test("/philosophy exposes the core manifesto and vector diagram", async ({
 
   await expect(page.getByRole("heading", { name: "Philosophy" })).toBeVisible()
   await expect(page.getByRole("heading", { name: "Triangle" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Composition" })).toBeVisible()
   await expect(
     page.getByText("Software is built iteratively inside a project triangle"),
+  ).toBeVisible()
+  await expect(
+    page.getByText("Small tools should do one thing clearly"),
   ).toBeVisible()
   await expect(
     page.getByAltText("Project management triangle diagram"),
