@@ -119,6 +119,30 @@ const Philosophy = () => {
           </div>
         </section>
 
+        <section className="space-y-4">
+          <h2 className="text-xl">Composition</h2>
+          <p>
+            Small tools should do one thing clearly, expose stable contracts, and
+            remain useful on their own. They become more capable when they can be
+            combined without hiding where responsibility, trust, or authority
+            lives.
+          </p>
+          <p>
+            Micrantha follows the Unix tradition where it fits: programs accept
+            structured input, produce structured output, and compose through
+            ordinary process boundaries. The same domain contracts should also
+            survive when those tools are used through services, automation, or
+            agent orchestration. Transport can change; meaning should not.
+          </p>
+          <p>
+            Orchestration is therefore a consumer of capabilities rather than the
+            owner of them. A supervisor may coordinate context, model selection,
+            execution, evidence, and governance, but the underlying tools remain
+            independently understandable, testable, and reusable. Composition
+            should increase capability without quietly increasing authority.
+          </p>
+        </section>
+
         <section className="space-y-6">
           <h2 className="text-xl">Naming</h2>
           <p>
