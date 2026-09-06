@@ -1,0 +1,29 @@
+name: Setup
+description: Activate the project-owned Nix toolchain and install dependencies
+
+runs:
+  using: composite
+  steps:
+    - name: Validate project toolchain
+      run: nix flake check
+      shell: bash
+
+    - name: Activate project toolchain
+      run: |
+        set -euo pipefail
+        toolchain="$(nix build --no-link --print-out-paths .#ci-toolchain)"
+        test -x "$toolchain/bin/node"
+        test -x "$toolchain/bin/yarn"
+        printf '%s\n' "$toolchain/bin" >> "$GITHUB_PATH"
+      shell: bash
+
+    - name: Verify project toolchain
+      run: |
+        set -euo pipefail
+        node --version
+        yarn --version
+      shell: bash
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile --non-interactive
+      shell: bash
