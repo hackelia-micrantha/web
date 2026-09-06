@@ -26,13 +26,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set up project toolchain
+        uses: ./.github/actions/setup
 
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
@@ -128,13 +123,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set up project toolchain
+        uses: ./.github/actions/setup
 
       - name: Install Chromium
         run: yarn playwright install --with-deps chromium
