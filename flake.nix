@@ -31,9 +31,50 @@
               pkgs.python3
             ];
           };
+
+          # The Yarn lock currently resolves @playwright/test to 1.60.0. The
+          # nixos-25.11 pin carries older Playwright browsers, so keep the
+          # browser artifact version explicit and fixed-output rather than
+          # silently coupling incompatible Playwright revisions.
+          playwrightVersion = "1.60.0";
+          playwrightChromium = {
+            revision = "1223";
+            browserVersion = "148.0.7778.96";
+          };
+          playwrightFfmpegRevision = "1011";
+          throwSystem = throw "Unsupported system: ${system}";
+          fontconfigFile = pkgs.makeFontsConf { fontDirectories = [ ]; };
+          chromium = pkgs.callPackage ./nix/playwright/chromium.nix {
+            inherit system throwSystem;
+            inherit (playwrightChromium) revision browserVersion;
+            fontconfig_file = fontconfigFile;
+          };
+          chromiumHeadlessShell = pkgs.callPackage ./nix/playwright/chromium-headless-shell.nix {
+            inherit system throwSystem;
+            inherit (playwrightChromium) revision browserVersion;
+          };
+          playwrightFfmpeg = pkgs.callPackage ./nix/playwright/ffmpeg.nix {
+            inherit system throwSystem;
+            revision = playwrightFfmpegRevision;
+          };
+          playwrightBrowsers = pkgs.linkFarm "micrantha-playwright-browsers-${playwrightVersion}" [
+            {
+              name = "chromium-${playwrightChromium.revision}";
+              path = chromium;
+            }
+            {
+              name = "chromium_headless_shell-${playwrightChromium.revision}";
+              path = chromiumHeadlessShell;
+            }
+            {
+              name = "ffmpeg-${playwrightFfmpegRevision}";
+              path = playwrightFfmpeg;
+            }
+          ];
         in
         {
           ci-toolchain = ciToolchain;
+          playwright-browsers = playwrightBrowsers;
           default = ciToolchain;
         }
       );
