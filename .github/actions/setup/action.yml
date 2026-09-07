@@ -1,6 +1,12 @@
 name: Setup
 description: Activate the project-owned Nix toolchain and install dependencies
 
+inputs:
+  playwright:
+    description: Activate the project-owned Playwright browser runtime
+    required: false
+    default: "false"
+
 runs:
   using: composite
   steps:
@@ -17,6 +23,19 @@ runs:
         printf '%s\n' "$toolchain/bin" >> "$GITHUB_PATH"
       shell: bash
 
+    - name: Activate project Playwright browsers
+      if: inputs.playwright == 'true'
+      run: |
+        set -euo pipefail
+        browsers="$(nix build --no-link --print-out-paths .#playwright-browsers)"
+        test -d "$browsers/chromium-1223"
+        test -d "$browsers/chromium_headless_shell-1223"
+        test -d "$browsers/ffmpeg-1011"
+        printf 'PLAYWRIGHT_BROWSERS_PATH=%s\n' "$browsers" >> "$GITHUB_ENV"
+        printf 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1\n' >> "$GITHUB_ENV"
+        printf 'PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1\n' >> "$GITHUB_ENV"
+      shell: bash
+
     - name: Verify project toolchain
       run: |
         set -euo pipefail
@@ -26,4 +45,12 @@ runs:
 
     - name: Install dependencies
       run: yarn install --frozen-lockfile --non-interactive
+      shell: bash
+
+    - name: Verify Playwright version contract
+      if: inputs.playwright == 'true'
+      run: |
+        set -euo pipefail
+        test "$(node -p "require('./node_modules/@playwright/test/package.json').version")" = "1.60.0"
+        test -n "${PLAYWRIGHT_BROWSERS_PATH:-}"
       shell: bash
