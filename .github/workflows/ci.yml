@@ -125,9 +125,8 @@ jobs:
 
       - name: Set up project toolchain
         uses: ./.github/actions/setup
-
-      - name: Install Chromium
-        run: yarn playwright install --with-deps chromium
+        with:
+          playwright: "true"
 
       - name: Run functional Playwright tests
         run: yarn playwright test --grep-invert "visual regressions"
