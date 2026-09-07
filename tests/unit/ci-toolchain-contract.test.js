@@ -51,6 +51,7 @@ test("Playwright browser runtime matches the Yarn-locked client", () => {
   assert.match(flake, /playwright-browsers = playwrightBrowsers;/)
 
   assert.doesNotMatch(workflow, /playwright install/)
+  assert.doesNotMatch(workflow, /\bsudo\b|\bapt(?:-get)?\b/)
   assert.match(workflow, /playwright: "true"/)
   assert.match(setup, /PLAYWRIGHT_BROWSERS_PATH/)
   assert.match(setup, /PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1/)
