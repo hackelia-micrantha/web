@@ -10,7 +10,7 @@ The JavaScript test client remains owned by `yarn.lock`. At the time this browse
 - Chromium headless shell revision `1223`;
 - FFmpeg revision `1011`.
 
-The Nix derivations and fixed-output hashes are adapted from NixOS/nixpkgs commit `9e87430ac7e25a6ba9f5a593c300f4e114a00f57` (`playwright: 1.59.1 -> 1.60.0`). They are intentionally kept separate from the repository's main `nixos-25.11` input because that branch currently packages an older Playwright browser revision.
+The Nix derivations and fixed-output hashes are adapted from NixOS/nixpkgs commit `9e87430ac7e25a6ba9f5a593c300f4e114a00f57` (`playwright: 1.59.1 -> 1.60.0`), under nixpkgs' MIT license. They are intentionally kept separate from the repository's main `nixos-25.11` input because that branch currently packages an older Playwright browser revision.
 
 Upstream source paths:
 
