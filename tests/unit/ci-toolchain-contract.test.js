@@ -9,13 +9,13 @@ const setup = readFileSync(".github/actions/setup/action.yml", "utf8")
 const yarnLock = readFileSync("yarn.lock", "utf8")
 
 const jobsSection = workflow.split("\njobs:\n")[1] ?? ""
-const jobBlocks = jobsSection.split(/\n(?=  [a-zA-Z0-9_-]+:\n)/)
+const jobBlocks = jobsSection.split(/\n(?= {2}[a-zA-Z0-9_-]+:\n)/)
 
 test("every runner-web job uses the repository-owned setup action", () => {
   assert.doesNotMatch(workflow, /actions\/setup-node@/)
 
   const runnerJobs = jobBlocks.filter((block) =>
-    /^    runs-on: runner-web$/m.test(block),
+    /^ {4}runs-on: runner-web$/m.test(block),
   )
 
   assert.ok(runnerJobs.length > 0, "CI must retain at least one runner-web job")
@@ -42,7 +42,7 @@ test("project toolchain pins Node 24 and Yarn 1 through Nix", () => {
 test("Playwright browser runtime matches the Yarn-locked client", () => {
   assert.match(
     yarnLock,
-    /"@playwright\/test@\^1\.54\.2":\n  version "1\.60\.0"/,
+    /"@playwright\/test@\^1\.54\.2":\n {2}version "1\.60\.0"/,
   )
   assert.match(flake, /playwrightVersion = "1\.60\.0";/)
   assert.match(flake, /revision = "1223";/)
