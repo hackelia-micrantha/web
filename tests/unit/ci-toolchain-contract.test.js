@@ -6,6 +6,7 @@ const workflow = readFileSync(".github/workflows/ci.yml", "utf8")
 const flake = readFileSync("flake.nix", "utf8")
 const lock = readFileSync("flake.lock", "utf8")
 const setup = readFileSync(".github/actions/setup/action.yml", "utf8")
+const playwrightConfig = readFileSync("playwright.config.ts", "utf8")
 const yarnLock = readFileSync("yarn.lock", "utf8")
 
 const jobsSection = workflow.split("\njobs:\n")[1] ?? ""
@@ -56,6 +57,10 @@ test("Playwright browser runtime matches the Yarn-locked client", () => {
   assert.match(setup, /PLAYWRIGHT_BROWSERS_PATH/)
   assert.match(setup, /PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1/)
   assert.match(setup, /PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1/)
+})
+
+test("Playwright CI concurrency stays bounded for the small JIT profile", () => {
+  assert.match(playwrightConfig, /workers: process\.env\.CI \? 1 : undefined/)
 })
 
 test("Nix input is locked to an immutable nixpkgs revision", () => {
