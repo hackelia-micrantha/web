@@ -32,10 +32,10 @@ let
       inherit revision browserVersion;
     }).${system} or throwSystem;
 
-  headlessShellDir =
+  headlessShellPath =
     {
-      x86_64-linux = "chrome-headless-shell-linux64";
-      aarch64-linux = "chrome-headless-shell-linux-arm64";
+      x86_64-linux = "chrome-headless-shell-linux64/chrome-headless-shell";
+      aarch64-linux = "chrome-linux/headless_shell";
     }
     .${system} or throwSystem;
 
@@ -75,7 +75,7 @@ let
 
     buildPhase = ''
       cp -R . $out
-      wrapProgram $out/${headlessShellDir}/headless_shell \
+      wrapProgram $out/${headlessShellPath} \
         --set-default FONTCONFIG_FILE ${fontconfig_file}
     '';
   };
