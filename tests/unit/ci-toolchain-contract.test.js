@@ -77,17 +77,17 @@ test("Playwright browser runtime owns its font availability", () => {
   assert.match(headlessShell, /makeWrapper/)
   assert.match(
     headlessShell,
-    /x86_64-linux = "chrome-headless-shell-linux64";/,
-    "x86_64 headless shell must preserve Playwright's archive directory",
+    /x86_64-linux = "chrome-headless-shell-linux64\/chrome-headless-shell";/,
+    "x86_64 headless shell path must match Playwright 1.60",
   )
   assert.match(
     headlessShell,
-    /aarch64-linux = "chrome-headless-shell-linux-arm64";/,
-    "aarch64 headless shell must preserve Playwright's archive directory",
+    /aarch64-linux = "chrome-linux\/headless_shell";/,
+    "aarch64 headless shell path must match Playwright 1.60",
   )
   assert.match(
     headlessShell,
-    /wrapProgram \$out\/\$\{headlessShellDir\}\/headless_shell[\s\\\n]*--set-default FONTCONFIG_FILE \$\{fontconfig_file\}/,
+    /wrapProgram \$out\/\$\{headlessShellPath\}[\s\\\n]*--set-default FONTCONFIG_FILE \$\{fontconfig_file\}/,
   )
 })
 
