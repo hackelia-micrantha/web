@@ -43,7 +43,13 @@
           };
           playwrightFfmpegRevision = "1011";
           throwSystem = throw "Unsupported system: ${system}";
-          fontconfigFile = pkgs.makeFontsConf { fontDirectories = [ ]; };
+
+          # Browser rendering is part of the repository-owned CI runtime. Do
+          # not rely on host/JIT runner fonts: isolated runners may otherwise
+          # render text as zero-size/invisible while preserving DOM semantics.
+          fontconfigFile = pkgs.makeFontsConf {
+            fontDirectories = [ pkgs.dejavu_fonts ];
+          };
           chromium = pkgs.callPackage ./nix/playwright/chromium.nix {
             inherit system throwSystem;
             inherit (playwrightChromium) revision browserVersion;
@@ -52,6 +58,7 @@
           chromiumHeadlessShell = pkgs.callPackage ./nix/playwright/chromium-headless-shell.nix {
             inherit system throwSystem;
             inherit (playwrightChromium) revision browserVersion;
+            fontconfig_file = fontconfigFile;
           };
           playwrightFfmpeg = pkgs.callPackage ./nix/playwright/ffmpeg.nix {
             inherit system throwSystem;
