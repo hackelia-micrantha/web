@@ -32,6 +32,13 @@ let
       inherit revision browserVersion;
     }).${system} or throwSystem;
 
+  headlessShellDir =
+    {
+      x86_64-linux = "chrome-headless-shell-linux64";
+      aarch64-linux = "chrome-headless-shell-linux-arm64";
+    }
+    .${system} or throwSystem;
+
   linux = stdenv.mkDerivation {
     name = "playwright-chromium-headless-shell";
     src = fetchzip {
@@ -68,7 +75,7 @@ let
 
     buildPhase = ''
       cp -R . $out
-      wrapProgram $out/headless_shell \
+      wrapProgram $out/${headlessShellDir}/headless_shell \
         --set-default FONTCONFIG_FILE ${fontconfig_file}
     '';
   };
