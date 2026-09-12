@@ -42,6 +42,19 @@ const homepageProjectPresentation = {
   },
 } as const
 
+const homepagePresentationFor = (slug: string) => {
+  const presentation =
+    homepageProjectPresentation[
+      slug as keyof typeof homepageProjectPresentation
+    ]
+
+  if (!presentation) {
+    throw new Error(`Missing homepage presentation for project: ${slug}`)
+  }
+
+  return presentation
+}
+
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Home",
@@ -354,7 +367,7 @@ export default function Index() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {featuredHomepageProjectSlugs.solution.map((slug) => {
             const project = projectBySlug(slug)
-            const presentation = homepageProjectPresentation[slug]
+            const presentation = homepagePresentationFor(slug)
 
             return (
               <Card
@@ -393,7 +406,7 @@ export default function Index() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {featuredHomepageProjectSlugs.laboratory.map((slug) => {
             const project = projectBySlug(slug)
-            const presentation = homepageProjectPresentation[slug]
+            const presentation = homepagePresentationFor(slug)
 
             return (
               <Card

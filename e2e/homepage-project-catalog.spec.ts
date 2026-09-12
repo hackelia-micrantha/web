@@ -6,9 +6,13 @@ import {
 } from "../app/data/project-catalog"
 
 for (const classification of ["solution", "laboratory"] as const) {
-  test(`homepage ${classification} features retain their catalog classification`, () => {
+  test(`homepage ${classification} features are canonical featured projects`, () => {
     for (const slug of featuredHomepageProjectSlugs[classification]) {
-      expect(projectBySlug(slug).classification).toBe(classification)
+      expect(projectBySlug(slug)).toMatchObject({
+        source: "canonical",
+        classification,
+        portfolio: "featured",
+      })
     }
   })
 }
