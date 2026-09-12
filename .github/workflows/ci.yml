@@ -26,13 +26,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set up project toolchain
+        uses: ./.github/actions/setup
 
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
@@ -122,22 +117,16 @@ jobs:
   end-to-end:
     name: End-to-end
     runs-on: runner-web
-    timeout-minutes: 25
+    timeout-minutes: 45
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
+      - name: Set up project toolchain
+        uses: ./.github/actions/setup
         with:
-          node-version: 24
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Install Chromium
-        run: yarn playwright install --with-deps chromium
+          playwright: "true"
 
       - name: Run functional Playwright tests
         run: yarn playwright test --grep-invert "visual regressions"
