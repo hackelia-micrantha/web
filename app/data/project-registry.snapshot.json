@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "hackelia-micrantha/hackelia-micrantha",
+    "registryPath": "registry/projects.yaml",
+    "inventoryPath": "registry/inventory.md",
+    "commit": "e711c5e3bc5bf306e55af531701b37eab1fa4ee3"
+  },
+  "excludedPortfolioFamilies": [
+    "garden",
+    "scouter"
+  ],
+  "projects": [
+    {
+      "id": "achillea",
+      "name": "Achillea",
+      "classification": "laboratory",
+      "portfolio": "featured",
+      "role": "platform",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "amaryllis",
+      "name": "Amaryllis",
+      "classification": "solution",
+      "portfolio": null,
+      "role": "platform",
+      "lifecycle": "active"
+    },
+    {
+      "id": "anthesis",
+      "name": "Anthesis",
+      "classification": "solution",
+      "portfolio": "featured",
+      "role": "platform",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "anthesis-governance-lab",
+      "name": "Anthesis Governance Lab",
+      "classification": "laboratory",
+      "portfolio": null,
+      "role": "laboratory",
+      "lifecycle": "active"
+    },
+    {
+      "id": "bluebell",
+      "name": "Bluebell",
+      "classification": "laboratory",
+      "portfolio": null,
+      "role": "library",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "calathea",
+      "name": "Calathea",
+      "classification": "laboratory",
+      "portfolio": "supporting",
+      "role": "tooling",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "digitalis",
+      "name": "Digitalis",
+      "classification": "laboratory",
+      "portfolio": null,
+      "role": "solution",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "dubnium",
+      "name": "Dubnium",
+      "classification": "solution",
+      "portfolio": "featured",
+      "role": "infrastructure",
+      "lifecycle": "active"
+    },
+    {
+      "id": "envuscator",
+      "name": "Envuscator",
+      "classification": "solution",
+      "portfolio": null,
+      "role": "tooling",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "eyespie",
+      "name": "EyesPie",
+      "classification": "laboratory",
+      "portfolio": null,
+      "role": "laboratory",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "fatherless",
+      "name": "The Fatherless / Entanglement of Ages",
+      "classification": null,
+      "portfolio": "featured",
+      "role": "creative",
+      "lifecycle": "active"
+    },
+    {
+      "id": "fortunes",
+      "name": "Fortunes Service",
+      "classification": "solution",
+      "portfolio": "supporting",
+      "role": "solution",
+      "lifecycle": "stable"
+    },
+    {
+      "id": "hyperion",
+      "name": "Hyperion",
+      "classification": "laboratory",
+      "portfolio": "supporting",
+      "role": "infrastructure",
+      "lifecycle": "active"
+    },
+    {
+      "id": "invokrum",
+      "name": "Invokrum",
+      "classification": null,
+      "portfolio": "supporting",
+      "role": "tooling",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "keylix",
+      "name": "Keylix",
+      "classification": null,
+      "portfolio": "supporting",
+      "role": "library",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "micrantha-github",
+      "name": "Micrantha GitHub Configuration",
+      "classification": null,
+      "portfolio": null,
+      "role": "meta",
+      "lifecycle": "active"
+    },
+    {
+      "id": "micrantha-meta",
+      "name": "Micrantha",
+      "classification": null,
+      "portfolio": "featured",
+      "role": "meta",
+      "lifecycle": "active"
+    },
+    {
+      "id": "micrantha-web",
+      "name": "Micrantha Web",
+      "classification": null,
+      "portfolio": null,
+      "role": "meta",
+      "lifecycle": "active"
+    },
+    {
+      "id": "mobuild",
+      "name": "Mobuild",
+      "classification": null,
+      "portfolio": "supporting",
+      "role": "meta",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "modolia",
+      "name": "Modolia",
+      "classification": null,
+      "portfolio": "supporting",
+      "role": "tooling",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "morifolium",
+      "name": "Morifolium",
+      "classification": "laboratory",
+      "portfolio": null,
+      "role": "platform",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "myosotis",
+      "name": "Myosotis",
+      "classification": "laboratory",
+      "portfolio": "featured",
+      "role": "platform",
+      "lifecycle": "experimental"
+    },
+    {
+      "id": "outermesh",
+      "name": "Outermesh",
+      "classification": null,
+      "portfolio": "supporting",
+      "role": "solution",
+      "lifecycle": "experimental"
+    },
+    {
+      "id": "phyllotaxis",
+      "name": "Phyllotaxis",
+      "classification": "laboratory",
+      "portfolio": "featured",
+      "role": "platform",
+      "lifecycle": "experimental"
+    },
+    {
+      "id": "repora",
+      "name": "Repora",
+      "classification": "laboratory",
+      "portfolio": "featured",
+      "role": "tooling",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "sandcastle",
+      "name": "Sandcastle",
+      "classification": "laboratory",
+      "portfolio": "supporting",
+      "role": "infrastructure",
+      "lifecycle": "experimental"
+    },
+    {
+      "id": "testule",
+      "name": "Testule",
+      "classification": null,
+      "portfolio": null,
+      "role": "tooling",
+      "lifecycle": "incubating"
+    }
+  ]
+}
