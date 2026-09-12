@@ -7,6 +7,8 @@
   stdenv,
   autoPatchelfHook,
   patchelfUnstable,
+  makeWrapper,
+  fontconfig_file,
 
   alsa-lib,
   at-spi2-atk,
@@ -45,6 +47,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       patchelfUnstable
+      makeWrapper
     ];
 
     buildInputs = [
@@ -65,6 +68,8 @@ let
 
     buildPhase = ''
       cp -R . $out
+      wrapProgram $out/headless_shell \
+        --set-default FONTCONFIG_FILE ${fontconfig_file}
     '';
   };
 
