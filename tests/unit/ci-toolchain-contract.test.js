@@ -7,6 +7,10 @@ const flake = readFileSync("flake.nix", "utf8")
 const lock = readFileSync("flake.lock", "utf8")
 const setup = readFileSync(".github/actions/setup/action.yml", "utf8")
 const playwrightConfig = readFileSync("playwright.config.ts", "utf8")
+const headlessShell = readFileSync(
+  "nix/playwright/chromium-headless-shell.nix",
+  "utf8",
+)
 const yarnLock = readFileSync("yarn.lock", "utf8")
 
 const jobsSection = workflow.split("\njobs:\n")[1] ?? ""
@@ -57,6 +61,24 @@ test("Playwright browser runtime matches the Yarn-locked client", () => {
   assert.match(setup, /PLAYWRIGHT_BROWSERS_PATH/)
   assert.match(setup, /PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1/)
   assert.match(setup, /PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1/)
+})
+
+test("Playwright browser runtime owns its font availability", () => {
+  assert.match(
+    flake,
+    /fontDirectories = \[ pkgs\.dejavu_fonts \];/,
+    "browser fontconfig must not depend on host fonts",
+  )
+  assert.match(
+    flake,
+    /chromiumHeadlessShell = pkgs\.callPackage[\s\S]*fontconfig_file = fontconfigFile;/,
+    "headless shell must receive the same repository-owned fontconfig",
+  )
+  assert.match(headlessShell, /makeWrapper/)
+  assert.match(
+    headlessShell,
+    /wrapProgram \$out\/headless_shell[\s\\\n]*--set-default FONTCONFIG_FILE \$\{fontconfig_file\}/,
+  )
 })
 
 test("Playwright CI concurrency stays bounded for the small JIT profile", () => {
