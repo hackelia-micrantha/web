@@ -32,6 +32,9 @@ jobs:
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
 
+      - name: Validate project registry projection
+        run: yarn test:project-registry-projection
+
       - name: Check repository formatting
         id: formatting
         run: yarn format:check
