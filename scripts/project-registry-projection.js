@@ -8,7 +8,13 @@ const root = path.resolve(__dirname, "..")
 const allowedClassifications = new Set(["solution", "laboratory", null])
 const allowedPortfolio = new Set(["featured", "supporting", false, null])
 const allowedSurfaces = new Set(["catalog", "homepage"])
-const canonicalFields = ["name", "portfolio", "classification", "role", "lifecycle"]
+const canonicalFields = [
+  "name",
+  "portfolio",
+  "classification",
+  "role",
+  "lifecycle",
+]
 const publicSnapshotFields = new Set([
   "id",
   "name",
@@ -63,10 +69,24 @@ export const normalizeProjectRegistryProjection = (snapshot, presentation) => ({
 })
 
 export const validateProjectRegistryProjection = (snapshot, presentation) => {
-  assert(snapshot.schemaVersion === 1, "unsupported project-registry snapshot schema")
-  assert(presentation.schemaVersion === 1, "unsupported project-presentation schema")
-  assertOnlyFields(snapshot, snapshotTopLevelFields, "project-registry snapshot")
-  assertOnlyFields(snapshot.source, snapshotSourceFields, "project-registry source")
+  assert(
+    snapshot.schemaVersion === 1,
+    "unsupported project-registry snapshot schema",
+  )
+  assert(
+    presentation.schemaVersion === 1,
+    "unsupported project-presentation schema",
+  )
+  assertOnlyFields(
+    snapshot,
+    snapshotTopLevelFields,
+    "project-registry snapshot",
+  )
+  assertOnlyFields(
+    snapshot.source,
+    snapshotSourceFields,
+    "project-registry source",
+  )
   assert(
     snapshot.source?.repository === canonicalSnapshotSource.repository,
     `project-registry snapshot must use canonical source repository ${canonicalSnapshotSource.repository}`,
@@ -87,7 +107,9 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
   const ids = snapshot.projects.map((project) => project.id)
   assert(unique(ids), "canonical project ids must be unique")
 
-  const canonicalById = new Map(snapshot.projects.map((project) => [project.id, project]))
+  const canonicalById = new Map(
+    snapshot.projects.map((project) => [project.id, project]),
+  )
   for (const project of snapshot.projects) {
     assertOnlyFields(
       project,
@@ -95,8 +117,14 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
       `canonical project ${project.id ?? "<missing>"}`,
     )
     assert(project.id?.trim(), "canonical project id must be non-empty")
-    assert(project.name?.trim(), `canonical project ${project.id} must have a name`)
-    assert(project.role?.trim(), `canonical project ${project.id} must have a role`)
+    assert(
+      project.name?.trim(),
+      `canonical project ${project.id} must have a name`,
+    )
+    assert(
+      project.role?.trim(),
+      `canonical project ${project.id} must have a role`,
+    )
     assert(
       project.lifecycle?.trim(),
       `canonical project ${project.id} must have a lifecycle`,
@@ -132,7 +160,10 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
   const canonicalPresentationIds = new Set()
   for (const project of presentation.projects) {
     assert(project.slug?.trim(), "presentation project slug must be non-empty")
-    assert(project.summary?.trim(), `presentation project ${project.slug} needs summary`)
+    assert(
+      project.summary?.trim(),
+      `presentation project ${project.slug} needs summary`,
+    )
     assert(
       project.architectureRole?.trim(),
       `presentation project ${project.slug} needs architectureRole`,
@@ -171,9 +202,13 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
       project.kind === "presentation-only",
       `presentation project ${project.slug} has unsupported kind`,
     )
-    assert(project.name?.trim(), `presentation-only project ${project.slug} needs name`)
     assert(
-      allowedClassifications.has(project.collection) && project.collection !== null,
+      project.name?.trim(),
+      `presentation-only project ${project.slug} needs name`,
+    )
+    assert(
+      allowedClassifications.has(project.collection) &&
+        project.collection !== null,
       `presentation-only project ${project.slug} needs solution/laboratory collection`,
     )
     assert(
@@ -188,7 +223,13 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
       !excludedFamily,
       `presentation project ${project.slug} belongs to explicitly excluded portfolio family ${excludedFamily}`,
     )
-    for (const field of ["portfolio", "classification", "role", "lifecycle", "canonicalId"]) {
+    for (const field of [
+      "portfolio",
+      "classification",
+      "role",
+      "lifecycle",
+      "canonicalId",
+    ]) {
       assert(
         !(field in project),
         `presentation-only project ${project.slug} must not declare canonical field ${field}`,
@@ -199,13 +240,20 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
   const dispositionIds = presentation.portfolioDispositions.map(
     (entry) => entry.canonicalId,
   )
-  assert(unique(dispositionIds), "portfolio dispositions must be unique by canonicalId")
+  assert(
+    unique(dispositionIds),
+    "portfolio dispositions must be unique by canonicalId",
+  )
 
   const dispositionById = new Map(
-    presentation.portfolioDispositions.map((entry) => [entry.canonicalId, entry]),
+    presentation.portfolioDispositions.map((entry) => [
+      entry.canonicalId,
+      entry,
+    ]),
   )
   const portfolioProjects = snapshot.projects.filter(
-    (project) => project.portfolio === "featured" || project.portfolio === "supporting",
+    (project) =>
+      project.portfolio === "featured" || project.portfolio === "supporting",
   )
 
   for (const project of portfolioProjects) {
@@ -222,7 +270,8 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
       `portfolio disposition references unknown canonical project ${disposition.canonicalId}`,
     )
     assert(
-      canonical.portfolio === "featured" || canonical.portfolio === "supporting",
+      canonical.portfolio === "featured" ||
+        canonical.portfolio === "supporting",
       `canonical project ${disposition.canonicalId} does not have a portfolio tier`,
     )
 
@@ -285,10 +334,16 @@ export const validateProjectRegistryProjection = (snapshot, presentation) => {
 
 export const loadProjectRegistryProjection = () => {
   const snapshot = JSON.parse(
-    fs.readFileSync(path.join(root, "app/data/project-registry.snapshot.json"), "utf8"),
+    fs.readFileSync(
+      path.join(root, "app/data/project-registry.snapshot.json"),
+      "utf8",
+    ),
   )
   const presentation = JSON.parse(
-    fs.readFileSync(path.join(root, "app/data/project-presentation.json"), "utf8"),
+    fs.readFileSync(
+      path.join(root, "app/data/project-presentation.json"),
+      "utf8",
+    ),
   )
 
   return { snapshot, presentation }

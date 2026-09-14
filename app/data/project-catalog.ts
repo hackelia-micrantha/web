@@ -1,5 +1,7 @@
-import presentationJson from "./project-presentation.json"
-import registrySnapshotJson from "./project-registry.snapshot.json"
+import {
+  projectPresentation,
+  projectRegistrySnapshot,
+} from "./project-registry.generated.js"
 
 export type ProjectClassification = "solution" | "laboratory"
 export type ProjectPortfolio = "featured" | "supporting" | false | null
@@ -74,8 +76,9 @@ type ProjectRegistrySnapshot = {
   projects: CanonicalProject[]
 }
 
-const presentation = presentationJson as unknown as ProjectPresentationConfig
-const registrySnapshot = registrySnapshotJson as unknown as ProjectRegistrySnapshot
+const presentation = projectPresentation as unknown as ProjectPresentationConfig
+const registrySnapshot =
+  projectRegistrySnapshot as unknown as ProjectRegistrySnapshot
 
 const canonicalById = new Map(
   registrySnapshot.projects.map((project) => [project.id, project]),

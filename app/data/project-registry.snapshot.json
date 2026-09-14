@@ -6,10 +6,7 @@
     "inventoryPath": "registry/inventory.md",
     "commit": "e711c5e3bc5bf306e55af531701b37eab1fa4ee3"
   },
-  "excludedPortfolioFamilies": [
-    "garden",
-    "scouter"
-  ],
+  "excludedPortfolioFamilies": ["garden", "scouter"],
   "projects": [
     {
       "id": "achillea",

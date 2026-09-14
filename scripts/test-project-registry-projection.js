@@ -1,12 +1,40 @@
 import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import {
   loadProjectRegistryProjection,
   normalizeProjectRegistryProjection,
   validateProjectRegistryProjection,
 } from "./project-registry-projection.js"
+import { renderProjectRegistryRuntime } from "./generate-project-registry-runtime.js"
 
 const clone = (value) => structuredClone(value)
 const { snapshot, presentation } = loadProjectRegistryProjection()
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
+
+const catalogSource = fs.readFileSync(
+  path.join(root, "app/data/project-catalog.ts"),
+  "utf8",
+)
+assert.doesNotMatch(
+  catalogSource,
+  /from\s+["'][^"']+\.json["']/,
+  "runtime project catalog must not import JSON modules directly",
+)
+
+const expectedRuntimeModule = await renderProjectRegistryRuntime(
+  snapshot,
+  presentation,
+)
+assert.equal(
+  fs.readFileSync(
+    path.join(root, "app/data/project-registry.generated.js"),
+    "utf8",
+  ),
+  expectedRuntimeModule,
+  "generated runtime project registry module must match the reviewed JSON projection",
+)
 
 assert.doesNotThrow(() =>
   validateProjectRegistryProjection(clone(snapshot), clone(presentation)),
@@ -36,7 +64,8 @@ assert.deepEqual(
 
 {
   const broken = clone(presentation)
-  broken.projects.find((project) => project.kind === "canonical").lifecycle = "stable"
+  broken.projects.find((project) => project.kind === "canonical").lifecycle =
+    "stable"
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
     /must not override canonical field lifecycle/,
@@ -47,7 +76,8 @@ assert.deepEqual(
   const brokenSnapshot = clone(snapshot)
   brokenSnapshot.projects[0].repository = "private-owner/private-repo"
   assert.throws(
-    () => validateProjectRegistryProjection(brokenSnapshot, clone(presentation)),
+    () =>
+      validateProjectRegistryProjection(brokenSnapshot, clone(presentation)),
     /contains non-public field repository/,
   )
 }
@@ -56,7 +86,8 @@ assert.deepEqual(
   const brokenSnapshot = clone(snapshot)
   brokenSnapshot.source.repository = "other-owner/other-registry"
   assert.throws(
-    () => validateProjectRegistryProjection(brokenSnapshot, clone(presentation)),
+    () =>
+      validateProjectRegistryProjection(brokenSnapshot, clone(presentation)),
     /must use canonical source repository hackelia-micrantha\/hackelia-micrantha/,
   )
 }
@@ -82,7 +113,8 @@ assert.deepEqual(
     kind: "canonical",
     canonicalId: "invokrum",
     slug: "invokrum",
-    summary: "Unclassified canonical projects cannot enter the current catalogue.",
+    summary:
+      "Unclassified canonical projects cannot enter the current catalogue.",
     url: "/invokrum",
     architectureRole: "Invalid unclassified catalogue entry",
   })
@@ -138,7 +170,9 @@ for (const slug of ["garden", "garden-library", "scouter-backend"]) {
   })
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
-    new RegExp(`presentation project ${slug} belongs to explicitly excluded portfolio family`),
+    new RegExp(
+      `presentation project ${slug} belongs to explicitly excluded portfolio family`,
+    ),
   )
 }
 
@@ -153,7 +187,8 @@ for (const slug of ["garden", "garden-library", "scouter-backend"]) {
     lifecycle: "experimental",
   })
   assert.throws(
-    () => validateProjectRegistryProjection(brokenSnapshot, clone(presentation)),
+    () =>
+      validateProjectRegistryProjection(brokenSnapshot, clone(presentation)),
     /canonical project scouter-revival belongs to explicitly excluded portfolio family scouter/,
   )
 }
