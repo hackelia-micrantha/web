@@ -25,6 +25,12 @@ app/data/project-registry.snapshot.json
                     +---- app/data/project-presentation.json
                     |       summary / URLs / architecture copy / display intent
                     v
+scripts/generate-project-registry-runtime.js
+                    |
+                    v
+app/data/project-registry.generated.js
+                    |
+                    v
 app/data/project-catalog.ts
                     |
                     v
@@ -32,6 +38,8 @@ solutions / laboratory / homepage presentation
 ```
 
 The snapshot must not contain canonical repository locations, relationships, private summaries, private implementation details, or release evidence. Its `source.commit` pins the exact canonical registry revision used for the projection.
+
+`project-registry.generated.js` is a deterministic checked-in runtime artifact generated from the two reviewed JSON inputs. It exists so the Remix server bundle does not depend on native JSON-module loading semantics. Do not edit it by hand; regenerate it with `yarn generate:project-registry-runtime`. The drift test compares the generated artifact byte-for-byte with freshly rendered output.
 
 `project-presentation.json` may own:
 
@@ -108,7 +116,8 @@ When canonical project metadata changes:
 2. update only the public-safe fields in `project-registry.snapshot.json`;
 3. update `source.commit` to the exact reviewed canonical commit;
 4. reconcile `project-presentation.json` dispositions and presentation metadata;
-5. run `yarn test:project-registry-projection`, typecheck, build, and project-catalog/browser tests;
-6. review the diff for accidental disclosure of private repository paths, summaries, relationships, or implementation details.
+5. run `yarn generate:project-registry-runtime`;
+6. run `yarn test:project-registry-projection`, typecheck, build, and project-catalog/browser tests;
+7. review the diff for accidental disclosure of private repository paths, summaries, relationships, or implementation details.
 
 The web application never needs a standing credential to the private registry, and deployment must not fetch the private registry at runtime.

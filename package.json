@@ -16,6 +16,7 @@
     "dev:remix": "remix dev",
     "format:check": "prettier --check .",
     "generate:blog-content": "node scripts/generate-blog-content.js",
+    "generate:project-registry-runtime": "node scripts/generate-project-registry-runtime.js",
     "generate:css": "tailwindcss -i ./app/styles/app.css -o ./public/tailwind.css",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
