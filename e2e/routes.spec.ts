@@ -75,7 +75,9 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
     }),
   ).toBeVisible()
   await expect(
-    page.getByRole("link", { name: /project hyperion/i }),
+    page.locator("a", {
+      has: page.getByRole("heading", { name: "Hyperion", exact: true }),
+    }),
   ).toHaveAttribute("href", "https://hyperion.micrantha.com")
   await expect(
     page.locator("a", {
@@ -86,7 +88,7 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
     page.getByRole("heading", { name: "Myosotis", exact: true }),
   ).toBeVisible()
   await expect(
-    page.getByRole("heading", { name: "Eyespie", exact: true }),
+    page.getByRole("heading", { name: "EyesPie", exact: true }),
   ).toBeVisible()
   await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
     "href",
