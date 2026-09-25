@@ -499,8 +499,8 @@ export default function Index() {
             className={cardStyles.yellow}
           >
             GPU-capable systems, accelerators, storage, networking equipment,
-            hosted compute or CI capacity, and other resources that expand
-            local AI, conformance, build, and systems-testing capability.
+            hosted compute or CI capacity, and other resources that expand local
+            AI, conformance, build, and systems-testing capability.
           </Card>
           <Card title="Design partners and adopters" className={cardStyles.red}>
             Teams willing to try projects, challenge assumptions, contribute
