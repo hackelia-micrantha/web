@@ -486,12 +486,18 @@ export default function Index() {
             distribution, commercialization, or bringing the technology into
             real operating environments.
           </Card>
-          <Card title="Co-founder / operating partner" className={cardStyles.blue}>
+          <Card
+            title="Co-founder / operating partner"
+            className={cardStyles.blue}
+          >
             A long-term collaborator with complementary product, business,
             research, community, or engineering strengths who wants to shape
             Micrantha beyond individual repositories.
           </Card>
-          <Card title="Hardware and infrastructure" className={cardStyles.yellow}>
+          <Card
+            title="Hardware and infrastructure"
+            className={cardStyles.yellow}
+          >
             GPU-capable systems, accelerators, storage, networking equipment,
             hosted compute or CI capacity, and other resources that expand
             local AI, conformance, build, and systems-testing capability.
