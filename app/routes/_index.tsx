@@ -87,6 +87,12 @@ export const handle = {
         url: "https://micrantha.com/laboratory",
       },
       {
+        name: "Collaborate",
+        description:
+          "Ways to contribute to Micrantha projects, partner strategically, provide infrastructure, or help validate projects in real environments.",
+        url: "https://micrantha.com/#collaborate",
+      },
+      {
         name: "Philosophy",
         description: "Micrantha's approach to building work that compounds.",
         url: "https://micrantha.com/philosophy",
@@ -137,6 +143,9 @@ export default function Index() {
               <Link className="button button-outline" to="/solutions">
                 View active solutions
               </Link>
+              <a className="button button-outline" href="#collaborate">
+                Collaborate
+              </a>
               <Link className="button button-outline" to="/blog">
                 Read architecture notes
               </Link>
@@ -445,6 +454,67 @@ export default function Index() {
         <Link className="inline-block text-sm" to="/philosophy">
           Read the full philosophy
         </Link>
+      </section>
+
+      <section
+        id="collaborate"
+        className="space-y-6 border-t border-gray-200 pt-12"
+      >
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
+            Collaborate
+          </p>
+          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
+            Help build, validate, and grow the Micrantha ecosystem.
+          </h2>
+          <p className="mt-3 text-base leading-7 text-slate-700">
+            Micrantha is looking for project contributors, strategic partners, a
+            co-founder or long-term operating partner, hardware and
+            infrastructure resources, and teams willing to exercise projects
+            against real-world requirements.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <Card title="Project contributions" className={cardStyles.neutral}>
+            Engineering, security review, testing, documentation, design,
+            accessibility, packaging, integrations, and field testing across
+            public projects.
+          </Card>
+          <Card title="Strategic partnership" className={cardStyles.green}>
+            Product direction, applied research, open-source sustainability,
+            distribution, commercialization, or bringing the technology into
+            real operating environments.
+          </Card>
+          <Card title="Co-founder / operating partner" className={cardStyles.blue}>
+            A long-term collaborator with complementary product, business,
+            research, community, or engineering strengths who wants to shape
+            Micrantha beyond individual repositories.
+          </Card>
+          <Card title="Hardware and infrastructure" className={cardStyles.yellow}>
+            GPU-capable systems, accelerators, storage, networking equipment,
+            hosted compute or CI capacity, and other resources that expand
+            local AI, conformance, build, and systems-testing capability.
+          </Card>
+          <Card title="Design partners and adopters" className={cardStyles.red}>
+            Teams willing to try projects, challenge assumptions, contribute
+            reusable requirements, and help establish where the systems are and
+            are not useful.
+          </Card>
+        </div>
+
+        <div className="flex flex-wrap gap-4 text-sm">
+          <a href="mailto:services@micrantha.com?subject=Micrantha%20collaboration">
+            Discuss a partnership
+          </a>
+          <a href="https://github.com/hackelia-micrantha/.github/blob/main/CONTRIBUTING.md">
+            Contribute to a public project
+          </a>
+        </div>
+        <p className="max-w-3xl text-sm leading-6 text-slate-600">
+          Collaboration does not bypass project governance, security review,
+          publication boundaries, or repository trust controls.
+        </p>
       </section>
 
       <section
