@@ -47,6 +47,20 @@ test("homepage exposes primary marketing content", async ({ page }) => {
       "Broad engineering support across AI development, AI governance, mobile platforms, secure authentication, and deployment systems for teams turning fragile software into production systems.",
     ),
   ).toBeVisible()
+  await expect(
+    page.getByRole("heading", {
+      name: "Help build, validate, and grow the Micrantha ecosystem.",
+    }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/strategic partners, a co-founder or long-term operating partner/),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: "Discuss a partnership" }),
+  ).toHaveAttribute(
+    "href",
+    "mailto:services@micrantha.com?subject=Micrantha%20collaboration",
+  )
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {
