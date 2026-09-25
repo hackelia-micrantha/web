@@ -507,6 +507,16 @@ export default function Index() {
             reusable requirements, and help establish where the systems are and
             are not useful.
           </Card>
+          <Card
+            title="Anthesis agentic-system trials"
+            className={cardStyles.green}
+            url="https://anthesis.micrantha.com/#collaborate"
+          >
+            Existing coding agents, supervisor/specialist systems, MCP and tool
+            workflows, and other agentic runtimes are wanted for bounded trials
+            around one consequential action, with feedback on integration,
+            bypasses, policy fit, approvals, evidence, and operational overhead.
+          </Card>
         </div>
 
         <div className="flex flex-wrap gap-4 text-sm">
