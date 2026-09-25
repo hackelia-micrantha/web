@@ -53,7 +53,9 @@ test("homepage exposes primary marketing content", async ({ page }) => {
     }),
   ).toBeVisible()
   await expect(
-    page.getByText(/strategic partners, a co-founder or long-term operating partner/),
+    page.getByText(
+      /strategic partners, a co-founder or long-term operating partner/,
+    ),
   ).toBeVisible()
   await expect(
     page.getByRole("link", { name: "Discuss a partnership" }),
