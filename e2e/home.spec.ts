@@ -63,6 +63,9 @@ test("homepage exposes primary marketing content", async ({ page }) => {
     "href",
     "mailto:services@micrantha.com?subject=Micrantha%20collaboration",
   )
+  await expect(
+    page.getByRole("link", { name: "Anthesis agentic-system trials" }),
+  ).toHaveAttribute("href", "https://anthesis.micrantha.com/#collaborate")
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {
