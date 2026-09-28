@@ -89,11 +89,11 @@ test("narrow long-form routes keep wide content locally contained", async ({
     await page.goto(path)
 
     if (path === "/blog/governance-native-engineering-control-plane") {
-      await expect(page.locator("[data-mermaid-diagram]").first()).toHaveAttribute(
-        "data-mermaid-status",
-        "rendered",
-        { timeout: 15_000 },
-      )
+      await expect(
+        page.locator("[data-mermaid-diagram]").first(),
+      ).toHaveAttribute("data-mermaid-status", "rendered", {
+        timeout: 15_000,
+      })
     }
 
     const hasDocumentOverflow = await page.evaluate(
