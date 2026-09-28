@@ -254,7 +254,14 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   assert.match(policy, /img-src 'self' data:/)
   assert.doesNotMatch(policy, /img-src[^;]*https:/)
 
-  if (!requireNonce) {
+  const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
+
+  if (!nonce) {
+    assert.equal(
+      requireNonce,
+      false,
+      "expected a CSP nonce in the document response",
+    )
     assert.match(
       policy,
       /script-src 'none'/,
@@ -263,9 +270,6 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
     return
   }
 
-  const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
-
-  assert.ok(nonce, "expected a CSP nonce in the document response")
   assert.ok(
     body.includes(`nonce="${nonce}"`),
     "expected the response body to use the CSP nonce",
