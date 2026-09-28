@@ -37,10 +37,9 @@ test("homepage exposes primary marketing content", async ({ page }) => {
       name: "Engineering support for systems that need to survive production.",
     }),
   ).toBeVisible()
-  await expect(page.getByRole("link", { name: "See the work" })).toHaveAttribute(
-    "href",
-    "#solutions",
-  )
+  await expect(
+    page.getByRole("link", { name: "See the work" }),
+  ).toHaveAttribute("href", "#solutions")
   await expect(
     page.getByRole("link", { name: "Read architecture notes" }),
   ).toHaveAttribute("href", "/blog")
