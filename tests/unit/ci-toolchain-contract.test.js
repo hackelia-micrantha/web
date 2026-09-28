@@ -1,8 +1,9 @@
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import test from "node:test"
 
 const workflow = readFileSync(".github/workflows/ci.yml", "utf8")
+const dockerfile = readFileSync("Dockerfile", "utf8")
 const flake = readFileSync("flake.nix", "utf8")
 const lock = readFileSync("flake.lock", "utf8")
 const setup = readFileSync(".github/actions/setup/action.yml", "utf8")
@@ -51,6 +52,16 @@ test("package manifest matches the repository-owned toolchain authority", () => 
   assert.equal(packageJson.devDependencies?.["@playwright/test"], "1.60.0")
   assert.equal(packageJson.devDependencies?.typescript, "5.9.3")
   assert.equal(packageJson.devDependencies?.wrangler, "4.114.0")
+})
+
+test("secondary portability paths do not define competing toolchains", () => {
+  assert.equal(existsSync(".gitlab-ci.yml"), false)
+  assert.match(dockerfile, /^FROM docker\.io\/library\/node:24-bookworm-slim AS base$/m)
+  assert.doesNotMatch(dockerfile, /npm install --global yarn/)
+  assert.equal(
+    (dockerfile.match(/yarn install --frozen-lockfile/g) ?? []).length,
+    2,
+  )
 })
 
 test("Playwright browser runtime matches the Yarn-locked client", () => {
