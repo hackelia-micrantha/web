@@ -2,6 +2,12 @@ const ANALYTICS_ORIGIN = "https://analytics.micrantha.com"
 
 export const CSP_NONCE_HEADER = "X-CSP-Nonce"
 
+/**
+ * @typedef {object} DocumentSecurityOptions
+ * @property {string | null | undefined} [nonce]
+ * @property {boolean} [isDevelopment]
+ */
+
 function baseDirectives() {
   return [
     "default-src 'self'",
@@ -16,6 +22,9 @@ function baseDirectives() {
   ]
 }
 
+/**
+ * @param {DocumentSecurityOptions} [options]
+ */
 export function buildContentSecurityPolicy({
   nonce,
   isDevelopment = false,
@@ -41,10 +50,14 @@ export function buildContentSecurityPolicy({
   ].join("; ")
 }
 
+/**
+ * @param {DocumentSecurityOptions} [options]
+ */
 export function buildDocumentSecurityHeaders({
   nonce,
   isDevelopment = false,
 } = {}) {
+  /** @type {Record<string, string>} */
   const headers = {
     "Content-Security-Policy": buildContentSecurityPolicy({
       nonce,
