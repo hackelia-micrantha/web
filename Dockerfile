@@ -1,4 +1,4 @@
-FROM docker.io/library/node:slim AS base
+FROM docker.io/library/node:24-slim AS base
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ ENV NODE_ENV=development
 
 ADD package.json yarn.lock ./
 
-RUN yarn
+RUN yarn install --frozen-lockfile
 
 # PROD DEPS
 FROM base AS production-deps
@@ -20,7 +20,7 @@ ENV NODE_ENV=production
 
 ADD package.json yarn.lock ./
 
-RUN yarn
+RUN yarn install --frozen-lockfile
 
 # BUILD
 FROM build-deps AS build
