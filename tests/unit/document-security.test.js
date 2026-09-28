@@ -20,10 +20,7 @@ test("production policy binds executable scripts to the response nonce", () => {
   assert.match(policy, /form-action 'self'/)
   assert.match(policy, /img-src 'self' data:/)
   assert.doesNotMatch(policy, /img-src[^;]*https:/)
-  assert.match(
-    policy,
-    /connect-src 'self' https:\/\/analytics\.micrantha\.com/,
-  )
+  assert.match(policy, /connect-src 'self' https:\/\/analytics\.micrantha\.com/)
   assert.match(
     policy,
     /script-src 'self' 'nonce-nonce-value' https:\/\/analytics\.micrantha\.com/,
@@ -74,18 +71,12 @@ test("document headers apply cross-origin and transport hardening", () => {
   assert.equal(production["Referrer-Policy"], "strict-origin-when-cross-origin")
   assert.equal(production["X-Content-Type-Options"], "nosniff")
   assert.equal(production["X-Frame-Options"], "DENY")
-  assert.equal(
-    production["Strict-Transport-Security"],
-    "max-age=31536000",
-  )
+  assert.equal(production["Strict-Transport-Security"], "max-age=31536000")
 
   const development = buildDocumentSecurityHeaders({
     nonce: "development-nonce",
     isDevelopment: true,
   })
 
-  assert.equal(
-    Object.hasOwn(development, "Strict-Transport-Security"),
-    false,
-  )
+  assert.equal(Object.hasOwn(development, "Strict-Transport-Security"), false)
 })
