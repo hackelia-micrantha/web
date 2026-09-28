@@ -17,7 +17,7 @@ This repository uses a single authority chain so local development, CI, and prod
 - Yarn classic is pinned to 1.22.22 where it must be installed outside the flake.
 - Playwright browser artifacts are pinned in the flake and must match the lockfile-resolved Playwright package.
 - Wrangler remains lockfile-pinned and is invoked from the repository dependency graph.
-- TypeScript and other JavaScript packages are resolved by `yarn.lock`; manifest-range changes require normal dependency review.
+- TypeScript is exact-pinned in `package.json` and `yarn.lock`; other JavaScript packages resolve through `yarn.lock`, and manifest-range changes require normal dependency review.
 
 Avoid manually maintained patch/minor version badges when they do not enforce anything.
 
