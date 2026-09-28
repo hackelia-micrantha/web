@@ -8,7 +8,7 @@ run = "mise run help"
 
 [tasks.setup]
 description = "Install dependencies if missing."
-run = "if [ ! -d ./node_modules ]; then yarn install; fi"
+run = "if [ ! -d ./node_modules ]; then yarn install --frozen-lockfile; fi"
 
 [tasks.install]
 description = "Alias for setup."
