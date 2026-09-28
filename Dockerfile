@@ -2,7 +2,6 @@ FROM docker.io/library/node:24-bookworm-slim AS base
 
 WORKDIR /app
 
-
 # BUILD DEPS
 FROM base AS build-deps
 
