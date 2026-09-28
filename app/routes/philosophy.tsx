@@ -122,10 +122,10 @@ const Philosophy = () => {
         <section className="space-y-4">
           <h2 className="text-xl">Composition</h2>
           <p>
-            Small tools should do one thing clearly, expose stable contracts, and
-            remain useful on their own. They become more capable when they can be
-            combined without hiding where responsibility, trust, or authority
-            lives.
+            Small tools should do one thing clearly, expose stable contracts,
+            and remain useful on their own. They become more capable when they
+            can be combined without hiding where responsibility, trust, or
+            authority lives.
           </p>
           <p>
             Micrantha follows the Unix tradition where it fits: programs accept
@@ -135,11 +135,12 @@ const Philosophy = () => {
             agent orchestration. Transport can change; meaning should not.
           </p>
           <p>
-            Orchestration is therefore a consumer of capabilities rather than the
-            owner of them. A supervisor may coordinate context, model selection,
-            execution, evidence, and governance, but the underlying tools remain
-            independently understandable, testable, and reusable. Composition
-            should increase capability without quietly increasing authority.
+            Orchestration is therefore a consumer of capabilities rather than
+            the owner of them. A supervisor may coordinate context, model
+            selection, execution, evidence, and governance, but the underlying
+            tools remain independently understandable, testable, and reusable.
+            Composition should increase capability without quietly increasing
+            authority.
           </p>
         </section>
 
