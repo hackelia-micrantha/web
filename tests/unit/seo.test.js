@@ -31,7 +31,7 @@ test("page metadata leads with the page topic and preserves canonical/social met
     path: "/solutions",
   })
 
-  assert.equal(descriptor(meta, (entry) => "title" in entry)?.title, "Solutions | Micrantha Software")
+  assert.equal(\n    descriptor(meta, (entry) => "title" in entry)?.title,\n    "Solutions | Micrantha Software",\n  )
   assert.equal(
     descriptor(meta, (entry) => entry.rel === "canonical")?.href,
     "https://micrantha.com/solutions",
@@ -65,11 +65,11 @@ test("article metadata retains publication details and topic-first titles", () =
     "Intent Is Security State | Micrantha Software",
   )
   assert.equal(
-    descriptor(meta, (entry) => entry.property === "article:modified_time")?.content,
+    descriptor(meta, (entry) => entry.property === "article:modified_time")\n      ?.content,
     "2026-08-13T00:00:00Z",
   )
   assert.deepEqual(
-    meta.filter((entry) => entry.property === "article:tag").map((entry) => entry.content),
+    meta\n      .filter((entry) => entry.property === "article:tag")\n      .map((entry) => entry.content),
     ["security", "governance"],
   )
 
@@ -88,7 +88,7 @@ test("article metadata retains publication details and topic-first titles", () =
 test("site metadata omits obsolete keywords and provides image alternatives", () => {
   const meta = seo.buildSiteMeta()
 
-  assert.equal(meta.some((entry) => entry.name === "keywords"), false)
+  assert.equal(\n    meta.some((entry) => entry.name === "keywords"),\n    false,\n  )
   assert.equal(
     descriptor(meta, (entry) => entry.property === "og:image:alt")?.content,
     "Micrantha Software",
