@@ -121,9 +121,7 @@ test("shell navigation only points at classified internal public routes", () => 
   const links = new Set(
     shellSources.flatMap((source) =>
       [
-        ...source.matchAll(
-          /\b(?:to|href)\s*(?:=|:)\s*["'](\/[^"'?#]*)["']/gu,
-        ),
+        ...source.matchAll(/\b(?:to|href)\s*(?:=|:)\s*["'](\/[^"'?#]*)["']/gu),
       ].map((match) => match[1]),
     ),
   )
