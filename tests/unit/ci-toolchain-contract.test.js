@@ -1,11 +1,13 @@
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import test from "node:test"
 
 const workflow = readFileSync(".github/workflows/ci.yml", "utf8")
+const dockerfile = readFileSync("Dockerfile", "utf8")
 const flake = readFileSync("flake.nix", "utf8")
 const lock = readFileSync("flake.lock", "utf8")
 const setup = readFileSync(".github/actions/setup/action.yml", "utf8")
+const packageJson = JSON.parse(readFileSync("package.json", "utf8"))
 const playwrightConfig = readFileSync("playwright.config.ts", "utf8")
 const headlessShell = readFileSync(
   "nix/playwright/chromium-headless-shell.nix",
@@ -44,10 +46,32 @@ test("project toolchain pins Node 24 and Yarn 1 through Nix", () => {
   assert.match(setup, /yarn install --frozen-lockfile --non-interactive/)
 })
 
+test("package manifest matches the repository-owned toolchain authority", () => {
+  assert.equal(packageJson.packageManager, "yarn@1.22.22")
+  assert.equal(packageJson.engines?.node, ">=24 <25")
+  assert.equal(packageJson.devDependencies?.["@playwright/test"], "1.60.0")
+  assert.equal(packageJson.devDependencies?.typescript, "5.9.3")
+  assert.equal(packageJson.devDependencies?.wrangler, "4.114.0")
+})
+
+test("secondary portability paths do not define competing toolchains", () => {
+  assert.equal(existsSync(".gitlab-ci.yml"), false)
+  assert.ok(
+    dockerfile.startsWith(
+      "FROM docker.io/library/node:24-bookworm-slim AS base\n",
+    ),
+  )
+  assert.doesNotMatch(dockerfile, /npm install --global yarn/)
+  assert.equal(
+    (dockerfile.match(/yarn install --frozen-lockfile/g) ?? []).length,
+    2,
+  )
+})
+
 test("Playwright browser runtime matches the Yarn-locked client", () => {
   assert.match(
     yarnLock,
-    /"@playwright\/test@\^1\.54\.2":\n {2}version "1\.60\.0"/,
+    /"@playwright\/test@1\.60\.0":\n {2}version "1\.60\.0"/,
   )
   assert.match(flake, /playwrightVersion = "1\.60\.0";/)
   assert.match(flake, /revision = "1223";/)

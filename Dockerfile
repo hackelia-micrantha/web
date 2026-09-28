@@ -1,8 +1,6 @@
-FROM docker.io/library/node:slim AS base
+FROM docker.io/library/node:24-bookworm-slim AS base
 
 WORKDIR /app
-
-RUN npm install --global yarn@1.22.22
 
 # BUILD DEPS
 FROM base AS build-deps
@@ -11,7 +9,7 @@ ENV NODE_ENV=development
 
 ADD package.json yarn.lock ./
 
-RUN yarn
+RUN yarn install --frozen-lockfile
 
 # PROD DEPS
 FROM base AS production-deps
@@ -20,7 +18,7 @@ ENV NODE_ENV=production
 
 ADD package.json yarn.lock ./
 
-RUN yarn
+RUN yarn install --frozen-lockfile
 
 # BUILD
 FROM build-deps AS build
