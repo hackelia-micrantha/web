@@ -1,10 +1,5 @@
 import assert from "node:assert/strict"
-import {
-  existsSync,
-  readFileSync,
-  readdirSync,
-  statSync,
-} from "node:fs"
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs"
 import path from "node:path"
 import test from "node:test"
 
@@ -108,7 +103,10 @@ test("every static public route has an explicit cache and canonical metadata con
     )
     assert.match(
       source,
-      new RegExp(`path:\\s*["']${route.pathname.replaceAll("/", "\\/")}["']`, "u"),
+      new RegExp(
+        `path:\\s*["']${route.pathname.replaceAll("/", "\\/")}["']`,
+        "u",
+      ),
       `${route.pathname} must declare its own canonical metadata path`,
     )
   }
