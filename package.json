@@ -1,18 +1,19 @@
 {
   "name": "micrantha-web",
   "private": true,
-  "description": "The Minimal House Remix Stack to setup Remix with minimal typsescript, tailwind, linting, and formatting. Worry about storage, testing, or deployment later.",
+  "description": "Micrantha public web presence and engineering laboratory site.",
   "license": "MIT",
   "type": "module",
+  "packageManager": "yarn@1.22.22",
   "sideEffects": false,
   "scripts": {
     "build": "run-s build:*",
-    "build:css": "npm run generate:css -- --minify",
+    "build:css": "yarn generate:css --minify",
     "build:remix": "remix build",
     "cloudflare:functions:build": "mkdir -p .cloudflare/functions && wrangler pages functions build functions --outdir .cloudflare/functions --output-config-path .cloudflare/functions/config.json --build-metadata-path .cloudflare/functions/build-metadata.json --project-directory .",
     "cloudflare:runtime:stage": "node scripts/stage-cloudflare-runtime.js",
     "dev": "run-p dev:*",
-    "dev:css": "npm run generate:css -- --watch",
+    "dev:css": "yarn generate:css --watch",
     "dev:remix": "remix dev",
     "format:check": "prettier --check .",
     "generate:blog-content": "node scripts/generate-blog-content.js",
@@ -74,6 +75,6 @@
     "wrangler": "4.114.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=24 <25"
   }
 }
