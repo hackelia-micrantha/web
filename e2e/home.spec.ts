@@ -67,6 +67,28 @@ test("homepage exposes primary marketing content", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Anthesis agentic-system trials" }),
   ).toHaveAttribute("href", "https://anthesis.micrantha.com/#collaborate")
+
+  const solutionsHeading = page.getByRole("heading", {
+    name: "Deployable systems for governed delivery.",
+  })
+  const laboratoryHeading = page.getByRole("heading", {
+    name: "Testbeds that validate the architecture.",
+  })
+  const architectureHeading = page.getByRole("heading", {
+    name: "Technical writing for teams dealing with real delivery constraints.",
+  })
+
+  const [solutionsBox, laboratoryBox, architectureBox] = await Promise.all([
+    solutionsHeading.boundingBox(),
+    laboratoryHeading.boundingBox(),
+    architectureHeading.boundingBox(),
+  ])
+
+  expect(solutionsBox).not.toBeNull()
+  expect(laboratoryBox).not.toBeNull()
+  expect(architectureBox).not.toBeNull()
+  expect(solutionsBox!.y).toBeLessThan(laboratoryBox!.y)
+  expect(laboratoryBox!.y).toBeLessThan(architectureBox!.y)
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {
