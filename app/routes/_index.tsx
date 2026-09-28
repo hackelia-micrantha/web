@@ -136,47 +136,19 @@ export default function Index() {
               mobile platforms, secure authentication, and deployment systems
               for teams turning fragile software into production systems.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap items-center gap-4">
               <Link className="button" to="/services">
                 Request a consultation
               </Link>
-              <Link className="button button-outline" to="/solutions">
-                View active solutions
-              </Link>
-              <a className="button button-outline" href="#collaborate">
-                Collaborate
+              <a className="button button-outline" href="#solutions">
+                See the work
               </a>
-              <Link className="button button-outline" to="/blog">
+              <Link className="text-sm font-medium" to="/blog">
                 Read architecture notes
               </Link>
-            </div>
-
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
-                  Delivery
-                </p>
-                <p className="mt-2 text-sm text-slate-700">
-                  AI systems, mobile platforms, and deployment foundations.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
-                  Governance
-                </p>
-                <p className="mt-2 text-sm text-slate-700">
-                  Auditability, policy, and operational control for durable
-                  teams.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
-                  Reliability
-                </p>
-                <p className="mt-2 text-sm text-slate-700">
-                  Architecture that keeps working after the demo is over.
-                </p>
-              </div>
+              <a className="text-sm font-medium" href="#collaborate">
+                Collaborate
+              </a>
             </div>
           </div>
         </div>
@@ -209,14 +181,14 @@ export default function Index() {
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
-            Engineering Approach
+            Where Teams Get Stuck
           </p>
           <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
-            Production-minded depth
+            Release uncertainty
           </p>
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            Clear tradeoffs, governed delivery, and systems thinking across AI,
-            mobile, security, and release engineering.
+            Deployment paths, ownership, and operational controls are often
+            added too late, leaving teams with releases that are hard to trust.
           </p>
         </div>
       </section>
@@ -230,12 +202,11 @@ export default function Index() {
             Services
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Broad engineering with depth in AI, mobile platforms, secure
-            systems, and production delivery.
+            Engineering support for systems that need to survive production.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
-            Micrantha helps teams turn fragile products, platforms, and
-            workflows into production systems.
+            Choose the engagement area that matches the constraint: AI delivery,
+            governance, mobile foundations, security boundaries, or deployment.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -264,52 +235,6 @@ export default function Index() {
         <Link className="inline-block text-sm" to="/services">
           Explore services
         </Link>
-      </section>
-
-      <section className="space-y-6 border-t border-gray-200 pt-12">
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            Working Approach
-          </p>
-          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Built for teams past the demo stage.
-          </h2>
-          <p className="mt-3 text-base leading-7 text-slate-700">
-            Micrantha works where software gets fragile: AI delivery that needs
-            governance, mobile platforms that need structure, and systems that
-            need to survive production.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-            <p className="text-lg font-semibold tracking-tight text-slate-900">
-              Technical depth
-            </p>
-            <p className="mt-2 text-sm leading-6 text-slate-700">
-              AI product work, mobile foundations, secure authentication,
-              deployment systems, and operational cleanup.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-            <p className="text-lg font-semibold tracking-tight text-slate-900">
-              Engagement style
-            </p>
-            <p className="mt-2 text-sm leading-6 text-slate-700">
-              Hands-on implementation, technical review, and decision support
-              for teams that need forward motion without extra noise.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-            <p className="text-lg font-semibold tracking-tight text-slate-900">
-              Delivery bias
-            </p>
-            <p className="mt-2 text-sm leading-6 text-slate-700">
-              Work scoped around production realities: constraints, failure
-              modes, maintainability, and governance.
-            </p>
-          </div>
-        </div>
       </section>
 
       <section className="space-y-6 border-t border-gray-200 pt-12">
@@ -555,11 +480,11 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center gap-4">
             <Link className="button" to="/services">
               Request a consultation
             </Link>
-            <Link className="button button-outline" to="/support">
+            <Link className="text-sm font-medium" to="/support">
               View support options
             </Link>
           </div>
