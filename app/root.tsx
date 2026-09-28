@@ -23,36 +23,12 @@ import {
   PRIVATE_NO_STORE_CACHE_CONTROL,
   getRequestCacheControl,
 } from "./services/cache-policy.server"
+import {
+  CSP_NONCE_HEADER,
+  buildDocumentSecurityHeaders,
+} from "./services/document-security.server"
 import { resolveRuntimePlatform } from "./services/platform.server"
 import { buildSiteMeta } from "./utils/seo"
-
-const NONCE_HEADER = "X-CSP-Nonce"
-
-function buildContentSecurityPolicy(nonce: string, isDev: boolean) {
-  const scriptSources = [
-    "'self'",
-    `'nonce-${nonce}'`,
-    "https://analytics.micrantha.com",
-  ]
-  const connectSources = ["'self'", "https://analytics.micrantha.com"]
-
-  if (isDev) {
-    connectSources.push("ws:", "wss:")
-    scriptSources.push("'unsafe-eval'")
-  }
-
-  return [
-    "default-src 'self'",
-    "base-uri 'self'",
-    "object-src 'none'",
-    "frame-ancestors 'none'",
-    "img-src 'self' https: data:",
-    "manifest-src 'self'",
-    `connect-src ${connectSources.join(" ")}`,
-    "style-src 'self' 'unsafe-inline'",
-    `script-src ${scriptSources.join(" ")}`,
-  ].join("; ")
-}
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/tailwind.css" },
@@ -84,32 +60,19 @@ export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
   const cacheControl = errorHeaders
     ? (errorHeaders.get("Cache-Control") ?? PRIVATE_NO_STORE_CACHE_CONTROL)
     : (loaderHeaders.get("Cache-Control") ?? PRIVATE_NO_STORE_CACHE_CONTROL)
-  const nonce = loaderHeaders.get(NONCE_HEADER)
+  const nonce = loaderHeaders.get(CSP_NONCE_HEADER)
   const isDev =
     typeof process !== "undefined"
       ? process.env.NODE_ENV === "development"
       : false
 
-  const headers: Record<string, string> = {
-    "Referrer-Policy": "strict-origin-when-cross-origin",
-    "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
-    "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
+  return {
+    ...buildDocumentSecurityHeaders({
+      nonce,
+      isDevelopment: isDev,
+    }),
     "Cache-Control": cacheControl,
   }
-
-  if (!isDev) {
-    headers["Strict-Transport-Security"] = "max-age=31536000"
-
-    if (nonce) {
-      headers["Content-Security-Policy"] = buildContentSecurityPolicy(
-        nonce,
-        isDev,
-      )
-    }
-  }
-
-  return headers
 }
 
 type State = { analyticsId: string | null; nonce: string }
@@ -125,7 +88,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
       headers: {
         "Cache-Control": cacheControl,
         "Content-Type": "application/json; charset=utf-8",
-        [NONCE_HEADER]: nonce,
+        [CSP_NONCE_HEADER]: nonce,
       },
     },
   )

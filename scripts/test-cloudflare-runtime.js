@@ -239,12 +239,37 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
     "max-age=31536000",
   )
   assert.ok(response.headers.get("cache-control"), "expected a cache policy")
-
-  if (!requireNonce) return
+  assert.equal(
+    response.headers.get("cross-origin-opener-policy"),
+    "same-origin",
+  )
+  assert.equal(
+    response.headers.get("cross-origin-resource-policy"),
+    "same-origin",
+  )
+  assert.equal(response.headers.get("origin-agent-cluster"), "?1")
 
   const policy = response.headers.get("content-security-policy") ?? ""
+  assert.ok(policy, "expected a CSP on every HTML document response")
+  assert.match(policy, /img-src 'self' data:/)
+  assert.doesNotMatch(policy, /img-src[^;]*https:/)
+
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
-  assert.ok(nonce, "expected a CSP nonce in the document response")
+
+  if (!nonce) {
+    assert.equal(
+      requireNonce,
+      false,
+      "expected a CSP nonce in the document response",
+    )
+    assert.match(
+      policy,
+      /script-src 'none'/,
+      "nonce-less documents must fail closed for script execution",
+    )
+    return
+  }
+
   assert.ok(
     body.includes(`nonce="${nonce}"`),
     "expected the response body to use the CSP nonce",
