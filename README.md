@@ -1,9 +1,9 @@
 # Micrantha Web
 
-[![Remix](https://img.shields.io/badge/Remix-2.17-121212?logo=remix)](https://remix.run/)
-[![React](https://img.shields.io/badge/React-18.3-149ECA?logo=react&logoColor=white)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Remix](https://img.shields.io/badge/Remix-2-121212?logo=remix)](https://remix.run/)
+[![React](https://img.shields.io/badge/React-18-149ECA?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare_Pages-F38020?logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-111827.svg)](./LICENSE)
@@ -32,9 +32,24 @@ Marketing site and web presence for [micrantha.com](https://micrantha.com), buil
 
 ## Requirements
 
-- Node.js `>=18`
-- Node.js `24` recommended
-- Yarn
+- Nix with flakes enabled for the repository-owned development and CI toolchain
+- Node.js `24` when running outside Nix
+- Yarn `1.22.22` when running outside Nix
+
+`flake.nix`/`flake.lock` are authoritative for Node, Yarn, the CI toolchain, and the pinned Playwright browser runtime. `yarn.lock` is authoritative for JavaScript dependency resolution.
+
+## Toolchain and runtime authority
+
+| Concern | Authority |
+| --- | --- |
+| Development and CI toolchain | `flake.nix` / `flake.lock` |
+| JavaScript dependency graph | `package.json` / `yarn.lock` |
+| Required validation | GitHub Actions on minimal Dubnium JIT runners |
+| Production runtime and deployment | Cloudflare Pages Functions / Wrangler |
+| GitLab | Mirror-only; no independent CI/toolchain contract |
+| Docker | Optional local Node portability path; not a production authority |
+
+Secondary paths must consume or remain compatible with these authorities rather than defining competing versions or deployment semantics. See [Toolchain Governance](docs/architecture/toolchain-governance.md).
 
 ## Quick Start
 
@@ -203,4 +218,4 @@ scripts/      Build, staging, budget, and runtime-contract automation
 
 - Tailwind is compiled from `app/styles/app.css` into `public/tailwind.css`.
 - The philosophy triangle diagram is served as SVG for sharper rendering.
-- This repository is mirrored from GitLab.
+- GitLab may mirror the repository, but GitHub Actions remains the required validation authority; GitLab does not define a parallel CI contract.
