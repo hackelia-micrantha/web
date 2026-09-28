@@ -70,7 +70,7 @@ function walkSourceFiles(directory) {
 function staticAssetReferences(source) {
   return [
     ...source.matchAll(
-      /(?:src|href)=["'](\/(?:img|icon)\/[^"'?#]+|\/(?:navigation\.js|accessibility\.css))["']/gu,
+      /\b(?:src|href)\s*(?:=|:)\s*["'](\/(?:img|icon)\/[^"'?#]+|\/(?:navigation\.js|accessibility\.css))["']/gu,
     ),
   ].map((match) => match[1])
 }
@@ -120,9 +120,11 @@ test("shell navigation only points at classified internal public routes", () => 
 
   const links = new Set(
     shellSources.flatMap((source) =>
-      [...source.matchAll(/(?:to|href)=["'](\/[^"'?#]*)["']/gu)].map(
-        (match) => match[1],
-      ),
+      [
+        ...source.matchAll(
+          /\b(?:to|href)\s*(?:=|:)\s*["'](\/[^"'?#]*)["']/gu,
+        ),
+      ].map((match) => match[1]),
     ),
   )
 
