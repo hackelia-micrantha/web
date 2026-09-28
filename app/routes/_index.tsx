@@ -57,7 +57,7 @@ const homepagePresentationFor = (slug: string) => {
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
-    title: "Home",
+    title: "Secure AI, Mobile & Platform Engineering",
     description:
       "Micrantha helps teams build, govern, and ship software that can survive production, with depth in AI, mobile platforms, secure systems, and deployments.",
     path: "/",
