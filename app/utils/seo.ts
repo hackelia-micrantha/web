@@ -47,19 +47,21 @@ export function buildPageMeta({
   const url = new URL(path, SITE_URL).toString()
 
   return [
-    { title: `${SITE_NAME} | ${title}` },
+    { title: `${title} | ${SITE_NAME}` },
     { name: "description", content: description },
     { tagName: "link", rel: "canonical", href: url },
     { property: "og:site_name", content: SITE_NAME },
-    { property: "og:title", content: `${SITE_NAME} | ${title}` },
+    { property: "og:title", content: `${title} | ${SITE_NAME}` },
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: url },
     { property: "og:image", content: DEFAULT_IMAGE },
+    { property: "og:image:alt", content: SITE_NAME },
     { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: `${SITE_NAME} | ${title}` },
+    { name: "twitter:title", content: `${title} | ${SITE_NAME}` },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: DEFAULT_IMAGE },
+    { name: "twitter:image:alt", content: SITE_NAME },
   ]
 }
 
@@ -74,24 +76,26 @@ export function buildArticleMeta({
   const url = new URL(path, SITE_URL).toString()
 
   return [
-    { title: `${SITE_NAME} | ${title}` },
+    { title: `${title} | ${SITE_NAME}` },
     { name: "description", content: description },
     { tagName: "link", rel: "canonical", href: url },
     { property: "og:site_name", content: SITE_NAME },
-    { property: "og:title", content: `${SITE_NAME} | ${title}` },
+    { property: "og:title", content: `${title} | ${SITE_NAME}` },
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
     { property: "og:url", content: url },
     { property: "og:image", content: DEFAULT_IMAGE },
+    { property: "og:image:alt", content: SITE_NAME },
     { property: "article:published_time", content: publishedTime },
     ...(modifiedTime
       ? [{ property: "article:modified_time", content: modifiedTime }]
       : []),
     ...tags.map((tag) => ({ property: "article:tag", content: tag })),
     { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: `${SITE_NAME} | ${title}` },
+    { name: "twitter:title", content: `${title} | ${SITE_NAME}` },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: DEFAULT_IMAGE },
+    { name: "twitter:image:alt", content: SITE_NAME },
   ]
 }
 
@@ -106,11 +110,6 @@ export function buildSiteMeta(): MetaDescriptor[] {
         "Micrantha builds resilient software systems from discovery to production.",
     },
     { name: "robots", content: "index,follow" },
-    {
-      name: "keywords",
-      content:
-        "saas, software, consulting, mobile, frontend, backend, infrastructure, deployment, architecture, testing, javascript, typescript",
-    },
     { property: "og:site_name", content: SITE_NAME },
     { property: "og:title", content: SITE_TITLE },
     {
@@ -121,6 +120,7 @@ export function buildSiteMeta(): MetaDescriptor[] {
     { property: "og:type", content: "website" },
     { property: "og:url", content: SITE_URL },
     { property: "og:image", content: DEFAULT_IMAGE },
+    { property: "og:image:alt", content: SITE_NAME },
     { name: "twitter:card", content: "summary" },
     { name: "twitter:title", content: SITE_TITLE },
     {
@@ -129,6 +129,7 @@ export function buildSiteMeta(): MetaDescriptor[] {
         "Micrantha builds resilient software systems from discovery to production.",
     },
     { name: "twitter:image", content: DEFAULT_IMAGE },
+    { name: "twitter:image:alt", content: SITE_NAME },
   ]
 }
 
