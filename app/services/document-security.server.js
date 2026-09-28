@@ -23,11 +23,7 @@ export function buildContentSecurityPolicy({
   const directives = baseDirectives()
 
   if (!nonce) {
-    return [
-      ...directives,
-      "connect-src 'self'",
-      "script-src 'none'",
-    ].join("; ")
+    return [...directives, "connect-src 'self'", "script-src 'none'"].join("; ")
   }
 
   const connectSources = ["'self'", ANALYTICS_ORIGIN]
