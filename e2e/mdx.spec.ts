@@ -175,7 +175,7 @@ test.describe("canonical MDX articles", () => {
       const response = await page.goto(articlePath(article))
 
       expect(response?.status()).toBe(200)
-      await expect(page).toHaveTitle(`Micrantha Software | ${article.title}`)
+      await expect(page).toHaveTitle(`${article.title} | Micrantha Software`)
       await expect(
         page.getByRole("heading", { level: 1, name: article.title }),
       ).toBeVisible()
