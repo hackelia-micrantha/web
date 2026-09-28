@@ -49,10 +49,13 @@ type ControlTableRow = {
 
 export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
   return (
-    <div className="overflow-x-auto">
+    <div
+      className="article-table-scroll overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
+      tabIndex={0}
+    >
       <table
         aria-label="AI pipeline failure modes"
-        className="min-w-[48rem] border-collapse text-left"
+        className="article-control-table min-w-[48rem] border-collapse text-left"
       >
         <thead>
           <tr>

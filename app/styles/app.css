@@ -534,4 +534,10 @@ details[open] > .mobile-nav-panel {
     overflow-x: auto;
     white-space: nowrap;
   }
+
+  .article-prose .article-control-table {
+    display: table;
+    overflow: visible;
+    white-space: normal;
+  }
 }
