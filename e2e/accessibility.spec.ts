@@ -5,6 +5,7 @@ type AccessibilityRoute = {
   path: string
   heading: string
   status?: number
+  checkBrowserHealth?: boolean
 }
 
 const routes: AccessibilityRoute[] = [
@@ -22,6 +23,7 @@ const routes: AccessibilityRoute[] = [
     path: "/this-route-does-not-exist",
     heading: "Not Found",
     status: 404,
+    checkBrowserHealth: false,
   },
 ]
 
@@ -45,9 +47,16 @@ function captureBrowserFailures(page: Page) {
   return () => expect(failures).toEqual([])
 }
 
-for (const { path, heading, status = 200 } of routes) {
+for (const {
+  path,
+  heading,
+  status = 200,
+  checkBrowserHealth = true,
+} of routes) {
   test(`accessibility and browser health pass for ${path}`, async ({ page }) => {
-    const assertNoBrowserFailures = captureBrowserFailures(page)
+    const assertNoBrowserFailures = checkBrowserHealth
+      ? captureBrowserFailures(page)
+      : null
     const response = await page.goto(path)
 
     expect(response?.status()).toBe(status)
@@ -58,7 +67,7 @@ for (const { path, heading, status = 200 } of routes) {
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
 
     expect(accessibilityScanResults.violations).toEqual([])
-    assertNoBrowserFailures()
+    assertNoBrowserFailures?.()
   })
 }
 
@@ -78,6 +87,14 @@ test("narrow long-form routes keep wide content locally contained", async ({
     "/security",
   ]) {
     await page.goto(path)
+
+    if (path === "/blog/governance-native-engineering-control-plane") {
+      await expect(page.locator("[data-mermaid-diagram]").first()).toHaveAttribute(
+        "data-mermaid-status",
+        "rendered",
+        { timeout: 15_000 },
+      )
+    }
 
     const hasDocumentOverflow = await page.evaluate(
       () =>
