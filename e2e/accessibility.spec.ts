@@ -53,7 +53,9 @@ for (const {
   status = 200,
   checkBrowserHealth = true,
 } of routes) {
-  test(`accessibility and browser health pass for ${path}`, async ({\n    page,\n  }) => {
+  test(`accessibility and browser health pass for ${path}`, async ({
+    page,
+  }) => {
     const assertNoBrowserFailures = checkBrowserHealth
       ? captureBrowserFailures(page)
       : null
