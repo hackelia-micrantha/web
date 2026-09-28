@@ -56,7 +56,10 @@ test("package manifest matches the repository-owned toolchain authority", () => 
 
 test("secondary portability paths do not define competing toolchains", () => {
   assert.equal(existsSync(".gitlab-ci.yml"), false)
-  assert.match(dockerfile, /^FROM docker\.io\/library\/node:24-bookworm-slim AS base$/m)
+  assert.match(
+    dockerfile,
+    /^FROM docker\\.io\\/library\\/node:24-bookworm-slim AS base$/m,
+  )
   assert.doesNotMatch(dockerfile, /npm install --global yarn/)
   assert.equal(
     (dockerfile.match(/yarn install --frozen-lockfile/g) ?? []).length,
