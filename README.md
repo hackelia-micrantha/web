@@ -40,14 +40,14 @@ Marketing site and web presence for [micrantha.com](https://micrantha.com), buil
 
 ## Toolchain and runtime authority
 
-| Concern | Authority |
-| --- | --- |
-| Development and CI toolchain | `flake.nix` / `flake.lock` |
-| JavaScript dependency graph | `package.json` / `yarn.lock` |
-| Required validation | GitHub Actions on minimal Dubnium JIT runners |
-| Production runtime and deployment | Cloudflare Pages Functions / Wrangler |
-| GitLab | Mirror-only; no independent CI/toolchain contract |
-| Docker | Optional local Node portability path; not a production authority |
+| Concern                           | Authority                                                        |
+| --------------------------------- | ---------------------------------------------------------------- |
+| Development and CI toolchain      | `flake.nix` / `flake.lock`                                       |
+| JavaScript dependency graph       | `package.json` / `yarn.lock`                                     |
+| Required validation               | GitHub Actions on minimal Dubnium JIT runners                    |
+| Production runtime and deployment | Cloudflare Pages Functions / Wrangler                            |
+| GitLab                            | Mirror-only; no independent CI/toolchain contract                |
+| Docker                            | Optional local Node portability path; not a production authority |
 
 Secondary paths must consume or remain compatible with these authorities rather than defining competing versions or deployment semantics. See [Toolchain Governance](docs/architecture/toolchain-governance.md).
 
