@@ -25,6 +25,7 @@ Avoid manually maintained patch/minor version badges when they do not enforce an
 
 - CI and portability paths use frozen-lockfile installs.
 - Package scripts invoke Yarn-owned scripts directly rather than bouncing through `npm run` or ad-hoc `npx`.
+- `npm-run-all` is retained for the small existing serial/parallel script compositions; it does not own dependency resolution or runtime selection.
 - Required CI must not assume Playwright, Node, or other project dependencies are present in the Dubnium runner image.
 - Changes to production topology must preserve the Cloudflare adapter/runtime contracts.
 
