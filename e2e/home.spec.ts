@@ -78,17 +78,32 @@ test("homepage exposes primary marketing content", async ({ page }) => {
     name: "Technical writing for teams dealing with real delivery constraints.",
   })
 
-  const [solutionsBox, laboratoryBox, architectureBox] = await Promise.all([
-    solutionsHeading.boundingBox(),
-    laboratoryHeading.boundingBox(),
-    architectureHeading.boundingBox(),
-  ])
+  const scanOrder = await page.evaluate(() => {
+    const headings = [
+      "Deployable systems for governed delivery.",
+      "Testbeds that validate the architecture.",
+      "Technical writing for teams dealing with real delivery constraints.",
+    ].map((text) =>
+      [...document.querySelectorAll("h2")].find(
+        (heading) => heading.textContent?.trim() === text,
+      ),
+    )
 
-  expect(solutionsBox).not.toBeNull()
-  expect(laboratoryBox).not.toBeNull()
-  expect(architectureBox).not.toBeNull()
-  expect(solutionsBox!.y).toBeLessThan(laboratoryBox!.y)
-  expect(laboratoryBox!.y).toBeLessThan(architectureBox!.y)
+    if (headings.some((heading) => !heading)) return false
+
+    return (
+      Boolean(
+        headings[0]?.compareDocumentPosition(headings[1]!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ) &&
+      Boolean(
+        headings[1]?.compareDocumentPosition(headings[2]!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      )
+    )
+  })
+
+  expect(scanOrder).toBe(true)
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {
