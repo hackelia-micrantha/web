@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 2,
+  "projectName": "micrantha-web",
+  "reportPath": ".performance/cloudflare-edge.json",
+  "timeoutMilliseconds": 15000,
+  "userAgent": "micrantha-edge-contract/2",
+  "targets": [
+    {
+      "name": "production",
+      "baseUrl": "https://micrantha.com"
+    },
+    {
+      "name": "pages-project",
+      "baseUrl": "https://micrantha-web.pages.dev"
+    }
+  ],
+  "requests": [
+    {
+      "name": "home",
+      "pathname": "/",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
+      "contentType": "text/html",
+      "maximumBytes": 250000,
+      "repetitions": 2,
+      "freshNonce": true
+    },
+    {
+      "name": "blog-index",
+      "pathname": "/blog",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
+      "contentType": "text/html",
+      "maximumBytes": 250000,
+      "bodyIncludes": [
+        "/blog/intent-is-security-state"
+      ],
+      "repetitions": 2,
+      "freshNonce": true
+    },
+    {
+      "name": "published-article",
+      "pathname": "/blog/intent-is-security-state",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
+      "contentType": "text/html",
+      "maximumBytes": 350000,
+      "repetitions": 2,
+      "freshNonce": true
+    },
+    {
+      "name": "sitemap-publication",
+      "pathname": "/sitemap.xml",
+      "status": 200,
+      "maximumBytes": 250000,
+      "bodyIncludes": [
+        "https://micrantha.com/blog/intent-is-security-state"
+      ],
+      "repetitions": 1
+    },
+    {
+      "name": "remix-root-data",
+      "pathname": "/?_data=root",
+      "status": 200,
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "maximumBytes": 50000,
+      "repetitions": 1
+    },
+    {
+      "name": "not-found",
+      "pathname": "/__edge-probe-not-found__",
+      "status": 404,
+      "cacheControl": "private, no-store",
+      "contentType": "text/html",
+      "maximumBytes": 100000,
+      "repetitions": 1
+    },
+    {
+      "name": "method-not-allowed",
+      "pathname": "/services",
+      "method": "POST",
+      "status": 405,
+      "cacheControl": "private, no-store",
+      "contentType": "text/html",
+      "maximumBytes": 100000,
+      "repetitions": 1
+    },
+    {
+      "name": "bot-home",
+      "pathname": "/",
+      "status": 200,
+      "cacheControl": "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
+      "contentType": "text/html",
+      "maximumBytes": 250000,
+      "userAgent": "Googlebot/2.1 (+https://www.google.com/bot.html)",
+      "repetitions": 1,
+      "freshNonce": true
+    }
+  ]
+}
