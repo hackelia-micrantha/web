@@ -32,9 +32,7 @@
       "cacheControl": "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
       "contentType": "text/html",
       "maximumBytes": 250000,
-      "bodyIncludes": [
-        "/blog/intent-is-security-state"
-      ],
+      "bodyIncludes": ["/blog/intent-is-security-state"],
       "repetitions": 2,
       "freshNonce": true
     },
@@ -53,9 +51,7 @@
       "pathname": "/sitemap.xml",
       "status": 200,
       "maximumBytes": 250000,
-      "bodyIncludes": [
-        "https://micrantha.com/blog/intent-is-security-state"
-      ],
+      "bodyIncludes": ["https://micrantha.com/blog/intent-is-security-state"],
       "repetitions": 1
     },
     {
