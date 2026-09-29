@@ -3,8 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { performance } from "node:perf_hooks"
 
-const configPath =
-  process.argv[2] ?? "config/cloudflare-edge-probe.json"
+const configPath = process.argv[2] ?? "config/cloudflare-edge-probe.json"
 const config = JSON.parse(await readFile(configPath, "utf8"))
 
 if (config.schemaVersion !== 2) {
@@ -87,10 +86,7 @@ function validateSample(target, request, sample) {
     )
   }
 
-  if (
-    request.maximumBytes &&
-    sample.bytes > request.maximumBytes
-  ) {
+  if (request.maximumBytes && sample.bytes > request.maximumBytes) {
     recordFailure(
       targetName,
       requestName,
@@ -110,11 +106,7 @@ function validateSample(target, request, sample) {
 
   if (request.freshNonce) {
     if (!sample.cspNonce) {
-      recordFailure(
-        targetName,
-        requestName,
-        "CSP script nonce is missing",
-      )
+      recordFailure(targetName, requestName, "CSP script nonce is missing")
     } else if (sample.bodyNonceCount < 1) {
       recordFailure(
         targetName,
@@ -197,11 +189,11 @@ for (const target of config.targets) {
     ) {
       try {
         const sample = await runSample(target, request, repetition)
-        const { body: _body, ...reportSample } = sample
+        const reportSample = { ...sample }
+        delete reportSample.body
         requestResult.samples.push(reportSample)
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : String(error)
+        const message = error instanceof Error ? error.message : String(error)
         recordFailure(target.name, request.name, message)
         requestResult.samples.push({
           repetition,
