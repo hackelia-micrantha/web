@@ -110,6 +110,33 @@ test("resolves analytics configuration in runtime precedence order", () => {
   }
 })
 
+test("ignores malformed and blank analytics bindings", () => {
+  const environment = preserveAnalyticsEnvironment()
+
+  try {
+    process.env.MICRANTHA_ANALYTICS_ID = "node-primary"
+
+    const runtime = resolveRuntimePlatform(
+      {
+        env: {
+          MICRANTHA_ANALYTICS_ID: 42,
+          ANALYTICS_ID: "   ",
+        },
+        cloudflare: {
+          env: {
+            MICRANTHA_ANALYTICS_ID: "  cloudflare-primary  ",
+          },
+        },
+      },
+      { url: "https://micrantha.test/path" },
+    )
+
+    assert.equal(runtime.analyticsId, "cloudflare-primary")
+  } finally {
+    restoreAnalyticsEnvironment(environment)
+  }
+})
+
 test("resolves request origin and the default edge cache when available", () => {
   const cachesDescriptor = Object.getOwnPropertyDescriptor(globalThis, "caches")
   const edgeCache = {}
