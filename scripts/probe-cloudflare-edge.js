@@ -75,9 +75,9 @@ function validateSample(target, request, sample) {
 
   if (
     request.contentType &&
-    !sample.headers.contentType?.toLowerCase().startsWith(
-      request.contentType.toLowerCase(),
-    )
+    !sample.headers.contentType
+      ?.toLowerCase()
+      .startsWith(request.contentType.toLowerCase())
   ) {
     recordFailure(
       targetName,
@@ -125,9 +125,7 @@ async function runSample(target, request, repetition) {
     method: request.method ?? "GET",
     headers: {
       "user-agent":
-        request.userAgent ??
-        config.userAgent ??
-        "micrantha-edge-contract/2",
+        request.userAgent ?? config.userAgent ?? "micrantha-edge-contract/2",
     },
     redirect: "manual",
     signal: AbortSignal.timeout(config.timeoutMilliseconds),
@@ -136,9 +134,7 @@ async function runSample(target, request, repetition) {
   const bytes = Buffer.from(await response.arrayBuffer())
   const totalMilliseconds = performance.now() - startedAt
   const body = bytes.toString("utf8")
-  const contentSecurityPolicy = response.headers.get(
-    "content-security-policy",
-  )
+  const contentSecurityPolicy = response.headers.get("content-security-policy")
   const cspNonce = extractScriptNonce(contentSecurityPolicy)
 
   const sample = {
