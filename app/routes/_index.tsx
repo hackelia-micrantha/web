@@ -237,52 +237,6 @@ export default function Index() {
         </Link>
       </section>
 
-      <section className="space-y-6 border-t border-gray-200 pt-12">
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            Architecture Notes
-          </p>
-          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Technical writing for teams dealing with real delivery constraints.
-          </h2>
-          <p className="mt-3 text-base leading-7 text-slate-700">
-            Architecture notes on secure platform integration, delivery
-            governance, AI-assisted systems, and long-lived software design.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card
-            title="Secure Platform Integration Is Not Plumbing"
-            url="/blog/secure-platform-integration-is-not-plumbing"
-            className={cardStyles.neutral}
-          >
-            Integration layers are operational control surfaces, not just pipes
-            between systems.
-          </Card>
-          <Card
-            title="AI Pipelines Need Control Boundaries"
-            url="/blog/ai-pipelines-need-control-boundaries"
-            className={cardStyles.blue}
-          >
-            Treat AI as an untrusted reasoning component inside a governed
-            integration path.
-          </Card>
-          <Card
-            title="Software Layers Are Risk Boundaries"
-            url="/blog/software-layers-are-risk-boundaries"
-            className={cardStyles.green}
-          >
-            Layering is how business rules, integrations, and security decisions
-            stay replaceable.
-          </Card>
-        </div>
-
-        <Link className="inline-block text-sm" to="/blog">
-          Browse the full series
-        </Link>
-      </section>
-
       <section
         id="solutions"
         className="space-y-6 border-t border-gray-200 pt-12"
@@ -358,6 +312,52 @@ export default function Index() {
         </div>
         <Link className="inline-block text-sm" to="/laboratory">
           Explore the lab
+        </Link>
+      </section>
+
+      <section className="space-y-6 border-t border-gray-200 pt-12">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
+            Architecture Notes
+          </p>
+          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
+            Technical writing for teams dealing with real delivery constraints.
+          </h2>
+          <p className="mt-3 text-base leading-7 text-slate-700">
+            Architecture notes on secure platform integration, delivery
+            governance, AI-assisted systems, and long-lived software design.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <Card
+            title="Secure Platform Integration Is Not Plumbing"
+            url="/blog/secure-platform-integration-is-not-plumbing"
+            className={cardStyles.neutral}
+          >
+            Integration layers are operational control surfaces, not just pipes
+            between systems.
+          </Card>
+          <Card
+            title="AI Pipelines Need Control Boundaries"
+            url="/blog/ai-pipelines-need-control-boundaries"
+            className={cardStyles.blue}
+          >
+            Treat AI as an untrusted reasoning component inside a governed
+            integration path.
+          </Card>
+          <Card
+            title="Software Layers Are Risk Boundaries"
+            url="/blog/software-layers-are-risk-boundaries"
+            className={cardStyles.green}
+          >
+            Layering is how business rules, integrations, and security decisions
+            stay replaceable.
+          </Card>
+        </div>
+
+        <Link className="inline-block text-sm" to="/blog">
+          Browse the full series
         </Link>
       </section>
 

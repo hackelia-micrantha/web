@@ -67,6 +67,43 @@ test("homepage exposes primary marketing content", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Anthesis agentic-system trials" }),
   ).toHaveAttribute("href", "https://anthesis.micrantha.com/#collaborate")
+
+  const solutionsHeading = page.getByRole("heading", {
+    name: "Deployable systems for governed delivery.",
+  })
+  const laboratoryHeading = page.getByRole("heading", {
+    name: "Testbeds that validate the architecture.",
+  })
+  const architectureHeading = page.getByRole("heading", {
+    name: "Technical writing for teams dealing with real delivery constraints.",
+  })
+
+  const scanOrder = await page.evaluate(() => {
+    const headings = [
+      "Deployable systems for governed delivery.",
+      "Testbeds that validate the architecture.",
+      "Technical writing for teams dealing with real delivery constraints.",
+    ].map((text) =>
+      [...document.querySelectorAll("h2")].find(
+        (heading) => heading.textContent?.trim() === text,
+      ),
+    )
+
+    if (headings.some((heading) => !heading)) return false
+
+    return (
+      Boolean(
+        headings[0]?.compareDocumentPosition(headings[1]!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ) &&
+      Boolean(
+        headings[1]?.compareDocumentPosition(headings[2]!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      )
+    )
+  })
+
+  expect(scanOrder).toBe(true)
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {
