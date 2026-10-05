@@ -91,13 +91,20 @@ Do not add application-level identity merely to improve analytics continuity.
 
 ### Operator disablement
 
-Omit `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID`.
+Omit `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID`, then allow existing
+browser/edge cache entries to expire or explicitly invalidate the affected
+cached HTML before treating the deployment as analytics-disabled.
 
-Expected result:
+Verify the post-invalidation/expiry deployment by requesting representative
+public pages and confirming:
 
-- no analytics script element;
-- no request to the analytics script origin from this integration;
+- no analytics script element is present;
+- no request to the analytics script origin occurs from this integration;
 - rendering, navigation, SEO, accessibility, and content remain functional.
+
+The repository's cache policy can retain previously rendered HTML after a
+binding change, so removing the binding is the configuration step, not by
+itself proof that already-cached documents have stopped referencing analytics.
 
 Analytics is therefore optional deployment configuration, not application
 authority.
