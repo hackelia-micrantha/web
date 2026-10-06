@@ -84,8 +84,8 @@ const Privacy = () => {
           ) : (
             <p>
               Product analytics is disabled for this rendered deployment. No
-              analytics binding was present when this page was generated, so
-              the application does not emit its optional analytics script.
+              analytics binding was present when this page was generated, so the
+              application does not emit its optional analytics script.
             </p>
           )}
           <p>
@@ -96,8 +96,8 @@ const Privacy = () => {
             site rendering or navigation.
           </p>
           <p>
-            Analytics is deployment configuration. After an operator changes
-            the binding, cached pages must expire or be invalidated before the
+            Analytics is deployment configuration. After an operator changes the
+            binding, cached pages must expire or be invalidated before the
             rendered state can be treated as current.
           </p>
         </section>
@@ -106,9 +106,9 @@ const Privacy = () => {
           <h2 className="text-xl">Cookies and Browser Storage</h2>
           <p>
             The Micrantha website application does not use cookies as its
-            product-analytics identity mechanism. Hosting and security
-            providers may use cookies or similar browser state when necessary
-            for delivery, abuse prevention, or security challenges.
+            product-analytics identity mechanism. Hosting and security providers
+            may use cookies or similar browser state when necessary for
+            delivery, abuse prevention, or security challenges.
           </p>
           <p>
             Provider-specific cookie or persistent-identifier behavior is
