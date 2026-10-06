@@ -9,7 +9,11 @@ const analyticsId = "adapter-contract-test"
 
 async function request(
   pathname,
-  { userAgent = "adapter-contract", method = "GET" } = {},
+  {
+    userAgent = "adapter-contract",
+    method = "GET",
+    analyticsIdOverride = analyticsId,
+  } = {},
 ) {
   const request = new Request(new URL(pathname, origin), {
     method,
@@ -20,9 +24,10 @@ async function request(
 
   return onRequest({
     request,
-    env: {
-      MICRANTHA_ANALYTICS_ID: analyticsId,
-    },
+    env:
+      analyticsIdOverride === null
+        ? { MICRANTHA_ANALYTICS_ID: "", ANALYTICS_ID: "" }
+        : { MICRANTHA_ANALYTICS_ID: analyticsIdOverride },
     params: {},
     data: {},
     functionPath: "[[path]]",
@@ -104,6 +109,18 @@ assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
 assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body)
+
+const analyticsDisabledHome = await read("/", { analyticsIdOverride: null })
+assert.equal(analyticsDisabledHome.response.status, 200)
+assert.doesNotMatch(analyticsDisabledHome.body, /data-website-id=/)
+assert.doesNotMatch(
+  analyticsDisabledHome.response.headers.get("content-security-policy") ?? "",
+  /analytics\.micrantha\.com/,
+)
+assertDocumentHeaders(
+  analyticsDisabledHome.response,
+  analyticsDisabledHome.body,
+)
 
 const contactRedirect = await read("/contact")
 assert.equal(contactRedirect.response.status, 301)
