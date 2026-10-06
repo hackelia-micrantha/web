@@ -112,7 +112,12 @@ test("/privacy retains the tailored long-form policy copy", async ({
   ).toBeVisible()
   await expect(page.getByText("Information You Provide")).toBeVisible()
   await expect(page.getByText("Request and Security Data")).toBeVisible()
-  await expect(page.getByText("Product Analytics")).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Product Analytics", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText("Product analytics is disabled for this rendered deployment."),
+  ).toBeVisible()
   await expect(page.getByText("Cookies and Browser Storage")).toBeVisible()
   await expect(page.getByText("Contact", { exact: true })).toBeVisible()
   await expect(page.getByText("fortunes.micrantha.com")).toHaveCount(0)
