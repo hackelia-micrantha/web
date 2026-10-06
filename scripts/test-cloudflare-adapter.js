@@ -9,7 +9,11 @@ const analyticsId = "adapter-contract-test"
 
 async function request(
   pathname,
-  { userAgent = "adapter-contract", method = "GET" } = {},
+  {
+    userAgent = "adapter-contract",
+    method = "GET",
+    analyticsBinding = analyticsId,
+  } = {},
 ) {
   const request = new Request(new URL(pathname, origin), {
     method,
@@ -20,9 +24,11 @@ async function request(
 
   return onRequest({
     request,
-    env: {
-      MICRANTHA_ANALYTICS_ID: analyticsId,
-    },
+    env: analyticsBinding
+      ? {
+          MICRANTHA_ANALYTICS_ID: analyticsBinding,
+        }
+      : {},
     params: {},
     data: {},
     functionPath: "[[path]]",
@@ -104,6 +110,25 @@ assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
 assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body)
+
+const privacyEnabled = await read("/privacy")
+assert.equal(privacyEnabled.response.status, 200)
+assert.match(
+  privacyEnabled.body,
+  /Product analytics is enabled for this rendered deployment\./,
+)
+assert.match(
+  privacyEnabled.body,
+  new RegExp(`data-website-id="${analyticsId}"`),
+)
+
+const privacyDisabled = await read("/privacy", { analyticsBinding: null })
+assert.equal(privacyDisabled.response.status, 200)
+assert.match(
+  privacyDisabled.body,
+  /Product analytics is disabled for this rendered deployment\./,
+)
+assert.doesNotMatch(privacyDisabled.body, /data-website-id=/)
 
 const contactRedirect = await read("/contact")
 assert.equal(contactRedirect.response.status, 301)
