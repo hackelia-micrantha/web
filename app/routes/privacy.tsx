@@ -121,9 +121,9 @@ const Privacy = () => {
           <h2 className="text-xl">Service Providers</h2>
           <p>
             Micrantha uses infrastructure providers to deliver and protect the
-            public website. The current public site is served through Cloudflare,
-            which necessarily processes request data needed to route, cache, and
-            protect requests.
+            public website. The current public site is served through
+            Cloudflare, which necessarily processes request data needed to
+            route, cache, and protect requests.
           </p>
           <p>
             The optional analytics provider receives pageview-related data only
