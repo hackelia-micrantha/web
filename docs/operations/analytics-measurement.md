@@ -35,6 +35,37 @@ Repository search currently finds no:
 These are source-code facts. They are not claims about reverse proxies,
 Cloudflare, the deployed Umami version/configuration, or database retention.
 
+## Deployed verification
+
+Public deployment verification on October 5, 2026 found:
+
+- `micrantha.com` rendered `analyticsId: null`;
+- representative HTML contained no analytics script and no
+  `data-website-id`;
+- the configured `analytics.micrantha.com/umami.js` client path returned
+  HTTP 404;
+- the corresponding `analytics.micrantha.com/api/send` path returned
+  HTTP 404.
+
+The currently observable deployment is therefore analytics-disabled. This
+evidence does **not** establish historical collection, provider version,
+database retention, IP/user-agent/session derivation, or proxy behavior.
+
+Before analytics is re-enabled:
+
+1. verify the deployed provider/version and expected client/ingest endpoints;
+2. verify minimum pageview fields, session/identity behavior, retention,
+   deletion, and proxy/IP handling;
+3. update the privacy page if those facts materially change its statements;
+4. enable the website binding;
+5. invalidate or expire cached HTML;
+6. verify the analytics script is present only where intended and site
+   correctness remains independent of provider failure.
+
+The document CSP trusts the analytics origin only when the runtime analytics
+binding is enabled; the disabled deployment does not need that cross-origin
+script/connect capability.
+
 ## Measurement questions
 
 The current pageview-only integration exists to answer two bounded questions:
