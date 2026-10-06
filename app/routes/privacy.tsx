@@ -40,10 +40,10 @@ const Privacy = () => (
         </p>
         <p>
           The application source does not add custom analytics events, account
-          or user identity, session replay, fingerprinting, or analytics
-          browser storage. Micrantha will verify the deployed provider&apos;s
-          data fields, identity behavior, retention, deletion, and proxy
-          handling before treating analytics as enabled production behavior.
+          or user identity, session replay, fingerprinting, or analytics browser
+          storage. Micrantha will verify the deployed provider&apos;s data
+          fields, identity behavior, retention, deletion, and proxy handling
+          before treating analytics as enabled production behavior.
         </p>
       </section>
 
@@ -53,8 +53,8 @@ const Privacy = () => (
           Delivering and securing a website requires processing ordinary HTTP
           request metadata such as the requested URL, network address, browser
           or user-agent information, and request timing. Hosting, content
-          delivery, and security infrastructure may process this information
-          for delivery, abuse prevention, reliability, and diagnostics.
+          delivery, and security infrastructure may process this information for
+          delivery, abuse prevention, reliability, and diagnostics.
         </p>
         <p>
           This operational processing is separate from optional product
@@ -76,19 +76,19 @@ const Privacy = () => (
       <section className="space-y-3">
         <h2 className="text-xl">External Services and Links</h2>
         <p>
-          The site relies on infrastructure providers to deliver and protect
-          the service and may link to third-party sites. External sites and
-          services operate under their own privacy practices. Micrantha does
-          not treat those external policies as evidence about its own optional
-          analytics configuration.
+          The site relies on infrastructure providers to deliver and protect the
+          service and may link to third-party sites. External sites and services
+          operate under their own privacy practices. Micrantha does not treat
+          those external policies as evidence about its own optional analytics
+          configuration.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl">Security</h2>
         <p>
-          Micrantha uses technical and operational safeguards appropriate to
-          the public website. No network transmission or storage system can be
+          Micrantha uses technical and operational safeguards appropriate to the
+          public website. No network transmission or storage system can be
           guaranteed absolutely secure.
         </p>
       </section>
