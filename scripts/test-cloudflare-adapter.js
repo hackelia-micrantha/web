@@ -24,9 +24,10 @@ async function request(
 
   return onRequest({
     request,
-    env: analyticsIdOverride
-      ? { MICRANTHA_ANALYTICS_ID: analyticsIdOverride }
-      : {},
+    env:
+      analyticsIdOverride === null
+        ? { MICRANTHA_ANALYTICS_ID: "", ANALYTICS_ID: "" }
+        : { MICRANTHA_ANALYTICS_ID: analyticsIdOverride },
     params: {},
     data: {},
     functionPath: "[[path]]",
