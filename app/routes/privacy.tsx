@@ -13,91 +13,83 @@ const Privacy = () => (
   <div>
     <PageTitle
       title="Privacy Policy"
-      subtitle="How Micrantha collects, uses, and protects personal information across the website and related services."
+      subtitle="How the public Micrantha website handles information and optional analytics."
     />
 
     <div className="space-y-8">
       <section className="space-y-4">
         <p>
-          Micrantha Software operates the <i>micrantha.com</i> website and
-          related services.
+          This policy describes the public <i>micrantha.com</i> website. The
+          public site currently has no account registration or first-party
+          profile/contact form that asks visitors to submit personal
+          information.
         </p>
         <p>
-          This page explains how Micrantha collects, uses, and discloses
-          personal information when you use the services.
-        </p>
-        <p>
-          By using the service, you agree to the collection and use of
-          information in accordance with this policy. Micrantha uses personal
-          information to provide, operate, and improve the service.
+          Last deployment verification for the analytics statements below:
+          October 5, 2026.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl">Information Collection and Use</h2>
+        <h2 className="text-xl">Website Analytics</h2>
         <p>
-          For a better experience, Micrantha may ask you to provide personally
-          identifiable information, including your name, phone number, or postal
-          address. Micrantha may use that information to contact you, support
-          the service, and improve the experience.
+          Micrantha has an optional, pageview-only analytics integration, but it
+          is currently disabled in the public deployment. When analytics is
+          disabled, the site does not render the analytics script or a website
+          identifier.
+        </p>
+        <p>
+          The application source does not add custom analytics events, account
+          or user identity, session replay, fingerprinting, or analytics
+          browser storage. Micrantha will verify the deployed provider&apos;s
+          data fields, identity behavior, retention, deletion, and proxy
+          handling before treating analytics as enabled production behavior.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl">Log Data</h2>
+        <h2 className="text-xl">Request and Operational Data</h2>
         <p>
-          When you visit the service, Micrantha may collect information sent
-          automatically by your browser. This can include your IP address,
-          browser version, the pages you visit, the time and date of your visit,
-          time spent on those pages, and similar diagnostic data.
+          Delivering and securing a website requires processing ordinary HTTP
+          request metadata such as the requested URL, network address, browser
+          or user-agent information, and request timing. Hosting, content
+          delivery, and security infrastructure may process this information
+          for delivery, abuse prevention, reliability, and diagnostics.
+        </p>
+        <p>
+          This operational processing is separate from optional product
+          analytics. This policy does not claim provider-specific retention or
+          identity semantics that have not been verified.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl">Cookies</h2>
+        <h2 className="text-xl">Cookies and Browser Storage</h2>
         <p>
-          Cookies are small data files commonly used as anonymous unique
-          identifiers. They are sent to your browser from websites you visit and
-          stored on your device.
-        </p>
-        <p>
-          Micrantha uses cookies to collect information and improve the service.
-          You can accept or refuse cookies, and most browsers let you know when
-          a cookie is being sent. If you refuse cookies, some parts of the
-          service may not function as expected.
+          The Micrantha application does not currently set analytics cookies or
+          use <code>localStorage</code> or <code>sessionStorage</code> to create
+          an analytics identity. Browser caching and infrastructure security
+          mechanisms are separate from product analytics.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl">Service Providers</h2>
+        <h2 className="text-xl">External Services and Links</h2>
         <p>
-          Micrantha may use third-party companies and individuals to help
-          operate the service, provide service-related functions, or assist in
-          understanding how the service is used.
-        </p>
-        <p>
-          These providers may have access to personal information only as needed
-          to perform those tasks for Micrantha, and they are expected not to
-          disclose or use it for other purposes.
+          The site relies on infrastructure providers to deliver and protect
+          the service and may link to third-party sites. External sites and
+          services operate under their own privacy practices. Micrantha does
+          not treat those external policies as evidence about its own optional
+          analytics configuration.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl">Security</h2>
         <p>
-          Micrantha uses commercially reasonable measures to protect personal
-          information. No method of transmission over the internet or method of
-          electronic storage is completely secure, so Micrantha cannot guarantee
-          absolute security.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl">Links to Other Sites</h2>
-        <p>
-          The service may contain links to third-party sites. Following one of
-          those links directs you to a site Micrantha does not operate. Review
-          the privacy policy of every external site you visit.
+          Micrantha uses technical and operational safeguards appropriate to
+          the public website. No network transmission or storage system can be
+          guaranteed absolutely secure.
         </p>
       </section>
 
@@ -107,23 +99,25 @@ const Privacy = () => (
           Micrantha services are not directed to children under 13, and
           Micrantha does not knowingly collect personal information from
           children under 13. If you believe a child has provided personal
-          information, contact privacy@micrantha.com so Micrantha can take
-          appropriate action.
+          information, contact privacy@micrantha.com.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl">Changes to This Privacy Policy</h2>
         <p>
-          Micrantha may update this Privacy Policy from time to time. Changes
-          become effective when they are posted on this page.
+          Micrantha will update this page when materially relevant collection,
+          analytics, retention, or service-provider behavior changes. In
+          particular, optional analytics should not be treated as enabled until
+          its deployed behavior has been re-verified and this policy remains
+          accurate.
         </p>
       </section>
 
       <section className="space-y-3 border-t border-gray-200 pt-6">
         <h2 className="text-xl">Contact</h2>
         <p>
-          Questions or suggestions about this Privacy Policy can be sent to{" "}
+          Questions about this Privacy Policy can be sent to{" "}
           <a href="mailto:privacy@micrantha.com">privacy@micrantha.com</a>.
         </p>
       </section>
