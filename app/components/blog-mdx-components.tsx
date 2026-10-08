@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
-import { isValidElement } from "react"
+import { isValidElement, useId } from "react"
 import { Link } from "@remix-run/react"
 
 import { MermaidDiagram } from "./mermaid-diagram"
@@ -47,12 +47,44 @@ type ControlTableRow = {
   response: string
 }
 
+function ScrollableTableFrame({
+  children,
+  label,
+}: {
+  children: ReactNode
+  label: string
+}) {
+  const hintId = useId()
+
+  return (
+    <div className="article-table-frame">
+      <p id={hintId} className="article-table-scroll-hint">
+        Scroll horizontally if needed to view all columns.
+      </p>
+      <div
+        aria-describedby={hintId}
+        aria-label={label}
+        className="article-table-scroll overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
+        role="region"
+        tabIndex={0}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+export function BlogMdxTable(props: ComponentPropsWithoutRef<"table">) {
+  return (
+    <ScrollableTableFrame label="Scrollable article table">
+      <table {...props} />
+    </ScrollableTableFrame>
+  )
+}
+
 export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
   return (
-    <div
-      className="article-table-scroll overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
-      tabIndex={0}
-    >
+    <ScrollableTableFrame label="AI pipeline failure modes table">
       <table
         aria-label="AI pipeline failure modes"
         className="article-control-table min-w-[48rem] border-collapse text-left"
@@ -74,7 +106,7 @@ export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </ScrollableTableFrame>
   )
 }
 
@@ -117,4 +149,5 @@ export const blogMdxComponents = {
   Figure,
   PostLink,
   pre: BlogMdxPre,
+  table: BlogMdxTable,
 }
