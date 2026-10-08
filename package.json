@@ -39,7 +39,8 @@
     "test:project-registry-projection": "node scripts/test-project-registry-projection.js",
     "test:unit": "node --test --experimental-test-coverage --test-coverage-lines=95 --test-coverage-functions=100 --test-coverage-branches=90 tests/unit/*.test.js",
     "typecheck": "tsc -b",
-    "deploy:cloudflare": "yarn test:unit && yarn test:project-registry-projection && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn test:performance-budgets && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
+    "deploy:cloudflare": "yarn test:unit && yarn test:project-registry-projection && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn test:performance-budgets && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps",
+    "probe:cloudflare:edge": "node scripts/probe-cloudflare-edge.js"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",

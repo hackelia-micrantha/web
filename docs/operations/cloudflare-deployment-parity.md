@@ -71,7 +71,24 @@ Perform this review before the first production deployment, after changing compa
 5. Confirm no dashboard-only rule overrides repository-owned routing, headers, redirects, or cache behavior without an explicit issue and documentation update.
 6. Deploy to a preview branch using the pinned repository command.
 7. Exercise the same representative requests used by the local runtime contract: success, static asset, nested article, bot, redirect, controlled 405, and 404.
-8. Record the verification evidence in the deployment issue or release record.
+8. Run the repository-owned deployed-edge probe against both the custom domain and the Pages project:
+
+   ```sh
+   yarn probe:cloudflare:edge
+   ```
+
+   The probe writes bounded JSON evidence to `.performance/cloudflare-edge.json`. It fails on status/cache/content/publication/nonce-pairing violations. `CF-Cache-Status`, `Age`, `Vary`, response hashes, and timings are evidence only; a CDN cache `HIT` is not required.
+
+9. Record the verification evidence in the deployment issue or release record.
+
+## Current project identity
+
+Live endpoint verification on 2026-09-29 confirms:
+
+- `micrantha-web.pages.dev` serves Micrantha Web and matches the checked-in `micrantha-web` project default;
+- `amaryllis-9ne.pages.dev` serves the separate Amaryllis product and must not be used as Micrantha Web deployment evidence.
+
+If older notes or branches identify `amaryllis-9ne` as the Micrantha Web Pages project, treat them as stale evidence rather than changing the checked-in deployment identity.
 
 ## Evidence record
 
