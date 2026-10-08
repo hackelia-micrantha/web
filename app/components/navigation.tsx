@@ -25,7 +25,7 @@ export const Navigation = () => {
   return (
     <nav
       aria-label="Primary"
-      className="relative z-50 border-b border-gray-200 bg-white/90 px-4 py-3 backdrop-blur-sm sm:px-6 lg:px-8"
+      className="relative z-50 border-b-2 border-slate-500 bg-[#f6f4ed] px-4 py-3 sm:px-6 lg:px-8"
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
         <Link
@@ -72,7 +72,7 @@ export const Navigation = () => {
           })}
           <ExternalLink
             href="https://github.com/hackelia-micrantha"
-            className="ml-1 flex items-center justify-center rounded-lg px-3 py-2 text-slate-700 transition-colors hover:text-slate-950"
+            className="ml-1 flex items-center justify-center rounded-[0.25rem] border border-transparent px-3 py-2 text-slate-700 transition-colors hover:border-slate-500 hover:bg-white hover:text-slate-950"
             aria-label="Micrantha GitHub"
           >
             <GithubIcon />
@@ -83,7 +83,7 @@ export const Navigation = () => {
           <summary
             aria-controls={MOBILE_NAVIGATION_ID}
             aria-expanded="false"
-            className="flex h-11 w-11 list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:bg-slate-50 [&::-webkit-details-marker]:hidden"
+            className="flex h-11 w-11 list-none items-center justify-center rounded-[0.25rem] border border-slate-500 bg-white text-slate-700 transition-colors hover:bg-[#f1eadc] [&::-webkit-details-marker]:hidden"
           >
             <span className="sr-only">Navigation menu</span>
             <span aria-hidden="true" className="flex w-5 flex-col gap-1.5">
@@ -95,7 +95,7 @@ export const Navigation = () => {
 
           <div
             id={MOBILE_NAVIGATION_ID}
-            className="mobile-nav-panel absolute right-0 top-full z-[60] mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_24px_50px_rgba(15,23,42,0.14)]"
+            className="mobile-nav-panel absolute right-0 top-full z-[60] mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-[0.25rem] border border-slate-500 bg-[#f6f4ed] p-2 shadow-none"
           >
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
@@ -106,10 +106,10 @@ export const Navigation = () => {
                     key={link.to}
                     to={link.to}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+                    className={`rounded-[0.2rem] border border-transparent px-3 py-3 text-sm font-medium transition-colors ${
                       active
-                        ? "bg-slate-100 text-slate-950"
-                        : "text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                        ? "border-slate-500 bg-white text-slate-950"
+                        : "text-slate-700 hover:border-slate-400 hover:bg-[#e8eef3] hover:text-slate-950"
                     }`}
                   >
                     {link.label}
@@ -118,7 +118,7 @@ export const Navigation = () => {
               })}
               <ExternalLink
                 href="https://github.com/hackelia-micrantha"
-                className="rounded-xl px-3 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950"
+                className="rounded-[0.2rem] border border-transparent px-3 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-slate-400 hover:bg-[#e8eef3] hover:text-slate-950"
               >
                 GitHub
               </ExternalLink>
