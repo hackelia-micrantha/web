@@ -130,7 +130,7 @@ export default function App() {
   ]
 
   return (
-    <html lang="en">
+    <html lang="en" data-phyllotaxis-profile="utility">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
@@ -188,7 +188,7 @@ export function ErrorBoundary() {
           : "The request could not be completed."
 
   return (
-    <html lang="en">
+    <html lang="en" data-phyllotaxis-profile="utility">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{`${status} ${title} | Micrantha Software`}</title>
