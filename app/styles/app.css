@@ -1,33 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --brand-ink: #1f2a2a;
+  color-scheme: light;
+  --brand-ink: #172126;
   --brand-dark: #253334;
   --brand-leaf: #2f6b55;
   --brand-leaf-deep: #234c3e;
-  --brand-mist: #d3e4de;
-  --brand-sky: #dbeaf7;
-  --brand-sand: #f4efe3;
-  --brand-paper: #fcfbf7;
+  --brand-mist: #e9f0e7;
+  --brand-sky: #e8eef3;
+  --brand-sand: #f1eadc;
+  --brand-paper: #f6f4ed;
+  --utility-line: #6d7772;
+  --utility-link: #164f9c;
+  --utility-visited: #67447c;
+  --utility-focus: #9b4c00;
 }
 
 html {
-  background:
-    radial-gradient(
-      circle at top left,
-      rgb(219 234 247 / 0.5),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at top right,
-      rgb(211 228 222 / 0.4),
-      transparent 32%
-    ),
-    var(--brand-paper);
+  background: var(--brand-paper);
 }
 
 body {
   color: var(--brand-ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-feature-settings:
     "liga" 1,
     "kern" 1,
@@ -80,56 +75,62 @@ body {
 }
 
 a:not(.button) {
-  color: var(--brand-dark);
+  color: var(--utility-link);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.14em;
 }
 a:not(.button):hover {
-  color: var(--brand-leaf);
+  color: var(--brand-leaf-deep);
+}
+
+a:not(.button):visited {
+  color: var(--utility-visited);
 }
 
 .button {
   align-items: center;
-  background: linear-gradient(135deg, var(--brand-dark), var(--brand-leaf));
-  border: 1px solid rgb(37 51 52 / 0.18);
-  border-radius: 9999px;
-  box-shadow: 0 10px 30px rgb(37 51 52 / 0.14);
-  color: #ffffff;
+  background: #ffffff;
+  border: 1px solid var(--utility-line);
+  border-radius: 0.25rem;
+  box-shadow: none;
+  color: var(--brand-dark);
   display: inline-flex;
-  font-weight: 600;
+  font-weight: 700;
   justify-content: center;
-  padding: 0.7rem 1.1rem;
+  padding: 0.45rem 0.75rem;
   text-decoration: none;
   transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
+    background-color 120ms ease-out,
+    border-color 120ms ease-out,
+    transform 120ms ease-out;
 }
 .button:hover {
-  background: linear-gradient(
-    135deg,
-    var(--brand-leaf-deep),
-    var(--brand-leaf)
-  );
-  color: #ffffff;
+  background: var(--brand-sand);
+  border-color: var(--brand-dark);
+  color: var(--brand-dark);
   transform: translateY(-1px);
-  box-shadow: 0 14px 34px rgb(37 51 52 / 0.18);
+  box-shadow: none;
+}
+.button:active {
+  background: #ffffff;
+  border-color: var(--utility-focus);
+  transform: translateY(0);
 }
 .button-outline {
-  background: rgb(255 255 255 / 0.72);
-  border: 1px solid rgb(37 51 52 / 0.16);
+  background: transparent;
+  border: 1px solid var(--utility-line);
   box-shadow: none;
   color: var(--brand-dark);
 }
 .button-outline:hover {
-  background: rgb(211 228 222 / 0.9);
+  background: var(--brand-sky);
   color: var(--brand-dark);
 }
 
 button:focus-visible,
 a:focus-visible,
 .button:focus-visible {
-  outline: 3px solid var(--brand-leaf);
+  outline: 3px solid var(--utility-focus);
   outline-offset: 3px;
 }
 
@@ -539,5 +540,17 @@ details[open] > .mobile-nav-panel {
     display: table;
     overflow: visible;
     white-space: normal;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button:hover,
+  .button:active,
+  .interactive-card,
+  .interactive-card:hover {
+    transition-duration: 0ms;
+    transform: none;
   }
 }
