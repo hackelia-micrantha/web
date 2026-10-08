@@ -40,7 +40,7 @@ export const Footer = () => {
   }, [])
 
   return (
-    <footer className="mt-20 border-t border-gray-200 px-4 py-8 text-center sm:px-6 lg:px-8">
+    <footer className="mt-16 border-t-2 border-slate-500 bg-[#f6f4ed] px-4 py-8 text-center sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4">
         <div className="flex w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-gray-600">
           <Link to="/services">Services</Link>
