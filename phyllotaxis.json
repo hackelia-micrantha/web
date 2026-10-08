@@ -1,0 +1,9 @@
+{
+  "adapter": "generic",
+  "chroma": {
+    "profile": "utility"
+  },
+  "venation": {
+    "contract": 1
+  }
+}
