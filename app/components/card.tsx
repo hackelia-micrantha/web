@@ -52,9 +52,9 @@ export const Card: React.FC<Props> = ({
   )
 
   const cardClasses =
-    "flex w-full flex-col overflow-hidden rounded-2xl border px-6 py-5 shadow-[0_12px_28px_rgba(31,42,42,0.10)] transition-all duration-300"
+    "flex w-full flex-col overflow-hidden rounded-[0.3rem] border px-5 py-4 shadow-none transition-[background-color,border-color,transform] duration-150"
   const interactiveCardClasses =
-    "interactive-card cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(31,42,42,0.14)]"
+    "interactive-card cursor-pointer hover:-translate-y-px hover:border-slate-600 hover:shadow-none"
 
   return (
     <div
