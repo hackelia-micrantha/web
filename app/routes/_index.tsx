@@ -109,11 +109,11 @@ export const handle = {
 
 export default function Index() {
   return (
-    <div className="space-y-20">
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(135deg,rgba(250,248,242,0.96),rgba(236,243,238,0.94)_52%,rgba(226,235,244,0.94))] px-6 py-10 shadow-[0_24px_60px_rgba(31,42,42,0.10)] backdrop-blur-sm md:px-10 md:py-12">
+    <div className="space-y-12">
+      <section className="relative overflow-hidden border border-slate-500 bg-[#e9f0e7] px-6 py-8 md:px-8 md:py-9">
         <div className="relative flex flex-col items-start justify-center gap-8 md:flex-row md:items-center">
           <div className="flex w-full justify-center md:w-auto md:shrink-0">
-            <div className="rounded-[2rem] border border-slate-200 bg-[linear-gradient(180deg,rgba(219,234,247,0.85),rgba(255,255,255,0.96))] p-5 shadow-[0_18px_40px_rgba(31,42,42,0.10)]">
+            <div className="rounded-[0.35rem] border border-slate-500 bg-white p-4 shadow-none">
               <img
                 src="/img/logo.svg"
                 width="168"
@@ -125,7 +125,7 @@ export default function Index() {
           </div>
 
           <div className="max-w-3xl">
-            <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-800">
+            <p className="inline-flex rounded-[0.2rem] border border-emerald-800 bg-white px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-900">
               Micrantha Software
             </p>
             <h1 className="mt-4 max-w-3xl text-4xl leading-tight tracking-tight text-slate-900 md:text-5xl">
@@ -154,8 +154,8 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+      <section className="grid grid-cols-1 gap-0 border-l border-t border-slate-500 md:grid-cols-3">
+        <div className="border-r border-b border-slate-500 bg-[#e9f0e7] px-5 py-4 shadow-none">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             Where Teams Get Stuck
           </p>
@@ -167,7 +167,7 @@ export default function Index() {
             to systems that fit real engineering environments.
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+        <div className="border-r border-b border-slate-500 bg-[#e8eef3] px-5 py-4 shadow-none">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             Where Teams Get Stuck
           </p>
@@ -179,7 +179,7 @@ export default function Index() {
             decay unless someone restores structure and operational discipline.
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
+        <div className="border-r border-b border-slate-500 bg-[#f1eadc] px-5 py-4 shadow-none">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             Where Teams Get Stuck
           </p>
@@ -460,7 +460,7 @@ export default function Index() {
 
       <section
         id="contact"
-        className="rounded-[2rem] border border-slate-200 bg-white/80 px-6 py-8 shadow-[0_20px_45px_rgba(31,42,42,0.08)]"
+        className="border border-slate-500 bg-[#e8eef3] px-6 py-7 shadow-none"
       >
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="space-y-4">
