@@ -29,6 +29,9 @@ jobs:
       - name: Set up project toolchain
         uses: ./.github/actions/setup
 
+      - name: Verify tracked-publication secret policy
+        run: yarn security:publication
+
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
 
@@ -69,6 +72,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Check generated public assets for accidental key publication
+        run: node scripts/check-publication-secrets.js --public
+
       - name: Verify blog browser chunk isolation
         run: yarn test:blog-chunk-isolation
 
@@ -88,6 +94,9 @@ jobs:
 
       - name: Bundle Cloudflare Pages Function
         run: yarn cloudflare:functions:build
+
+      - name: Verify generated Cloudflare Functions bundle
+        run: node scripts/check-publication-secrets.js --functions
 
       - name: Enforce Cloudflare Worker bundle budget
         run: yarn test:cloudflare:bundle-budget
