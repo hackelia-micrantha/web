@@ -7,6 +7,7 @@
 import { execFileSync } from "node:child_process"
 import { createReadStream, lstatSync, readdirSync } from "node:fs"
 import path from "node:path"
+import { pathToFileURL } from "node:url"
 import process from "node:process"
 
 const PEM = /-----BEGIN (?:RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY-----/u
@@ -19,6 +20,8 @@ export function sensitivePath(relative) {
   return (
     parts.includes("certs") && parts.includes("test")
   ) || /(^|\/)\.env(?:$|\.)(?!example$|sample$|template$)/iu.test(unix) ||
+    (name === ".dev.vars" ||
+      (name.startsWith(".dev.vars.") && !/\.(?:example|sample|template)$/iu.test(name))) ||
     SENSITIVE_SUFFIX.test(name) ||
     /^(?:id_rsa|id_ed25519|id_ecdsa|credentials\.json)$/iu.test(name)
 }
@@ -114,6 +117,6 @@ export async function main(argv = process.argv.slice(2)) {
   }
 }
 
-if (process.argv[1] && import.meta.url === new URL("file://" + path.resolve(process.argv[1])).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   process.exitCode = await main()
 }
