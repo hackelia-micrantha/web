@@ -226,7 +226,6 @@ Development TLS identities and `.env` overlays are machine-local state, not sour
 
 Historical public Git commits previously included `test/certs/dev-key.pem` and its corresponding development certificate. The certificate's validity ended in August 2023; that date does not prove the key was never trusted or later reused. Current `main` no longer tracks either file. If the old identity was trusted or reused, address the relevant trust/credential replacement before considering coordinated Git-history cleanup. A current-tree deletion or ignore rule cannot erase historical commits or external clones. Do not include historical private-key bytes in issues or logs.
 
-
 ## Publication safety
 
 Before CI validates or production publishing begins, the project runs a
