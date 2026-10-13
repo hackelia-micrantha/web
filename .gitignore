@@ -127,3 +127,11 @@ dist
 .serena
 .agents
 skills-lock.json
+
+# Local developer TLS identities and machine-specific env overlays.
+# The historic test/certs/dev-key.pem must never be republished.
+/test/certs/
+.env.*
+!.env.example
+!.env.sample
+!.env.template

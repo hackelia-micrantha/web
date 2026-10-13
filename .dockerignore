@@ -2,3 +2,8 @@ node_modules
 build
 public/build
 *.log
+
+# Never copy local runtime secrets or developer TLS identities to an image.
+.env
+.env.*
+test/certs/

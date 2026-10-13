@@ -219,3 +219,9 @@ scripts/      Build, staging, budget, and runtime-contract automation
 - Tailwind is compiled from `app/styles/app.css` into `public/tailwind.css`.
 - The philosophy triangle diagram is served as SVG for sharper rendering.
 - GitLab may mirror the repository, but GitHub Actions remains the required validation authority; GitLab does not define a parallel CI contract.
+
+## Local TLS and environment publication boundary
+
+Development TLS identities and `.env` overlays are machine-local state, not source artifacts. `.gitignore` excludes the historical `test/certs/` directory and local environment overlays; `.dockerignore` also prevents them from entering an optional local container build context. Keep non-secret example configuration in reviewed `.env.example`/template files and inject actual provider credentials through the deployment platform.
+
+Historical public Git commits previously included `test/certs/dev-key.pem` and its corresponding development certificate. The certificate's validity ended in August 2023; that date does not prove the key was never trusted or later reused. Current `main` no longer tracks either file. If the old identity was trusted or reused, address the relevant trust/credential replacement before considering coordinated Git-history cleanup. A current-tree deletion or ignore rule cannot erase historical commits or external clones. Do not include historical private-key bytes in issues or logs.
