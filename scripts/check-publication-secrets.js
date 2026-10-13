@@ -18,12 +18,14 @@ export function sensitivePath(relative) {
   const parts = unix.split("/")
   const name = parts.at(-1) || ""
   return (
-    parts.includes("certs") && parts.includes("test")
-  ) || /(^|\/)\.env(?:$|\.)(?!example$|sample$|template$)/iu.test(unix) ||
-    (name === ".dev.vars" ||
-      (name.startsWith(".dev.vars.") && !/\.(?:example|sample|template)$/iu.test(name))) ||
+    (parts.includes("certs") && parts.includes("test")) ||
+    /(^|\/)\.env(?:$|\.)(?!example$|sample$|template$)/iu.test(unix) ||
+    name === ".dev.vars" ||
+    (name.startsWith(".dev.vars.") &&
+      !/\.(?:example|sample|template)$/iu.test(name)) ||
     SENSITIVE_SUFFIX.test(name) ||
     /^(?:id_rsa|id_ed25519|id_ecdsa|credentials\.json)$/iu.test(name)
+  )
 }
 
 export async function hasPrivateKeyHeader(file) {
@@ -40,8 +42,11 @@ export async function checkFiles(root, relativeFiles) {
   const findings = []
   for (const name of [...relativeFiles].sort()) {
     const relative = name.replaceAll("\\", "/")
-    if (!relative || path.isAbsolute(relative) ||
-        relative.split("/").includes("..")) {
+    if (
+      !relative ||
+      path.isAbsolute(relative) ||
+      relative.split("/").includes("..")
+    ) {
       findings.push([relative, "unsafe path"])
       continue
     }
@@ -69,7 +74,9 @@ export async function checkFiles(root, relativeFiles) {
 export function listTree(root) {
   const result = []
   function visit(directory) {
-    for (const item of readdirSync(path.join(root, directory), { withFileTypes: true })) {
+    for (const item of readdirSync(path.join(root, directory), {
+      withFileTypes: true,
+    })) {
       const relative = path.join(directory, item.name)
       if (item.isDirectory()) visit(relative)
       else result.push(relative)
@@ -88,35 +95,57 @@ function trackedFiles(root) {
 }
 
 export async function main(argv = process.argv.slice(2)) {
-  if (argv.length !== 1 || !["--tracked", "--public", "--functions"].includes(argv[0])) {
-    process.stderr.write("Usage: check-publication-secrets.js --tracked|--public|--functions\n")
+  if (
+    argv.length !== 1 ||
+    !["--tracked", "--public", "--functions"].includes(argv[0])
+  ) {
+    process.stderr.write(
+      "Usage: check-publication-secrets.js --tracked|--public|--functions\n",
+    )
     return 2
   }
   const root = process.cwd()
-  const base = argv[0] === "--tracked" ? root :
-    path.join(root, argv[0] === "--public" ? "public" : ".cloudflare/functions")
+  const base =
+    argv[0] === "--tracked"
+      ? root
+      : path.join(
+          root,
+          argv[0] === "--public" ? "public" : ".cloudflare/functions",
+        )
   let names
   try {
     const stat = lstatSync(base)
-    if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error("invalid output")
+    if (!stat.isDirectory() || stat.isSymbolicLink())
+      throw new Error("invalid output")
     names = argv[0] === "--tracked" ? trackedFiles(root) : listTree(base)
     const findings = await checkFiles(base, names)
     if (findings.length > 0) {
       for (const [name, reason] of findings) {
-        process.stderr.write("publication-secret-gate: blocked " +
-          JSON.stringify(name) + ": " + reason + "\n")
+        process.stderr.write(
+          "publication-secret-gate: blocked " +
+            JSON.stringify(name) +
+            ": " +
+            reason +
+            "\n",
+        )
       }
       return 1
     }
     process.stdout.write("publication-secret-gate: " + argv[0] + " passed\n")
     return 0
   } catch (error) {
-    process.stderr.write("publication-secret-gate: unable to inspect: " +
-      (error?.code || "invalid scope") + "\n")
+    process.stderr.write(
+      "publication-secret-gate: unable to inspect: " +
+        (error?.code || "invalid scope") +
+        "\n",
+    )
     return 2
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
+) {
   process.exitCode = await main()
 }
