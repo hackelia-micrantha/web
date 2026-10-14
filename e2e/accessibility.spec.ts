@@ -86,6 +86,7 @@ test("narrow long-form routes keep wide content locally contained", async ({
   for (const path of [
     "/blog/ai-pipelines-need-control-boundaries",
     "/blog/governance-native-engineering-control-plane",
+    "/blog/intent-is-security-state",
     "/security",
   ]) {
     await page.goto(path)
@@ -114,20 +115,55 @@ test("narrow long-form routes keep wide content locally contained", async ({
   const controlTable = page.getByRole("table", {
     name: "AI pipeline failure modes",
   })
-  const tableRegion = controlTable.locator("..")
+  const tableRegion = page.getByRole("region", {
+    name: "AI pipeline failure modes table",
+  })
 
   await expect(controlTable).toBeVisible()
+  await expect(tableRegion).toHaveAttribute("tabindex", "0")
   expect(
     await tableRegion.evaluate(
       (element) => element.scrollWidth > element.clientWidth,
     ),
   ).toBe(true)
+  await tableRegion.focus()
+  await expect(tableRegion).toBeFocused()
 
-  const documentStillContained = await page.evaluate(
+  const controlDocumentStillContained = await page.evaluate(
     () =>
       document.documentElement.scrollWidth <=
       document.documentElement.clientWidth,
   )
 
-  expect(documentStillContained).toBe(true)
+  expect(controlDocumentStillContained).toBe(true)
+
+  await page.goto("/blog/intent-is-security-state")
+
+  const policyTable = page.getByRole("table").first()
+  const policyTableRegion = page.getByRole("region", {
+    name: "Scrollable article table",
+  })
+  const policyTableFrame = policyTableRegion.locator("..")
+
+  await expect(policyTable).toBeVisible()
+  await expect(policyTable).toHaveCSS("display", "table")
+  await expect(policyTable.locator("td").first()).toHaveCSS(
+    "white-space",
+    "normal",
+  )
+  await expect(policyTableRegion).toHaveAttribute("tabindex", "0")
+  await expect(policyTableRegion).toHaveCSS("overflow-x", "auto")
+  await expect(
+    policyTableFrame.getByText(
+      "Scroll horizontally if needed to view all columns.",
+    ),
+  ).toBeVisible()
+
+  const policyDocumentStillContained = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth <=
+      document.documentElement.clientWidth,
+  )
+
+  expect(policyDocumentStillContained).toBe(true)
 })
