@@ -1,8 +1,8 @@
 import type { AppLoadContext } from "@remix-run/node"
 
 type RuntimeEnvironment = {
-  MICRANTHA_ANALYTICS_ID?: string
-  ANALYTICS_ID?: string
+  MICRANTHA_ANALYTICS_ID?: unknown
+  ANALYTICS_ID?: unknown
 }
 
 type CloudflareLoadContext = AppLoadContext & {
@@ -18,6 +18,22 @@ export type RuntimePlatform = {
   origin: string
 }
 
+function configuredString(value: unknown): string | null {
+  if (typeof value !== "string") return null
+
+  const normalized = value.trim()
+  return normalized.length > 0 ? normalized : null
+}
+
+function firstConfiguredString(...values: unknown[]): string | null {
+  for (const value of values) {
+    const configured = configuredString(value)
+    if (configured) return configured
+  }
+
+  return null
+}
+
 export function resolveRuntimePlatform(
   context: AppLoadContext,
   request: Request,
@@ -25,15 +41,18 @@ export function resolveRuntimePlatform(
   const cloudflareContext = context as CloudflareLoadContext
   const nodeAnalyticsId =
     typeof process !== "undefined"
-      ? (process.env.MICRANTHA_ANALYTICS_ID ?? process.env.ANALYTICS_ID ?? null)
+      ? firstConfiguredString(
+          process.env.MICRANTHA_ANALYTICS_ID,
+          process.env.ANALYTICS_ID,
+        )
       : null
-  const analyticsId =
-    cloudflareContext.env?.MICRANTHA_ANALYTICS_ID ??
-    cloudflareContext.env?.ANALYTICS_ID ??
-    cloudflareContext.cloudflare?.env?.MICRANTHA_ANALYTICS_ID ??
-    cloudflareContext.cloudflare?.env?.ANALYTICS_ID ??
-    nodeAnalyticsId ??
-    null
+  const analyticsId = firstConfiguredString(
+    cloudflareContext.env?.MICRANTHA_ANALYTICS_ID,
+    cloudflareContext.env?.ANALYTICS_ID,
+    cloudflareContext.cloudflare?.env?.MICRANTHA_ANALYTICS_ID,
+    cloudflareContext.cloudflare?.env?.ANALYTICS_ID,
+    nodeAnalyticsId,
+  )
 
   const cacheStorage =
     typeof globalThis.caches !== "undefined"
