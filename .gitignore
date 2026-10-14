@@ -16,6 +16,7 @@ lerna-debug.log*
 
 # Cloudflare build output
 /.cloudflare
+/.performance/cloudflare-edge.json
 
 /cypress/screenshots
 /cypress/videos
