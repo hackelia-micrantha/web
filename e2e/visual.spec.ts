@@ -18,13 +18,20 @@ async function expectVisualSnapshot(locator: Locator, name: string) {
 }
 
 test.describe("visual regressions", () => {
-  test.beforeEach(async ({ page }, testInfo) => {
+  test.use({
+    colorScheme: "light",
+    deviceScaleFactor: 1,
+    locale: "en-CA",
+    reducedMotion: "reduce",
+    timezoneId: "America/Vancouver",
+    viewport: { width: 1440, height: 1600 },
+  })
+
+  test.beforeEach(async ({}, testInfo) => {
     test.skip(
       testInfo.project.name !== "desktop-chromium",
       "Visual regression snapshots run once on the desktop project to keep baselines stable.",
     )
-
-    await page.setViewportSize({ width: 1440, height: 1600 })
   })
 
   test("homepage hero remains stable", async ({ page }) => {

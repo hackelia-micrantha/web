@@ -157,3 +157,46 @@ jobs:
             test-results-cloudflare
           if-no-files-found: ignore
           retention-days: 7
+
+  visual-regression:
+    name: Visual regression
+    needs:
+      - quality
+      - end-to-end
+    if: ${{ always() && needs.quality.result == 'success' && needs.end-to-end.result == 'success' }}
+    runs-on: runner-web
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up project toolchain
+        uses: ./.github/actions/setup
+        with:
+          playwright: "true"
+
+      - name: Run advisory visual regression tests
+        id: visual
+        continue-on-error: true
+        run: yarn playwright test e2e/visual.spec.ts --project=desktop-chromium
+
+      - name: Upload visual regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-${{ github.run_id }}
+          path: |
+            e2e/visual.spec.ts-snapshots
+            playwright-report
+            test-results
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Report advisory result
+        if: always()
+        run: |
+          echo "Visual regression outcome: ${{ steps.visual.outcome }}"
+          if [ "${{ steps.visual.outcome }}" != "success" ]; then
+            echo "Visual differences are advisory while #53 baselines are under review."
+          fi
