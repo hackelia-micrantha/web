@@ -135,3 +135,10 @@ skills-lock.json
 !.env.example
 !.env.sample
 !.env.template
+
+# Wrangler local secret variables must never be committed.
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+!.dev.vars.sample
+!.dev.vars.template

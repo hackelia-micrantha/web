@@ -225,3 +225,27 @@ scripts/      Build, staging, budget, and runtime-contract automation
 Development TLS identities and `.env` overlays are machine-local state, not source artifacts. `.gitignore` excludes the historical `test/certs/` directory and local environment overlays; `.dockerignore` also prevents them from entering an optional local container build context. Keep non-secret example configuration in reviewed `.env.example`/template files and inject actual provider credentials through the deployment platform.
 
 Historical public Git commits previously included `test/certs/dev-key.pem` and its corresponding development certificate. The certificate's validity ended in August 2023; that date does not prove the key was never trusted or later reused. Current `main` no longer tracks either file. If the old identity was trusted or reused, address the relevant trust/credential replacement before considering coordinated Git-history cleanup. A current-tree deletion or ignore rule cannot erase historical commits or external clones. Do not include historical private-key bytes in issues or logs.
+
+## Publication safety
+
+Before CI validates or production publishing begins, the project runs a
+current-tree credential-publication guard:
+
+```sh
+yarn security:publication
+node scripts/check-publication-secrets.js --public
+```
+
+`yarn build` also validates the generated `public/` assets. The Cloudflare
+deployment command validates the tracked source, static output and generated
+Functions bundle before uploading. The guard rejects developer TLS/key files,
+local environment files, symlinks and PEM private-key headers without printing
+secret contents. This is not a full secret scanner and does not clean
+previously published Git objects or third-party copies.
+
+The historical `test/certs/dev-key.pem` and `test/certs/dev.pem` pair was
+removed from current source years ago. It may remain accessible in old public
+commits. Determine whether its certificate/key was trusted or reused before
+classifying it as harmless; rotate affected identities if necessary. Do not
+reintroduce these files as test fixtures. Use synthetically generated
+in-memory fixtures in automated tests.

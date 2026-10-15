@@ -7,7 +7,7 @@
   "packageManager": "yarn@1.22.22",
   "sideEffects": false,
   "scripts": {
-    "build": "run-s build:*",
+    "build": "run-s build:* security:publication-output",
     "build:css": "yarn generate:css --minify",
     "build:remix": "remix build",
     "cloudflare:functions:build": "mkdir -p .cloudflare/functions && wrangler pages functions build functions --outdir .cloudflare/functions --output-config-path .cloudflare/functions/config.json --build-metadata-path .cloudflare/functions/build-metadata.json --project-directory .",
@@ -39,7 +39,9 @@
     "test:project-registry-projection": "node scripts/test-project-registry-projection.js",
     "test:unit": "node --test --experimental-test-coverage --test-coverage-lines=95 --test-coverage-functions=100 --test-coverage-branches=90 tests/unit/*.test.js",
     "typecheck": "tsc -b",
-    "deploy:cloudflare": "yarn test:unit && yarn test:project-registry-projection && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn test:performance-budgets && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps"
+    "deploy:cloudflare": "yarn test:unit && yarn test:project-registry-projection && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn test:performance-budgets && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && node scripts/check-publication-secrets.js --tracked && node scripts/check-publication-secrets.js --public && node scripts/check-publication-secrets.js --functions && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps",
+    "security:publication": "node scripts/test-publication-secrets.js && node scripts/check-publication-secrets.js --tracked",
+    "security:publication-output": "node scripts/check-publication-secrets.js --public"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",
