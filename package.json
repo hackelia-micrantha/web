@@ -41,7 +41,9 @@
     "typecheck": "tsc -b",
     "deploy:cloudflare": "yarn test:unit && yarn test:project-registry-projection && yarn test:blog-mdx-validation && yarn test:blog-content-boundaries && yarn typecheck && yarn build && yarn test:blog-chunk-isolation && yarn test:performance-budgets && yarn cloudflare:functions:build && yarn test:cloudflare:bundle-budget && yarn test:integration && node scripts/check-publication-secrets.js --tracked && node scripts/check-publication-secrets.js --public && node scripts/check-publication-secrets.js --functions && wrangler pages deploy public --project-name ${CLOUDFLARE_PAGES_PROJECT:-micrantha-web} --branch ${CLOUDFLARE_PAGES_BRANCH:-main} --upload-source-maps",
     "security:publication": "node scripts/test-publication-secrets.js && node scripts/check-publication-secrets.js --tracked",
-    "security:publication-output": "node scripts/check-publication-secrets.js --public"
+    "security:publication-output": "node scripts/check-publication-secrets.js --public",
+    "clean:build": "node scripts/clean-generated-output.js build",
+    "clean:browser": "node scripts/clean-generated-output.js browser"
   },
   "dependencies": {
     "@remix-run/node": "2.17.4",
