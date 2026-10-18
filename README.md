@@ -250,7 +250,6 @@ classifying it as harmless; rotate affected identities if necessary. Do not
 reintroduce these files as test fixtures. Use synthetically generated
 in-memory fixtures in automated tests.
 
-
 ## Local generated-build cleanup
 
 After build/test/verification, and **after evidence upload or retention**, use the
