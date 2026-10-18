@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // Worktree-local generated build and browser cleanup, never source/deployment state.
 import { lstat, rm } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const ownedPaths = {
@@ -47,12 +46,4 @@ export async function cleanGeneratedOutput(root, kind) {
     await rm(fullPath, { recursive: true, force: false });
   }
   return pending.map(({ fullPath }) => fullPath);
-}
-
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-  cleanGeneratedOutput(root, process.argv[2]).catch((error) => {
-    console.error(error.message);
-    process.exitCode = 1;
-  });
 }

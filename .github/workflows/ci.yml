@@ -134,6 +134,8 @@ jobs:
           name: web-quality-failure-${{ github.run_id }}
           path: |
             build/
+            public/build/
+            public/tailwind.css
             .cloudflare/functions/
             .performance/
           if-no-files-found: error
@@ -182,6 +184,7 @@ jobs:
             playwright-report-cloudflare
             test-results
             test-results-cloudflare
+            .performance/browser
           if-no-files-found: error
           retention-days: 7
 

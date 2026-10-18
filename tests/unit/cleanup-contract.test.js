@@ -3,6 +3,8 @@ import { test } from "node:test";
 import { mkdtemp, mkdir, readFile, symlink, writeFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import net from "node:net";
+import { once } from "node:events";
 import { cleanGeneratedOutput } from "../../scripts/clean-generated-output.js";
 
 async function withRoot(fn) {
@@ -54,5 +56,55 @@ test("refuses symlinked outputs before removing earlier artifacts", async () => 
     await assert.rejects(cleanGeneratedOutput(root, "build"), /symlinked/);
     assert.equal(await readFile(path.join(root, "build/index.js"), "utf8"), "must survive");
     assert.equal(await readFile(path.join(root, "outside/file.txt"), "utf8"), "external");
+  });
+});
+
+
+test("invalid cleanup kind is refused", async () => {
+  await withRoot(async (root) => {
+    await assert.rejects(cleanGeneratedOutput(root, "global"), /expected build or browser/);
+  });
+});
+
+test("missing outputs return no actions", async () => {
+  await withRoot(async (root) => {
+    assert.deepEqual(await cleanGeneratedOutput(root, "build"), []);
+  });
+});
+
+test("non-directory parent and filesystem errors are refused", async () => {
+  await withRoot(async (root) => {
+    await save(root, "public", "invalid parent");
+    await assert.rejects(cleanGeneratedOutput(root, "build"), /non-directory/);
+    const file = path.join(root, "root-as-file");
+    await writeFile(file, "file");
+    await assert.rejects(cleanGeneratedOutput(file, "build"), /ENOTDIR/);
+  });
+});
+
+test("symlinked parent is refused before deleting any build outputs", async () => {
+  await withRoot(async (root) => {
+    await save(root, "build/index.js", "keep");
+    await mkdir(path.join(root, "external"));
+    await symlink(path.join(root, "external"), path.join(root, ".cloudflare"));
+    await assert.rejects(cleanGeneratedOutput(root, "build"), /symlinked/);
+    assert.equal(await readFile(path.join(root, "build/index.js"), "utf8"), "keep");
+  });
+});
+
+test("unexpected socket output is refused and earlier outputs survive", async () => {
+  await withRoot(async (root) => {
+    await save(root, "build/index.js", "keep");
+    await mkdir(path.join(root, ".performance"), { recursive: true });
+    const socketPath = path.join(root, ".performance/build-budget.json");
+    const server = net.createServer();
+    try {
+      server.listen(socketPath);
+      await once(server, "listening");
+      await assert.rejects(cleanGeneratedOutput(root, "build"), /unexpected output type/);
+      assert.equal(await readFile(path.join(root, "build/index.js"), "utf8"), "keep");
+    } finally {
+      await new Promise((resolve) => server.close(resolve));
+    }
   });
 });
