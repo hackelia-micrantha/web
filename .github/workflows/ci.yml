@@ -126,6 +126,25 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: Preserve failed quality-build diagnostics
+        id: failure_evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-quality-failure-${{ github.run_id }}
+          path: |
+            build/
+            public/build/
+            public/tailwind.css
+            .cloudflare/functions/
+            .performance/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Clean task-local generated build outputs
+        if: ${{ always() && (success() || steps.failure_evidence.outcome == 'success') }}
+        run: yarn clean:build
+
   end-to-end:
     name: End-to-end
     runs-on: runner-web
@@ -155,6 +174,7 @@ jobs:
         run: yarn test:e2e:cloudflare
 
       - name: Upload Playwright failure artifacts
+        id: failure_evidence
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -164,5 +184,10 @@ jobs:
             playwright-report-cloudflare
             test-results
             test-results-cloudflare
-          if-no-files-found: ignore
+            .performance/browser
+          if-no-files-found: error
           retention-days: 7
+
+      - name: Clean task-local browser outputs after evidence uploads
+        if: ${{ always() && (success() || steps.failure_evidence.outcome == 'success') }}
+        run: yarn clean:browser

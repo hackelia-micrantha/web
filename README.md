@@ -249,3 +249,20 @@ commits. Determine whether its certificate/key was trusted or reused before
 classifying it as harmless; rotate affected identities if necessary. Do not
 reintroduce these files as test fixtures. Use synthetically generated
 in-memory fixtures in automated tests.
+
+## Local generated-build cleanup
+
+After build/test/verification, and **after evidence upload or retention**, use the
+repository-native Node tasks `yarn clean:build` and, for Playwright runs,
+`yarn clean:browser`. They delete only recognized task-worktree outputs
+(e.g. `build/`, `public/build/`, generated Tailwind CSS, Cloudflare
+**build/runtime** intermediates, and browser test reports); they do not delete
+tracked public assets, `node_modules`, `.wrangler`, release/source content,
+or any other worktree. Cleanup rejects symlinked targets and parents.
+
+The CI job finalizers clean successful runs, and failed runs **only after the
+diagnostics artifact upload succeeds**; failed evidence collection defers
+cleanup. Production deployment remains a separate lifecycle: never clean
+the `public/` build inputs before Cloudflare deployment and post-deploy
+verification have completed. The existing `mise` tasks are convenience
+entry points, not the cleanup contract.
