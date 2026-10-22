@@ -363,8 +363,27 @@ details[open] > .mobile-nav-panel {
 .article-prose table {
   border-collapse: collapse;
   font-size: 0.98rem;
-  margin-top: 1.4rem;
+  margin-top: 0;
   width: 100%;
+}
+
+.article-prose .article-table-frame {
+  margin-top: 1.4rem;
+  max-width: 42rem;
+}
+
+.article-prose .article-table-scroll {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+.article-prose .article-table-scroll-hint {
+  color: rgb(71 85 105);
+  display: none;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-bottom: 0.45rem;
 }
 
 .article-prose th,
@@ -512,6 +531,7 @@ details[open] > .mobile-nav-panel {
   .article-prose pre,
   .article-prose table,
   .article-prose .article-callout,
+  .article-prose .article-table-frame,
   .article-lead {
     max-width: 100%;
   }
@@ -530,14 +550,18 @@ details[open] > .mobile-nav-panel {
   }
 
   .article-prose table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  .article-prose .article-control-table {
     display: table;
     overflow: visible;
     white-space: normal;
+  }
+
+  .article-prose th,
+  .article-prose td {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .article-prose .article-table-scroll-hint {
+    display: block;
   }
 }
