@@ -16,7 +16,7 @@ export const repositoryRoot = process.cwd()
 const routesDirectory = path.join(repositoryRoot, "app/routes")
 const seriesPath = "app/content/blog-series.ts"
 const siteOrigin = "https://micrantha.com"
-const staticPathsBeforeBlogContent = ["/", "/solutions"]
+const staticPathsBeforeBlogContent = ["/", "/solutions", "/solutions/fortunes"]
 const staticPathsAfterBlogContent = [
   "/laboratory",
   "/compost",
