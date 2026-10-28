@@ -16,9 +16,15 @@ test("Fortunes public roadmap distinguishes planned capabilities", async ({
   await expect(
     page.getByRole("heading", { name: "Fortunes & Quotes", exact: true }),
   ).toBeVisible()
-  await expect(page.getByText("Roadmap · Planned and experimental")).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Discover by meaning" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Write and contribute" })).toBeVisible()
+  await expect(
+    page.getByText("Roadmap · Planned and experimental"),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Discover by meaning" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Write and contribute" }),
+  ).toBeVisible()
   await expect(
     page.getByRole("heading", { name: "Generate original fortunes with AI" }),
   ).toBeVisible()
@@ -30,7 +36,9 @@ test("Fortunes public roadmap distinguishes planned capabilities", async ({
   await expect(
     page.getByRole("heading", { name: "From an idea to a published fortune" }),
   ).toBeVisible()
-  await expect(page.getByText(/This page describes proposals and experiments/)).toBeVisible()
+  await expect(
+    page.getByText(/This page describes proposals and experiments/),
+  ).toBeVisible()
   await expect(
     page.getByRole("link", { name: "Back to Solutions" }),
   ).toHaveAttribute("href", "/solutions")
