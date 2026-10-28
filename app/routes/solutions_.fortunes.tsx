@@ -89,10 +89,16 @@ const FortunesRoadmap = () => (
         </p>
         <ol className="list-decimal space-y-2 pl-6">
           <li>Write an original fortune or generate an AI-labeled draft.</li>
-          <li>Check attribution, originality, safety, and contributor rights.</li>
+          <li>
+            Check attribution, originality, safety, and contributor rights.
+          </li>
           <li>Review and approve the content for publication.</li>
-          <li>Publish a versioned collection and rebuild its SQLite vector index.</li>
-          <li>Make approved items discoverable by category, keyword, and meaning.</li>
+          <li>
+            Publish a versioned collection and rebuild its SQLite vector index.
+          </li>
+          <li>
+            Make approved items discoverable by category, keyword, and meaning.
+          </li>
         </ol>
       </section>
 
@@ -119,12 +125,24 @@ const FortunesRoadmap = () => (
           Design principles
         </h2>
         <ul className="list-disc space-y-2 pl-6">
-          <li>Keep existing fortune behavior usable as new capabilities are added.</li>
-          <li>Distinguish human-authored, curated, and AI-generated content.</li>
-          <li>Keep the public reading path lightweight and inexpensive to operate.</li>
-          <li>Require review before community or generated content is published.</li>
-          <li>Make privacy, attribution, moderation, and content rights explicit.</li>
-          <li>Measure retrieval and generation quality before making product claims.</li>
+          <li>
+            Keep existing fortune behavior usable as new capabilities are added.
+          </li>
+          <li>
+            Distinguish human-authored, curated, and AI-generated content.
+          </li>
+          <li>
+            Keep the public reading path lightweight and inexpensive to operate.
+          </li>
+          <li>
+            Require review before community or generated content is published.
+          </li>
+          <li>
+            Make privacy, attribution, moderation, and content rights explicit.
+          </li>
+          <li>
+            Measure retrieval and generation quality before making product claims.
+          </li>
         </ul>
         <p className="pt-2">
           <Link className="underline" to="/solutions">
