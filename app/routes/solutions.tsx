@@ -55,7 +55,11 @@ const solutionCardPresentation: Record<string, ProjectCardPresentation> = {
       >
         Slack App
       </ExternalLink>,
-      <Link key="fortunes-roadmap" className="underline" to="/solutions/fortunes">
+      <Link
+        key="fortunes-roadmap"
+        className="underline"
+        to="/solutions/fortunes"
+      >
         Roadmap
       </Link>,
     ],
