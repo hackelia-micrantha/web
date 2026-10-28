@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node"
+import { Link } from "@remix-run/react"
 import type { ReactNode } from "react"
 import { Card, ExternalLink, PageTitle } from "~/components"
 import {
@@ -54,6 +55,9 @@ const solutionCardPresentation: Record<string, ProjectCardPresentation> = {
       >
         Slack App
       </ExternalLink>,
+      <Link key="fortunes-roadmap" className="underline" to="/solutions/fortunes">
+        Roadmap
+      </Link>,
     ],
   },
   veil: {
