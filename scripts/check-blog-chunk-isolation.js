@@ -35,16 +35,6 @@ const bodyMarkers = new Map([
     "recursive-governance-and-agent-workflows",
     "humans remain capable of comprehension, intervention, replay, audit",
   ],
-  [
-    "ai-native-sdlc-governed-software-delivery",
-    "The scarce resource becomes confidence",
-  ],
-  ["threat-modeling-ai-engineering-coprocessor", "AI is becoming an"],
-  ["secure-auth-systems-reference", "Most authentication systems are secure"],
-  [
-    "legacy-system-insights",
-    "Modern engineering culture often treats legacy systems",
-  ],
 ])
 
 function buildFilePath(moduleReference, importerPath = buildDirectory) {

@@ -3,28 +3,6 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
-    slug: "ai-native-sdlc-governed-software-delivery",
-    status: "published",
-    title: "From AI-Native SDLC to Governed Software Delivery",
-    description:
-      "AI-generated implementation shifts the engineering bottleneck toward trustworthy acceptance, exact-candidate evidence, identity, and controlled effects.",
-    date: "2026-10-01",
-    updatedAt: "2026-11-06",
-    excerpt:
-      "When generation becomes inexpensive, trustworthy acceptance and constrained execution become the scarce engineering work.",
-    tags: [
-      "ai-governance",
-      "software-delivery",
-      "agentic-systems",
-      "secure-sdlc",
-      "architecture-notes",
-    ],
-    relatedSlugs: [
-      "governance-native-engineering-control-plane",
-      "ai-pipelines-need-control-boundaries",
-    ],
-  },
-  {
     slug: "intent-is-security-state",
     status: "published",
     title: "Intent Is Security State, Not Conversation History",
@@ -192,74 +170,5 @@ export const blogPosts = [
       slug: "architecture-control-boundaries",
       order: 3,
     },
-  },
-  {
-    slug: "secure-auth-systems-reference",
-    status: "published",
-    title:
-      "Designing Secure Authentication Systems: Architecture, Threat Models, and Operational Lessons",
-    description:
-      "Design authentication for token lifecycle control, replay resistance, backend authorization, compromise detection, and recovery.",
-    date: "2026-03-20",
-    updatedAt: "2026-11-06",
-    excerpt:
-      "Protocol correctness is insufficient: authentication must survive token theft, client compromise, session abuse, and operational failure.",
-    tags: [
-      "application-security",
-      "authentication",
-      "oauth",
-      "oidc",
-      "sessions",
-      "architecture-notes",
-    ],
-    relatedSlugs: [
-      "secure-platform-integration-is-not-plumbing",
-      "software-layers-are-risk-boundaries",
-    ],
-  },
-  {
-    slug: "legacy-system-insights",
-    status: "published",
-    title:
-      "Legacy Systems in the Real World: Why Rewrites Fail and What Actually Drives Change",
-    description:
-      "Why legacy modernization requires business alignment, architecture discipline, incremental delivery, observability, and organizational trust.",
-    date: "2026-03-16",
-    updatedAt: "2026-11-06",
-    excerpt:
-      "Legacy systems persist for real reasons: domain knowledge, operating risk, incentives, and trust. Modernization starts with evidence.",
-    tags: [
-      "software-architecture",
-      "modernization",
-      "technical-debt",
-      "observability",
-      "engineering-management",
-    ],
-    relatedSlugs: [
-      "software-layers-are-risk-boundaries",
-      "secure-platform-integration-is-not-plumbing",
-    ],
-  },
-  {
-    slug: "threat-modeling-ai-engineering-coprocessor",
-    status: "published",
-    title: "Threat Modeling AI as an Engineering Coprocessor",
-    description:
-      "Treat AI outputs and agent tool requests as untrusted inputs across requirements, design, implementation, testing, and operations.",
-    date: "2026-03-08",
-    updatedAt: "2026-11-06",
-    excerpt:
-      "AI-assisted engineering changes the software supply chain, not just code generation. Verify artifacts, capabilities, provenance, and downstream effects.",
-    tags: [
-      "ai-security",
-      "threat-modeling",
-      "software-supply-chain",
-      "secure-sdlc",
-      "ai-governance",
-    ],
-    relatedSlugs: [
-      "ai-pipelines-need-control-boundaries",
-      "intent-is-security-state",
-    ],
   },
 ] satisfies BlogPost[]

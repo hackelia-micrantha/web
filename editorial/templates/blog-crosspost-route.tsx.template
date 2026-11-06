@@ -4,9 +4,10 @@ import type { ElementType } from "react"
 import { createBlogMdxRoute } from "./blog-mdx-route"
 
 /**
- * Publish an attributed edition of an independently maintained personal essay.
- * The Micrantha route is public only after the PR carrying it is merged.
- * Its search canonical remains the original author's article.
+ * Future publish-time route adapter for attributed personal essays.
+ * Keep this file outside compiled app modules until separate publication approval.
+ * A draft PR is not a public preview access boundary.
+ * The search canonical remains the original author's published article.
  */
 export function createBlogCrosspostRoute(
   slug: string,
