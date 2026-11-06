@@ -35,6 +35,10 @@ const bodyMarkers = new Map([
     "recursive-governance-and-agent-workflows",
     "humans remain capable of comprehension, intervention, replay, audit",
   ],
+  [
+    "the-envelope-contract-based-agentic-ai",
+    "The office needs both paperwork and doors",
+  ],
 ])
 
 function buildFilePath(moduleReference, importerPath = buildDirectory) {
