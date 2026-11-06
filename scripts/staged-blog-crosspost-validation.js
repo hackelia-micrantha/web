@@ -5,6 +5,7 @@ import path from "node:path"
 import { repositoryRoot } from "./blog-content-inventory.js"
 import { validateBlogMdxSource } from "./blog-mdx-validation.js"
 import { validateBlogMermaidBlocks } from "./blog-mermaid-validation.js"
+import { assertReleaseReadinessManifest } from "./release-readiness-validation.js"
 
 const stagedDirectory = path.join(repositoryRoot, "editorial", "staged")
 
@@ -109,6 +110,18 @@ export async function validateStagedBlogCrossposts(inventory) {
         url === expectedCoverUrl && (await isFile(cover)),
     })
     validateBlogMermaidBlocks(source, relativeContentPath)
+
+    const releaseManifestPath = path.join(directory, "release-readiness.json")
+    if (await isFile(releaseManifestPath)) {
+      const manifest = JSON.parse(await readFile(releaseManifestPath, "utf8"))
+      assertReleaseReadinessManifest({
+        manifest,
+        slug,
+        content: source,
+        cover: await readFile(cover),
+        routeTemplate: await readFile(template, "utf8"),
+      })
+    }
   }
 
   return entries.length
