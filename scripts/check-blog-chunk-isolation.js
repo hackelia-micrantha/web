@@ -35,6 +35,7 @@ const bodyMarkers = new Map([
     "recursive-governance-and-agent-workflows",
     "humans remain capable of comprehension, intervention, replay, audit",
   ],
+  ["ai-chat-not-a-database", "A seed is a retrieval handle, not truth"],
 ])
 
 function buildFilePath(moduleReference, importerPath = buildDirectory) {
