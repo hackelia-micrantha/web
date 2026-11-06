@@ -25,3 +25,16 @@ exact-head CI and desktop/mobile visuals. Reconcile with other cross-post PRs.
 
 Earlier preview builds on old commits may still be accessible and require
 separate Cloudflare cleanup.
+
+## Release readiness snapshot (not approval)
+
+The release-readiness.json file binds the current canonical repository source
+revision and the exact staged MDX, cover, and future route template digests.
+It also records a November 6, 2026 HTTP 200 / canonical / index-follow check
+of the original public article. The repository offline validation verifies
+the local byte bindings, not remote source authenticity or current HTTP
+availability. Recheck the canonical content at actual publication.
+
+Status: qualified for editorial release review only. Nothing in this
+directory is deployed as a Micrantha article. The candidate has no release
+authorization, and activation requires a separately approved publication PR.
