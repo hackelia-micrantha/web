@@ -3,28 +3,6 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
-    slug: "ai-chat-not-a-database",
-    status: "published",
-    title: "Your AI Chat Is Not a Database",
-    description:
-      "AI conversations feel continuous, but derived memory is not a source of authority. A practical architecture for promoting, reconciling, and recovering durable state.",
-    date: "2026-08-16",
-    updatedAt: "2026-11-06",
-    excerpt:
-      "Retained conversations are not authoritative state. Build governed promotion, evidence, recovery, and memory security around long-running AI workflows.",
-    tags: [
-      "ai-governance",
-      "agentic-systems",
-      "state-management",
-      "memory",
-      "architecture-notes",
-    ],
-    relatedSlugs: [
-      "intent-is-security-state",
-      "replayability-is-a-governance-problem",
-    ],
-  },
-  {
     slug: "intent-is-security-state",
     status: "published",
     title: "Intent Is Security State, Not Conversation History",

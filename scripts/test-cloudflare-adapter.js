@@ -233,34 +233,6 @@ assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
 assertDocumentHeaders(botArticle.response, botArticle.body)
 
-const crosspost = await read("/blog/ai-chat-not-a-database")
-const crosspostCanonical = "https://ryanjennin.gs/posts/ai-chat-not-a-database/"
-const crosspostCover =
-  "https://micrantha.com/img/blog/ai-chat-not-a-database.webp"
-assert.equal(crosspost.response.status, 200)
-assert.ok(
-  crosspost.body.includes('rel="canonical" href="' + crosspostCanonical + '"'),
-)
-assert.ok(
-  crosspost.body.includes(
-    'property="og:image" content="' + crosspostCover + '"',
-  ),
-)
-assert.ok(
-  crosspost.body.includes(
-    'name="twitter:image" content="' + crosspostCover + '"',
-  ),
-)
-assert.ok(
-  crosspost.body.includes('src="/img/blog/ai-chat-not-a-database.webp"'),
-)
-assert.ok(
-  crosspost.body.includes('"author":{"@type":"Person","name":"Ryan Jennings"}'),
-)
-assert.ok(crosspost.body.includes('"isBasedOn":"' + crosspostCanonical + '"'))
-assert.ok(crosspost.body.includes("A seed is a retrieval handle, not truth"))
-assertDocumentHeaders(crosspost.response, crosspost.body)
-
 for (const pathname of [
   "/blog/draft-publication-fixture",
   "/blog/future-publication-fixture",

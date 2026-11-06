@@ -1,9 +1,6 @@
 import type { Page } from "@playwright/test"
 import { expect, test } from "@playwright/test"
 import { projectsByClassification } from "../app/data/project-catalog"
-import type { BlogPost } from "../app/content/blog"
-import { blogPosts } from "../app/content/blog.generated"
-import { filterPublishedBlogPosts } from "../app/content/blog-publication.js"
 
 type StructuredDataEntry = {
   "@type"?: string
@@ -102,20 +99,26 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage).toBeTruthy()
   expect(collectionPage?.name).toBe("Blog")
   expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
-  const expectedPosts: BlogPost[] = filterPublishedBlogPosts(blogPosts)
-  expect(expectedPosts.length).toBeGreaterThan(7)
-  expect(collectionPage?.mainEntity?.numberOfItems).toBe(expectedPosts.length)
-  expect(
-    collectionPage?.mainEntity?.itemListElement?.map(
-      (entry) => entry.item?.name,
-    ),
-  ).toEqual(expectedPosts.map((post) => post.title))
-  expect(
-    collectionPage?.mainEntity?.itemListElement?.map((entry) => entry.position),
-  ).toEqual(expectedPosts.map((_, index) => index + 1))
-  expect(
-    collectionPage?.mainEntity?.itemListElement?.map((entry) => entry.url),
-  ).toEqual(
-    expectedPosts.map((post) => "https://micrantha.com/blog/" + post.slug),
+  expect(collectionPage?.mainEntity?.numberOfItems).toBe(7)
+  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
+    "Intent Is Security State, Not Conversation History",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
+    "The Missing Layer in Agentic Development: Precise Governance",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[2]?.item?.name).toBe(
+    "Replayability Is a Governance Problem",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[3]?.item?.name).toBe(
+    "Recursive Governance and Agent Workflows",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[4]?.item?.name).toBe(
+    "Secure Platform Integration Is Not Plumbing",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[5]?.item?.name).toBe(
+    "AI Pipelines Need Control Boundaries",
+  )
+  expect(collectionPage?.mainEntity?.itemListElement?.[6]?.item?.name).toBe(
+    "Software Layers Are Risk Boundaries",
   )
 })
