@@ -395,13 +395,13 @@ Required response:
 
 ### Field Notes (What Breaks in Practice)
 
-- Systems **omit refresh tokens** and rely on user-triggered failures (401 → re-login). This removes server control and visibility over session lifecycle.
+- Systems lack an explicit **session inventory, revocation strategy, and renewal or reauthentication flow**. Omitting refresh tokens is not itself a defect: an access-token-only design can be appropriate when expiry, reauthentication, and any required session revocation are deliberately controlled.
 - Clients attempt to **generate encryption keys locally** (e.g., for token protection) using weak or reproducible entropy. This collapses the protection model.
 - Datastores occasionally contain **plaintext or reversibly encrypted credentials**. This is a catastrophic failure regardless of upstream controls.
 
 **Practical guidance**
 
-- When issuing refresh tokens, use **rotation with reuse detection or sender constraint**, plus server-side revocation. Coordinate refresh through a controlled client flow, not UI error prompts.
+- Assess whether refresh tokens are needed at all. If issued to public clients, use **rotation with reuse detection or sender-constrained tokens** and support revocation. Otherwise, define an intentional reauthentication policy and any required server-side session controls.
 - Never rely on client-generated keys for long-term secrecy; prefer **hardware-backed keys** or server-side controls.
 - Store credentials using **strong, adaptive hashing** (e.g., Argon2/bcrypt with proper parameters) and treat the database as eventually exposed.
 
@@ -460,10 +460,12 @@ Properties:
 
 - biometric never leaves device
 - server trusts cryptographic proof
-- credentials are device-bound
+- the server verifies an authenticator's cryptographic assertion; **device binding is a separate assurance property**, not guaranteed by every passkey
 
 > **Biometric verification is local user verification, not independently sufficient server-side authorization.**
 > In passkey or hardware-backed challenge flows, the server trusts the cryptographic assertion, not a biometric sample.
+
+A **synced passkey** may be synchronized by a credential provider to other devices; its use is not proof of a specific physical device or a non-exportable hardware key. Device binding needs an explicitly selected authenticator assurance policy and evidence where available.
 
 ### Field Notes (Common Failure Modes)
 
@@ -473,7 +475,7 @@ Properties:
 
 **Practical guidance**
 
-- Tie biometrics to **hardware-backed keys**, not stored secrets.
+- Prefer passkeys or other phishing-resistant, challenge-based authentication over using biometrics to reveal stored passwords. Where the threat model requires **device-bound, non-exportable keys**, use authenticators with those properties and verify available attestation; synced passkeys can be available on multiple devices.
 - Treat device compromise as possible; rely on **server-side controls** (sessions, step-up) to contain damage.
 - Keep the UX consistent, but design assuming **heterogeneous security capabilities**.
 
@@ -673,8 +675,8 @@ These are architectural issues, not protocol issues.
 
 ## What Hardened Systems Do Differently
 
-- device-bound credentials (passkeys)
-- short-lived tokens with rotation
+- phishing-resistant passkeys, distinguishing **synced** credentials from verified **device-bound** authenticators
+- short-lived access tokens with controlled renewal; rotate or sender-constrain refresh tokens when issued
 - session state with visibility and control
 - continuous risk evaluation
 - step-up authentication for sensitive actions
