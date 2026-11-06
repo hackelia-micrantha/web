@@ -315,7 +315,7 @@ revision, and acceptance evidence before committing the new record.
 That path gives the change an owner and an identity. It also handles a
 concurrent or revoked decision as a conflict, not an implicit overwrite.
 The mechanics of durable memory promotion and recovery are treated in the
-separate draft essay *Your AI Chat Is Not a Database*; the focus here is
+separate draft essay _Your AI Chat Is Not a Database_; the focus here is
 which retrieved information merits verification in the first place.
 
 Without it, memory becomes an ambient write channel.
@@ -406,8 +406,8 @@ execution evidence   -> What actually happened?
 Context engineering belongs in the stack.
 
 It should not swallow the rest of it. Related work separates two adjacent
-questions: *Intent Is Security State, Not Conversation History* defines
-current authority over an action; *Your AI Chat Is Not a Database* addresses
+questions: _Intent Is Security State, Not Conversation History_ defines
+current authority over an action; _Your AI Chat Is Not a Database_ addresses
 long-lived memory and accepted-state reconciliation. This draft instead
 concentrates on evidence selection, progressive source expansion, and
 context receipts. They share trust boundaries, but they solve different
