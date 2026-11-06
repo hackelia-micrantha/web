@@ -4,6 +4,7 @@ status: draft
 title: Context Is Not State
 description: Agentic systems need a hard boundary between information selected for reasoning and authoritative structured state used for policy, planning, and execution.
 date: "2026-08-12"
+updatedAt: "2026-11-06"
 excerpt: Context can be relevant, useful, and even reproducible without being current truth. Loading information should not silently become a state transition.
 tags:
   - ai-governance
@@ -28,11 +29,7 @@ A context window is assembled for a particular reasoning step. It can contain re
 
 None of those properties make it current truth.
 
-<Callout>
-
-Loading information is not a state transition.
-
-</Callout>
+> **Loading information is not a state transition.**
 
 That boundary sounds obvious until an agent starts using retrieved material to plan, request capabilities, modify repositories, update infrastructure, or approve the next action in a workflow.
 
@@ -73,7 +70,10 @@ It exists to help a model interpret a task, compare evidence, generate a proposa
 
 Authoritative state has a different job.
 
-It represents the smallest explicit set of facts the system is currently prepared to rely on for consequential decisions.
+It represents the smallest explicit set of **accepted, current records** the
+system is prepared to rely on for consequential decisions within a defined
+scope. A system of record establishes operational authority; it is not
+infallible evidence that the world itself agrees.
 
 That state should have stronger properties:
 
@@ -92,19 +92,19 @@ The broader rule is the same.
 Context may inform state. It should not silently become state.
 
 ```mermaid
-%% title: Context and state are different control planes
-%% caption: Retrieved information may inform a governed state transition, but it does not become authoritative simply because it entered the model context.
+%% title: Retrieved context is evidence, not authority
+%% caption: Verification and trusted admission separate selected material from accepted state; consequential effects require independent authorization.
 flowchart TD
   A[Query or task] --> B[Context routing]
   B --> C[Selected context]
-  C --> D[Reasoning / proposal]
-  D --> E[Verify against canonical sources]
-  E --> F[Governed state transition]
-  F --> G[Versioned structured state]
-  G --> H[Policy / planning / execution]
-
-  C -. evidence only .-> E
-  C -. no implicit promotion .-> G
+  C --> D[Reasoning and proposal]
+  D --> E[Verify canonical sources]
+  E --> F{Trusted admission}
+  F -->|Accepted| G[Versioned structured state]
+  F -->|Rejected or stale| R[Reconcile or discard]
+  G --> H[Current authorization check]
+  H --> I[Bounded effect boundary]
+  C -. Supporting evidence .-> E
 ```
 
 ## Retrieval selects evidence; it does not mutate truth
@@ -221,18 +221,22 @@ Compression is dangerous when it erases where information came from.
 A generated summary, cached note, model-produced recap, and ratified policy may all fit into a few paragraphs. Once flattened into plain text, they can look equally authoritative to a language model.
 
 The control plane should preserve the distinction outside the prose.
+Retrieved text is still **untrusted instruction-bearing input**: a document
+that says "ignore previous policy" must not acquire authority just because
+a router labels it relevant. Identity and scope checks must survive caching,
+compression, and forwarding between agents. A generated summary may cite
+a policy without becoming that policy.
 
 Useful metadata includes:
 
 ```text
-source identity
-source revision
-trust class
-generation method
-content digest
-selection reason
-scope
-staleness or supersession status
+source identity and immutable revision
+trust class and authority issuer
+generation method and extractor version
+content digest and canonical locator
+selection reason and policy revision
+user / tenant / project scope
+staleness, expiry or supersession status
 ```
 
 The model does not need to invent those facts. The surrounding system can supply them deterministically.
@@ -243,13 +247,22 @@ This matters because context engineering is not only about selecting the right t
 
 Repora's [context receipts](https://github.com/hackelia-micrantha/repora/blob/main/docs/routing/context-receipts.md) make routed context inspectable.
 
-A receipt can identify the repository revision, routing policy digest, selected paths, trust tiers, content hashes, exclusions, and consumed budgets. For the same routing inputs, the receipt is designed to serialize deterministically.
+A receipt can identify the repository revision, routing policy digest,
+selected paths, trust tiers, content hashes, exclusions, and consumed budgets.
+Deterministic serialization of equivalent routing inputs makes the selection
+evidence comparable; it does **not** prove that the inputs were authentic or
+that the selected documents were semantically correct.
 
 That is valuable evidence.
 
 It still does not make the selected material authoritative.
 
-A receipt can prove that a generated summary was selected from a particular revision under a particular routing policy. It cannot prove that the summary is correct. It cannot promote the summary into current state. It cannot authorize a mutation.
+A receipt **records** that a generated summary was selected from a particular
+revision under a particular routing policy. Only after independent integrity
+validation and a trustworthy collection boundary can it support a stronger
+claim about what was actually selected. Even then, it cannot prove that the
+summary is correct, promote the summary into current state, or authorize a
+mutation.
 
 The distinction mirrors the rest of the Assurance Stack:
 
@@ -294,9 +307,16 @@ The release note may be correct. It may also refer to a different branch, enviro
 
 The retrieval layer should not rewrite support state merely because the note entered context.
 
-The system can verify the authoritative release artifact, determine scope, and then update structured state through a defined mutation path.
+The system can verify the authoritative release artifact, determine scope,
+and propose an update through a defined mutation path. A trusted admission
+service then binds the candidate to its source, actor, policy, expected
+revision, and acceptance evidence before committing the new record.
 
-That path gives the change an owner and an identity.
+That path gives the change an owner and an identity. It also handles a
+concurrent or revoked decision as a conflict, not an implicit overwrite.
+The mechanics of durable memory promotion and recovery are treated in the
+separate draft essay *Your AI Chat Is Not a Database*; the focus here is
+which retrieved information merits verification in the first place.
 
 Without it, memory becomes an ambient write channel.
 
@@ -350,11 +370,17 @@ If context is treated as authoritative state, there is no stable object to recon
 A shared structured state gives the topology a common boundary:
 
 ```text
-supervisor context   ----\
-specialist context   -----+--> governed structured state
-reviewer context     ----/           |
+supervisor context    --\
+specialist context    ----> evidence / proposals
+reviewer context      --/            |
                                      v
-                              policy / authority
+                         verify + trusted admission
+                                     |
+                                     v
+                           versioned shared state
+                                     |
+                                     v
+                         scoped effect authorization
 ```
 
 The contexts may differ.
@@ -379,7 +405,13 @@ execution evidence   -> What actually happened?
 
 Context engineering belongs in the stack.
 
-It should not swallow the rest of it.
+It should not swallow the rest of it. Related work separates two adjacent
+questions: *Intent Is Security State, Not Conversation History* defines
+current authority over an action; *Your AI Chat Is Not a Database* addresses
+long-lived memory and accepted-state reconciliation. This draft instead
+concentrates on evidence selection, progressive source expansion, and
+context receipts. They share trust boundaries, but they solve different
+failure modes.
 
 A larger context window does not eliminate the need for current state. Better retrieval does not eliminate policy. Deterministic routing does not create authorization. Provenance does not prove correctness.
 
