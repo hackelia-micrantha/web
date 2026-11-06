@@ -1,0 +1,65 @@
+import type { MetaFunction } from "@remix-run/node"
+import type { ElementType } from "react"
+
+import { createBlogMdxRoute } from "./blog-mdx-route"
+
+/**
+ * Publish an attributed edition of an independently maintained personal essay.
+ * The Micrantha route is public only after the PR carrying it is merged.
+ * Its search canonical remains the original author's article.
+ */
+export function createBlogCrosspostRoute(
+  slug: string,
+  Content: ElementType,
+  canonicalUrl: string,
+  coverPath: string,
+  coverAlt: string,
+) {
+  const route = createBlogMdxRoute(slug, Content)
+  const coverUrl = new URL(coverPath, "https://micrantha.com").toString()
+
+  const meta: MetaFunction = (args) =>
+    route.meta(args).map((descriptor) => {
+      if (
+        "tagName" in descriptor &&
+        descriptor.tagName === "link" &&
+        "rel" in descriptor &&
+        descriptor.rel === "canonical"
+      ) {
+        return { ...descriptor, href: canonicalUrl }
+      }
+
+      if ("property" in descriptor) {
+        if (descriptor.property === "og:image") {
+          return { ...descriptor, content: coverUrl }
+        }
+        if (descriptor.property === "og:image:alt") {
+          return { ...descriptor, content: coverAlt }
+        }
+      }
+
+      if ("name" in descriptor) {
+        if (descriptor.name === "twitter:image") {
+          return { ...descriptor, content: coverUrl }
+        }
+        if (descriptor.name === "twitter:image:alt") {
+          return { ...descriptor, content: coverAlt }
+        }
+      }
+
+      return descriptor
+    })
+
+  return {
+    Component: route.Component,
+    meta,
+    handle: {
+      structuredData: {
+        ...route.handle.structuredData,
+        author: { "@type": "Person", name: "Ryan Jennings" },
+        image: [coverUrl],
+        isBasedOn: canonicalUrl,
+      },
+    },
+  }
+}

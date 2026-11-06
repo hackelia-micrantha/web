@@ -233,6 +233,37 @@ assert.equal(botArticle.response.status, 200)
 assert.match(botArticle.body, /AI Pipelines Need Control Boundaries/)
 assertDocumentHeaders(botArticle.response, botArticle.body)
 
+// Each cross-post keeps a personal-essay search canonical while serving
+// its own Micrantha cover and explicitly attributed structured data.
+for (const slug of [
+  "ai-native-sdlc-governed-software-delivery",
+  "threat-modeling-ai-engineering-coprocessor",
+  "secure-auth-systems-reference",
+  "legacy-system-insights",
+]) {
+  const article = await read(`/blog/${slug}`)
+  const canonical = `https://ryanjennin.gs/posts/${slug}/`
+  const cover = `https://micrantha.com/img/blog/${slug}.webp`
+
+  assert.equal(article.response.status, 200, slug)
+  assert.ok(article.body.includes(`rel="canonical" href="${canonical}"`), slug)
+  assert.ok(
+    article.body.includes(`property="og:image" content="${cover}"`),
+    slug,
+  )
+  assert.ok(
+    article.body.includes(`name="twitter:image" content="${cover}"`),
+    slug,
+  )
+  assert.ok(article.body.includes(`src="/img/blog/${slug}.webp"`), slug)
+  assert.ok(
+    article.body.includes('"author":{"@type":"Person","name":"Ryan Jennings"}'),
+    slug,
+  )
+  assert.ok(article.body.includes(`"isBasedOn":"${canonical}"`), slug)
+  assertDocumentHeaders(article.response, article.body)
+}
+
 for (const pathname of [
   "/blog/draft-publication-fixture",
   "/blog/future-publication-fixture",

@@ -1,0 +1,576 @@
+---
+slug: threat-modeling-ai-engineering-coprocessor
+status: published
+title: "Threat Modeling AI as an Engineering Coprocessor"
+description: "Treat AI outputs and agent tool requests as untrusted inputs across requirements, design, implementation, testing, and operations."
+date: "2026-03-08"
+updatedAt: "2026-11-06"
+excerpt: "AI-assisted engineering changes the software supply chain, not just code generation. Verify artifacts, capabilities, provenance, and downstream effects."
+tags:
+  - ai-security
+  - threat-modeling
+  - software-supply-chain
+  - secure-sdlc
+  - ai-governance
+relatedSlugs:
+  - ai-pipelines-need-control-boundaries
+  - intent-is-security-state
+---
+
+_By Ryan Jennings. Adapted for Micrantha Architecture Notes from [the personal edition](https://ryanjennin.gs/posts/threat-modeling-ai-engineering-coprocessor/), which remains the canonical source._
+
+<Figure
+  title="Threat Modeling AI as an Engineering Coprocessor"
+  caption="Treat model-generated artifacts and agent-selected actions as untrusted inputs."
+  src="/img/blog/threat-modeling-ai-engineering-coprocessor.webp"
+  alt="Illustration for a threat model of AI-assisted software development."
+  narrow
+/>
+
+Artificial intelligence is rapidly becoming embedded throughout modern software engineering workflows. AI systems are no longer confined to code completion in an IDE. They now participate in drafting requirements, suggesting architectures, generating code, producing tests, summarizing incidents, and assisting with communication.
+
+More recently, **agentic systems**—AI systems capable of planning actions and invoking tools—are extending this role further. These systems can interact with repositories, execute workflows, call APIs, and propose operational changes.
+
+In practice, AI is becoming an **engineering coprocessor** influencing nearly every phase of the software development lifecycle (SDLC).
+
+AI assistance can offer productivity benefits in some workflows. Security models must nevertheless account for new capabilities and the risks introduced by agents.
+
+Many established SDLC controls are designed around identifiable human contributors and familiar review and authorization paths.
+
+AI-assisted and agentic development challenges that assumption.
+
+The most useful framing from a security perspective is:
+
+> **AI systems should be treated as untrusted engineering collaborators whose output requires verification.**
+
+These systems behave like **automated contributors influencing engineering decisions across the SDLC**, often with uncertain provenance and probabilistic correctness.
+
+Understanding this shift is essential for organizations that want to adopt AI-assisted engineering without weakening security, supply chain integrity, or intellectual property protections.
+
+This model is informed both by published security guidance and by my own
+experience working across enterprise, product, and contract software delivery,
+where tooling decisions quickly become architecture, governance, and supply
+chain problems rather than isolated developer conveniences.
+
+For the process-level motivation behind this model, see
+[AI SDLC: automating the grind](https://ryanjennin.gs/posts/ai-sdlc/).
+For the architectural bias toward controllable systems that sits beneath it, see
+[Software Architecture for Independence](https://ryanjennin.gs/posts/software-architecture/).
+
+---
+
+## 1. The Opening Problem
+
+Industry discussions about AI risk often focus narrowly on **AI-generated code**.
+
+That framing misses the broader impact.
+
+AI systems now influence almost every engineering artifact:
+
+- requirements and specifications
+- architecture and infrastructure design
+- source code and configuration
+- tests and validation logic
+- documentation and internal communication
+- operational incident analysis
+
+Agentic systems extend this further by allowing AI to:
+
+- call APIs
+- execute tools
+- modify repositories
+- trigger automated workflows
+
+This means AI output can affect:
+
+- **what systems are built**
+- **how they are designed**
+- **how they are validated**
+- **how they are operated**
+
+Many SDLC controls were designed around engineering artifacts with **known human contributors**.
+
+AI-assisted and agentic systems introduce a new contributor class whose outputs have:
+
+- uncertain provenance
+- probabilistic accuracy
+- unclear licensing origins
+- inconsistent adherence to internal architectural standards
+
+From a security standpoint, AI-generated artifacts behave more like **software supply chain inputs** than traditional developer contributions.
+
+---
+
+## 2. Mental Model: AI as an Untrusted Engineering Coprocessor
+
+The most useful mental model is to treat AI systems as **untrusted engineering coprocessors**.
+
+A coprocessor assists with complex tasks but does not determine the final outcome.
+
+Similarly, AI systems can assist engineers across the SDLC, but their outputs must always be validated.
+
+Agentic systems amplify this model: they do not merely generate suggestions but may **initiate actions inside engineering systems**.
+
+Several characteristics of modern AI systems introduce risk.
+
+### Training Data Uncertainty
+
+AI models are trained on large datasets containing public code, documentation, and technical discussions.
+
+These datasets inevitably contain:
+
+- insecure patterns
+- outdated practices
+- conflicting design approaches
+
+Models can sometimes recognize insecure patterns, but those judgments are not trusted security decisions. Output quality depends on the model, available context, and independent verification.
+
+This affects not only code but also:
+
+- architectural suggestions
+- testing strategies
+- operational guidance
+
+It also introduces a **temporal risk**. Models are trained on historical snapshots of human knowledge that may become outdated.
+
+---
+
+### Lack of Intent Awareness
+
+AI systems use the prompts, retrieved context, and tools made available to them. They do not inherently know which organization-specific constraints are authoritative, including:
+
+- system threat models
+- internal architecture rules
+- compliance requirements
+- organizational engineering standards
+
+An AI-generated solution may bypass existing abstractions or reimplement security-sensitive functionality simply because similar patterns appeared in training data.
+
+---
+
+### Licensing and Code Reproduction Risks
+
+AI models are trained on datasets containing code under many licenses.
+
+Outputs may occasionally resemble existing implementations.
+
+This creates risks including:
+
+- reproduction of copyleft code
+- unclear attribution obligations
+- incompatible license inclusion
+
+AI-assisted development can also create **internal redundancy and IP confusion**.
+
+Multiple engineers may independently generate similar solutions to the same problem, resulting in:
+
+- duplicated implementations
+- unclear ownership boundaries
+- licensing ambiguity
+
+Over time this increases maintenance and governance complexity.
+
+---
+
+### The Core Issue: Provenance
+
+The fundamental challenge is **lack of provenance guarantees**.
+
+For AI-generated artifacts it is often impossible to determine:
+
+- where the output originated
+- which training examples influenced it
+- whether it reproduces existing code
+- whether it complies with internal policies
+
+This lack of provenance places AI-generated artifacts into the category of **unverified supply chain inputs**.
+
+It also makes AI systems behave similarly to **indeterministic infrastructure components**, such as distributed cloud networks that exhibit intermittency and unpredictable behavior.
+
+---
+
+## 3. Threat Surface Across the SDLC
+
+When AI is viewed as an engineering coprocessor, the threat surface spans the entire SDLC.
+
+Agentic systems extend this further by allowing automated interaction with development tools and infrastructure.
+
+---
+
+### Requirements and Product Design
+
+AI is often used to generate:
+
+- product requirement documents
+- feature specifications
+- user stories
+
+Risks include:
+
+- misunderstanding between human intent and AI interpretation
+- missing security requirements
+- incomplete regulatory considerations
+- ambiguous specifications
+
+AI interactions can miss implicit organizational context shared by human participants. Misalignment between engineer intent and AI interpretation can produce **requirements that appear correct but encode incorrect assumptions**.
+
+Iterative clarification between humans and AI is necessary.
+
+---
+
+### Architecture and System Design
+
+AI systems frequently suggest architecture patterns.
+
+Risks include:
+
+- insecure trust boundaries
+- incorrect authentication flows
+- weak service isolation
+- unnecessary architectural complexity
+
+Because design decisions propagate downstream, flaws introduced here may persist for years.
+
+---
+
+### Implementation
+
+Implementation risks include:
+
+- insecure cryptographic primitives
+- unsafe input handling
+- hallucinated dependencies
+- vulnerable libraries
+
+These issues resemble traditional application security problems but may occur more frequently due to probabilistic generation.
+
+---
+
+### Testing
+
+AI-generated tests introduce a structural risk: **testing disconnected from earlier SDLC phases**.
+
+Common issues include:
+
+- tests mirroring implementation logic
+- missing adversarial scenarios
+- lack of validation for security boundaries
+
+If tests are generated late in the process, they may fail to validate assumptions made during requirements or architecture.
+
+This creates the illusion of coverage without meaningful validation.
+
+---
+
+### Operations and Incident Response
+
+AI systems are increasingly used during operational troubleshooting.
+
+Examples include:
+
+- summarizing incidents
+- proposing root causes
+- recommending fixes
+
+This becomes dangerous when operational insights are automatically fed back into the development lifecycle.
+
+If telemetry or logs are manipulated, AI-driven remediation may introduce flawed changes into future releases.
+
+Agentic systems increase this risk by enabling **automated remediation actions**.
+
+---
+
+### Communication and Documentation
+
+Engineers increasingly use AI systems to generate:
+
+- design documents
+- architecture summaries
+- incident reports
+- internal communication
+
+This introduces risks such as:
+
+- propagation of incorrect explanations
+- fragmentation of institutional knowledge
+- duplication of documentation
+
+Over time, generated content may obscure the authoritative source of truth for system behavior.
+
+---
+
+### Human Factors: Time Pressure and Automation Bias
+
+A significant practical risk is **automation bias under time pressure**.
+
+Engineers often work under deadlines or operational stress.
+
+In these situations, AI suggestions may be accepted without sufficient scrutiny.
+
+This can manifest as:
+
+- blindly accepting generated code
+- trusting generated explanations during debugging
+- assuming generated tests provide sufficient coverage
+
+The issue is not developer laziness but **time-constrained decision-making interacting with confident-looking outputs**.
+
+---
+
+## 4. Is the SDLC Outdated?
+
+A common argument is that the traditional SDLC is obsolete in the age of AI and agentic systems.
+
+The reasoning is typically that:
+
+- AI accelerates development dramatically
+- agentic systems can automate multiple engineering tasks
+- iterative loops happen faster than traditional lifecycle phases
+
+From this perspective, some propose replacing the SDLC with continuous autonomous systems.
+
+However, this argument misunderstands the role of the SDLC.
+
+The SDLC is not primarily about **speed of execution**.
+It exists to ensure that engineering decisions are **validated, reviewed, and iterated upon**.
+
+Agentic systems do not remove this need. In fact, they **increase it**.
+
+AI-generated artifacts often require:
+
+- clarification
+- iteration
+- verification
+
+External factors frequently change as well:
+
+- system requirements evolve
+- regulatory conditions change
+- infrastructure constraints shift
+- security threats evolve
+
+Even if an agent produces an initial solution, that output must still be **evaluated, iterated upon, and validated over time**.
+
+In other words:
+
+> Agentic systems accelerate engineering loops, but they do not eliminate them.
+
+Rather than replacing the SDLC, AI systems simply **increase the number of iterations within it**.
+
+The lifecycle remains necessary because it provides the structure required to validate evolving systems.
+
+---
+
+## 5. AI and the Software Supply Chain
+
+AI-assisted engineering introduces new inputs into the software supply chain.
+
+Traditional supply chain security focuses on:
+
+- dependencies
+- build artifacts
+- CI pipelines
+
+AI introduces additional artifacts including:
+
+- generated code
+- generated configuration
+- generated documentation
+- generated tests
+
+These artifacts frequently lack traceable provenance.
+
+Modern supply chain approaches emphasize:
+
+- artifact signing
+- build attestations
+- transparency logs
+
+Without provenance tracking, organizations cannot determine:
+
+- which artifacts were AI-generated
+- which model produced them
+- whether outputs changed after model updates
+
+---
+
+## 6. Model Swap and Provider Risk
+
+AI systems themselves become part of the engineering supply chain.
+
+Organizations sometimes treat models as interchangeable infrastructure.
+
+In practice, swapping models introduces risks including:
+
+- prompt routing to new vendors
+- exposure of proprietary context
+- behavioral differences between models
+- inconsistent outputs
+
+A particularly important risk is **context loss**.
+
+When switching models:
+
+- prompt assumptions may no longer hold
+- prior conversation context may disappear
+- generated outputs may diverge significantly
+
+Each model effectively acts as a **different engineering coprocessor**.
+
+---
+
+## 7. Security Frameworks and Current Guidance
+
+The following references describe published guidance. Revisit their versions and scope as standards and threat taxonomies evolve.
+
+OWASP released the **Top 10 for Agentic Applications for 2026** on December 9, 2025. It is distinct from the OWASP Top 10 for LLM Applications and names risks
+specific to systems that can plan and act, including:
+
+- ASI01 — Agent Goal Hijack
+- ASI02 — Tool Misuse & Exploitation
+- ASI03 — Identity & Privilege Abuse
+- ASI04 — Agentic Supply Chain Vulnerabilities
+- ASI05 — Unexpected Code Execution
+- ASI06 — Memory & Context Poisoning
+- ASI07 — Insecure Inter-Agent Communication
+- ASI08 — Cascading Failures
+- ASI09 — Human-Agent Trust Exploitation
+- ASI10 — Rogue Agents
+
+See the [OWASP Top 10 for Agentic Applications for 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) and the companion [Securing Agentic Applications Guide](https://genai.owasp.org/resource/securing-agentic-applications-guide-1-0/).
+
+[SAFE-MCP](https://www.safe-mcp.org/) addresses a narrower but related surface:
+MCP and agent-tool orchestration. Its tactic/technique model is useful when the
+threat model includes tool poisoning, prompt injection, credential exposure,
+privilege escalation, lateral movement, exfiltration, and other attacks crossing
+the agent/tool boundary.
+
+The [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+remains a useful lifecycle risk-management foundation. As of September 1, 2026,
+AI RMF 1.0 is still the published core framework but NIST is revising it under
+the U.S. AI Action Plan. NIST's [Generative AI Profile, NIST AI 600-1](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence),
+first published in July 2024 and updated on the NIST site in April 2026, remains
+a companion profile rather than a replacement for the core RMF.
+
+These references do not produce one universal agent-security architecture. They
+are most useful as complementary layers: risk-management lifecycle, agentic
+failure taxonomy, MCP/tool-specific attack techniques, and deterministic local
+controls that turn those concerns into enforceable boundaries.
+
+---
+
+## 8. Governance and Practical Controls
+
+Organizations adopting AI-assisted engineering should implement explicit governance.
+
+### Prompt Hygiene
+
+Avoid including sensitive information in prompts:
+
+- proprietary algorithms
+- internal architecture diagrams
+- credentials or secrets
+- customer data
+
+---
+
+### Provenance Tracking
+
+Track AI-generated artifacts through:
+
+- commit metadata
+- repository tagging
+- documentation references
+
+---
+
+### Supply Chain Controls
+
+AI-generated artifacts should pass through the same controls applied to external contributions:
+
+- code review
+- dependency scanning
+- license compliance checks
+- vulnerability scanning
+- [SBOM generation](https://www.cisa.gov/sbom)
+
+---
+
+### Security Tooling
+
+Automated guardrails remain essential:
+
+- static analysis
+- dependency vulnerability scanning
+- secret detection
+- license scanning
+
+---
+
+### Organizational Culture
+
+Engineering teams must internalize a simple principle:
+
+> AI output is a suggestion, not an authority.
+
+Developers remain responsible for validating:
+
+- correctness
+- security
+- architecture consistency
+- licensing compliance
+
+---
+
+## 9. Economic and Societal Risk Considerations
+
+AI introduces not only technical risks but also broader organizational concerns.
+
+Large AI systems require significant:
+
+- compute infrastructure
+- electricity consumption
+- hardware resources
+
+These costs influence sustainability and long-term operational strategy.
+
+AI adoption can also introduce sociological risks including:
+
+- over-reliance on generated output
+- erosion of deep technical understanding
+- homogenization of engineering practices
+
+Organizations should recognize that AI systems influence **engineering culture and decision-making**, not just productivity.
+
+---
+
+## 10. Key Takeaway
+
+AI systems are no longer just coding tools.
+
+They are becoming **engineering coprocessors embedded across the entire SDLC**, and agentic systems extend this influence further.
+
+They affect:
+
+- requirements
+- architecture
+- implementation
+- testing
+- operations
+- communication
+
+Because their outputs lack strong provenance guarantees, they must be treated as **untrusted contributors to the engineering process**.
+
+Agentic systems do not eliminate the SDLC—they **increase the need for structured iteration and validation**.
+
+Organizations that recognize this shift can safely capture the benefits of AI-assisted engineering by applying familiar security principles:
+
+- supply chain verification
+- artifact provenance
+- license compliance
+- human review and validation
+- governance over AI systems and providers
+
+The challenge for engineering leaders is ensuring that **secure development practices evolve alongside this new engineering coprocessor**.
+
+---
