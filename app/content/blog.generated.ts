@@ -3,27 +3,6 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
-    slug: "the-envelope-contract-based-agentic-ai",
-    status: "published",
-    title: "The Envelope: Contracts and Trust Boundaries for Agentic AI",
-    description:
-      "A contract-based mental model for secure agentic workflows, from user intent through independently enforced authorization, execution, and evidence.",
-    date: "2026-11-05",
-    excerpt:
-      "A prompt is not permission, a proposal is not approval, and an AI agent should never certify its own work. The envelope gives each transition an enforceable contract.",
-    tags: [
-      "ai-governance",
-      "authorization",
-      "agentic-systems",
-      "security-engineering",
-      "architecture-notes",
-    ],
-    relatedSlugs: [
-      "ai-pipelines-need-control-boundaries",
-      "intent-is-security-state",
-    ],
-  },
-  {
     slug: "intent-is-security-state",
     status: "published",
     title: "Intent Is Security State, Not Conversation History",

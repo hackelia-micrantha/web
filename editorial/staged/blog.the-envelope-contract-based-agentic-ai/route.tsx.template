@@ -43,5 +43,12 @@ export const meta: MetaFunction = (args) =>
     return descriptor
   })
 
-export const handle = route.handle
+export const handle = {
+  structuredData: {
+    ...route.handle.structuredData,
+    author: { "@type": "Person", name: "Ryan Jennings" },
+    image: [coverUrl],
+    isBasedOn: canonicalUrl,
+  },
+}
 export default route.Component
