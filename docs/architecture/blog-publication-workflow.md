@@ -77,6 +77,18 @@ A routable article must:
 
 Draft or future content must remain outside the routable `app/routes/blog.<slug>/` namespace until publication. Hiding a route only from the index or sitemap is insufficient because its direct URL would still exist.
 
+## Curating articles from ryjen/blog
+
+The source blog is a candidate library, not an automatic syndication feed.
+Apply the [personal-blog curation contract](blog-curation-policy.md) before
+staging or publishing a derivative. Document source revision and public
+canonical URL, author attribution, legal/asset reuse, technical claim checks,
+Micrantha audience fit, and optional series placement. A source marked draft
+may be privately adapted but never promoted into a public Remix route.
+Publication requires a separate, explicit destination approval after canonical
+source verification. The existing staging validator is a technical exclusion
+gate, not editorial permission to publish.
+
 ## Authoring a draft
 
 1. Author the MDX outside the routable route namespace.
