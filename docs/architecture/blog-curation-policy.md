@@ -47,12 +47,12 @@ A candidate review must document:
 
 ## Fail-closed publication states
 
-| Personal source | Micrantha candidate | Permitted outcome |
-| --- | --- | --- |
-| `draft: true`, unmerged, or not publicly verified | Adaptation reviewed | Private `editorial/staged/blog.<slug>/` only |
-| Public, source corrections pending | Adaptation reviewed | Private staging; reconcile corrections first |
-| Public and source reviewed | Adaptation accepted | Separate publication PR **eligible**, not authorized |
-| Publication PR explicitly approved and validated | `status: published` | Promote to routable path and deploy; verify live output |
+| Personal source                                   | Micrantha candidate | Permitted outcome                                       |
+| ------------------------------------------------- | ------------------- | ------------------------------------------------------- |
+| `draft: true`, unmerged, or not publicly verified | Adaptation reviewed | Private `editorial/staged/blog.<slug>/` only            |
+| Public, source corrections pending                | Adaptation reviewed | Private staging; reconcile corrections first            |
+| Public and source reviewed                        | Adaptation accepted | Separate publication PR **eligible**, not authorized    |
+| Publication PR explicitly approved and validated  | `status: published` | Promote to routable path and deploy; verify live output |
 
 A staged item must keep `status: draft`, `route.tsx.template` inert,
 and its cover outside `public/`. Existing staging validation checks
