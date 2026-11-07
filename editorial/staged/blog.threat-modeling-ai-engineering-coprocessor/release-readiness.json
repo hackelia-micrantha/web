@@ -10,8 +10,8 @@
     "canonicalUrl": "https://ryanjennin.gs/posts/threat-modeling-ai-engineering-coprocessor/"
   },
   "staged": {
-    "contentSha256": "244d5724b98454e259b2cc877305f48e05e35a0477c653558a8872461de4a382",
-    "coverSha256": "092f82dff94b338decb3e6fb2755707a735d59e53615164e7d628c59ef6ff46b",
+    "contentSha256": "08e20e6d846fc7f0a5176b93e90eec6d3e97388b05922e1f087831ad9d4e15b0",
+    "coverSha256": "f172a15f205e91bbc2ad458b51a033ecd38fc0986fa08d04d3f799d9a57882ca",
     "routeTemplateSha256": "5498a64e3cc6efdd7c6c7f568df5104b4fa052f4a50df765e763597fcfb2b817"
   },
   "observed": {
