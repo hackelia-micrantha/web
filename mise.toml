@@ -57,17 +57,17 @@ run = "yarn lint && yarn typecheck && yarn build"
 [tasks.image]
 description = "Build the Docker image."
 depends = ["setup"]
-run = "docker build -t \"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}:${TAG:-latest}\" ."
+run = "docker build -t \"${REGISTRY:-docker.io}/${SLUG:-micrantha/web}:${TAG:-latest}\" ."
 
 [tasks.serve]
 description = "Build and run the Docker image locally."
 depends = ["image"]
-run = "docker run -p \"${PORT:-3000}:3000\" \"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}:${TAG:-latest}\""
+run = "docker run -p \"${PORT:-3000}:3000\" \"${REGISTRY:-docker.io}/${SLUG:-micrantha/web}:${TAG:-latest}\""
 
 [tasks.deploy]
 description = "Push image tags to the container registry."
 depends = ["image"]
-run = "image=\"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}:${TAG:-latest}\"; repository=\"${REGISTRY:+$REGISTRY/}${SLUG:-micrantha/web}\"; docker tag \"$image\" \"$repository:latest\"; docker push \"$repository\" --all-tags"
+run = "image=\"${REGISTRY:-docker.io}/${SLUG:-micrantha/web}:${TAG:-latest}\"; repository=\"${REGISTRY:-docker.io}/${SLUG:-micrantha/web}\"; docker tag \"$image\" \"$repository:latest\"; docker push \"$image\"; if [ \"$image\" != \"$repository:latest\" ]; then docker push \"$repository:latest\"; fi"
 
 [tasks.deploy-cloudflare]
 description = "Deploy the app to Cloudflare."
