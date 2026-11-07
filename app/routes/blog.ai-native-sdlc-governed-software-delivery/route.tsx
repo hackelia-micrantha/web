@@ -6,7 +6,7 @@ const route = createBlogCrosspostRoute(
   Content,
   "https://ryanjennin.gs/posts/ai-native-sdlc-governed-software-delivery/",
   "/img/blog/ai-native-sdlc-governed-software-delivery.webp",
-  "Illustration for AI-native software development and governed delivery.",
+  "Pastel layered software delivery pipeline connecting code, verification, security controls, and organizational governance.",
 )
 
 export const meta = route.meta
