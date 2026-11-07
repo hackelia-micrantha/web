@@ -135,6 +135,33 @@ assert.equal(contactRedirect.response.status, 301)
 assert.equal(contactRedirect.response.headers.get("location"), "/services")
 assert.equal(contactRedirect.body, "")
 
+const sourceFirst = await read(
+  "/blog/ai-native-sdlc-governed-software-delivery",
+)
+assert.equal(sourceFirst.response.status, 200)
+assert.match(
+  sourceFirst.body,
+  /From AI-Native SDLC to Governed Software Delivery/,
+)
+assert.match(sourceFirst.body, /The scarce resource becomes confidence/)
+assert.match(
+  sourceFirst.body,
+  /ryanjennin\.gs\/posts\/ai-native-sdlc-governed-software-delivery\//,
+)
+assert.match(
+  sourceFirst.body,
+  /"isBasedOn":"https:\/\/ryanjennin\.gs\/posts\/ai-native-sdlc-governed-software-delivery\/"/,
+)
+assert.match(
+  sourceFirst.body,
+  /"author":\{"@type":"Person","name":"Ryan Jennings"\}/,
+)
+assert.match(
+  sourceFirst.body,
+  /"image":\["https:\/\/micrantha\.com\/img\/blog\/ai-native-sdlc-governed-software-delivery\.webp"\]/,
+)
+assertDocumentHeaders(sourceFirst.response, sourceFirst.body)
+
 const article = await read("/blog/ai-pipelines-need-control-boundaries")
 assert.equal(article.response.status, 200)
 assert.match(article.body, /AI Pipelines Need Control Boundaries/)

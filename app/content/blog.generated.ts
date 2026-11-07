@@ -3,6 +3,28 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
+    slug: "ai-native-sdlc-governed-software-delivery",
+    status: "published",
+    title: "From AI-Native SDLC to Governed Software Delivery",
+    description:
+      "AI-generated implementation shifts the engineering bottleneck toward trustworthy acceptance, exact-candidate evidence, identity, and controlled effects.",
+    date: "2026-10-01",
+    updatedAt: "2026-11-06",
+    excerpt:
+      "When generation becomes inexpensive, trustworthy acceptance and constrained execution become the scarce engineering work.",
+    tags: [
+      "ai-governance",
+      "software-delivery",
+      "agentic-systems",
+      "secure-sdlc",
+      "architecture-notes",
+    ],
+    relatedSlugs: [
+      "governance-native-engineering-control-plane",
+      "ai-pipelines-need-control-boundaries",
+    ],
+  },
+  {
     slug: "intent-is-security-state",
     status: "published",
     title: "Intent Is Security State, Not Conversation History",
