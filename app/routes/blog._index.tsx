@@ -2,12 +2,51 @@ import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card, PageTitle } from "~/components"
 import { BLOG_DESCRIPTION, BLOG_TITLE, formatBlogDate } from "~/content/blog"
-import { getBlogPosts } from "~/content/blog-provider"
-import { getSeriesNavigation } from "~/content/blog-series"
+import { getBlogPostBySlug, getBlogPosts } from "~/content/blog-provider"
+import { getBlogSeriesGroups, getSeriesNavigation } from "~/content/blog-series"
 import { cardStyles } from "~/utils/card-styles"
 import { buildCollectionPageStructuredData, buildPageMeta } from "~/utils/seo"
 
 const posts = getBlogPosts()
+const seriesGroups = getBlogSeriesGroups()
+
+// Curated navigation, deliberately independent of series membership metadata.
+const readingPaths = [
+  {
+    title: "For integration and modernization teams",
+    description:
+      "Follow trust boundaries from enterprise workflows into AI-assisted delivery.",
+    steps: [
+      "secure-platform-integration-is-not-plumbing",
+      "ai-pipelines-need-control-boundaries",
+      "governance-native-engineering-control-plane",
+      "replayability-is-a-governance-problem",
+    ],
+  },
+  {
+    title: "For AI-assisted engineering teams",
+    description:
+      "Start with assurance, then trace it back to tool and write-back boundaries.",
+    steps: [
+      "governance-native-engineering-control-plane",
+      "replayability-is-a-governance-problem",
+      "recursive-governance-and-agent-workflows",
+      "ai-pipelines-need-control-boundaries",
+    ],
+  },
+].map(({ title, description, steps }) => ({
+  title,
+  description,
+  posts: steps.map((slug) => {
+    const post = getBlogPostBySlug(slug)
+    if (!post) {
+      throw new Error(
+        "Reading path references an unpublished or missing post: " + slug,
+      )
+    }
+    return post
+  }),
+}))
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
@@ -47,7 +86,71 @@ export default function BlogIndexRoute() {
         </p>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section className="space-y-4" aria-labelledby="blog-series-heading">
+        <div>
+          <h2
+            id="blog-series-heading"
+            className="text-2xl font-semibold tracking-tight text-slate-900"
+          >
+            Explore the series
+          </h2>
+          <p className="page-copy-sm mt-2">
+            Ordered architecture notes for two complementary audiences.
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {seriesGroups.map((series) => (
+            <Card
+              key={series.slug}
+              title={series.title}
+              url={`/blog/series/${series.slug}`}
+              headingLevel={3}
+              className={cardStyles.neutral}
+            >
+              <>
+                <p>{series.description}</p>
+                <p className="meta-kicker mt-3">{series.posts.length} parts</p>
+              </>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4" aria-labelledby="reading-paths-heading">
+        <h2
+          id="reading-paths-heading"
+          className="text-2xl font-semibold tracking-tight text-slate-900"
+        >
+          Recommended reading paths
+        </h2>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {readingPaths.map((path) => (
+            <div key={path.title} className="editorial-panel px-6 py-6">
+              <h3 className="text-lg font-semibold text-slate-900">
+                {path.title}
+              </h3>
+              <p className="page-copy-sm mt-2">{path.description}</p>
+              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-6">
+                {path.posts.map((post) => (
+                  <li key={post.slug}>
+                    <Link
+                      className="article-meta-link"
+                      to={`/blog/${post.slug}`}
+                    >
+                      {post.title}
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section
+        aria-label="All published notes"
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"
+      >
         {posts.map((post, index) => {
           const seriesNavigation = getSeriesNavigation(post)
 
@@ -57,6 +160,20 @@ export default function BlogIndexRoute() {
               title={post.title}
               url={`/blog/${post.slug}`}
               headingLevel={2}
+              actions={
+                seriesNavigation
+                  ? [
+                      <Link
+                        key={seriesNavigation.series.slug}
+                        className="article-meta-link inline-flex min-h-11 items-center rounded-lg px-2 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                        to={`/blog/series/${seriesNavigation.series.slug}`}
+                        aria-label={`Explore ${seriesNavigation.series.title} series`}
+                      >
+                        {seriesNavigation.series.title}
+                      </Link>,
+                    ]
+                  : undefined
+              }
               className={
                 index % 3 === 0
                   ? `${cardStyles.neutral} editorial-card`
@@ -67,20 +184,10 @@ export default function BlogIndexRoute() {
             >
               <>
                 {seriesNavigation ? (
-                  <div className="meta-kicker mb-3 flex flex-wrap items-center gap-1.5">
-                    <span
-                      className="rounded-full border border-slate-300 bg-white text-slate-600"
-                      style={{
-                        fontSize: "0.58rem",
-                        letterSpacing: "0.14em",
-                        lineHeight: 1,
-                        padding: "0.14rem 0.38rem",
-                      }}
-                    >
-                      Part {seriesNavigation.index + 1}
-                    </span>
-                    <span>{seriesNavigation.series.title}</span>
-                  </div>
+                  <span className="mb-3 block text-sm font-semibold tracking-wide leading-6 text-slate-600">
+                    Part {seriesNavigation.index + 1} of{" "}
+                    {seriesNavigation.total}
+                  </span>
                 ) : null}
                 <span className="meta-kicker mb-3 block">
                   {formatBlogDate(post.date)}
