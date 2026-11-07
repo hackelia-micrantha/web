@@ -38,3 +38,16 @@ availability. Recheck the canonical content at actual publication.
 Status: qualified for editorial release review only. Nothing in this
 directory is deployed as a Micrantha article. The candidate has no release
 authorization, and activation requires a separately approved publication PR.
+
+## Approved masculine-pastel cover revision
+
+The previously staged cover has been replaced by the reviewed 1200 × 675
+WebP illustration. Its muted slate, sage and warm-neutral palette avoids
+large generated title text. Visible engineers are middle-aged, with natural
+crown thinning or balding. The cover and article description are now
+accurate to this illustration.
+
+Source image was generated and approved in the editorial conversation;
+the optimized artifact is pinned by the SHA-256 release-readiness manifest.
+This is an editorial asset update only and **does not** publish the article.
+The canonical personal-blog cover remains unchanged.
