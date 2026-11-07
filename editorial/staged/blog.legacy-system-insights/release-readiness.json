@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "slug": "legacy-system-insights",
+  "authorization": "not-granted",
+  "source": {
+    "repository": "ryjen/blog",
+    "path": "content/posts/legacy-system-insights.md",
+    "gitCommit": "9710c214c744daed3e59a3e428372ae687ee0774",
+    "sha256": "d64a5594bbc52767a35934d416c221853773fa4c6cc803c8bf3599dc324900ba",
+    "canonicalUrl": "https://ryanjennin.gs/posts/legacy-system-insights/"
+  },
+  "staged": {
+    "contentSha256": "1533620d54ed600d8c9211c47b3673120410046a39e5af3b567bd71b66ffdf38",
+    "coverSha256": "4dd6ab9a158cd40adfa3898436ba3862a9ffaf817b433108091cecf6eb8261d0",
+    "routeTemplateSha256": "520c98595068fef987f740a9cdb45ee8a5dd494b2eb357c7a6ab5810c4964a09"
+  },
+  "observed": {
+    "checkedAt": "2026-11-06",
+    "httpStatus": 200,
+    "finalUrl": "https://ryanjennin.gs/posts/legacy-system-insights/",
+    "canonicalUrl": "https://ryanjennin.gs/posts/legacy-system-insights/",
+    "robots": "index, follow"
+  }
+}
