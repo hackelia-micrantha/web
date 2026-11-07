@@ -38,6 +38,10 @@ AI review provides judgment. CI/CD provides executable evidence. Precise governa
 
 </Callout>
 
+**Anthesis** is a research-stage governance effort for AI-assisted software delivery. It investigates how a proposed change or tool effect can be tied to current intent, the exact candidate revision, attributable review and test evidence, policy evaluation, approval, and a narrowly scoped execution boundary. Public conformance contracts and experiments are not proof of end-to-end enforcement for arbitrary agents or production systems.
+
+That extends the integration principle from <PostLink slug="ai-pipelines-need-control-boundaries">AI Pipelines Need Control Boundaries</PostLink>: a reasoning component can propose work, but must not silently become the authority for a consequential write.
+
 ## Three different jobs
 
 Review, verification, and governance are complementary. Treating them as interchangeable weakens all three.
@@ -170,6 +174,8 @@ inspect repository
   -> create pull request
   -> perhaps merge or deploy
 ```
+
+Consider a proposed change to a login workflow: an agent edits authorization rules, updates a dependency and CI workflow, then asks to merge. Passing unit tests at the initial commit does not verify the revised dependency or the final CI workflow. Review evidence must identify the exact head revision; policy can require a human decision for the merge and refuse any stale approval or unrelated deployment. The agent may prepare the work without receiving standing permission to execute every subsequent effect.
 
 The complete plan may not be known at the start.
 

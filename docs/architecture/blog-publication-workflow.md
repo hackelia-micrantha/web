@@ -79,6 +79,10 @@ Draft or future content must remain outside the routable `app/routes/blog.<slug>
 
 ## Curating articles from ryjen/blog
 
+For series positioning, curated cross-series routes, and the decision
+not to add a redundant bridge article, see
+[Blog series reading paths](blog-series-reading-paths.md).
+
 The source blog is a candidate library, not an automatic syndication feed.
 Apply the [personal-blog curation contract](blog-curation-policy.md) before
 staging or publishing a derivative. Document source revision and public
