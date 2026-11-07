@@ -155,10 +155,13 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "/blog/intent-is-security-state")
   await expect(
-    page.getByRole("link", {
-      name: "Secure Platform Integration Is Not Plumbing",
-      exact: true,
-    }),
+    page
+      .getByRole("heading", { name: "Editorial use" })
+      .locator("..")
+      .getByRole("link", {
+        name: "Secure Platform Integration Is Not Plumbing",
+        exact: true,
+      }),
   ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
   await expect(
     page.getByText(
@@ -226,6 +229,12 @@ test("/blog exposes independently navigable series links and reading paths", asy
     paths.getByRole("heading", { name: "For AI-assisted engineering teams" }),
   ).toBeVisible()
   await expect(paths.getByRole("listitem")).toHaveCount(8)
+  await expect(
+    paths.getByRole("link", {
+      name: "Secure Platform Integration Is Not Plumbing",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
 
   await articleCards
     .getByRole("link", { name: "Explore The Assurance Stack series" })
