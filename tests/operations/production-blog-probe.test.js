@@ -18,7 +18,12 @@ const makeResponse = (
     '"/><script nonce="' +
     nonce +
     '"></script>' +
-    route.expected.filter((marker) => marker !== omit).join(" ")
+    route.expected
+      .filter((marker) => marker !== omit)
+      .map((marker) =>
+        marker.startsWith("/") ? '<a href="' + marker + '">Series</a>' : marker,
+      )
+      .join(" ")
   return new Response(body, {
     status: status ?? route.status,
     headers: {
@@ -179,4 +184,59 @@ test("public pages and 404s reject contradictory cache directives", async () => 
     ),
   )
   assert.ok(result.failures.some((failure) => failure.check === "404-no-store"))
+})
+
+test("hydration-only text and non-anchor URLs cannot satisfy SSR acceptance", async () => {
+  const result = await probeBlogEdge({
+    fetcher: async (url) => {
+      const response = makeResponse(url)
+      if (!url.endsWith("/blog")) return response
+      let html = await response.text()
+      const route = BLOG_EDGE_ROUTES.find((entry) => url.endsWith(entry.path))
+      const renderedText = route.expected
+        .filter((marker) => !marker.startsWith("/"))
+        .join(" ")
+      html = html.replace(renderedText, "")
+      for (const marker of route.expected.filter((value) =>
+        value.startsWith("/"),
+      )) {
+        html = html.replace('<a href="' + marker + '">Series</a>', "")
+      }
+      html +=
+        '<script type="application/json">' +
+        JSON.stringify(route.expected) +
+        "</script>"
+      return new Response(html, { status: 200, headers: response.headers })
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "missing:Explore the series",
+    ),
+  )
+  assert.ok(
+    result.failures.some(
+      (failure) =>
+        failure.check === "missing:/blog/series/governance-native-engineering",
+    ),
+  )
+})
+
+test("any mismatched script nonce rejects paired CSP evidence", async () => {
+  const result = await probeBlogEdge({
+    fetcher: async (url) => {
+      const response = makeResponse(url)
+      if (!url.endsWith("/blog")) return response
+      const html =
+        (await response.text()) + '<script nonce="wrong-nonce"></script>'
+      return new Response(html, { status: 200, headers: response.headers })
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.path === "/blog" && failure.check === "nonce-pair",
+    ),
+  )
 })

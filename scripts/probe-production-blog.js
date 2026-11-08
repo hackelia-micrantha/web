@@ -68,12 +68,22 @@ export async function probeBlogEdge({ fetcher = fetch } = {}) {
     const contentType = headers.get("content-type") ?? ""
     const nonce = /'nonce-([^']+)'/.exec(csp)?.[1]
     const scriptTags = body.match(/<script\b[^>]*>/gi) ?? []
+    const scriptNonces = scriptTags
+      .map((tag) => /\bnonce=(["'])([^"']+)\1/i.exec(tag)?.[2])
+      .filter(Boolean)
     const noncePaired = Boolean(
       nonce &&
-      scriptTags.some((tag) => {
-        const found = /\bnonce=(["'])([^"']+)\1/i.exec(tag)
-        return found?.[2] === nonce
-      }),
+      scriptNonces.length > 0 &&
+      scriptNonces.every((value) => value === nonce),
+    )
+    // Hydration JSON and SEO metadata do not establish visible SSR navigation.
+    const renderedBody = body
+      .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, "")
+      .replace(/<(script|style|template)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
+    const renderedText = renderedBody.replace(/<[^>]+>/g, " ")
+    const anchorHrefs = Array.from(
+      renderedBody.matchAll(/<a\b[^>]*\bhref=(["'])([^"']+)\1/gi),
+      (match) => match[2],
     )
     const cacheDirectives = new Set(
       cacheControl
@@ -113,7 +123,10 @@ export async function probeBlogEdge({ fetcher = fetch } = {}) {
       if (!body.includes('<link rel="canonical" href="' + url + '"'))
         fail("canonical")
       for (const marker of expected) {
-        if (!body.includes(marker)) fail("missing:" + marker)
+        const present = marker.startsWith("/")
+          ? anchorHrefs.includes(marker)
+          : renderedText.includes(marker)
+        if (!present) fail("missing:" + marker)
       }
     } else {
       if (
