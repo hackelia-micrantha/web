@@ -127,3 +127,17 @@ Before enabling production execution:
 5. Record the Cloudflare deployment ID, deployed SHA, verified custom-domain and Pages project identity, live SSR/cache/CSP checks, and rollback identity. A passing dispatch is not evidence of public-edge deployment until production is checked.
 
 For local operators, `yarn deploy:cloudflare` remains a combined validate-and-publish command. The split `verify` and `publish` scripts exist solely to place an exact-head revalidation gate between the two CI steps. No workflow step should ever call `publish` before both the validation script and authorization gates pass.
+
+## Read-only production blog probe (#58)
+
+After an independently approved Pages production release, run:
+
+```sh
+node scripts/probe-production-blog.js
+```
+
+The probe uses **only** unauthenticated public HTTPS GETs to the fixed `https://micrantha.com` hostname, requests `/blog`, both series pages, one representative article, and a deliberate unknown route. It checks HTTP status/content type, CSP and nonce pairing, `nosniff` / `DENY`, cache classification, public canonical links, SSR-only series/navigation markers, and the failure route's private no-store policy. It emits a JSON record with response sizes, SHA-256 body hashes, selected _public_ headers, and explicit failures. No secrets, Cloudflare credentials, or deployment mutation are involved.
+
+**Important:** The probe verifies _observable public behavior_, not the deployed Git commit or Cloudflare project identity. It must be paired with the authenticated project/deployment evidence and exact-source release gate. A FAIL may mean pending propagation or a genuine regression; it is not safe to mark the release complete without diagnosis. Any future intentional change to blog headings, routes, or content must update this public-release contract explicitly.
+
+This probe is deliberately **not invoked as an automatic main-branch deployment**. It can be used manually as a pre/post-release comparator. Post-deployment automation, retry policy, and rollback remain separate decisions after #129's manual release is exercised.

@@ -35,6 +35,9 @@ jobs:
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
 
+      - name: Test read-only public blog release probe
+        run: node --test tests/operations/production-blog-probe.test.js
+
       - name: Test production deployment admission gate
         run: node --test tests/operations/cloudflare-deployment-gate.test.js
 
