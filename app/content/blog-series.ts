@@ -16,13 +16,13 @@ const blogSeriesDefinitions: BlogSeriesDefinition[] = [
     slug: "governance-native-engineering",
     title: "The Assurance Stack",
     description:
-      "Essays on the assurance stack for agentic systems: review, evidence, policy, authority, replayability, and bounded execution.",
+      "For AI-assisted engineering teams: review, exact-change evidence, approval, scoped authority, and replayability in agentic software delivery.",
   },
   {
     slug: "architecture-control-boundaries",
     title: "Architecture Control Boundaries",
     description:
-      "Architecture notes on integration, AI workflow boundaries, and layered software design as delivery-governance surfaces.",
+      "For integration and modernization delivery: contracts, identity, workflow recovery, layered architecture, and AI as a governed integration boundary.",
   },
 ]
 

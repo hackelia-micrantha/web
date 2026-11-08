@@ -65,7 +65,13 @@ The diagram forces the questions that matter: where is identity asserted, where 
 - Make idempotency, replay, and compensating actions explicit design features rather than operational folklore.
 - Give operators first-class recovery tools and clear state models for partial failure.
 
-The follow-on concern is how new AI-assisted paths fit inside those same controls. That is the subject of <PostLink slug="ai-pipelines-need-control-boundaries">AI Pipelines Need Control Boundaries</PostLink>.
+## What this becomes during delivery
+
+A discovery review should leave behind more than a diagram. Useful artifacts include an API and data-contract inventory, an actor-to-entitlement map, a state-transition and retry diagram, a risk register for partial failures, and acceptance tests for idempotent replay and operator recovery. Those artifacts make integration assumptions inspectable before a long modernization schedule commits to them.
+
+The same bounded work can support a prime contractor or internal delivery team: an architecture review before a proposal, a focused integration-risk assessment, a reference adapter spike, or an independent review of a recovery design. These are examples of engineering engagement shapes, not claims about a particular client engagement.
+
+The follow-on concern is how new AI-assisted paths fit inside those same controls. An AI pipeline is still an integration workflow, but its reasoning step introduces additional uncertainty and authority questions. See <PostLink slug="ai-pipelines-need-control-boundaries">AI Pipelines Need Control Boundaries</PostLink>.
 
 ## Conclusion
 

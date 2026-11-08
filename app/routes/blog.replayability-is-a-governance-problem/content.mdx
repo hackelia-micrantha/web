@@ -61,8 +61,10 @@ Replayability is not static. It decays over time as models are replaced, provide
 
 Governance systems should model that decay explicitly. A system should not silently preserve a stronger replayability claim after the evidence required to support it has expired.
 
+Consider a reviewer investigating a generated security-policy change three months later. The provider has replaced the model version, the retrieval index has been rebuilt, and request logs have passed their retention window. The repository commit and policy decision may still be attributable, but the original model response can no longer be reproduced or fully explained. The appropriate record distinguishes traceable effects from reproducible inference and downgrades the replay claim instead of inventing missing evidence.
+
 ## Anthesis perspective
 
-Anthesis treats replayability as a first-class governance surface. Replay evidence is attached to workflow execution, provider routing, execution lineage, policy evaluation, and governance signals.
+In Anthesis's research model for governing AI-assisted delivery, replayability is a proposed first-class governance surface. Relevant evidence would link workflow execution, provider routing, execution lineage and policy evaluation; the availability of those links in a particular run must be demonstrated, not presumed.
 
 The goal is not perfect determinism. The goal is bounded explainability and attributable execution.

@@ -28,7 +28,9 @@ AI is not the system of record. AI is an untrusted reasoning component operating
 
 </Callout>
 
-That framing changes the design. Prompts, tool access, retrieval, outputs, and write-back actions all need control boundaries of their own.
+That framing changes the design. Prompts, tool access, retrieval, outputs, and write-back actions all need control boundaries of their own. The same identity mapping, interface contracts, retries, and reconciliation described in <PostLink slug="secure-platform-integration-is-not-plumbing">Secure Platform Integration Is Not Plumbing</PostLink> still apply; the model adds uncertain reasoning, not a new source of authority.
+
+For example, a classifier may draft a customer-record correction. A schema-valid response is not permission to update the record: the workflow still needs the current account identity, an authorized reviewer, an idempotent target operation, and a recovery path if the write fails after the upstream system acknowledges it.
 
 ## Pre-processing
 
@@ -110,3 +112,5 @@ The write-back step should look like a normal governed integration: authorized a
 ## Conclusion
 
 The practical goal is not to remove AI from the workflow. It is to put AI in a governed part of the workflow without letting it become the implicit owner of security, state, or business truth. Once the control boundaries are explicit, enterprise AI becomes easier to test, review, and replace.
+
+When an agent can also modify code, tools, and deployment configuration, this integration argument extends into the software-delivery control plane. <PostLink slug="governance-native-engineering-control-plane">The Missing Layer in Agentic Development: Precise Governance</PostLink> follows that transition from controlled write-back to exact-change evidence, approval, and scoped execution authority.
