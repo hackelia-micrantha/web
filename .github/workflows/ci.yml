@@ -35,6 +35,9 @@ jobs:
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
 
+      - name: Test production deployment admission gate
+        run: node --test tests/operations/cloudflare-deployment-gate.test.js
+
       - name: Validate project registry projection
         run: yarn test:project-registry-projection
 

@@ -1,0 +1,61 @@
+name: Cloudflare Pages production release
+
+# First vertical slice of #129: deliberately manual, never automatic.
+on:
+  workflow_dispatch:
+    inputs:
+      release_sha:
+        description: Exact current main SHA, with successful push CI
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: cloudflare-pages-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Guarded production release
+    runs-on: runner-web
+    environment: production
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out immutable candidate
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.release_sha }}
+          persist-credentials: false
+
+      - name: Activate repository-owned toolchain
+        uses: ./.github/actions/setup
+
+      - name: Verify source, CI evidence, and release authorization
+        env: &release-gate-environment
+          DEPLOY_SHA: ${{ inputs.release_sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+          CLOUDFLARE_PRODUCTION_DEPLOY_ENABLED: ${{ vars.CLOUDFLARE_PRODUCTION_DEPLOY_ENABLED }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: micrantha-web
+          CLOUDFLARE_PAGES_BRANCH: main
+        run: node scripts/cloudflare-deployment-gate.js
+
+      - name: Validate candidate with pinned deployment contracts
+        run: yarn deploy:cloudflare:verify
+
+      - name: Recheck exact main and CI evidence immediately before effect
+        env: *release-gate-environment
+        run: node scripts/cloudflare-deployment-gate.js
+
+      - name: Publish with pinned Wrangler
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: micrantha-web
+          CLOUDFLARE_PAGES_BRANCH: main
+        run: yarn deploy:cloudflare:publish
