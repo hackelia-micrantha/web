@@ -19,7 +19,11 @@ export function assertReleaseIdentity({ env, checkedOutHead }) {
   assert.equal(env.CLOUDFLARE_PRODUCTION_DEPLOY_ENABLED, "true")
   assert.ok(env.GITHUB_TOKEN, "GitHub read token is required")
   assert.ok(env.CLOUDFLARE_API_TOKEN, "Pages deployment token is required")
-  assert.ok(env.CLOUDFLARE_ACCOUNT_ID, "Cloudflare account is required")
+  assert.match(
+    env.CLOUDFLARE_ACCOUNT_ID ?? "",
+    /^[0-9a-f]{32}$/,
+    "Cloudflare account ID must be a 32-character hex identifier",
+  )
   assert.equal(env.CLOUDFLARE_PAGES_PROJECT, "micrantha-web")
   assert.equal(env.CLOUDFLARE_PAGES_BRANCH, "main")
 }
@@ -37,6 +41,20 @@ export function assertMainAndCi({ candidate, main, runs }) {
         run.path === ".github/workflows/ci.yml",
     ),
     "no successful exact-main push CI run for candidate",
+  )
+}
+
+export function assertCloudflarePagesProject(project) {
+  assert.equal(project?.name, "micrantha-web", "wrong Cloudflare Pages project")
+  assert.equal(
+    project?.production_branch,
+    "main",
+    "wrong Pages production branch",
+  )
+  assert.ok(
+    Array.isArray(project?.domains) &&
+      project.domains.includes("micrantha.com"),
+    "Pages project does not own micrantha.com",
   )
 }
 
@@ -78,6 +96,34 @@ export async function validateCloudflareReleaseGate({
     main: ref.object?.sha,
     runs: ci.workflow_runs ?? [],
   })
+
+  // Read-only project identity check. Pages Write tokens can read project metadata.
+  // Do not rely on a project name in an arbitrary Cloudflare account as proof of ownership.
+  const projectResponse = await fetcher(
+    "https://api.cloudflare.com/client/v4/accounts/" +
+      env.CLOUDFLARE_ACCOUNT_ID +
+      "/pages/projects/micrantha-web",
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + env.CLOUDFLARE_API_TOKEN,
+      },
+    },
+  )
+  if (!projectResponse.ok) {
+    throw new Error(
+      "Cloudflare Pages project verification failed (HTTP " +
+        projectResponse.status +
+        ")",
+    )
+  }
+  const project = await projectResponse.json()
+  assert.equal(
+    project.success,
+    true,
+    "Cloudflare Pages project read was unsuccessful",
+  )
+  assertCloudflarePagesProject(project.result)
 
   return { sha: env.DEPLOY_SHA, qualified: true }
 }

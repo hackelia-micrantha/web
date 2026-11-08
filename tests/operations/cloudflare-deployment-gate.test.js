@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 import {
   assertMainAndCi,
+  assertCloudflarePagesProject,
   assertReleaseIdentity,
   validateCloudflareReleaseGate,
 } from "../../scripts/cloudflare-deployment-gate.js"
@@ -18,9 +19,14 @@ const env = {
   GITHUB_TOKEN: "test-gh-token",
   CLOUDFLARE_PRODUCTION_DEPLOY_ENABLED: "true",
   CLOUDFLARE_API_TOKEN: "test-pages-token",
-  CLOUDFLARE_ACCOUNT_ID: "test-account",
+  CLOUDFLARE_ACCOUNT_ID: "c".repeat(32),
   CLOUDFLARE_PAGES_PROJECT: "micrantha-web",
   CLOUDFLARE_PAGES_BRANCH: "main",
+}
+const project = {
+  name: "micrantha-web",
+  production_branch: "main",
+  domains: ["micrantha.com", "www.micrantha.com"],
 }
 const goodRun = {
   head_sha: sha,
@@ -45,6 +51,7 @@ test("identity binds repository, checkout, project, branch and explicit grant", 
     { CLOUDFLARE_PRODUCTION_DEPLOY_ENABLED: "false" },
     { CLOUDFLARE_API_TOKEN: "" },
     { CLOUDFLARE_ACCOUNT_ID: "" },
+    { CLOUDFLARE_ACCOUNT_ID: "another-account" },
     { GITHUB_TOKEN: "" },
     { CLOUDFLARE_PAGES_PROJECT: "amaryllis-9ne" },
     { CLOUDFLARE_PAGES_BRANCH: "preview" },
@@ -106,19 +113,27 @@ test("API verification accepts one exact-head successful CI run", async () => {
     checkedOutHead: sha,
     fetcher: async (url, options) => {
       urls.push(url)
-      assert.equal(options.headers.Authorization, "Bearer test-gh-token")
+      assert.equal(
+        options.headers.Authorization,
+        url.includes("api.cloudflare.com")
+          ? "Bearer test-pages-token"
+          : "Bearer test-gh-token",
+      )
       return {
         ok: true,
         json: async () =>
           url.includes("/git/ref/heads/main")
             ? { object: { sha } }
-            : { workflow_runs: [{ ...goodRun }] },
+            : url.includes("api.cloudflare.com")
+              ? { success: true, result: project }
+              : { workflow_runs: [{ ...goodRun }] },
       }
     },
   })
   assert.deepEqual(result, { sha, qualified: true })
-  assert.equal(urls.length, 2)
+  assert.equal(urls.length, 3)
   assert.ok(urls[1].includes("head_sha=" + sha))
+  assert.ok(urls[2].endsWith("/pages/projects/micrantha-web"))
 })
 
 test("API verification rejects main drift before publication", async () => {
@@ -165,4 +180,47 @@ test("workflow remains manual, main-only, and checks release identity before eff
   assert.ok(validation < integrity)
   assert.ok(integrity < effectGate)
   assert.ok(effectGate < publish)
+})
+
+test("Pages project read must match domain, project and production branch", () => {
+  assert.doesNotThrow(() => assertCloudflarePagesProject(project))
+  for (const candidate of [
+    { ...project, name: "amaryllis" },
+    { ...project, production_branch: "production" },
+    { ...project, domains: ["other.example"] },
+    { ...project, domains: null },
+    null,
+  ]) {
+    assert.throws(() => assertCloudflarePagesProject(candidate))
+  }
+})
+
+test("Pages lookup must succeed before release admission", async () => {
+  for (const scenario of ["denied", "api_error", "wrong_domain"]) {
+    await assert.rejects(
+      validateCloudflareReleaseGate({
+        env,
+        checkedOutHead: sha,
+        fetcher: async (url) => {
+          if (url.includes("api.cloudflare.com")) {
+            if (scenario === "denied") return { ok: false, status: 403 }
+            return {
+              ok: true,
+              json: async () =>
+                scenario === "api_error"
+                  ? { success: false, result: project }
+                  : { success: true, result: { ...project, domains: [] } },
+            }
+          }
+          return {
+            ok: true,
+            json: async () =>
+              url.includes("/git/ref/heads/main")
+                ? { object: { sha } }
+                : { workflow_runs: [goodRun] },
+          }
+        },
+      }),
+    )
+  }
 })
