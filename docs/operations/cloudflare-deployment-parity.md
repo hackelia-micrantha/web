@@ -130,14 +130,24 @@ For local operators, `yarn deploy:cloudflare` remains a combined validate-and-pu
 
 ## Read-only production blog probe (#58)
 
+## Source-derived edge verification
+
+The read-only blog probe resolves expectations from the **candidate repository revision** using the same validated canonical MDX frontmatter and blog series definitions used to build the site. It checks _every_ published article and series, their current titles, descriptions, canonical URLs and SSR navigation links. Adding, reordering or renaming published content automatically changes the expected public graph without editing a second list of routes or article titles.
+
+Two intentionally stable structural assertions remain on the blog index: the labelled series discovery and reading-path sections, plus an ordered list linking to an article. These test that the release actually includes the navigational feature without pinning its editorial copy or the curated article sequence.
+
+Canonical expectations are also resolved from checked-in article route implementations: attributed cross-posts retain approved external canonical URLs, rather than being forced to self-canonical URLs. Unparseable cross-post adapters fail closed.
+
+The probe never derives acceptance expectations from the _live_ sitemap or HTML; that would allow an outdated deployment to validate itself. Run it from the exact source tree whose deployment is being qualified and record the source revision separately. A PASS proves observable parity with that tree, not deployment identity: authenticated Cloudflare deployment evidence is still required. The script performs GETs only to the fixed public hostname and cannot publish.
+
 After an independently approved Pages production release, run:
 
 ```sh
 node scripts/probe-production-blog.js
 ```
 
-The probe uses **only** unauthenticated public HTTPS GETs to the fixed `https://micrantha.com` hostname, requests `/blog`, both series pages, one representative article, and a deliberate unknown route. It checks HTTP status/content type, CSP and nonce pairing, `nosniff` / `DENY`, cache classification, public canonical links, SSR-only series/navigation markers, and the failure route's private no-store policy. It emits a JSON record with response sizes, SHA-256 body hashes, selected _public_ headers, and explicit failures. No secrets, Cloudflare credentials, or deployment mutation are involved.
+The probe uses **only** unauthenticated public HTTPS GETs to the fixed `https://micrantha.com` hostname, requests `/blog`, every current published article and series, and a deliberate unknown route. It checks HTTP status/content type, CSP and nonce pairing, `nosniff` / `DENY`, cache classification, public canonical links, source-derived titles/links and stable structural blog discovery/navigation assertions, and the failure route's private no-store policy. It emits a JSON record with response sizes, SHA-256 body hashes, selected _public_ headers, and explicit failures. No secrets, Cloudflare credentials, or deployment mutation are involved.
 
-**Important:** The probe verifies _observable public behavior_, not the deployed Git commit or Cloudflare project identity. It must be paired with the authenticated project/deployment evidence and exact-source release gate. A FAIL may mean pending propagation or a genuine regression; it is not safe to mark the release complete without diagnosis. Any future intentional change to blog headings, routes, or content must update this public-release contract explicitly.
+**Important:** The probe verifies _observable public behavior_, not the deployed Git commit or Cloudflare project identity. It must be paired with the authenticated project/deployment evidence and exact-source release gate. A FAIL may mean pending propagation or a genuine regression; it is not safe to mark the release complete without diagnosis. The probe follows published content automatically; intentional changes to the stable navigation structure or security policy require explicit contract changes.
 
 This probe is deliberately **not invoked as an automatic main-branch deployment**. It can be used manually as a pre/post-release comparator. Post-deployment automation, retry policy, and rollback remain separate decisions after #129's manual release is exercised.

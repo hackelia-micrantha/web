@@ -1,31 +1,97 @@
 import assert from "node:assert/strict"
 import test from "node:test"
+
+import { loadBlogContentInventory } from "../../scripts/blog-content-inventory.js"
 import {
-  BLOG_EDGE_ROUTES,
+  buildBlogEdgeContract,
+  deriveCanonicalUrlFromRouteSource,
+  loadBlogReleaseInventory,
   probeBlogEdge,
 } from "../../scripts/probe-production-blog.js"
 
-const makeResponse = (
-  url,
-  { omit, missingHeader, status, cacheControl } = {},
-) => {
-  const route = BLOG_EDGE_ROUTES.find((entry) => url.endsWith(entry.path))
-  assert.ok(route, url)
-  const nonce = "fixed-test-nonce"
-  const body =
-    '<link rel="canonical" href="' +
-    url +
-    '"/><script nonce="' +
+const first = {
+  slug: "first-note",
+  status: "published",
+  title: "First & Important Note",
+  series: { slug: "engineering-notes", order: 1 },
+}
+const standalone = {
+  slug: "standalone-note",
+  status: "published",
+  title: "Standalone Note",
+}
+const unpublished = {
+  slug: "future-note",
+  status: "draft",
+  title: "Unpublished Note",
+}
+const series = {
+  slug: "engineering-notes",
+  title: "Engineering Notes",
+  description: "A source-derived series description",
+}
+
+function makeInventory({ extraPost } = {}) {
+  const posts = [
+    first,
+    standalone,
+    unpublished,
+    ...(extraPost ? [extraPost] : []),
+  ]
+  const seriesPosts = posts
+    .filter(
+      (post) =>
+        post.status === "published" && post.series?.slug === series.slug,
+    )
+    .sort((left, right) => left.series.order - right.series.order)
+  return {
+    posts,
+    series: [series],
+    seriesPostsBySlug: new Map([[series.slug, seriesPosts]]),
+  }
+}
+
+function textHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+}
+
+function makeResponse(url, contract, options = {}) {
+  const route = contract.find((candidate) => url.endsWith(candidate.path))
+  assert.ok(route, "unexpected route " + url)
+  const nonce = "test-request-nonce"
+  const titleNodes = route.expectedText
+    .filter((value) => value !== options.omitText)
+    .map((value) => "<h2>" + textHtml(value) + "</h2>")
+    .join("")
+  const links = route.expectedLinks
+    .filter((value) => value !== options.omitLink)
+    .map((href) => '<a href="' + href + '">Open</a>')
+    .join("")
+  const sections = (route.requiredSections ?? [])
+    .filter((value) => value !== options.omitSection)
+    .map((value) => '<section aria-labelledby="' + value + '"></section>')
+    .join("")
+  const readingPath =
+    route.requiresReadingPath && !options.omitReadingPath
+      ? '<ol><li><a href="/blog/standalone-note">Read</a></li></ol>'
+      : ""
+  const html =
+    '<html><head><link rel="canonical" href="' +
+    (route.canonicalUrl ?? url) +
+    '"/></head><body><script nonce="' +
     nonce +
     '"></script>' +
-    route.expected
-      .filter((marker) => marker !== omit)
-      .map((marker) =>
-        marker.startsWith("/") ? '<a href="' + marker + '">Series</a>' : marker,
-      )
-      .join(" ")
-  return new Response(body, {
-    status: status ?? route.status,
+    titleNodes +
+    links +
+    sections +
+    readingPath +
+    (options.trailingHtml ?? "") +
+    "</body></html>"
+  return new Response(html, {
+    status: options.status ?? route.status,
     headers: {
       "content-type": "text/html; charset=utf-8",
       "content-security-policy":
@@ -33,210 +99,305 @@ const makeResponse = (
         nonce +
         "'",
       "cache-control":
-        cacheControl ??
+        options.cacheControl ??
         (route.status === 200 ? "public, max-age=60" : "private, no-store"),
       "x-content-type-options":
-        missingHeader === "nosniff" ? "invalid" : "nosniff",
+        options.missingHeader === "nosniff" ? "invalid" : "nosniff",
       "x-frame-options": "DENY",
       "cf-cache-status": "DYNAMIC",
     },
   })
 }
 
-test("every public blog SSR and failure contract passes with expected content", async () => {
-  const queries = []
-  const result = await probeBlogEdge({
+async function probeWith(overrides = {}, inventory = makeInventory()) {
+  const contract = buildBlogEdgeContract(inventory)
+  return probeBlogEdge({
+    inventory,
     fetcher: async (url, options) => {
-      queries.push(url)
       assert.equal(options.redirect, "manual")
       assert.equal(options.headers["User-Agent"], "MicranthaReleaseProbe/1.0")
-      return makeResponse(url)
+      return makeResponse(
+        url,
+        contract,
+        overrides[url.slice("https://micrantha.com".length)],
+      )
     },
   })
+}
+
+test("derives routes and full expected navigation from source content", async () => {
+  const result = await probeWith()
   assert.equal(result.result, "PASS")
-  assert.deepEqual(result.failures, [])
-  assert.equal(result.observations.length, BLOG_EDGE_ROUTES.length)
-  assert.equal(queries.length, BLOG_EDGE_ROUTES.length)
   assert.equal(
     result.scope,
-    "public-read-only-blog-edge; no-deployment-identity-attestation",
+    "source-derived-public-read-only-blog-edge; no-deployment-identity-attestation",
   )
+  assert.deepEqual(result.source, {
+    publishedPosts: 2,
+    series: 1,
+    routesChecked: 5,
+  })
+  assert.deepEqual(result.failures, [])
+  assert.equal(result.observations.length, 5)
 })
 
-test("missing new blog index SSR fails, even if legacy routes remain healthy", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) =>
-      makeResponse(url, {
-        omit: url.endsWith("/blog") ? "Recommended reading paths" : undefined,
-      }),
-  })
-  assert.equal(result.result, "FAIL")
+test("a newly published article automatically expands index and route acceptance", async () => {
+  const newPost = {
+    slug: "newly-published-note",
+    status: "published",
+    title: "Newly Published Note",
+    series: { slug: series.slug, order: 2 },
+  }
+  const inventory = makeInventory({ extraPost: newPost })
+  const routes = buildBlogEdgeContract(inventory)
+  assert.ok(routes.some((route) => route.path === "/blog/newly-published-note"))
   assert.ok(
-    result.failures.some(
-      (failure) =>
-        failure.path === "/blog" &&
-        failure.check === "missing:Recommended reading paths",
+    routes
+      .find((route) => route.path === "/blog")
+      .expectedLinks.includes("/blog/newly-published-note"),
+  )
+  assert.ok(
+    routes
+      .find((route) => route.path === "/blog/series/engineering-notes")
+      .expectedLinks.includes("/blog/newly-published-note"),
+  )
+  assert.equal((await probeWith({}, inventory)).result, "PASS")
+})
+
+test("unpublished posts must not be expected or exposed as source-derived routes", () => {
+  const routes = buildBlogEdgeContract(makeInventory())
+  assert.equal(
+    routes.some((route) => route.path.includes("future-note")),
+    false,
+  )
+  assert.ok(
+    routes.every(
+      (route) =>
+        !(route.expectedLinks ?? []).some((url) => url.includes("future-note")),
     ),
   )
 })
 
-test("missing CSP pairing, security headers, or 404 isolation fails closed", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) => {
-      if (url.endsWith("/blog"))
-        return makeResponse(url, { missingHeader: "nosniff" })
-      if (url.includes("governance-native-engineering")) {
-        const body = await makeResponse(url).text()
-        return new Response(
-          body.replaceAll(
-            'nonce="fixed-test-nonce"',
-            'nonce="wrong-html-nonce"',
-          ),
-          { status: 200, headers: makeResponse(url).headers },
-        )
-      }
-      if (url.includes("__release_probe_")) {
-        return makeResponse(url, { cacheControl: "public" })
-      }
-      return makeResponse(url)
+test("missing source-derived article links and series titles fail", async () => {
+  const result = await probeWith({
+    "/blog": { omitLink: "/blog/first-note" },
+    "/blog/series/engineering-notes": { omitText: series.title },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "missing-link:/blog/first-note",
+    ),
+  )
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "missing-text:Engineering Notes",
+    ),
+  )
+})
+
+test("blog series discovery and reading paths remain stable structural contracts", async () => {
+  const result = await probeWith({
+    "/blog": {
+      omitSection: "blog-series-heading",
+      omitReadingPath: true,
     },
   })
   assert.equal(result.result, "FAIL")
-  assert.ok(result.failures.some((failure) => failure.check === "nosniff"))
-  assert.ok(result.failures.some((failure) => failure.check === "nonce-pair"))
-  assert.ok(result.failures.some((failure) => failure.check === "404-no-store"))
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "missing-section:blog-series-heading",
+    ),
+  )
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "reading-path-navigation",
+    ),
+  )
 })
 
-test("network or unexpected status failure is evidence, never treated as success", async () => {
+test("hydration JSON cannot satisfy visible source-derived titles or links", async () => {
+  const result = await probeWith({
+    "/blog": {
+      omitText: first.title,
+      omitLink: "/blog/first-note",
+      trailingHtml:
+        '<script type="application/json">' +
+        JSON.stringify({ title: first.title, href: "/blog/first-note" }) +
+        "</script>",
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "missing-text:" + first.title,
+    ),
+  )
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.check === "missing-link:/blog/first-note",
+    ),
+  )
+})
+
+test("security headers, contradictory cache directives, and nonce mismatch fail closed", async () => {
+  const result = await probeWith({
+    "/blog": {
+      missingHeader: "nosniff",
+      cacheControl: "public, private",
+      trailingHtml: '<script nonce="wrong-nonce"></script>',
+    },
+    "/blog/__release_probe_not_a_route__": {
+      cacheControl: "public, private, no-store",
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  for (const check of [
+    "nosniff",
+    "cache-public",
+    "nonce-pair",
+    "404-no-store",
+  ]) {
+    assert.ok(
+      result.failures.some((failure) => failure.check === check),
+      check,
+    )
+  }
+})
+
+test("network failure and unexpected response status are never successes", async () => {
+  const inventory = makeInventory()
+  const contract = buildBlogEdgeContract(inventory)
   const result = await probeBlogEdge({
+    inventory,
     fetcher: async (url) => {
       if (url.endsWith("/blog"))
         throw Object.assign(new Error("unreachable"), { name: "TimeoutError" })
-      if (url.includes("governance-native-engineering")) {
-        return makeResponse(url, { status: 503 })
-      }
-      return makeResponse(url)
+      return makeResponse(url, contract, {
+        status: url.endsWith("/blog/first-note") ? 503 : undefined,
+      })
     },
   })
   assert.equal(result.result, "FAIL")
   assert.ok(result.failures.some((failure) => failure.check === "request"))
   assert.ok(result.failures.some((failure) => failure.check === "status"))
-  assert.equal(result.observations.length, BLOG_EDGE_ROUTES.length - 1)
+  assert.equal(result.observations.length, contract.length - 1)
 })
 
-test("staged editorial source path must never appear in public HTML", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) => {
-      const normal = await makeResponse(url).text()
-      const route = BLOG_EDGE_ROUTES.find((entry) => url.endsWith(entry.path))
-      return new Response(normal + " editorial/staged/unpublished/ ", {
-        status: route.status,
-        headers: makeResponse(url).headers,
-      })
-    },
+test("staged editorial path exposure fails for any public response", async () => {
+  const result = await probeWith({
+    "/blog": { trailingHtml: " editorial/staged/private-note/ " },
   })
   assert.equal(result.result, "FAIL")
-  assert.equal(
-    result.failures.filter(
+  assert.ok(
+    result.failures.some(
       (failure) => failure.check === "staged-content-exposure",
-    ).length,
-    BLOG_EDGE_ROUTES.length,
-  )
-})
-
-test("CSP pairing requires script nonce, not arbitrary HTML nonce text", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) => {
-      const response = makeResponse(url)
-      if (!url.endsWith("/blog")) return response
-      const body = await response.text()
-      return new Response(
-        body.replace(
-          '<script nonce="fixed-test-nonce"></script>',
-          '<div nonce="fixed-test-nonce"></div><script></script>',
-        ),
-        { status: 200, headers: response.headers },
-      )
-    },
-  })
-  assert.equal(result.result, "FAIL")
-  assert.ok(result.failures.some((failure) => failure.check === "nonce-pair"))
-})
-
-test("public pages and 404s reject contradictory cache directives", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) => {
-      if (url.endsWith("/blog")) {
-        return makeResponse(url, {
-          cacheControl: "private, public, max-age=60",
-        })
-      }
-      if (url.includes("__release_probe_")) {
-        return makeResponse(url, { cacheControl: "public, private, no-store" })
-      }
-      return makeResponse(url)
-    },
-  })
-  assert.equal(result.result, "FAIL")
-  assert.ok(
-    result.failures.some(
-      (failure) => failure.path === "/blog" && failure.check === "cache-public",
     ),
   )
-  assert.ok(result.failures.some((failure) => failure.check === "404-no-store"))
 })
 
-test("hydration-only text and non-anchor URLs cannot satisfy SSR acceptance", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) => {
-      const response = makeResponse(url)
-      if (!url.endsWith("/blog")) return response
-      let html = await response.text()
-      const route = BLOG_EDGE_ROUTES.find((entry) => url.endsWith(entry.path))
-      const renderedText = route.expected
-        .filter((marker) => !marker.startsWith("/"))
-        .join(" ")
-      html = html.replace(renderedText, "")
-      for (const marker of route.expected.filter((value) =>
-        value.startsWith("/"),
-      )) {
-        html = html.replace('<a href="' + marker + '">Series</a>', "")
-      }
-      html +=
-        '<script type="application/json">' +
-        JSON.stringify(route.expected) +
-        "</script>"
-      return new Response(html, { status: 200, headers: response.headers })
-    },
-  })
-  assert.equal(result.result, "FAIL")
-  assert.ok(
-    result.failures.some(
-      (failure) => failure.check === "missing:Explore the series",
+test("invalid or empty source inventories fail instead of silently passing", () => {
+  assert.throws(() =>
+    buildBlogEdgeContract({
+      posts: [],
+      series: [],
+      seriesPostsBySlug: new Map(),
+    }),
+  )
+  assert.throws(() =>
+    buildBlogEdgeContract({
+      posts: [{ slug: "../not-safe", status: "published" }],
+      series: [],
+      seriesPostsBySlug: new Map(),
+    }),
+  )
+  assert.throws(() =>
+    buildBlogEdgeContract({
+      posts: [first],
+      series: [series],
+      seriesPostsBySlug: new Map(),
+    }),
+  )
+})
+
+test("repository parser supplies real expected routes without a second slug list", async () => {
+  const inventory = await loadBlogContentInventory()
+  const routes = buildBlogEdgeContract(inventory)
+  const posts = inventory.posts.filter((post) => post.status === "published")
+  assert.equal(routes.length, 2 + inventory.series.length + posts.length)
+  assert.ok(routes.some((route) => route.path === "/blog"))
+  for (const post of posts) {
+    assert.ok(routes.some((route) => route.path === "/blog/" + post.slug))
+  }
+  for (const series of inventory.series) {
+    assert.ok(
+      routes.some((route) => route.path === "/blog/series/" + series.slug),
+    )
+  }
+})
+
+test("external crosspost canonical is derived from checked-in route source", () => {
+  const source = [
+    'import { createBlogCrosspostRoute } from "~/content/blog-crosspost-route";',
+    "const route = createBlogCrosspostRoute(",
+    '  "first-note", Content, "https://ryanjennin.gs/posts/first-note/",',
+    '  "/img/blog/first.webp", "cover",',
+    ")",
+  ].join("\n")
+  assert.equal(
+    deriveCanonicalUrlFromRouteSource(source, "first-note"),
+    "https://ryanjennin.gs/posts/first-note/",
+  )
+  assert.equal(
+    deriveCanonicalUrlFromRouteSource(
+      'createBlogMdxRoute("first-note", Content)',
+      "first-note",
+    ),
+    null,
+  )
+  assert.throws(() =>
+    deriveCanonicalUrlFromRouteSource(source, "different-slug"),
+  )
+  assert.throws(() =>
+    deriveCanonicalUrlFromRouteSource(
+      'createBlogCrosspostRoute("first-note", Content, canonicalUrl)',
+      "first-note",
     ),
   )
+})
+
+test("external canonical follows source, not a self-canonical assumption", async () => {
+  const inventory = makeInventory()
+  inventory.posts = inventory.posts.map((post) =>
+    post.slug === first.slug
+      ? { ...post, canonicalUrl: "https://ryanjennin.gs/posts/first-note/" }
+      : post,
+  )
+  assert.equal((await probeWith({}, inventory)).result, "PASS")
+  const wrongContract = buildBlogEdgeContract(makeInventory())
+  const result = await probeBlogEdge({
+    inventory,
+    fetcher: async (url) => makeResponse(url, wrongContract),
+  })
+  assert.equal(result.result, "FAIL")
   assert.ok(
     result.failures.some(
       (failure) =>
-        failure.check === "missing:/blog/series/governance-native-engineering",
+        failure.path === "/blog/first-note" && failure.check === "canonical",
     ),
   )
 })
 
-test("any mismatched script nonce rejects paired CSP evidence", async () => {
-  const result = await probeBlogEdge({
-    fetcher: async (url) => {
-      const response = makeResponse(url)
-      if (!url.endsWith("/blog")) return response
-      const html =
-        (await response.text()) + '<script nonce="wrong-nonce"></script>'
-      return new Response(html, { status: 200, headers: response.headers })
-    },
-  })
-  assert.equal(result.result, "FAIL")
-  assert.ok(
-    result.failures.some(
-      (failure) => failure.path === "/blog" && failure.check === "nonce-pair",
-    ),
-  )
+test("real source canonical projection matches each route implementation", async () => {
+  const inventory = await loadBlogReleaseInventory()
+  const routes = buildBlogEdgeContract(inventory)
+  for (const post of inventory.posts.filter(
+    (candidate) => candidate.status === "published",
+  )) {
+    const route = routes.find((entry) => entry.path === "/blog/" + post.slug)
+    assert.equal(
+      route.canonicalUrl,
+      post.canonicalUrl ?? "https://micrantha.com/blog/" + post.slug,
+    )
+  }
 })
