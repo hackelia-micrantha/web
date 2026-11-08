@@ -67,6 +67,20 @@ export async function probeBlogEdge({ fetcher = fetch } = {}) {
     const cacheControl = headers.get("cache-control") ?? ""
     const contentType = headers.get("content-type") ?? ""
     const nonce = /'nonce-([^']+)'/.exec(csp)?.[1]
+    const scriptTags = body.match(/<script\b[^>]*>/gi) ?? []
+    const noncePaired = Boolean(
+      nonce &&
+      scriptTags.some((tag) => {
+        const found = /\bnonce=(["'])([^"']+)\1/i.exec(tag)
+        return found?.[2] === nonce
+      }),
+    )
+    const cacheDirectives = new Set(
+      cacheControl
+        .split(",")
+        .map((part) => part.trim().split("=")[0].toLowerCase())
+        .filter(Boolean),
+    )
 
     const observation = {
       path,
@@ -76,10 +90,7 @@ export async function probeBlogEdge({ fetcher = fetch } = {}) {
       cacheControl,
       cfCacheStatus: headers.get("cf-cache-status"),
       contentType,
-      noncePaired:
-        status === 200
-          ? Boolean(nonce && body.includes('nonce="' + nonce + '"'))
-          : null,
+      noncePaired: status === 200 ? noncePaired : null,
     }
     observations.push(observation)
 
@@ -92,7 +103,12 @@ export async function probeBlogEdge({ fetcher = fetch } = {}) {
     if (!csp.includes("object-src 'none'")) fail("csp")
     if (body.includes("editorial/staged/")) fail("staged-content-exposure")
     if (status === 200) {
-      if (!cacheControl.includes("public")) fail("cache-public")
+      if (
+        !cacheDirectives.has("public") ||
+        cacheDirectives.has("private") ||
+        cacheDirectives.has("no-store")
+      )
+        fail("cache-public")
       if (!observation.noncePaired) fail("nonce-pair")
       if (!body.includes('<link rel="canonical" href="' + url + '"'))
         fail("canonical")
@@ -101,8 +117,9 @@ export async function probeBlogEdge({ fetcher = fetch } = {}) {
       }
     } else {
       if (
-        !cacheControl.includes("private") ||
-        !cacheControl.includes("no-store")
+        !cacheDirectives.has("private") ||
+        !cacheDirectives.has("no-store") ||
+        cacheDirectives.has("public")
       ) {
         fail("404-no-store")
       }

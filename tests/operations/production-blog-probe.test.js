@@ -138,3 +138,45 @@ test("staged editorial source path must never appear in public HTML", async () =
     BLOG_EDGE_ROUTES.length,
   )
 })
+
+test("CSP pairing requires script nonce, not arbitrary HTML nonce text", async () => {
+  const result = await probeBlogEdge({
+    fetcher: async (url) => {
+      const response = makeResponse(url)
+      if (!url.endsWith("/blog")) return response
+      const body = await response.text()
+      return new Response(
+        body.replace(
+          '<script nonce="fixed-test-nonce"></script>',
+          '<div nonce="fixed-test-nonce"></div><script></script>',
+        ),
+        { status: 200, headers: response.headers },
+      )
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(result.failures.some((failure) => failure.check === "nonce-pair"))
+})
+
+test("public pages and 404s reject contradictory cache directives", async () => {
+  const result = await probeBlogEdge({
+    fetcher: async (url) => {
+      if (url.endsWith("/blog")) {
+        return makeResponse(url, {
+          cacheControl: "private, public, max-age=60",
+        })
+      }
+      if (url.includes("__release_probe_")) {
+        return makeResponse(url, { cacheControl: "public, private, no-store" })
+      }
+      return makeResponse(url)
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(
+    result.failures.some(
+      (failure) => failure.path === "/blog" && failure.check === "cache-public",
+    ),
+  )
+  assert.ok(result.failures.some((failure) => failure.check === "404-no-store"))
+})
