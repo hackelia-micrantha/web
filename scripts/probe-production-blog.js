@@ -154,6 +154,7 @@ export function buildBlogEdgeContract(inventory) {
         ...item.posts.map((post) => post.title),
       ],
       expectedLinks: item.posts.map((post) => "/blog/" + post.slug),
+      expectedOrderedLinks: item.posts.map((post) => "/blog/" + post.slug),
     })),
     ...posts.map((post) => ({
       path: "/blog/" + post.slug,
@@ -214,6 +215,7 @@ function inspectHtml(body) {
   return {
     text: readableText,
     links: new Set(links),
+    linkSequence: links,
     sections: new Set(sections),
     readingPathLists: orderedLists.length,
   }
@@ -311,6 +313,19 @@ export async function probeBlogEdge({ fetcher = fetch, inventory } = {}) {
       }
       for (const link of expectedLinks) {
         if (!html.links.has(link)) fail("missing-link:" + link)
+      }
+      if (route.expectedOrderedLinks) {
+        const indices = route.expectedOrderedLinks.map((link) =>
+          html.linkSequence.indexOf(link),
+        )
+        if (
+          indices.some((index) => index < 0) ||
+          indices.some(
+            (index, position) => position > 0 && index <= indices[position - 1],
+          )
+        ) {
+          fail("series-order")
+        }
       }
       for (const section of route.requiredSections ?? []) {
         if (!html.sections.has(section)) fail("missing-section:" + section)

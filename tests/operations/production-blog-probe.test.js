@@ -196,6 +196,43 @@ test("missing source-derived article links and series titles fail", async () => 
   )
 })
 
+test("series article ordering follows canonical frontmatter dynamically", async () => {
+  const inventory = makeInventory({
+    extraPost: {
+      slug: "second-series-post",
+      status: "published",
+      title: "Second Series Post",
+      series: { slug: series.slug, order: 2 },
+    },
+  })
+  const contract = buildBlogEdgeContract(inventory)
+  const route = contract.find(
+    (candidate) => candidate.path === "/blog/series/" + series.slug,
+  )
+  assert.deepEqual(route.expectedOrderedLinks, [
+    "/blog/first-note",
+    "/blog/second-series-post",
+  ])
+  const result = await probeBlogEdge({
+    inventory,
+    fetcher: async (url) => {
+      const response = makeResponse(url, contract)
+      if (!url.endsWith("/blog/series/engineering-notes")) return response
+      const body = await response.text()
+      const reversed = body
+        .replace('href="/blog/first-note"', 'href="/blog/order-placeholder"')
+        .replace('href="/blog/second-series-post"', 'href="/blog/first-note"')
+        .replace(
+          'href="/blog/order-placeholder"',
+          'href="/blog/second-series-post"',
+        )
+      return new Response(reversed, { status: 200, headers: response.headers })
+    },
+  })
+  assert.equal(result.result, "FAIL")
+  assert.ok(result.failures.some((failure) => failure.check === "series-order"))
+})
+
 test("blog series discovery and reading paths remain stable structural contracts", async () => {
   const result = await probeWith({
     "/blog": {
