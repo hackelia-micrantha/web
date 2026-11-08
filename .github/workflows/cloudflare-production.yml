@@ -25,10 +25,21 @@ jobs:
     timeout-minutes: 45
 
     steps:
-      - name: Check out immutable candidate
+      - name: Refuse non-main dispatch and malformed candidate before checkout
+        env:
+          DISPATCH_REF: ${{ github.ref }}
+          RELEASE_SHA: ${{ inputs.release_sha }}
+        run: |
+          set -euo pipefail
+          test "$DISPATCH_REF" = "refs/heads/main"
+          [[ "$RELEASE_SHA" =~ ^[a-f0-9]{40}$ ]]
+
+      # Never checkout a user-selected ref before the source identity gate.
+      # Any unexpected main movement is rejected by the exact-head gate below.
+      - name: Check out current main for admission
         uses: actions/checkout@v5
         with:
-          ref: ${{ inputs.release_sha }}
+          ref: main
           persist-credentials: false
 
       - name: Activate repository-owned toolchain
@@ -47,6 +58,12 @@ jobs:
 
       - name: Validate candidate with pinned deployment contracts
         run: yarn deploy:cloudflare:verify
+
+      - name: Refuse tracked release-contract changes after validation
+        run: |
+          set -euo pipefail
+          git diff --quiet HEAD -- scripts/cloudflare-deployment-gate.js package.json yarn.lock wrangler.toml .github/workflows/cloudflare-production.yml
+          git diff --cached --quiet HEAD -- scripts/cloudflare-deployment-gate.js package.json yarn.lock wrangler.toml .github/workflows/cloudflare-production.yml
 
       - name: Recheck exact main and CI evidence immediately before effect
         env: *release-gate-environment

@@ -4,6 +4,12 @@ import { pathToFileURL } from "node:url"
 
 export function assertReleaseIdentity({ env, checkedOutHead }) {
   assert.equal(env.GITHUB_REPOSITORY, "hackelia-micrantha/web")
+  assert.equal(env.GITHUB_REF, "refs/heads/main")
+  assert.equal(env.GITHUB_EVENT_NAME, "workflow_dispatch")
+  assert.equal(
+    env.GITHUB_WORKFLOW_REF,
+    "hackelia-micrantha/web/.github/workflows/cloudflare-production.yml@refs/heads/main",
+  )
   assert.match(env.DEPLOY_SHA ?? "", /^[0-9a-f]{40}$/)
   assert.equal(
     checkedOutHead,
