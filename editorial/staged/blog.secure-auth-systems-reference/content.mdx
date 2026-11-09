@@ -306,7 +306,7 @@ Protocols define how identity is asserted and delegated across systems. They do 
 **OAuth 2.0 (Authorization Framework)**
 
 - purpose: delegated access to APIs
-- outputs: access tokens (and refresh tokens)
+- outputs: access tokens; refresh tokens are optional
 - does **not** define identity by itself
 
 **OpenID Connect (OIDC)**
@@ -440,7 +440,7 @@ Trade-offs:
 ### Practical “Strong” Token Model
 
 - short-lived access tokens
-- rotating refresh tokens with reuse detection
+- optional refresh tokens with rotation/reuse detection or sender constraint when issued
 - server-side session tracking
 - optional PoP for high-risk APIs
 
@@ -448,7 +448,7 @@ Trade-offs:
 
 ## Biometrics Done Correctly
 
-Correct model:
+Example device-bound model:
 
 biometric → unlock hardware key → sign challenge → server verifies
 
@@ -458,8 +458,8 @@ biometric → unlock stored token
 
 Properties:
 
-- biometric never leaves device
-- server trusts cryptographic proof
+- local biometric verification data stays on the device
+- the server validates a signed assertion for the relying party
 - the server verifies an authenticator's cryptographic assertion; **device binding is a separate assurance property**, not guaranteed by every passkey
 
 > **Biometric verification is local user verification, not independently sufficient server-side authorization.**
@@ -507,7 +507,7 @@ Recommended hybrid:
 - **phishing** — weak auth factors: passkeys / phishing-resistant MFA
 - **code interception** — redirect flow: PKCE
 - **access token theft** — client storage/logging: short TTL / PoP
-- **refresh token theft** — lifecycle design: rotation + reuse detection
+- **refresh token theft** — lifecycle design: rotation/reuse detection or sender constraint
 - **session hijack** — no session control: session state + revocation
 - **replay** — bearer model: PoP
 - **mobile tampering** — trusting client: backend enforcement
@@ -623,7 +623,7 @@ Authentication systems benefit from applying structured secure design principles
 ### Secure by Default
 
 - short-lived tokens
-- rotation enabled
+- refresh-token rotation or sender constraint for public clients when issued
 - strong hashing enforced
 
 ### Fail Securely
