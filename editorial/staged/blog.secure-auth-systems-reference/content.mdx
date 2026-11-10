@@ -460,10 +460,10 @@ Properties:
 
 - local biometric verification data stays on the device
 - the server validates a signed assertion for the relying party
-- the server verifies an authenticator's cryptographic assertion; **device binding is a separate assurance property**, not guaranteed by every passkey
+- **device binding is a separate assurance property**, not guaranteed by every passkey
 
-> **Biometric verification is local user verification, not independently sufficient server-side authorization.**
-> In passkey or hardware-backed challenge flows, the server trusts the cryptographic assertion, not a biometric sample.
+> **Local biometric verification is not independently sufficient server-side authentication or authorization.**
+> In passkey or hardware-backed challenge flows, the server validates a signed assertion rather than a biometric sample.
 
 A **synced passkey** may be synchronized by a credential provider to other devices; its use is not proof of a specific physical device or a non-exportable hardware key. Device binding needs an explicitly selected authenticator assurance policy and evidence where available.
 
