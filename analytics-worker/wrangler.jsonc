@@ -7,6 +7,6 @@
   "observability": {
     "enabled": true,
     "logs": { "enabled": true, "head_sampling_rate": 0.01 },
-    "traces": { "enabled": true, "head_sampling_rate": 0.01 }
-  }
+    "traces": { "enabled": true, "head_sampling_rate": 0.01 },
+  },
 }
