@@ -115,7 +115,7 @@ const privacyEnabled = await read("/privacy")
 assert.equal(privacyEnabled.response.status, 200)
 assert.match(
   privacyEnabled.body,
-  /Product analytics is enabled for this rendered deployment\./,
+  /Application-controlled analytics is enabled for this rendered deployment\./,
 )
 assert.match(
   privacyEnabled.body,
@@ -126,9 +126,13 @@ const privacyDisabled = await read("/privacy", { analyticsBinding: null })
 assert.equal(privacyDisabled.response.status, 200)
 assert.match(
   privacyDisabled.body,
-  /Product analytics is disabled for this rendered deployment\./,
+  /Application-controlled analytics is disabled for this rendered deployment\./,
 )
 assert.doesNotMatch(privacyDisabled.body, /data-website-id=/)
+assert.match(
+  privacyDisabled.body,
+  /Cloudflare Web Analytics is independently enabled for/,
+)
 
 const contactRedirect = await read("/contact")
 assert.equal(contactRedirect.response.status, 301)

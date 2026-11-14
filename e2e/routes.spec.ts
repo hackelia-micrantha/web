@@ -117,8 +117,13 @@ test("/privacy retains the tailored long-form policy copy", async ({
   ).toBeVisible()
   await expect(
     page.getByText(
-      "Product analytics is disabled for this rendered deployment.",
+      "Application-controlled analytics is disabled for this rendered deployment.",
     ),
+  ).toBeVisible()
+  await expect(
+    page.getByText("Cloudflare Web Analytics is independently enabled for", {
+      exact: false,
+    }),
   ).toBeVisible()
   await expect(page.getByText("Cookies and Browser Storage")).toBeVisible()
   await expect(page.getByText("Contact", { exact: true })).toBeVisible()
