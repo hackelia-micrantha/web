@@ -49,7 +49,10 @@ test("Worker serves only explicit sites, versions, and health", async () => {
   assert.match(js.headers.get("content-type"), /^application\/javascript/)
   assert.equal(js.headers.get("x-content-type-options"), "nosniff")
   assert.equal(js.headers.get("access-control-allow-origin"), "*")
-  assert.equal(js.headers.get("cache-control"), "public, max-age=300, must-revalidate")
+  assert.equal(
+    js.headers.get("cache-control"),
+    "public, max-age=300, must-revalidate",
+  )
   assert.match(await js.text(), /"provider":"none"/)
 
   for (const path of [
@@ -98,15 +101,16 @@ test("GA4 is gated by explicit consent and existing SDK ownership", () => {
 
   api.setConsent("granted")
   assert.equal(scripts.length, 1)
-  assert.match(scripts[0].src, /^https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-TEST1234$/)
+  assert.match(
+    scripts[0].src,
+    /^https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-TEST1234$/,
+  )
   api.setConsent("granted")
   assert.equal(scripts.length, 1)
 
-  const entries = () =>
-    Array.from(window.dataLayer, (args) => Array.from(args))
-  assert.deepEqual(Array.from(entries()[1][2] ? Object.entries(entries()[1][2]) : []), [
-    ["send_page_view", false],
-  ])
+  const entries = () => Array.from(window.dataLayer, (args) => Array.from(args))
+  assert.equal(entries()[1][0], "config")
+  assert.equal(entries()[1][2].send_page_view, false)
 
   const initialCount = entries().length
   api.page("/about")
@@ -120,7 +124,10 @@ test("GA4 is gated by explicit consent and existing SDK ownership", () => {
     "page_view",
     "cta_click",
   ])
-  assert.equal(entries()[initialCount][2].page_location, "https://micrantha.com/about")
+  assert.equal(
+    entries()[initialCount][2].page_location,
+    "https://micrantha.com/about",
+  )
   assert.equal(entries()[initialCount + 1][2].placement, "hero")
 
   api.setConsent("denied")
