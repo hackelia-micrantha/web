@@ -120,10 +120,12 @@ test("GA4 is gated by explicit consent and existing SDK ownership", () => {
   api.track("cta_click", { email: "private@example.com" })
   api.track("unknown_event")
   assert.equal(entries().length, initialCount + 2)
-  assert.deepEqual(entries().slice(-2).map((event) => event[1]), [
-    "page_view",
-    "cta_click",
-  ])
+  assert.deepEqual(
+    entries()
+      .slice(-2)
+      .map((event) => event[1]),
+    ["page_view", "cta_click"],
+  )
   assert.equal(
     entries()[initialCount][2].page_location,
     "https://micrantha.com/about",
