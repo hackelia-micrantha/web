@@ -28,8 +28,7 @@ export function lenticelClient(config) {
       const script = document.createElement("script")
       script.async = true
       script.src =
-        "https://www.googletagmanager.com/gtag/js?id=" +
-        encodeURIComponent(id)
+        "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id)
 
       window.dataLayer = []
       window.gtag = function () {
