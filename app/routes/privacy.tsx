@@ -70,9 +70,9 @@ const Privacy = () => {
           {analyticsEnabled ? (
             <>
               <p>
-                Application-controlled analytics is enabled for this rendered deployment. The
-                site is configured to load the optional pageview analytics
-                script from <i>analytics.micrantha.com</i>.
+                Application-controlled analytics is enabled for this rendered
+                deployment. The site is configured to load the optional pageview
+                analytics script from <i>analytics.micrantha.com</i>.
               </p>
               <p>
                 The application supplies a website identifier but does not add
@@ -83,9 +83,10 @@ const Privacy = () => {
             </>
           ) : (
             <p>
-              Application-controlled analytics is disabled for this rendered deployment. No
-              analytics binding was present when this page was generated, so the
-              application does not emit its optional analytics script.
+              Application-controlled analytics is disabled for this rendered
+              deployment. No analytics binding was present when this page was
+              generated, so the application does not emit its optional analytics
+              script.
             </p>
           )}
           <p>
@@ -133,10 +134,10 @@ const Privacy = () => {
             route, cache, and protect requests.
           </p>
           <p>
-            The application-controlled optional analytics provider receives pageview-related data only
-            when analytics is configured and its client is loaded. Other related
-            Micrantha services may use different providers for their specific
-            functions.
+            The application-controlled optional analytics provider receives
+            pageview-related data only when analytics is configured and its
+            client is loaded. Other related Micrantha services may use different
+            providers for their specific functions.
           </p>
         </section>
 
