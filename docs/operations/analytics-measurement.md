@@ -35,6 +35,22 @@ Repository search currently finds no:
 These are source-code facts. They are not claims about reverse proxies,
 Cloudflare, the deployed Umami version/configuration, or database retention.
 
+## Separately managed Cloudflare Web Analytics
+
+The Cloudflare `micrantha.com` zone has RUM enabled and its Web Analytics
+site is configured for automatic injection. A read-only GraphQL query on
+2026-11-14 recorded browser page-load events for `micrantha.com` during
+November 7–14, 2026. This is observed aggregate collection, but not a
+page-by-page injected-HTML, CSP, or browser-network verification.
+
+Omitting the application analytics binding disables only the optional
+Umami script. It does **not** disable Cloudflare's independent edge-managed
+Web Analytics. The privacy route distinguishes these two mechanisms.
+
+Live document/network verification, any historical provider/database and
+backup inventory, and the final retention and disablement disposition
+remain governed by `hackelia-micrantha/hackelia-micrantha#64`.
+
 ## Measurement questions
 
 The current pageview-only integration exists to answer two bounded questions:
