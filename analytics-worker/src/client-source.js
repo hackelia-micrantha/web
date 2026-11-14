@@ -95,5 +95,5 @@ export function lenticelClient(config) {
 
 export function createClientScript(config) {
   // The client is self-contained: no imports, dynamic eval, or runtime config.
-  return `;${lenticelClient.toString()}(${JSON.stringify(config)});\n`
+  return `;(${lenticelClient.toString()})(${JSON.stringify(config)});\n`
 }
