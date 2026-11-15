@@ -123,7 +123,10 @@ assert.doesNotMatch(
   analyticsDisabledHome.response.headers.get("content-security-policy") ?? "",
   /analytics\.micrantha\.com/,
 )
-assertDocumentHeaders(analyticsDisabledHome.response, analyticsDisabledHome.body)
+assertDocumentHeaders(
+  analyticsDisabledHome.response,
+  analyticsDisabledHome.body,
+)
 
 const privacyEnabled = await read("/privacy")
 assert.equal(privacyEnabled.response.status, 200)
