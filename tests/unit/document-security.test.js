@@ -41,7 +41,7 @@ test("production policy does not trust the optional analytics origin when disabl
 
   assert.match(policy, /connect-src 'self'/)
   assert.match(policy, /script-src 'self' 'nonce-nonce-value'/)
-  assert.doesNotMatch(policy, /analytics\\.micrantha\\.com/)
+  assert.doesNotMatch(policy, /analytics\.micrantha\.com/)
 })
 
 test("development policy permits only the development runtime additions", () => {
@@ -78,7 +78,7 @@ test("document headers apply cross-origin and transport hardening", () => {
   assert.equal(CSP_NONCE_HEADER, "X-CSP-Nonce")
   assert.doesNotMatch(
     production["Content-Security-Policy"],
-    /analytics\\.micrantha\\.com/,
+    /analytics\.micrantha\.com/,
   )
   assert.equal(production["Cross-Origin-Opener-Policy"], "same-origin")
   assert.equal(production["Cross-Origin-Resource-Policy"], "same-origin")
