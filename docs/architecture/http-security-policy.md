@@ -28,7 +28,8 @@ The only cross-origin executable/network trust in the normal document policy is
 
 - `script-src` allows the optional application-managed analytics client only
   when a response nonce and an analytics deployment binding are present;
-- `connect-src` permits that client's submissions only while the binding is enabled;
+- `connect-src` permits that client's submissions only while the binding is
+  enabled;
 - `img-src` is restricted to `'self' data:`; the site does not require the
   previous wildcard `https:` image allowance.
 
