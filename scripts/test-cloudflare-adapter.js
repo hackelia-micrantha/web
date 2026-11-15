@@ -113,7 +113,7 @@ assertDocumentHeaders(home.response, home.body)
 
 assert.match(
   home.response.headers.get("content-security-policy") ?? "",
-  /analytics\\.micrantha\\.com/,
+  /analytics\.micrantha\.com/,
 )
 
 const analyticsDisabledHome = await read("/", { analyticsBinding: null })
@@ -121,7 +121,7 @@ assert.equal(analyticsDisabledHome.response.status, 200)
 assert.doesNotMatch(analyticsDisabledHome.body, /data-website-id=/)
 assert.doesNotMatch(
   analyticsDisabledHome.response.headers.get("content-security-policy") ?? "",
-  /analytics\\.micrantha\\.com/,
+  /analytics\.micrantha\.com/,
 )
 assertDocumentHeaders(analyticsDisabledHome.response, analyticsDisabledHome.body)
 
