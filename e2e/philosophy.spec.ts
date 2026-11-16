@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 
 test("/philosophy exposes the core manifesto and vector diagram", async ({
   page,
