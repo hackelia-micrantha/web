@@ -22,7 +22,8 @@ test("production policy binds executable scripts to the response nonce", () => {
   assert.match(policy, /img-src 'self' data:/)
   assert.doesNotMatch(policy, /img-src[^;]*https:/)
   assert.match(policy, /style-src 'self' 'unsafe-inline'/)
-  assert.match(policy, /connect-src 'self' https:\/\/analytics\.micrantha\.com/)
+  assert.match(policy, /connect-src 'self'/)
+  assert.doesNotMatch(policy, /connect-src[^;]*analytics\.micrantha\.com/)
   assert.match(
     policy,
     /script-src 'self' 'nonce-nonce-value' https:\/\/analytics\.micrantha\.com/,
