@@ -87,9 +87,11 @@ const Privacy = () => {
             site rendering or navigation.
           </p>
           <p>
-            Analytics is deployment configuration. After an operator changes the
-            binding, cached pages must expire or be invalidated before the
-            rendered state can be treated as current.
+            The Phenology browser script is part of the site application by
+            default. Disabling or changing it requires a reviewed source
+            change and production release. Previously cached pages must expire
+            or be invalidated before the published state can be treated as
+            current. Cloudflare measurement is managed independently.
           </p>
         </section>
 
