@@ -79,7 +79,7 @@ export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
 
 const ANALYTICS_ENABLED_HEADER = "X-Micrantha-Analytics-Enabled"
 
-type State = { analyticsId: string | null; nonce: string }
+type State = { analyticsClientEnabled: boolean; nonce: string }
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const runtime = resolveRuntimePlatform(context, request)
@@ -87,13 +87,13 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const nonce = globalThis.crypto.randomUUID()
 
   return new Response(
-    JSON.stringify({ analyticsId: runtime.analyticsId, nonce }),
+    JSON.stringify({ analyticsClientEnabled: runtime.analyticsClientEnabled, nonce }),
     {
       headers: {
         "Cache-Control": cacheControl,
         "Content-Type": "application/json; charset=utf-8",
         [CSP_NONCE_HEADER]: nonce,
-        [ANALYTICS_ENABLED_HEADER]: runtime.analyticsId ? "1" : "0",
+        [ANALYTICS_ENABLED_HEADER]: runtime.analyticsClientEnabled ? "1" : "0",
       },
     },
   )
@@ -164,7 +164,7 @@ export default function App() {
         <script nonce={state?.nonce} src="/navigation.js" defer />
         <ScrollRestoration nonce={state?.nonce} />
         <Scripts nonce={state?.nonce} />
-        <Analytics id={state?.analyticsId} nonce={state?.nonce} />
+        <Analytics enabled={state?.analyticsClientEnabled} nonce={state?.nonce} />
         {isDev ? <LiveReload nonce={state?.nonce} /> : null}
       </body>
     </html>
