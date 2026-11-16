@@ -61,8 +61,8 @@
       }
     ],
     "externalRequests": {
-      "count": 0,
-      "transferBytes": 0
+      "count": 1,
+      "transferBytes": 2048
     },
     "timings": {
       "enforcement": "advisory",
