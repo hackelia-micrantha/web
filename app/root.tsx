@@ -80,16 +80,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cacheControl = getRequestCacheControl(request)
   const nonce = globalThis.crypto.randomUUID()
 
-  return new Response(
-    JSON.stringify({ nonce }),
-    {
-      headers: {
-        "Cache-Control": cacheControl,
-        "Content-Type": "application/json; charset=utf-8",
-        [CSP_NONCE_HEADER]: nonce,
-      },
+  return new Response(JSON.stringify({ nonce }), {
+    headers: {
+      "Cache-Control": cacheControl,
+      "Content-Type": "application/json; charset=utf-8",
+      [CSP_NONCE_HEADER]: nonce,
     },
-  )
+  })
 }
 
 export default function App() {
