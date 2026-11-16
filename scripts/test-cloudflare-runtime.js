@@ -18,7 +18,6 @@ const wranglerExecutable = path.join(
   process.platform === "win32" ? "wrangler.cmd" : "wrangler",
 )
 const host = "127.0.0.1"
-const analyticsId = "cloudflare-runtime-contract"
 const runtimeLog = []
 
 async function getAvailablePort() {
@@ -117,7 +116,7 @@ const runtime = spawn(
     "--local-protocol",
     "http",
     "--var",
-    `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
+    "MICRANTHA_ANALYTICS_CLIENT_ENABLED:true",
     "--var",
     "MICRANTHA_RUNTIME_CONTRACT:enabled",
     "--show-interactive-dev-session=false",
@@ -283,7 +282,11 @@ try {
   assert.equal(home.response.status, 200)
   assert.match(home.body, /<!DOCTYPE html>/i)
   assert.match(home.body, /id="content"/)
-  assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
+  assert.match(
+    home.body,
+    /https:\/\/analytics\.micrantha\.com\/v1\/sites\/micrantha-web\.js/,
+  )
+  assert.doesNotMatch(home.body, /data-website-id=|\/umami\.js/)
   assert.match(home.body, /https:\/\/micrantha\.com/)
   assertDocumentHeaders(home.response, home.body)
 
