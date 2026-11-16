@@ -28,6 +28,8 @@ The only cross-origin executable/network trust in the normal document policy is
 
 - `script-src` allows the default Phenology browser script when a response
   nonce is present; its hostname and release must be independently qualified;
+  the script also pins the reviewed inert v1 bytes with SHA-384 SRI and
+  anonymous CORS, so future Worker byte changes require coordinated review;
 - `connect-src` remains same-origin only: the reviewed Phenology v1 adapter
   has no event exporter or cross-origin data egress;
 - `img-src` is restricted to `'self' data:`; the site does not require the
