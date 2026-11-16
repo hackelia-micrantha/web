@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { expect, test } from "./fixtures"
+import { expect, phenologyClientURL, test } from "./fixtures"
 import type { Response } from "@playwright/test"
 
 type BrowserRuntimeBudgets = {
@@ -72,6 +72,14 @@ for (const documentBudget of runtimeBudgets.documents) {
 
     const documentResponse = await page.goto(documentBudget.pathname)
     await page.waitForLoadState("networkidle")
+
+    // A single audited versioned script request is part of the default
+    // browser contract. No other external request may be normalized away.
+    expect([...externalRequests]).toEqual([phenologyClientURL])
+    expect(externalResponses.map((response) => response.url())).toEqual([
+      phenologyClientURL,
+    ])
+    expect(externalResponses[0].status()).toBe(200)
 
     expect(documentResponse?.status()).toBe(200)
     const documentBody = await documentResponse?.body()
