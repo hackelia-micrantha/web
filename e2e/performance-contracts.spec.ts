@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 import type { Response } from "@playwright/test"
 
 type BrowserRuntimeBudgets = {
