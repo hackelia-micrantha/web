@@ -1,201 +1,113 @@
 # Analytics measurement contract
 
-## Scope
+## Scope and measurement questions
 
-This document defines the repository-owned product/usage measurement contract
-for `micrantha.com`.
+This is the repository-owned product/usage measurement contract for
+`micrantha.com`, layered on the Micrantha observability standard adopted via
+`hackelia-micrantha/.github#148`.
 
-It layers on the Micrantha observability standard/profile merged through
-`hackelia-micrantha/.github#148` at
-`704fa3da3c35dc0dd80ebed6524f6f9eb696cb68`.
+There are two accepted questions:
 
-Product/usage analytics is separate from operational observability, security
-evidence, and application authority.
+1. Which public pages receive enough use to justify maintenance and prominence?
+2. Do major navigation/content changes change which public pages are reached?
 
-## Current implementation
+Cloudflare-managed Web Analytics already reports aggregate page-load data.
+Phenology v1 **does not** collect data or answer these questions on its own.
+Do not add custom events, identity or a second provider without a concrete
+unanswered question and separate privacy/operational review.
 
-The site has one optional analytics integration:
+## Owned browser integration
 
-- component: `app/components/analytics.tsx`;
-- script origin: `https://analytics.micrantha.com/umami.js`;
-- repository-supplied analytics data: website ID only;
-- enabled only when `MICRANTHA_ANALYTICS_ID` or the compatible
-  `ANALYTICS_ID` binding is present;
-- absent binding means no analytics script is rendered.
-
-Repository search currently finds no:
-
-- custom analytics events;
-- `umami.identify` or equivalent user identity calls;
-- session replay;
-- fingerprinting library;
-- application cookie API;
-- `localStorage`/`sessionStorage` analytics identity.
-
-These are source-code facts. They are not claims about reverse proxies,
-Cloudflare, the deployed Umami version/configuration, or database retention.
-
-## Separately managed Cloudflare Web Analytics
-
-The Cloudflare `micrantha.com` zone has RUM enabled and its Web Analytics
-site is configured for automatic injection. A read-only GraphQL query on
-2026-11-14 recorded browser page-load events for `micrantha.com` during
-November 7–14, 2026. This is observed aggregate collection, but not a
-page-by-page injected-HTML, CSP, or browser-network verification.
-
-Omitting the application analytics binding disables only the optional
-Umami script. It does **not** disable Cloudflare's independent edge-managed
-Web Analytics. The privacy route distinguishes these two mechanisms.
-
-Live document/network verification, any historical provider/database and
-backup inventory, and the final retention and disablement disposition
-remain governed by `hackelia-micrantha/hackelia-micrantha#64`.
-
-## Measurement questions
-
-The current pageview-only integration exists to answer two bounded questions:
-
-1. **Which public pages receive enough use to justify continued maintenance and
-   prominence?**
-2. **Do major navigation/content changes materially change which public pages
-   are reached?**
-
-No additional measurement is justified by this contract.
-
-If a future decision requires another question, define the question first and
-review the minimum new event/property set before instrumenting it.
-
-## Minimum measurement
-
-The application intentionally emits no custom event payload.
-
-The maximum repository-owned collection surface is therefore:
+The optional client component is `app/components/analytics.tsx`. It references
+the **Micrantha-owned Phenology contract**, not an Umami or other vendor SDK:
 
 ```text
-page rendered
-  -> optional provider script
-  -> automatic pageview behavior of the verified deployed provider
+https://analytics.micrantha.com/v1/sites/micrantha-web.js
 ```
 
-The application does not add:
+The URL is a **future deployment boundary**, not a live integration guarantee.
+Phenology currently owns source code only; it has no deployed Worker, custom
+domain or approved consumer. Its reviewed v1 script defines `window.phenology`
+with inert `page`, `track`, and `setConsent` methods and sends no data.
 
-- account/user identity;
-- email/contact identity;
-- arbitrary click payloads;
-- form contents;
-- prompt/content bodies;
-- session replay;
-- custom device fingerprinting;
-- unrestricted application state.
+Web renders that script only when its runtime binding
+`MICRANTHA_ANALYTICS_CLIENT_ENABLED` is the exact string `true`.
+No binding, `false`, malformed values or legacy `MICRANTHA_ANALYTICS_ID` /
+`ANALYTICS_ID` website-ID values **cannot enable the client**. No website ID
+is placed in the HTML, and `/umami.js` is no longer referenced by Web.
 
-Provider-default pageview fields must be verified against the deployed
-`analytics.micrantha.com` version/configuration before being described as
-current production behavior.
+**Keep the new binding unset in production.** Activating it before the
+Phenology Worker is independently qualified and owns the exact hostname
+would direct browser requests to the unrelated pre-existing wildcard origin.
 
-## Identity and aggregation
+Application CSP conditionally admits the Phenology **script origin only**
+when the client is enabled; it does not grant cross-origin `connect-src`
+egress. The v1 adapter needs no network export permission. Changing CSP,
+provider configuration or network egress needs another security review.
 
-The application has no account/user analytics identity.
+## Independently managed Cloudflare Web Analytics
 
-Any provider-derived session identity, IP processing, user-agent processing,
-referrer handling, path/title capture, screen/language metadata, or
-generalization/aggregation is a deployment concern and must be documented from
-the actual deployed provider configuration.
+The Cloudflare zone has RUM/Web Analytics configured separately for automatic
+beacon injection. Read-only Cloudflare GraphQL queries observed aggregate
+page-load events for `micrantha.com` in November 2026. Those provider counts
+are not event-level HAR evidence, unique-person counts or proof of a specific
+injected script's successful execution after every release.
 
-Do not add application-level identity merely to improve analytics continuity.
+Disabling the Phenology client does **not** disable Cloudflare measurement.
+The public privacy page must maintain this separation. Current browser
+response HTML, CSP/beacon execution and provider-specific retention still
+require a real network/browser receipt under
+`hackelia-micrantha/hackelia-micrantha#64`.
 
-## Disablement and failure semantics
+## Data, identity and privacy boundaries
 
-### Operator disablement
+Web adds no custom analytics events, user/account identity, form content,
+session replay, fingerprinting, analytics cookies, or persistent local browser
+analytics identifiers. Phenology v1 has no provider integration, event
+collector, database, storage binding or exporter. Its `setConsent` API is
+reserved and **not** an effective consent/withdrawal mechanism.
 
-Omit `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID`, then allow existing
-browser/edge cache entries to expire or explicitly invalidate the affected
-cached HTML before treating the deployment as analytics-disabled.
+Cloudflare may separately process network information, aggregate pageviews or
+security metadata. Vendor-specific identity, IP handling, cookies, retention,
+deletion, proxy handling and residency require evidence from the deployed
+configuration; this source contract does not assert them.
 
-Verify the post-invalidation/expiry deployment by requesting representative
-public pages and confirming:
+## Disablement and rollout gates
 
-- no analytics script element is present;
-- no request to the analytics script origin occurs from this integration;
-- rendering, navigation, SEO, accessibility, and content remain functional.
+For the Web-controlled Phenology script, disabling means omitting or setting
+`MICRANTHA_ANALYTICS_CLIENT_ENABLED` to anything other than `true`.
+Previously cached HTML may remain until expiry or explicit invalidation.
+Validate the actual rendered HTML and CSP, not only repository variables.
 
-The repository's cache policy can retain previously rendered HTML after a
-binding change, so removing the binding is the configuration step, not by
-itself proof that already-cached documents have stopped referencing analytics.
+For any **future** activation:
 
-Analytics is therefore optional deployment configuration, not application
-authority.
+1. Verify the exact Phenology Worker artifact, hostname, TLS/routing and
+   rollback, including that the wildcard DigitalOcean origin is not receiving
+   the intended browser script traffic.
+2. Complete independent code/security review, Workerd/browser contract,
+   script integrity/CSP, negative egress, consent and privacy acceptance.
+3. Obtain separate authorization for the Worker/domain, consumer binding and
+   release; do not infer it from a merged PR or this document.
+4. Verify uncached `/` and `/privacy` HTML, CSP, browser requests, console,
+   caching and site operation with the new binding both enabled and disabled.
+5. Keep rendering, navigation, accessibility and SEO independent of analytics
+   script availability. Do not add queues or client-side recovery machinery.
 
-### Provider/export failure
+The repository currently has no end-user analytics toggle. If one is needed,
+review Cloudflare's separate capabilities and actual provider behavior first
+rather than implementing a new consent store speculatively.
 
-Failure to load or deliver analytics must not change:
+## Historic Umami and other provider retention
 
-- route rendering;
-- navigation;
-- security policy decisions;
-- user-facing content correctness;
-- deployment success criteria unrelated to analytics.
+Removing the legacy script and environment bindings does **not** establish that
+the old DigitalOcean origin or its attached volume lack historical analytics
+data. Before asserting deletion/retention completion or removing infrastructure,
+inventory authorized service/container configuration, databases, volume
+contents, snapshots, independent backups, expiry and applicable privacy duties.
+These remain open under
+`hackelia-micrantha/hackelia-micrantha#64`; do not destroy data from source
+code evidence alone.
 
-No retry queue, offline analytics store, or custom delivery protocol is owned by
-this repository.
-
-## End-user/browser opt-out
-
-The repository currently provides no analytics-specific end-user toggle.
-
-That is an explicit unresolved product/privacy decision, not an accidental
-contract.
-
-Before adding one, verify the deployed provider's supported opt-out/DNT
-semantics and decide whether:
-
-- browser DNT should be honored by the integration;
-- a site-local preference is required;
-- operator-level disablement is sufficient for the intended deployment/privacy
-  posture.
-
-Do not invent a custom consent/identity store solely for analytics.
-
-## Retention and deletion
-
-The repository does not own or currently encode analytics database retention.
-
-Before privacy copy makes a concrete retention/deletion claim, deployment
-evidence must identify:
-
-- deployed Umami version;
-- data store/operator;
-- retention window;
-- deletion mechanism;
-- backup retention interaction;
-- proxy/IP handling;
-- data residency if material.
-
-The absence of a repository retention value must not be represented as a
-retention guarantee.
-
-## Privacy-page relationship
-
-`app/routes/privacy.tsx` must describe deployed behavior, not provider defaults
-or generic privacy-policy boilerplate.
-
-Do not update provider-specific cookie, identity, IP, retention, or deletion
-claims from this document alone. First attach deployment evidence to
-`hackelia-micrantha/web#166`.
-
-## Change control
-
-Any change that introduces one of the following requires an explicit measurement
-question and privacy review:
-
-- custom events/properties;
-- user/account identity;
-- persistent browser identifiers;
-- session replay;
-- fingerprinting;
-- form/content capture;
-- new analytics provider;
-- remote export destination change;
-- retention expansion.
-
-Prefer the existing provider/configuration when it can satisfy the declared
-question. Do not build a Micrantha analytics backend merely for conformance.
+Any future provider integration, remote export destination, custom events,
+identity or retention expansion requires a new measurement question, privacy
+review, bounded security changes and explicit effect authority.
