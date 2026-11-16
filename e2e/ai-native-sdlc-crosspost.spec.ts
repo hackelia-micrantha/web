@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 
 const articlePath = "/blog/ai-native-sdlc-governed-software-delivery"
 const canonicalUrl =
