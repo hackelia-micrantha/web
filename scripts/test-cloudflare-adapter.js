@@ -5,14 +5,14 @@ process.env.NODE_ENV = "production"
 const { onRequest } = await import("../functions/[[path]].js")
 
 const origin = "https://micrantha.example"
-const analyticsId = "adapter-contract-test"
 
 async function request(
   pathname,
   {
     userAgent = "adapter-contract",
     method = "GET",
-    analyticsBinding = analyticsId,
+    analyticsBinding = true,
+    legacyAnalyticsId = null,
   } = {},
 ) {
   const request = new Request(new URL(pathname, origin), {
@@ -24,11 +24,10 @@ async function request(
 
   return onRequest({
     request,
-    env: analyticsBinding
-      ? {
-          MICRANTHA_ANALYTICS_ID: analyticsBinding,
-        }
-      : {},
+    env: {
+      MICRANTHA_ANALYTICS_CLIENT_ENABLED: analyticsBinding ? "true" : "false",
+      ...(legacyAnalyticsId ? { MICRANTHA_ANALYTICS_ID: legacyAnalyticsId } : {}),
+    },
     params: {},
     data: {},
     functionPath: "[[path]]",
@@ -108,7 +107,11 @@ const home = await read("/")
 assert.equal(home.response.status, 200)
 assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
-assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
+assert.match(
+  home.body,
+  /https:\/\/analytics\.micrantha\.com\/v1\/sites\/micrantha-web\.js/,
+)
+assert.doesNotMatch(home.body, /data-website-id=|\/umami\.js/)
 assertDocumentHeaders(home.response, home.body)
 
 assert.match(
@@ -116,7 +119,7 @@ assert.match(
   /analytics\.micrantha\.com/,
 )
 
-const analyticsDisabledHome = await read("/", { analyticsBinding: null })
+const analyticsDisabledHome = await read("/", { analyticsBinding: false })
 assert.equal(analyticsDisabledHome.response.status, 200)
 assert.doesNotMatch(analyticsDisabledHome.body, /data-website-id=/)
 assert.doesNotMatch(
@@ -128,24 +131,35 @@ assertDocumentHeaders(
   analyticsDisabledHome.body,
 )
 
+const legacyOnlyHome = await read("/", {
+  analyticsBinding: false,
+  legacyAnalyticsId: "old-umami-site",
+})
+assert.doesNotMatch(legacyOnlyHome.body, /v1\/sites\/micrantha-web\.js/)
+assert.doesNotMatch(
+  legacyOnlyHome.response.headers.get("content-security-policy") ?? "",
+  /analytics\.micrantha\.com/,
+)
+
 const privacyEnabled = await read("/privacy")
 assert.equal(privacyEnabled.response.status, 200)
 assert.match(
   privacyEnabled.body,
-  /Application-controlled analytics is enabled for this rendered deployment\./,
+  /The optional Micrantha Phenology client is enabled for this/,
 )
 assert.match(
   privacyEnabled.body,
-  new RegExp(`data-website-id="${analyticsId}"`),
+  /https:\/\/analytics\.micrantha\.com\/v1\/sites\/micrantha-web\.js/,
 )
 
-const privacyDisabled = await read("/privacy", { analyticsBinding: null })
+const privacyDisabled = await read("/privacy", { analyticsBinding: false })
 assert.equal(privacyDisabled.response.status, 200)
 assert.match(
   privacyDisabled.body,
   /Application-controlled analytics is disabled for this rendered deployment\./,
 )
-assert.doesNotMatch(privacyDisabled.body, /data-website-id=/)
+assert.doesNotMatch(privacyDisabled.body, /data-website-id=|\/umami\.js/)
+assert.doesNotMatch(privacyDisabled.body, /v1\/sites\/micrantha-web\.js/)
 assert.match(
   privacyDisabled.body,
   /Cloudflare Web Analytics is independently enabled for/,
