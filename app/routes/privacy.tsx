@@ -62,9 +62,9 @@ const Privacy = () => {
           <p>
             Micrantha Web includes the Micrantha-owned Phenology browser client
             by default. Its reviewed v1 adapter is inert: it does not collect
-            pageviews, export events, or connect to an analytics provider.
-            The client is served from <i>analytics.micrantha.com</i> after
-            the corresponding Worker and hostname are approved and deployed.
+            pageviews, export events, or connect to an analytics provider. The
+            client is served from <i>analytics.micrantha.com</i> after the
+            corresponding Worker and hostname are approved and deployed.
           </p>
           <p>
             The application does not supply a provider website identifier,
