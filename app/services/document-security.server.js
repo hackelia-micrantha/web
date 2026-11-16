@@ -41,7 +41,6 @@ export function buildContentSecurityPolicy({
   const scriptSources = ["'self'", `'nonce-${nonce}'`]
 
   if (analyticsEnabled) {
-    connectSources.push(ANALYTICS_ORIGIN)
     scriptSources.push(ANALYTICS_ORIGIN)
   }
 
