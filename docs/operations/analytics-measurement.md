@@ -18,7 +18,7 @@ unanswered question and separate privacy/operational review.
 
 ## Owned browser integration
 
-The optional client component is `app/components/analytics.tsx`. It references
+The default client component is `app/components/analytics.tsx`. It references
 the **Micrantha-owned Phenology contract**, not an Umami or other vendor SDK:
 
 ```text
@@ -30,20 +30,18 @@ Phenology currently owns source code only; it has no deployed Worker, custom
 domain or approved consumer. Its reviewed v1 script defines `window.phenology`
 with inert `page`, `track`, and `setConsent` methods and sends no data.
 
-Web renders that script only when its runtime binding
-`MICRANTHA_ANALYTICS_CLIENT_ENABLED` is the exact string `true`.
-No binding, `false`, malformed values or legacy `MICRANTHA_ANALYTICS_ID` /
-`ANALYTICS_ID` website-ID values **cannot enable the client**. No website ID
-is placed in the HTML, and `/umami.js` is no longer referenced by Web.
+Web includes this script by default without provider-specific ID or an
+enablement flag. Legacy `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID` values are
+ignored by the browser component. No `data-website-id` or `/umami.js` is
+emitted in the page.
 
-**Keep the new binding unset in production.** Activating it before the
-Phenology Worker is independently qualified and owns the exact hostname
-would direct browser requests to the unrelated pre-existing wildcard origin.
+**Do not merge or release Web before the Phenology Worker owns the exact
+hostname.** A premature release would request a JavaScript file from the
+pre-existing DigitalOcean wildcard instead of reviewed Phenology code.
 
-Application CSP conditionally admits the Phenology **script origin only**
-when the client is enabled; it does not grant cross-origin `connect-src`
-egress. The v1 adapter needs no network export permission. Changing CSP,
-provider configuration or network egress needs another security review.
+Application CSP admits the Phenology script origin with the document nonce.
+`connect-src` remains same-origin only; the v1 adapter needs no cross-origin
+data egress. CSP, provider and script-integrity changes need separate review.
 
 ## Independently managed Cloudflare Web Analytics
 
@@ -53,7 +51,7 @@ page-load events for `micrantha.com` in November 2026. Those provider counts
 are not event-level HAR evidence, unique-person counts or proof of a specific
 injected script's successful execution after every release.
 
-Disabling the Phenology client does **not** disable Cloudflare measurement.
+The Phenology client does **not** replace or disable Cloudflare measurement.
 The public privacy page must maintain this separation. Current browser
 response HTML, CSP/beacon execution and provider-specific retention still
 require a real network/browser receipt under
@@ -74,10 +72,10 @@ configuration; this source contract does not assert them.
 
 ## Disablement and rollout gates
 
-For the Web-controlled Phenology script, disabling means omitting or setting
-`MICRANTHA_ANALYTICS_CLIENT_ENABLED` to anything other than `true`.
-Previously cached HTML may remain until expiry or explicit invalidation.
-Validate the actual rendered HTML and CSP, not only repository variables.
+Phenology is a default browser dependency once approved, not an operator
+toggle. Disabling it requires a reviewed source change and production release.
+Previously cached HTML may remain until expiry or explicit invalidation;
+validate the actual rendered HTML and CSP, not just repository state.
 
 For any **future** activation:
 
@@ -86,10 +84,10 @@ For any **future** activation:
    the intended browser script traffic.
 2. Complete independent code/security review, Workerd/browser contract,
    script integrity/CSP, negative egress, consent and privacy acceptance.
-3. Obtain separate authorization for the Worker/domain, consumer binding and
-   release; do not infer it from a merged PR or this document.
+3. Obtain separate authorization for Worker/domain activation and the Web
+   production release; do not infer it from a merged PR or this document.
 4. Verify uncached `/` and `/privacy` HTML, CSP, browser requests, console,
-   caching and site operation with the new binding both enabled and disabled.
+   caching and site operation with the Phenology client included by default.
 5. Keep rendering, navigation, accessibility and SEO independent of analytics
    script availability. Do not add queues or client-side recovery machinery.
 
