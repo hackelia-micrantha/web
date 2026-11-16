@@ -111,6 +111,23 @@ assert.match(home.body, /id="content"/)
 assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body)
 
+assert.match(
+  home.response.headers.get("content-security-policy") ?? "",
+  /analytics\.micrantha\.com/,
+)
+
+const analyticsDisabledHome = await read("/", { analyticsBinding: null })
+assert.equal(analyticsDisabledHome.response.status, 200)
+assert.doesNotMatch(analyticsDisabledHome.body, /data-website-id=/)
+assert.doesNotMatch(
+  analyticsDisabledHome.response.headers.get("content-security-policy") ?? "",
+  /analytics\.micrantha\.com/,
+)
+assertDocumentHeaders(
+  analyticsDisabledHome.response,
+  analyticsDisabledHome.body,
+)
+
 const privacyEnabled = await read("/privacy")
 assert.equal(privacyEnabled.response.status, 200)
 assert.match(

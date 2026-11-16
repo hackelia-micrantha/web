@@ -26,11 +26,16 @@ pairing for rendered documents.
 The only cross-origin executable/network trust in the normal document policy is
 `https://analytics.micrantha.com`:
 
-- `script-src` allows the analytics client only when a response nonce is also
-  present;
-- `connect-src` permits analytics submissions;
+- `script-src` allows the optional application-managed analytics client only
+  when a response nonce and an analytics deployment binding are present;
+- `connect-src` permits that client's submissions only while the binding is
+  enabled;
 - `img-src` is restricted to `'self' data:`; the site does not require the
   previous wildcard `https:` image allowance.
+
+Cloudflare-managed Web Analytics is configured separately at the edge.
+Its measured page-load traffic does not grant or require permanent application
+CSP trust for the dormant Umami endpoint.
 
 Adding another executable or network origin is a security-policy change and
 should include a reason, tests and ownership.
