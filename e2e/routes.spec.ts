@@ -117,7 +117,7 @@ test("/privacy retains the tailored long-form policy copy", async ({
   ).toBeVisible()
   await expect(
     page.getByText(
-      "Application-controlled analytics is disabled for this rendered deployment.",
+      "Micrantha Web includes the Micrantha-owned Phenology browser client",
     ),
   ).toBeVisible()
   await expect(
