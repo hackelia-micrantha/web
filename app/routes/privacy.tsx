@@ -1,5 +1,4 @@
 import type { MetaFunction } from "@remix-run/node"
-import { useRouteLoaderData } from "@remix-run/react"
 import { PageTitle } from "~/components"
 import { buildPageMeta } from "~/utils/seo"
 
@@ -10,14 +9,7 @@ export const meta: MetaFunction = () =>
     path: "/privacy",
   })
 
-type RootState = {
-  analyticsClientEnabled?: boolean
-}
-
 const Privacy = () => {
-  const rootState = useRouteLoaderData<RootState>("root")
-  const analyticsEnabled = rootState?.analyticsClientEnabled === true
-
   return (
     <div>
       <PageTitle
@@ -67,29 +59,19 @@ const Privacy = () => {
 
         <section className="space-y-3">
           <h2 className="text-xl">Product Analytics</h2>
-          {analyticsEnabled ? (
-            <>
-              <p>
-                The optional Micrantha Phenology client is enabled for this
-                rendered deployment. Its reviewed v1 adapter is inert: it does
-                not collect pageviews, export events, or connect to an analytics
-                provider. The client is served through <i>analytics.micrantha.com</i>.
-              </p>
-              <p>
-                The application does not transmit a provider website identifier
-                or add custom analytics events, application user identity,
-                session replay, fingerprinting, form contents, or an
-                application-owned analytics browser-storage mechanism.
-              </p>
-            </>
-          ) : (
-            <p>
-              Application-controlled analytics is disabled for this rendered
-              deployment. No explicit Phenology client enablement was present
-              when this page was generated, so the application does not emit
-              its optional analytics script.
-            </p>
-          )}
+          <p>
+            Micrantha Web includes the Micrantha-owned Phenology browser client
+            by default. Its reviewed v1 adapter is inert: it does not collect
+            pageviews, export events, or connect to an analytics provider.
+            The client is served from <i>analytics.micrantha.com</i> after
+            the corresponding Worker and hostname are approved and deployed.
+          </p>
+          <p>
+            The application does not supply a provider website identifier,
+            custom analytics events, application user identity, session replay,
+            fingerprinting, form contents, or an application-owned analytics
+            browser-storage mechanism.
+          </p>
           <p>
             Cloudflare Web Analytics is independently enabled for{" "}
             <i>micrantha.com</i>. It records browser page loads and performance
