@@ -76,8 +76,8 @@ const Privacy = () => {
             Cloudflare Web Analytics is independently enabled for{" "}
             <i>micrantha.com</i>. It records browser page loads and performance
             through a Cloudflare-managed beacon on eligible pages, independently
-            of the Micrantha-owned Phenology browser client. Changing or removing
-            that client does not disable Cloudflare measurement.
+            of the Micrantha-owned Phenology browser client. Changing or
+            removing that client does not disable Cloudflare measurement.
           </p>
           <p>
             Provider-side session identity, IP and user-agent processing,
@@ -88,10 +88,10 @@ const Privacy = () => {
           </p>
           <p>
             The Phenology browser script is part of the site application by
-            default. Disabling or changing it requires a reviewed source
-            change and production release. Previously cached pages must expire
-            or be invalidated before the published state can be treated as
-            current. Cloudflare measurement is managed independently.
+            default. Disabling or changing it requires a reviewed source change
+            and production release. Previously cached pages must expire or be
+            invalidated before the published state can be treated as current.
+            Cloudflare measurement is managed independently.
           </p>
         </section>
 
@@ -120,9 +120,9 @@ const Privacy = () => {
           </p>
           <p>
             The Phenology v1 client has no provider integration or event
-            exporter. Any future provider connection requires a separate
-            privacy and deployment decision. Other related Micrantha services
-            may use different providers for their specific functions.
+            exporter. Any future provider connection requires a separate privacy
+            and deployment decision. Other related Micrantha services may use
+            different providers for their specific functions.
           </p>
         </section>
 
