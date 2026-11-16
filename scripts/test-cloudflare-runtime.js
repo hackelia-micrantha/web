@@ -116,8 +116,6 @@ const runtime = spawn(
     "--local-protocol",
     "http",
     "--var",
-    "MICRANTHA_ANALYTICS_CLIENT_ENABLED:true",
-    "--var",
     "MICRANTHA_RUNTIME_CONTRACT:enabled",
     "--show-interactive-dev-session=false",
   ],
