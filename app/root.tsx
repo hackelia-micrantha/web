@@ -27,7 +27,6 @@ import {
   CSP_NONCE_HEADER,
   buildDocumentSecurityHeaders,
 } from "./services/document-security.server"
-import { resolveRuntimePlatform } from "./services/platform.server"
 import { buildSiteMeta } from "./utils/seo"
 
 export const links: LinksFunction = () => [
@@ -77,8 +76,7 @@ export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
 
 type State = { nonce: string }
 
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const runtime = resolveRuntimePlatform(context, request)
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cacheControl = getRequestCacheControl(request)
   const nonce = globalThis.crypto.randomUUID()
 
