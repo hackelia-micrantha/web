@@ -284,6 +284,12 @@ try {
     home.body,
     /https:\/\/analytics\.micrantha\.com\/v1\/sites\/micrantha-web\.js/,
   )
+  assert.ok(
+    home.body.includes('integrity="sha384-s7W4Rqhd9Bym5x4+9q8KNBPgnLrhzPIOItA5tX2MwfaHOMbU9smTCVdVAdfLn2M/"'),
+    "Phenology must use the reviewed static v1 script SRI",
+  )
+  assert.match(home.body, /crossorigin="anonymous"/)
+  assert.match(home.body, /referrerpolicy="no-referrer"/)
   assert.doesNotMatch(home.body, /data-website-id=|\/umami\.js/)
   assert.match(home.body, /https:\/\/micrantha\.com/)
   assertDocumentHeaders(home.response, home.body)
