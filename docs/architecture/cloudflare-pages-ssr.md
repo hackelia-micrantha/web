@@ -129,12 +129,14 @@ Per-response CSP nonces require the HTML document and CSP header to remain one c
 
 Runtime configuration is resolved through the Pages Function context and request environment. Secrets and bindings are not committed.
 
-The optional Phenology browser client is controlled by the explicit
-`MICRANTHA_ANALYTICS_CLIENT_ENABLED=true` binding. It defaults to disabled,
-and legacy `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID` values never enable it.
-Enabling this flag requires separate authorization after the Phenology Worker
-owns `analytics.micrantha.com`, its browser contract is verified, and privacy
-and CSP behavior are accepted. Cloudflare-managed RUM is independent.
+Micrantha Web includes the Phenology browser adapter by default, without
+provider-specific website identifiers or an analytics enablement setting.
+Cloudflare RUM/Web Analytics is independently configured and controlled.
+
+**Release dependency:** this Web revision must not be merged or published until
+an independently qualified Phenology Worker owns `analytics.micrantha.com`,
+including validated TLS/routing, script integrity, CSP and rollback. The
+existing wildcard still routes to the legacy DigitalOcean origin.
 
 Adding a new runtime binding requires documentation of:
 
