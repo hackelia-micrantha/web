@@ -26,12 +26,16 @@ pairing for rendered documents.
 The only cross-origin executable/network trust in the normal document policy is
 `https://analytics.micrantha.com`:
 
-- `script-src` allows the optional Phenology script only when a response nonce
-  and explicit `MICRANTHA_ANALYTICS_CLIENT_ENABLED=true` binding are present;
+- `script-src` allows the default Phenology browser script when a response
+  nonce is present; its hostname and release must be independently qualified;
 - `connect-src` remains same-origin only: the reviewed Phenology v1 adapter
   has no event exporter or cross-origin data egress;
 - `img-src` is restricted to `'self' data:`; the site does not require the
   previous wildcard `https:` image allowance.
+
+The default inclusion is a source contract, not authority to run the legacy
+DigitalOcean wildcard origin. Do not merge or release the Web browser script
+until Phenology owns the exact `analytics.micrantha.com` hostname.
 
 Cloudflare-managed Web Analytics is configured separately at the edge.
 Its measured page-load traffic does not grant or require permanent application
