@@ -129,7 +129,14 @@ Per-response CSP nonces require the HTML document and CSP header to remain one c
 
 Runtime configuration is resolved through the Pages Function context and request environment. Secrets and bindings are not committed.
 
-The analytics identifier is optional. Missing analytics configuration must not prevent rendering. Adding a new runtime binding requires documentation of:
+The optional Phenology browser client is controlled by the explicit
+`MICRANTHA_ANALYTICS_CLIENT_ENABLED=true` binding. It defaults to disabled,
+and legacy `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID` values never enable it.
+Enabling this flag requires separate authorization after the Phenology Worker
+owns `analytics.micrantha.com`, its browser contract is verified, and privacy
+and CSP behavior are accepted. Cloudflare-managed RUM is independent.
+
+Adding a new runtime binding requires documentation of:
 
 - its owner;
 - preview and production behavior;
