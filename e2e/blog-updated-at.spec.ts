@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 
 const articlePath = "/blog/recursive-governance-and-agent-workflows"
 const modifiedTime = "2026-08-03T00:00:00Z"
