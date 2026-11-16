@@ -61,7 +61,6 @@ export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
     ? (errorHeaders.get("Cache-Control") ?? PRIVATE_NO_STORE_CACHE_CONTROL)
     : (loaderHeaders.get("Cache-Control") ?? PRIVATE_NO_STORE_CACHE_CONTROL)
   const nonce = loaderHeaders.get(CSP_NONCE_HEADER)
-  const analyticsEnabled = loaderHeaders.get(ANALYTICS_ENABLED_HEADER) === "1"
   const isDev =
     typeof process !== "undefined"
       ? process.env.NODE_ENV === "development"
@@ -71,15 +70,12 @@ export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
     ...buildDocumentSecurityHeaders({
       nonce,
       isDevelopment: isDev,
-      analyticsEnabled,
     }),
     "Cache-Control": cacheControl,
   }
 }
 
-const ANALYTICS_ENABLED_HEADER = "X-Micrantha-Analytics-Enabled"
-
-type State = { analyticsClientEnabled: boolean; nonce: string }
+type State = { nonce: string }
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const runtime = resolveRuntimePlatform(context, request)
@@ -87,13 +83,12 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const nonce = globalThis.crypto.randomUUID()
 
   return new Response(
-    JSON.stringify({ analyticsClientEnabled: runtime.analyticsClientEnabled, nonce }),
+    JSON.stringify({ nonce }),
     {
       headers: {
         "Cache-Control": cacheControl,
         "Content-Type": "application/json; charset=utf-8",
         [CSP_NONCE_HEADER]: nonce,
-        [ANALYTICS_ENABLED_HEADER]: runtime.analyticsClientEnabled ? "1" : "0",
       },
     },
   )
@@ -164,7 +159,7 @@ export default function App() {
         <script nonce={state?.nonce} src="/navigation.js" defer />
         <ScrollRestoration nonce={state?.nonce} />
         <Scripts nonce={state?.nonce} />
-        <Analytics enabled={state?.analyticsClientEnabled} nonce={state?.nonce} />
+        <Analytics nonce={state?.nonce} />
         {isDev ? <LiveReload nonce={state?.nonce} /> : null}
       </body>
     </html>
