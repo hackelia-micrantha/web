@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 
 test("skip link moves focus to the main content", async ({ page }) => {
   await page.goto("/")
