@@ -75,9 +75,9 @@ const Privacy = () => {
           <p>
             Cloudflare Web Analytics is independently enabled for{" "}
             <i>micrantha.com</i>. It records browser page loads and performance
-            through a Cloudflare-managed beacon on eligible pages, separately
-            from the optional application analytics script. Disabling the
-            application integration does not disable Cloudflare measurement.
+            through a Cloudflare-managed beacon on eligible pages, independently
+            of the Micrantha-owned Phenology browser client. Changing or removing
+            that client does not disable Cloudflare measurement.
           </p>
           <p>
             Provider-side session identity, IP and user-agent processing,
@@ -119,8 +119,8 @@ const Privacy = () => {
             route, cache, and protect requests.
           </p>
           <p>
-            The optional Phenology v1 client has no provider integration or
-            event exporter. Any future provider connection requires a separate
+            The Phenology v1 client has no provider integration or event
+            exporter. Any future provider connection requires a separate
             privacy and deployment decision. Other related Micrantha services
             may use different providers for their specific functions.
           </p>
