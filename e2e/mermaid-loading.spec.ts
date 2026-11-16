@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 
 test("loads Mermaid only after a diagram route mounts", async ({
   page,
