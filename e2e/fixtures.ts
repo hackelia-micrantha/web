@@ -22,13 +22,16 @@ const inertPhenologyClient = `(() => {
 
 export const test = base.extend({
   page: async ({ page }, use) => {
-    await page.route(phenologyClientURL, (route) =>
-      route.fulfill({
+    await page.route("https://analytics.micrantha.com/**", (route) => {
+      if (route.request().url() !== phenologyClientURL) {
+        return route.abort("blockedbyclient")
+      }
+      return route.fulfill({
         status: 200,
         contentType: "application/javascript; charset=utf-8",
         body: inertPhenologyClient,
-      }),
-    )
+      })
+    })
     await use(page)
   },
 })
