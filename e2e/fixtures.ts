@@ -5,7 +5,7 @@ export type { Locator, Page } from "@playwright/test"
 // The default Phenology source is not deployed yet. Intercept this exact
 // versioned URL before navigation to avoid executing the legacy wildcard
 // origin in browser tests. This stub is not a Worker qualification receipt.
-const phenologyClientURL =
+export const phenologyClientURL =
   "https://analytics.micrantha.com/v1/sites/micrantha-web.js"
 
 const inertPhenologyClient = `(() => {
