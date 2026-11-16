@@ -11,7 +11,6 @@ test("production policy binds executable scripts to the response nonce", () => {
   const policy = buildContentSecurityPolicy({
     nonce: "nonce-value",
     isDevelopment: false,
-    analyticsEnabled: true,
   })
 
   assert.match(policy, /default-src 'self'/)
@@ -31,18 +30,6 @@ test("production policy binds executable scripts to the response nonce", () => {
   assert.doesNotMatch(policy, /unsafe-eval/)
   assert.doesNotMatch(policy, /\bws:/)
   assert.doesNotMatch(policy, /\bwss:/)
-})
-
-test("production policy does not trust the optional analytics origin when disabled", () => {
-  const policy = buildContentSecurityPolicy({
-    nonce: "nonce-value",
-    isDevelopment: false,
-    analyticsEnabled: false,
-  })
-
-  assert.match(policy, /connect-src 'self'/)
-  assert.match(policy, /script-src 'self' 'nonce-nonce-value'/)
-  assert.doesNotMatch(policy, /analytics\.micrantha\.com/)
 })
 
 test("development policy permits only the development runtime additions", () => {
@@ -73,11 +60,10 @@ test("document headers apply cross-origin and transport hardening", () => {
   const production = buildDocumentSecurityHeaders({
     nonce: "production-nonce",
     isDevelopment: false,
-    analyticsEnabled: false,
   })
 
   assert.equal(CSP_NONCE_HEADER, "X-CSP-Nonce")
-  assert.doesNotMatch(
+  assert.match(
     production["Content-Security-Policy"],
     /analytics\.micrantha\.com/,
   )
