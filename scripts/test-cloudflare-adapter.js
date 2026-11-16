@@ -25,7 +25,9 @@ async function request(
   return onRequest({
     request,
     env: {
-      MICRANTHA_ANALYTICS_CLIENT_ENABLED: analyticsBinding ? "true" : "false",
+      ...(analyticsBinding === null
+        ? {}
+        : { MICRANTHA_ANALYTICS_CLIENT_ENABLED: analyticsBinding ? "true" : "false" }),
       ...(legacyAnalyticsId ? { MICRANTHA_ANALYTICS_ID: legacyAnalyticsId } : {}),
     },
     params: {},
@@ -132,7 +134,7 @@ assertDocumentHeaders(
 )
 
 const legacyOnlyHome = await read("/", {
-  analyticsBinding: false,
+  analyticsBinding: null,
   legacyAnalyticsId: "old-umami-site",
 })
 assert.doesNotMatch(legacyOnlyHome.body, /v1\/sites\/micrantha-web\.js/)
