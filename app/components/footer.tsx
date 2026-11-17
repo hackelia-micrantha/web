@@ -45,11 +45,15 @@ export const Footer = () => {
         <div className="flex w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-gray-600">
           <Link to="/services">Services</Link>
           <Link to="/solutions">Solutions</Link>
+          <Link to="/research">Research</Link>
           <Link to="/blog">Blog</Link>
           <Link to="/support">Support</Link>
           <Link to="/security">Security</Link>
           <Link to="/privacy">Privacy</Link>
           <Link to="/philosophy">Philosophy</Link>
+          <ExternalLink href="https://github.com/sponsors/hackelia-micrantha">
+            Sponsor
+          </ExternalLink>
         </div>
 
         {fortune ? (
