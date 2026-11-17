@@ -54,7 +54,7 @@ The limits preserve deliberate headroom above the current build rather than trac
 
 ## Browser runtime budgets
 
-Playwright enforces document-body and external-request budgets for the representative routes above. The homepage is also measured in the pinned mobile project. The local contract permits no cross-origin requests because analytics is disabled without an explicit deployment binding.
+Playwright enforces document-body and external-request budgets for the representative routes above. The homepage is also measured in the pinned mobile project. The local contract permits no cross-origin requests; the application does not include a browser analytics client.
 
 Navigation timing values are attached as advisory JSON evidence:
 
