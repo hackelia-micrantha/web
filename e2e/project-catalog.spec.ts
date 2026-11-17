@@ -7,8 +7,18 @@ import {
 } from "../app/data/project-catalog"
 
 const expectedCoreTaxonomy = {
-  solution: ["anthesis", "dubnium", "envuscator"],
-  laboratory: ["achillea", "myosotis", "repora"],
+  solution: ["anthesis", "dubnium", "envuscator", "veil"],
+  laboratory: [
+    "achillea",
+    "myosotis",
+    "repora",
+    "invokrum",
+    "keylix",
+    "modolia",
+    "testule",
+    "sandcastle",
+    "outermesh",
+  ],
 } as const
 
 test("core ecosystem projects retain canonical classifications", () => {
@@ -73,4 +83,13 @@ test("canonical project semantics come from the reviewed registry snapshot", () 
     role: "platform",
   })
   expect(projectBySlug("myosotis").summary).toContain("field-operated AI")
+})
+
+test("MUSICPKG presents its public specification without canonical project claims", () => {
+  expect(projectBySlug("musicpkg-specification")).toMatchObject({
+    name: "MUSICPKG",
+    source: "presentation-only",
+    classification: "laboratory",
+    url: "https://github.com/hackelia-micrantha/musicpkg-community",
+  })
 })

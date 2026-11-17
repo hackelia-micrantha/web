@@ -130,7 +130,7 @@ test("core article content remains usable without JavaScript", async ({
     ).toBeVisible()
     await expect(
       page.getByText(
-        "Deployable systems, distributions, tools, and platforms.",
+        "Systems, distributions, tools, and platforms.",
       ),
     ).toBeVisible()
   } finally {

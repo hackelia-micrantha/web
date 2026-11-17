@@ -115,7 +115,7 @@ assert.deepEqual(
     slug: "mobuild",
     summary:
       "Unclassified canonical projects cannot enter the current catalogue.",
-    url: "/invokrum",
+    url: "/mobuild",
     architectureRole: "Invalid unclassified catalogue entry",
   })
   assert.throws(

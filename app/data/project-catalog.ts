@@ -92,7 +92,7 @@ export const portfolioDispositions = presentation.portfolioDispositions
 
 export const projectCollectionDescriptions = {
   solution:
-    "Micrantha deployable systems, distributions, tools, and platforms for governed agentic development, mobile engineering, and secure delivery.",
+    "Micrantha systems, distributions, tools, and platforms for governed agentic development, mobile engineering, and secure delivery.",
   laboratory:
     "Micrantha testbeds and experimental projects that validate contracts, integrations, and emerging engineering capabilities.",
 } as const satisfies Record<ProjectClassification, string>
