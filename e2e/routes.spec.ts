@@ -102,6 +102,28 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   ).toHaveCount(0)
 })
 
+test("/compost preserves historical project context", async ({ page }) => {
+  await page.goto("/compost")
+
+  await expect(
+    page.getByRole("heading", { name: "Laboratory Compost", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "Earlier experiments, retired implementations, and ideas that continue to inform new work.",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Sandbox", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/ideas helped shape the later Sandcastle/),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "The Garden", exact: true }),
+  ).toBeVisible()
+})
+
 test("/privacy retains the tailored long-form policy copy", async ({
   page,
 }) => {
