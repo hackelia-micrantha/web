@@ -102,10 +102,9 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   ]) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
   }
-  await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
-    "href",
-    "/compost",
-  )
+  await expect(
+    page.getByRole("main").getByRole("link", { name: "Compost" }),
+  ).toHaveAttribute("href", "/compost")
   await expect(
     page.getByRole("heading", { name: "Project Anthesis", exact: true }),
   ).toHaveCount(0)

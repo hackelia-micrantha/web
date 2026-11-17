@@ -171,17 +171,32 @@ export const Navigation = () => {
             <div className="flex flex-col gap-1">
               {navSections.map((section) =>
                 "links" in section ? (
-                  <div
+                  <details
                     key={section.id}
-                    role="group"
-                    aria-label={section.label}
-                    className="border-t border-slate-200 pt-2"
+                    data-nav-group
+                    name="mobile-navigation-groups"
+                    className="group/mobile-section border-t border-slate-200"
                   >
-                    <p className="px-3 text-xs font-semibold text-slate-600">
+                    <summary
+                      aria-controls={`mobile-${section.id}`}
+                      className={`flex cursor-pointer list-none items-center justify-between rounded-xl px-3 py-3 text-sm font-medium [&::-webkit-details-marker]:hidden ${
+                        section.links.some((link) => isActive(link.to))
+                          ? "bg-slate-100 text-slate-950"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                      }`}
+                    >
                       {section.label}
-                    </p>
-                    <div className="pl-3">{section.links.map(panelLink)}</div>
-                  </div>
+                      <span
+                        aria-hidden="true"
+                        className="text-xs transition-transform group-open/mobile-section:rotate-180"
+                      >
+                        ▾
+                      </span>
+                    </summary>
+                    <div id={`mobile-${section.id}`} className="pl-3">
+                      {section.links.map(panelLink)}
+                    </div>
+                  </details>
                 ) : (
                   panelLink(section)
                 ),

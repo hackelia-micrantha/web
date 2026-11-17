@@ -21,10 +21,21 @@ for (const navigation of navigations) {
     }
   }
 
+  navigation.addEventListener("toggle", () => {
+    if (navigation.open) return
+
+    for (const child of navigation.querySelectorAll(
+      "details[data-nav-group]",
+    )) {
+      child.open = false
+    }
+  })
+
   navigation.addEventListener("keydown", (event) => {
     if (event.key !== "Escape" || !navigation.open) return
 
     event.preventDefault()
+    event.stopPropagation()
     closeNavigation(true)
   })
 

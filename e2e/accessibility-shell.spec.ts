@@ -78,31 +78,45 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   await page.goto("/")
   const navigation = page.getByRole("navigation", { name: "Primary" })
   const disclosure = navigation.locator("details[data-mobile-navigation]")
-  const trigger = disclosure.locator("summary")
+  const trigger = disclosure.locator(":scope > summary")
 
   await expect(trigger).toHaveAccessibleName("Navigation menu")
   await trigger.focus()
   await page.keyboard.press("Enter")
   await expect(disclosure).toHaveAttribute("open", "")
 
-  const solutionsLink = navigation.getByRole("link", {
-    name: "Solutions",
-    exact: true,
-  })
+  const projects = disclosure.locator("#mobile-projects-navigation")
+  const projectsTrigger = disclosure.locator(
+    'summary[aria-controls="mobile-projects-navigation"]',
+  )
+  const aboutTrigger = disclosure.locator(
+    'summary[aria-controls="mobile-about-navigation"]',
+  )
+  await expect(projects).toBeHidden()
+  await expect(projectsTrigger).toBeVisible()
+  await expect(aboutTrigger).toBeVisible()
+  await projectsTrigger.focus()
+  await page.keyboard.press("Enter")
+  const solutionsLink = projects.getByRole("link", { name: "Solutions" })
   await expect(solutionsLink).toBeVisible()
-  await expect(
-    navigation.getByRole("group", { name: "Projects" }),
-  ).toBeVisible()
-  await expect(navigation.getByRole("group", { name: "About" })).toBeVisible()
+  await aboutTrigger.click()
+  await expect(projects).toBeHidden()
+  await projectsTrigger.click()
+  await expect(solutionsLink).toBeVisible()
   await expect(
     navigation.getByRole("link", { name: "Research", exact: true }),
   ).toBeVisible()
   await solutionsLink.focus()
   await page.keyboard.press("Escape")
+  await expect(projects).toBeHidden()
+  await expect(projectsTrigger).toBeFocused()
+  await expect(disclosure).toHaveAttribute("open", "")
+  await page.keyboard.press("Escape")
   await expect(disclosure).not.toHaveAttribute("open", "")
   await expect(trigger).toBeFocused()
 
   await trigger.click()
+  await projectsTrigger.click()
   await solutionsLink.click()
   await expect(page).toHaveURL(/\/solutions$/)
 
@@ -110,10 +124,13 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   const updatedDisclosure = updatedNavigation.locator(
     "details[data-mobile-navigation]",
   )
-  const updatedTrigger = updatedDisclosure.locator("summary")
+  const updatedTrigger = updatedDisclosure.locator(":scope > summary")
 
   await expect(updatedDisclosure).not.toHaveAttribute("open", "")
   await updatedTrigger.click()
+  await updatedDisclosure
+    .locator('summary[aria-controls="mobile-projects-navigation"]')
+    .click()
   await expect(
     updatedNavigation.getByRole("link", {
       name: "Solutions",
@@ -135,7 +152,7 @@ test("mobile menu remains inside a 320px viewport", async ({
 
   const navigation = page.getByRole("navigation", { name: "Primary" })
   const disclosure = navigation.locator("details[data-mobile-navigation]")
-  await disclosure.locator("summary").click()
+  await disclosure.locator(":scope > summary").click()
 
   const panel = page.locator("#mobile-navigation")
   await expect(disclosure).toHaveAttribute("open", "")
@@ -173,12 +190,15 @@ test("mobile navigation remains usable without JavaScript", async ({
 
     const navigation = page.getByRole("navigation", { name: "Primary" })
     const disclosure = navigation.locator("details[data-mobile-navigation]")
-    const trigger = disclosure.locator("summary")
+    const trigger = disclosure.locator(":scope > summary")
 
     await expect(trigger).toHaveAccessibleName("Navigation menu")
     await trigger.click()
     await expect(disclosure).toHaveAttribute("open", "")
 
+    await disclosure
+      .locator('summary[aria-controls="mobile-projects-navigation"]')
+      .click()
     const solutionsLink = navigation.getByRole("link", {
       name: "Solutions",
       exact: true,
