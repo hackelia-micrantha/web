@@ -211,25 +211,17 @@
     {
       "canonicalId": "achillea",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "anthesis",
       "disposition": "shown",
-      "surfaces": [
-        "catalog",
-        "homepage"
-      ]
+      "surfaces": ["catalog", "homepage"]
     },
     {
       "canonicalId": "dubnium",
       "disposition": "shown",
-      "surfaces": [
-        "catalog",
-        "homepage"
-      ]
+      "surfaces": ["catalog", "homepage"]
     },
     {
       "canonicalId": "fatherless",
@@ -244,58 +236,42 @@
     {
       "canonicalId": "myosotis",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "phyllotaxis",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "repora",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "calathea",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "fortunes",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "hyperion",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "invokrum",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "keylix",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "mobuild",
@@ -305,23 +281,17 @@
     {
       "canonicalId": "modolia",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "outermesh",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "sandcastle",
       "disposition": "shown",
-      "surfaces": [
-        "catalog"
-      ]
+      "surfaces": ["catalog"]
     }
   ]
 }
