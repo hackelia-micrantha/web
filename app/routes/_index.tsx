@@ -78,7 +78,8 @@ export const handle = {
       },
       {
         name: "Research",
-        description: "Research papers and technical analysis informing Micrantha.",
+        description:
+          "Research papers and technical analysis informing Micrantha.",
         url: "https://micrantha.com/research",
       },
       {

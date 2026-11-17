@@ -24,7 +24,9 @@ test("homepage has only the two flagship projects", async ({ page }) => {
   await expect(page.locator("#solutions h3")).toHaveCount(2)
   await expect(page.locator("#laboratory h3")).toHaveCount(0)
   await expect(
-    page.locator("#laboratory").getByRole("link", { name: "Browse experiments" }),
+    page
+      .locator("#laboratory")
+      .getByRole("link", { name: "Browse experiments" }),
   ).toHaveAttribute("href", "/laboratory")
   await expect(
     page.locator("#insights").getByRole("link", { name: "Explore research" }),
