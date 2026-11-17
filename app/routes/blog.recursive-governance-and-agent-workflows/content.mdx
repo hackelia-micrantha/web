@@ -51,6 +51,8 @@ A workflow cannot claim stronger governance properties than the weakest material
 
 </Callout>
 
+A planner might delegate a deployment change to one specialist and a review to another. If the reviewer sees only the final diff while the specialist had broad tool access and its actions were not logged, the combined workflow cannot claim the stronger assurance of the visible review branch. The unverified branch needs a scoped rerun or separate evidence before effect-time authorization. More reviewers do not compensate for a bypassable executor.
+
 ## Observable vs latent execution
 
 Not all recursive execution is equally observable. Some systems expose explicit execution nodes, review boundaries, execution lineage, and structured delegation. Others operate partly in latent space or opaque runtime layers.
@@ -65,6 +67,6 @@ Replayability therefore propagates across execution lineage.
 
 ## Anthesis direction
 
-Anthesis treats recursive coordination as profiles over governed execution graphs, bounded execution expansion, evidence-linked workflow composition, and policy-governed delegation rather than unrestricted autonomous recursion.
+Anthesis explores recursive coordination as profiles over governed execution graphs, bounded execution expansion, evidence-linked workflow composition, and policy-governed delegation rather than unrestricted autonomous recursion. This is an architecture direction, not a claim that every recursive runtime currently exposes enforceable execution lineage.
 
 The long-term challenge is not simply building more capable recursive agents. It is ensuring humans remain capable of comprehension, intervention, replay, audit, and authority governance after recursive systems become operationally useful.

@@ -5,11 +5,15 @@ process.env.NODE_ENV = "production"
 const { onRequest } = await import("../functions/[[path]].js")
 
 const origin = "https://micrantha.example"
-const analyticsId = "adapter-contract-test"
+const legacyAnalyticsId = "adapter-contract-test"
 
 async function request(
   pathname,
-  { userAgent = "adapter-contract", method = "GET" } = {},
+  {
+    userAgent = "adapter-contract",
+    method = "GET",
+    analyticsBinding = legacyAnalyticsId,
+  } = {},
 ) {
   const request = new Request(new URL(pathname, origin), {
     method,
@@ -20,9 +24,12 @@ async function request(
 
   return onRequest({
     request,
-    env: {
-      MICRANTHA_ANALYTICS_ID: analyticsId,
-    },
+    env: analyticsBinding
+      ? {
+          MICRANTHA_ANALYTICS_ID: analyticsBinding,
+          ANALYTICS_ID: analyticsBinding,
+        }
+      : {},
     params: {},
     data: {},
     functionPath: "[[path]]",
@@ -75,6 +82,8 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   assert.ok(policy, "expected a CSP on every HTML document response")
   assert.match(policy, /img-src 'self' data:/)
   assert.doesNotMatch(policy, /img-src[^;]*https:/)
+  assert.doesNotMatch(policy, /analytics\.micrantha\.com/)
+  assert.doesNotMatch(body, /data-website-id=|\/umami\.js/)
 
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
 
@@ -102,13 +111,59 @@ const home = await read("/")
 assert.equal(home.response.status, 200)
 assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
-assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body)
+assert.doesNotMatch(home.body, /adapter-contract-test|analyticsId/)
+assert.equal(home.response.headers.get("x-micrantha-analytics-enabled"), null)
+
+const noBindingHome = await read("/", { analyticsBinding: null })
+assert.equal(noBindingHome.response.status, 200)
+assertDocumentHeaders(noBindingHome.response, noBindingHome.body)
+
+for (const analyticsBinding of [legacyAnalyticsId, null]) {
+  const privacy = await read("/privacy", { analyticsBinding })
+  assert.equal(privacy.response.status, 200)
+  assert.match(
+    privacy.body,
+    /The website application does not include its own product analytics/,
+  )
+  assert.match(
+    privacy.body,
+    /Cloudflare Web Analytics is independently enabled for/,
+  )
+  assertDocumentHeaders(privacy.response, privacy.body)
+}
 
 const contactRedirect = await read("/contact")
 assert.equal(contactRedirect.response.status, 301)
 assert.equal(contactRedirect.response.headers.get("location"), "/services")
 assert.equal(contactRedirect.body, "")
+
+const sourceFirst = await read(
+  "/blog/ai-native-sdlc-governed-software-delivery",
+)
+assert.equal(sourceFirst.response.status, 200)
+assert.match(
+  sourceFirst.body,
+  /From AI-Native SDLC to Governed Software Delivery/,
+)
+assert.match(sourceFirst.body, /The scarce resource becomes confidence/)
+assert.match(
+  sourceFirst.body,
+  /ryanjennin\.gs\/posts\/ai-native-sdlc-governed-software-delivery\//,
+)
+assert.match(
+  sourceFirst.body,
+  /"isBasedOn":"https:\/\/ryanjennin\.gs\/posts\/ai-native-sdlc-governed-software-delivery\/"/,
+)
+assert.match(
+  sourceFirst.body,
+  /"author":\{"@type":"Person","name":"Ryan Jennings"\}/,
+)
+assert.match(
+  sourceFirst.body,
+  /"image":\["https:\/\/micrantha\.com\/img\/blog\/ai-native-sdlc-governed-software-delivery\.webp"\]/,
+)
+assertDocumentHeaders(sourceFirst.response, sourceFirst.body)
 
 const article = await read("/blog/ai-pipelines-need-control-boundaries")
 assert.equal(article.response.status, 200)

@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test"
 
 const navTargets = {
   Blog: "/blog",
+  Research: "/research",
   Solutions: "/solutions",
   Support: "/support",
 }
@@ -12,7 +13,18 @@ async function clickNavigationLink(page: Page, name: keyof typeof navTargets) {
   const visibleLink = navigation.locator(`a[href="${target}"]:visible`)
 
   if ((await visibleLink.count()) === 0) {
-    await navigation.locator("details[data-mobile-navigation] summary").click()
+    const mobileTrigger = navigation.locator(
+      "details[data-mobile-navigation] summary",
+    )
+    if (await mobileTrigger.isVisible()) {
+      await mobileTrigger.click()
+    } else {
+      await navigation
+        .locator("details[data-nav-group]")
+        .filter({ has: page.locator(`a[href="${target}"]`) })
+        .locator("summary")
+        .click()
+    }
   }
 
   await visibleLink.click()
@@ -68,42 +80,18 @@ test("homepage exposes primary marketing content", async ({ page }) => {
     page.getByRole("link", { name: "Anthesis agentic-system trials" }),
   ).toHaveAttribute("href", "https://anthesis.micrantha.com/#collaborate")
 
-  const solutionsHeading = page.getByRole("heading", {
-    name: "Deployable systems for governed delivery.",
-  })
-  const laboratoryHeading = page.getByRole("heading", {
-    name: "Testbeds that validate the architecture.",
-  })
-  const architectureHeading = page.getByRole("heading", {
-    name: "Technical writing for teams dealing with real delivery constraints.",
-  })
-
-  const scanOrder = await page.evaluate(() => {
-    const headings = [
-      "Deployable systems for governed delivery.",
-      "Testbeds that validate the architecture.",
-      "Technical writing for teams dealing with real delivery constraints.",
-    ].map((text) =>
-      [...document.querySelectorAll("h2")].find(
-        (heading) => heading.textContent?.trim() === text,
-      ),
-    )
-
-    if (headings.some((heading) => !heading)) return false
-
-    return (
-      Boolean(
-        headings[0]?.compareDocumentPosition(headings[1]!) &
-          Node.DOCUMENT_POSITION_FOLLOWING,
-      ) &&
-      Boolean(
-        headings[1]?.compareDocumentPosition(headings[2]!) &
-          Node.DOCUMENT_POSITION_FOLLOWING,
-      )
-    )
-  })
-
-  expect(scanOrder).toBe(true)
+  const scanOrder = await page
+    .locator("main section[id]")
+    .evaluateAll((sections) => sections.map((section) => section.id))
+  expect(scanOrder).toEqual([
+    "solutions",
+    "services",
+    "laboratory",
+    "insights",
+    "philosophy",
+    "collaborate",
+    "contact",
+  ])
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {
@@ -113,7 +101,7 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
   await expect(page).toHaveURL(/\/solutions$/)
   await expect(page.getByRole("heading", { name: "Solutions" })).toBeVisible()
   await expect(
-    page.getByText("Deployable systems, distributions, tools, and platforms."),
+    page.getByText("Systems, distributions, tools, and platforms."),
   ).toBeVisible()
 
   await clickNavigationLink(page, "Blog")
@@ -124,6 +112,18 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
       "Architecture notes on secure platform integration, delivery governance, AI-assisted systems, and long-lived software design.",
     ),
   ).toBeVisible()
+
+  await clickNavigationLink(page, "Research")
+  await expect(page).toHaveURL(/\/research$/)
+  await expect(
+    page.getByRole("heading", { name: "Research", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page
+      .getByRole("navigation", { name: "Primary" })
+      .locator('a[href="/research"]')
+      .first(),
+  ).toHaveAttribute("aria-current", "page")
 
   await clickNavigationLink(page, "Support")
   await expect(page).toHaveURL(/\/support$/)

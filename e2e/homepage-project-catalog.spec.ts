@@ -17,6 +17,25 @@ for (const classification of ["solution", "laboratory"] as const) {
   })
 }
 
+test("homepage has only the two flagship projects", async ({ page }) => {
+  expect(featuredHomepageProjectSlugs.solution).toEqual(["anthesis", "dubnium"])
+  expect(featuredHomepageProjectSlugs.laboratory).toEqual([])
+  await page.goto("/")
+  await expect(page.locator("#solutions h3")).toHaveCount(2)
+  await expect(page.locator("#laboratory h3")).toHaveCount(0)
+  await expect(
+    page.locator("#laboratory").getByRole("link", { name: "Browse experiments" }),
+  ).toHaveAttribute("href", "/laboratory")
+  await expect(
+    page.locator("#insights").getByRole("link", { name: "Explore research" }),
+  ).toHaveAttribute("href", "/research")
+  await expect(
+    page
+      .locator("#insights")
+      .getByRole("link", { name: "Browse architecture notes" }),
+  ).toHaveAttribute("href", "/blog")
+})
+
 test("homepage project cards resolve identity and copy from the catalog", async ({
   page,
 }) => {

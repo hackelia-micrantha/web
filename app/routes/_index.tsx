@@ -1,12 +1,7 @@
 import type { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Card } from "~/components"
-import {
-  AnthesisIcon,
-  DubniumIcon,
-  MobuildIcon,
-  MyosotisIcon,
-} from "~/components/icons"
+import { AnthesisIcon, DubniumIcon } from "~/components/icons"
 import {
   featuredHomepageProjectSlugs,
   projectBySlug,
@@ -23,22 +18,6 @@ const homepageProjectPresentation = {
   anthesis: {
     icon: <AnthesisIcon />,
     className: cardStyles.green,
-  },
-  envuscator: {
-    icon: <MobuildIcon />,
-    className: cardStyles.yellow,
-  },
-  "anthesis-governance-lab": {
-    icon: <AnthesisIcon />,
-    className: cardStyles.green,
-  },
-  "dubnium-governed-agent-demo": {
-    icon: <DubniumIcon />,
-    className: cardStyles.cyan,
-  },
-  myosotis: {
-    icon: <MyosotisIcon />,
-    className: cardStyles.blue,
   },
 } as const
 
@@ -98,6 +77,11 @@ export const handle = {
         url: "https://micrantha.com/philosophy",
       },
       {
+        name: "Research",
+        description: "Research papers and technical analysis informing Micrantha.",
+        url: "https://micrantha.com/research",
+      },
+      {
         name: "Blog",
         description:
           "Architecture notes on secure platform integration, delivery governance, AI-assisted systems, and long-lived software design.",
@@ -109,7 +93,7 @@ export const handle = {
 
 export default function Index() {
   return (
-    <div className="space-y-20">
+    <div className="space-y-12">
       <section className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(135deg,rgba(250,248,242,0.96),rgba(236,243,238,0.94)_52%,rgba(226,235,244,0.94))] px-6 py-10 shadow-[0_24px_60px_rgba(31,42,42,0.10)] backdrop-blur-sm md:px-10 md:py-12">
         <div className="relative flex flex-col items-start justify-center gap-8 md:flex-row md:items-center">
           <div className="flex w-full justify-center md:w-auto md:shrink-0">
@@ -154,105 +138,22 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
-            Where Teams Get Stuck
-          </p>
-          <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
-            Fragile AI delivery
-          </p>
-          <p className="mt-2 text-sm leading-6 text-slate-700">
-            Micrantha helps teams move from isolated demos and brittle workflows
-            to systems that fit real engineering environments.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
-            Where Teams Get Stuck
-          </p>
-          <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
-            Platform drift
-          </p>
-          <p className="mt-2 text-sm leading-6 text-slate-700">
-            Mobile foundations, auth boundaries, and deployment paths tend to
-            decay unless someone restores structure and operational discipline.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-5 py-5 shadow-[0_14px_30px_rgba(31,42,42,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
-            Where Teams Get Stuck
-          </p>
-          <p className="mt-3 text-lg font-semibold tracking-tight text-slate-900">
-            Release uncertainty
-          </p>
-          <p className="mt-2 text-sm leading-6 text-slate-700">
-            Deployment paths, ownership, and operational controls are often
-            added too late, leaving teams with releases that are hard to trust.
-          </p>
-        </div>
-      </section>
-
-      <section
-        id="services"
-        className="space-y-6 border-t border-gray-200 pt-12"
-      >
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            Services
-          </p>
-          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Engineering support for systems that need to survive production.
-          </h2>
-          <p className="mt-3 text-base leading-7 text-slate-700">
-            Choose the engagement area that matches the constraint: AI delivery,
-            governance, mobile foundations, security boundaries, or deployment.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Card title="AI Development" className={cardStyles.neutral}>
-            Build AI-enabled products, internal tools, and workflows that
-            integrate with real software systems instead of living as isolated
-            demos.
-          </Card>
-          <Card title="AI Governance" className={cardStyles.green}>
-            Add policy, review, auditability, and operational controls around
-            AI-assisted development and AI-enabled systems.
-          </Card>
-          <Card title="Mobile Platforms" className={cardStyles.blue}>
-            Modernize mobile foundations, untangle platform architecture, and
-            support secure, maintainable client delivery.
-          </Card>
-          <Card title="Secure Systems" className={cardStyles.red}>
-            Harden authentication, authorization, and access boundaries for
-            systems where trust, compliance, and risk matter.
-          </Card>
-          <Card title="Production Deployments" className={cardStyles.yellow}>
-            Design the environments, rollout paths, and operational foundations
-            needed to ship reliably and keep systems stable after release.
-          </Card>
-        </div>
-        <Link className="inline-block text-sm" to="/services">
-          Explore services
-        </Link>
-      </section>
-
       <section
         id="solutions"
         className="space-y-6 border-t border-gray-200 pt-12"
       >
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            Solutions
+            Featured technology
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Deployable systems for governed delivery.
+            Systems for governed delivery.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
             {projectCollectionDescriptions.solution}
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {featuredHomepageProjectSlugs.solution.map((slug) => {
             const project = projectBySlug(slug)
             const presentation = homepagePresentationFor(slug)
@@ -271,94 +172,69 @@ export default function Index() {
             )
           })}
         </div>
-        <Link className="inline-block text-sm" to="/solutions">
-          View all solutions
+        <div className="flex flex-wrap gap-4 text-sm">
+          <Link to="/solutions">View all solutions</Link>
+          <Link to="/laboratory">Explore the lab</Link>
+        </div>
+      </section>
+
+      <section
+        id="services"
+        className="space-y-4 border-t border-gray-200 pt-12"
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
+          Services
+        </p>
+        <h2 className="text-2xl tracking-tight md:text-3xl">
+          Engineering support for systems that need to survive production.
+        </h2>
+        <p className="max-w-3xl text-base leading-7 text-slate-700">
+          AI development and governance, mobile platforms, secure systems, and
+          production deployments. Help for teams moving from fragile prototypes
+          to maintainable systems.
+        </p>
+        <Link className="inline-block text-sm" to="/services">
+          Explore services
         </Link>
       </section>
 
       <section
         id="laboratory"
-        className="space-y-6 border-t border-gray-200 pt-12"
+        className="space-y-4 border-t border-gray-200 pt-12"
       >
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            Laboratory
-          </p>
-          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Testbeds that validate the architecture.
-          </h2>
-          <p className="mt-3 text-base leading-7 text-slate-700">
-            {projectCollectionDescriptions.laboratory}
-          </p>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {featuredHomepageProjectSlugs.laboratory.map((slug) => {
-            const project = projectBySlug(slug)
-            const presentation = homepagePresentationFor(slug)
-
-            return (
-              <Card
-                key={project.slug}
-                title={project.name}
-                url={project.url}
-                icon={presentation.icon}
-                headingLevel={3}
-                className={presentation.className}
-              >
-                {project.summary}
-              </Card>
-            )
-          })}
-        </div>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
+          Laboratory
+        </p>
+        <h2 className="text-2xl tracking-tight md:text-3xl">
+          Testbeds that validate the architecture.
+        </h2>
+        <p className="max-w-3xl text-base leading-7 text-slate-700">
+          {projectCollectionDescriptions.laboratory}
+        </p>
         <Link className="inline-block text-sm" to="/laboratory">
-          Explore the lab
+          Browse experiments
         </Link>
       </section>
 
-      <section className="space-y-6 border-t border-gray-200 pt-12">
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
-            Architecture Notes
-          </p>
-          <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Technical writing for teams dealing with real delivery constraints.
-          </h2>
-          <p className="mt-3 text-base leading-7 text-slate-700">
-            Architecture notes on secure platform integration, delivery
-            governance, AI-assisted systems, and long-lived software design.
-          </p>
+      <section
+        id="insights"
+        className="space-y-4 border-t border-gray-200 pt-12"
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
+          Research and insights
+        </p>
+        <h2 className="text-2xl tracking-tight md:text-3xl">
+          Research and architecture notes.
+        </h2>
+        <p className="max-w-3xl text-base leading-7 text-slate-700">
+          Research papers and technical writing on secure platform integration,
+          delivery governance, AI-assisted systems, and long-lived software
+          design.
+        </p>
+        <div className="flex flex-wrap gap-4 text-sm">
+          <Link to="/research">Explore research</Link>
+          <Link to="/blog">Browse architecture notes</Link>
         </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card
-            title="Secure Platform Integration Is Not Plumbing"
-            url="/blog/secure-platform-integration-is-not-plumbing"
-            className={cardStyles.neutral}
-          >
-            Integration layers are operational control surfaces, not just pipes
-            between systems.
-          </Card>
-          <Card
-            title="AI Pipelines Need Control Boundaries"
-            url="/blog/ai-pipelines-need-control-boundaries"
-            className={cardStyles.blue}
-          >
-            Treat AI as an untrusted reasoning component inside a governed
-            integration path.
-          </Card>
-          <Card
-            title="Software Layers Are Risk Boundaries"
-            url="/blog/software-layers-are-risk-boundaries"
-            className={cardStyles.green}
-          >
-            Layering is how business rules, integrations, and security decisions
-            stay replaceable.
-          </Card>
-        </div>
-
-        <Link className="inline-block text-sm" to="/blog">
-          Browse the full series
-        </Link>
       </section>
 
       <section
@@ -400,56 +276,15 @@ export default function Index() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Card title="Project contributions" className={cardStyles.neutral}>
-            Engineering, security review, testing, documentation, design,
-            accessibility, packaging, integrations, and field testing across
-            public projects.
-          </Card>
-          <Card title="Strategic partnership" className={cardStyles.green}>
-            Product direction, applied research, open-source sustainability,
-            distribution, commercialization, or bringing the technology into
-            real operating environments.
-          </Card>
-          <Card
-            title="Co-founder / operating partner"
-            className={cardStyles.blue}
-          >
-            A long-term collaborator with complementary product, business,
-            research, community, or engineering strengths who wants to shape
-            Micrantha beyond individual repositories.
-          </Card>
-          <Card
-            title="Hardware and infrastructure"
-            className={cardStyles.yellow}
-          >
-            GPU-capable systems, accelerators, storage, networking equipment,
-            hosted compute or CI capacity, and other resources that expand local
-            AI, conformance, build, and systems-testing capability.
-          </Card>
-          <Card title="Design partners and adopters" className={cardStyles.red}>
-            Teams willing to try projects, challenge assumptions, contribute
-            reusable requirements, and help establish where the systems are and
-            are not useful.
-          </Card>
-          <Card
-            title="Anthesis agentic-system trials"
-            className={cardStyles.green}
-            url="https://anthesis.micrantha.com/#collaborate"
-          >
-            Existing coding agents, supervisor/specialist systems, MCP and tool
-            workflows, and other agentic runtimes are wanted for bounded trials
-            around one consequential action, with feedback on integration,
-            bypasses, policy fit, approvals, evidence, and operational overhead.
-          </Card>
-        </div>
-
         <div className="flex flex-wrap gap-4 text-sm">
           <a href="mailto:services@micrantha.com?subject=Micrantha%20collaboration">
             Discuss a partnership
           </a>
           <a href="https://github.com/hackelia-micrantha/.github/blob/main/CONTRIBUTING.md">
             Contribute to a public project
+          </a>
+          <a href="https://anthesis.micrantha.com/#collaborate">
+            Anthesis agentic-system trials
           </a>
         </div>
         <p className="max-w-3xl text-sm leading-6 text-slate-600">

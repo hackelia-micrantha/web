@@ -90,6 +90,18 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   await expect(
     page.getByRole("heading", { name: "EyesPie", exact: true }),
   ).toBeVisible()
+  for (const name of [
+    "Invokrum",
+    "Keylix",
+    "Modolia",
+    "Testule",
+    "Sandcastle",
+    "Outermesh",
+    "MUSICPKG",
+    "Phyllotaxis",
+  ]) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
+  }
   await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
     "href",
     "/compost",
@@ -102,6 +114,31 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   ).toHaveCount(0)
 })
 
+test("/compost preserves historical project context", async ({ page }) => {
+  await page.goto("/compost")
+
+  await expect(
+    page.getByRole("heading", { name: "Laboratory Compost", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "Earlier experiments, retired implementations, and ideas that continue to inform new work.",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Sandbox", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/ideas helped shape the later Sandcastle/),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "The Garden", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Outermesh", exact: true }),
+  ).toHaveCount(0)
+})
+
 test("/privacy retains the tailored long-form policy copy", async ({
   page,
 }) => {
@@ -110,9 +147,25 @@ test("/privacy retains the tailored long-form policy copy", async ({
   await expect(
     page.getByRole("heading", { name: "Privacy Policy", exact: true }),
   ).toBeVisible()
-  await expect(page.getByText("Information Collection and Use")).toBeVisible()
-  await expect(page.getByText("Cookies", { exact: true })).toBeVisible()
-  await expect(page.getByText("Contact", { exact: true })).toBeVisible()
+  await expect(page.getByText("Information You Provide")).toBeVisible()
+  await expect(page.getByText("Request and Security Data")).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Product Analytics", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "The website application does not include its own product analytics script",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByText("Cloudflare Web Analytics is independently enabled for", {
+      exact: false,
+    }),
+  ).toBeVisible()
+  await expect(page.getByText("Cookies and Browser Storage")).toBeVisible()
+  await expect(
+    page.getByRole("main").getByText("Contact", { exact: true }),
+  ).toBeVisible()
   await expect(page.getByText("fortunes.micrantha.com")).toHaveCount(0)
 })
 
@@ -146,10 +199,13 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
     }),
   ).toHaveAttribute("href", "/blog/intent-is-security-state")
   await expect(
-    page.getByRole("link", {
-      name: "Secure Platform Integration Is Not Plumbing",
-      exact: true,
-    }),
+    page
+      .getByRole("heading", { name: "Editorial use" })
+      .locator("..")
+      .getByRole("link", {
+        name: "Secure Platform Integration Is Not Plumbing",
+        exact: true,
+      }),
   ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
   await expect(
     page.getByText(
@@ -166,10 +222,122 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
       .locator(".editorial-card")
       .getByText("Architecture Control Boundaries", { exact: true }),
   ).toHaveCount(3)
-  await expect(page.getByText("Part 1")).toHaveCount(2)
-  await expect(page.getByText("Part 2")).toHaveCount(2)
-  await expect(page.getByText("Part 3")).toHaveCount(2)
-  await expect(page.getByText("Part 4")).toHaveCount(1)
+  await expect(page.getByText("Part 1 of 4")).toHaveCount(1)
+  await expect(page.getByText("Part 2 of 4")).toHaveCount(1)
+  await expect(page.getByText("Part 3 of 4")).toHaveCount(1)
+  await expect(page.getByText("Part 4 of 4")).toHaveCount(1)
+  await expect(page.getByText("Part 1 of 3")).toHaveCount(1)
+  await expect(page.getByText("Part 2 of 3")).toHaveCount(1)
+  await expect(page.getByText("Part 3 of 3")).toHaveCount(1)
+})
+
+test("/blog exposes independently navigable series links and reading paths", async ({
+  page,
+}) => {
+  await page.goto("/blog")
+
+  const seriesDiscovery = page.locator(
+    'section[aria-labelledby="blog-series-heading"]',
+  )
+  await expect(
+    seriesDiscovery.getByRole("link", { name: /The Assurance Stack/ }),
+  ).toHaveAttribute("href", "/blog/series/governance-native-engineering")
+  await expect(
+    seriesDiscovery.getByRole("link", {
+      name: /Architecture Control Boundaries/,
+    }),
+  ).toHaveAttribute("href", "/blog/series/architecture-control-boundaries")
+
+  const articleCards = page.locator(
+    'section[aria-label="All published notes"] .editorial-card',
+  )
+  await expect(
+    articleCards.getByRole("link", {
+      name: "Explore The Assurance Stack series",
+    }),
+  ).toHaveCount(4)
+  await expect(
+    articleCards.getByRole("link", {
+      name: "Explore Architecture Control Boundaries series",
+    }),
+  ).toHaveCount(3)
+  await expect(articleCards.locator("a a")).toHaveCount(0)
+
+  const paths = page.locator('section[aria-labelledby="reading-paths-heading"]')
+  await expect(
+    paths.getByRole("heading", {
+      name: "For integration and modernization teams",
+    }),
+  ).toBeVisible()
+  await expect(
+    paths.getByRole("heading", { name: "For AI-assisted engineering teams" }),
+  ).toBeVisible()
+  await expect(paths.getByRole("listitem")).toHaveCount(8)
+  await expect(
+    paths.getByRole("link", {
+      name: "Secure Platform Integration Is Not Plumbing",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "/blog/secure-platform-integration-is-not-plumbing")
+
+  await articleCards
+    .getByRole("link", { name: "Explore The Assurance Stack series" })
+    .first()
+    .click()
+  await expect(page).toHaveURL(/\/blog\/series\/governance-native-engineering$/)
+  await expect(
+    page.getByRole("heading", { name: "The Assurance Stack" }),
+  ).toBeVisible()
+})
+
+test("/blog series links render at mobile width without horizontal overflow", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 720 })
+  await page.goto("/blog")
+  await expect(
+    page.getByRole("heading", { name: "Recommended reading paths" }),
+  ).toBeVisible()
+  const card = page
+    .locator('section[aria-label="All published notes"] .editorial-card')
+    .filter({
+      has: page.getByRole("heading", {
+        name: "The Missing Layer in Agentic Development: Precise Governance",
+      }),
+    })
+  await expect(
+    card.getByRole("link", { name: "Explore The Assurance Stack series" }),
+  ).toBeVisible()
+  await expect
+    .poll(() =>
+      page.evaluate(() => document.documentElement.scrollWidth - innerWidth),
+    )
+    .toBeLessThanOrEqual(1)
+})
+
+test("/blog series and reading paths remain server-rendered without JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false })
+  try {
+    const page = await context.newPage()
+    await page.goto("/blog")
+    await expect(
+      page.getByRole("heading", { name: "Explore the series" }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole("heading", { name: "Recommended reading paths" }),
+    ).toBeVisible()
+    await page
+      .getByRole("link", { name: /The Assurance Stack/ })
+      .first()
+      .click()
+    await expect(
+      page.getByRole("heading", { name: "The Assurance Stack" }),
+    ).toBeVisible()
+  } finally {
+    await context.close()
+  }
 })
 
 test("/blog/:slug exposes article content and related notes", async ({
@@ -214,6 +382,14 @@ test("/blog/:slug exposes series navigation for assurance-stack posts", async ({
     }),
   ).toHaveAttribute("href", "/blog/series/governance-native-engineering")
   await expect(page.getByText("Part 1 of 4")).toBeVisible()
+  const seriesList = page
+    .getByRole("heading", { name: "In this series" })
+    .locator("..")
+  await expect(seriesList.locator('a[aria-current="page"]')).toHaveCount(1)
+  await expect(seriesList.locator('a[aria-current="page"]')).toHaveAttribute(
+    "href",
+    "/blog/governance-native-engineering-control-plane",
+  )
   await expect(
     page.getByRole("link", {
       name: "Next: Intent Is Security State, Not Conversation History",

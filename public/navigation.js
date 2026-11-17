@@ -1,6 +1,8 @@
-const mobileNavigations = document.querySelectorAll("[data-mobile-navigation]")
+const navigations = document.querySelectorAll(
+  "[data-mobile-navigation], [data-nav-group]",
+)
 
-for (const navigation of mobileNavigations) {
+for (const navigation of navigations) {
   if (!(navigation instanceof HTMLDetailsElement)) continue
 
   const trigger = navigation.querySelector("summary")
@@ -11,20 +13,13 @@ for (const navigation of mobileNavigations) {
     continue
   }
 
-  const syncExpandedState = () => {
-    trigger.setAttribute("aria-expanded", String(navigation.open))
-  }
-
   const closeNavigation = (restoreFocus = false) => {
     navigation.open = false
-    syncExpandedState()
 
     if (restoreFocus) {
       trigger.focus()
     }
   }
-
-  navigation.addEventListener("toggle", syncExpandedState)
 
   navigation.addEventListener("keydown", (event) => {
     if (event.key !== "Escape" || !navigation.open) return
@@ -56,6 +51,4 @@ for (const navigation of mobileNavigations) {
   window.addEventListener("pageshow", () => {
     closeNavigation()
   })
-
-  syncExpandedState()
 }

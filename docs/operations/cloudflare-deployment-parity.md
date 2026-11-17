@@ -113,3 +113,17 @@ Do not normalize an unexplained dashboard difference by changing committed confi
 - Issue #58 owns deployed CDN cache validation, performance budgets, and production response timing.
 - Issue #57 owns deeper HTTP security-policy hardening.
 - Issue #55 extends the runtime contract with the representative MDX and JavaScript-disabled route.
+
+### Manual exact-head production release gate (#129 first slice)
+
+The `.github/workflows/cloudflare-production.yml` workflow provides a **manual** production release entry point while automatic `main` promotion remains an open #129 follow-up. Creating or merging the workflow is not production publication authorization.
+
+Before enabling production execution:
+
+1. Configure the **protected** GitHub `production` environment with required reviewer approval and deployment branch restrictions (`main` only). Verify protections in GitHub; the workflow cannot create or attest them.
+2. Configure narrowly scoped `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as protected environment secrets, not checked-in files. Configure environment variable `CLOUDFLARE_PRODUCTION_DEPLOY_ENABLED=true` **only after** the intended Cloudflare Pages project/domain/production-branch parity is independently reviewed.
+3. The admission gate additionally performs an authenticated **read-only** Cloudflare Pages project lookup, requiring the expected `micrantha-web` project, production branch `main`, and associated custom domain `micrantha.com`. An unavailable or denied lookup stops publication. Run the `CI` workflow on `main` and record a successful push run for the exact proposed commit. The dispatch and workflow refs must both be `main`; the workflow checks out `main` rather than an arbitrary user-provided ref. Dispatch `Cloudflare Pages production release` with the full 40-character SHA of **current `main`**. It refuses any stale SHA, non-main checkout, non-main CI, PR-only CI or failed CI evidence.
+4. The workflow uses the repository flake setup and frozen Yarn lockfile, runs the checked-in `deploy:cloudflare:verify` contract, checks tracked release contract integrity and main+CI again immediately before effect, then invokes pinned Wrangler with `deploy:cloudflare:publish`. Single-flight concurrency prevents overlapping releases but cannot atomically fence a new main push while a remote upload is already in progress; monitor the post-deploy head and do not interpret an older upload as latest.
+5. Record the Cloudflare deployment ID, deployed SHA, verified custom-domain and Pages project identity, live SSR/cache/CSP checks, and rollback identity. A passing dispatch is not evidence of public-edge deployment until production is checked.
+
+For local operators, `yarn deploy:cloudflare` remains a combined validate-and-publish command. The split `verify` and `publish` scripts exist solely to place an exact-head revalidation gate between the two CI steps. No workflow step should ever call `publish` before both the validation script and authorization gates pass.

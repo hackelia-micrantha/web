@@ -1,5 +1,3 @@
-const ANALYTICS_ORIGIN = "https://analytics.micrantha.com"
-
 export const CSP_NONCE_HEADER = "X-CSP-Nonce"
 
 /**
@@ -35,8 +33,8 @@ export function buildContentSecurityPolicy({
     return [...directives, "connect-src 'self'", "script-src 'none'"].join("; ")
   }
 
-  const connectSources = ["'self'", ANALYTICS_ORIGIN]
-  const scriptSources = ["'self'", `'nonce-${nonce}'`, ANALYTICS_ORIGIN]
+  const connectSources = ["'self'"]
+  const scriptSources = ["'self'", `'nonce-${nonce}'`]
 
   if (isDevelopment) {
     connectSources.push("ws:", "wss:")
