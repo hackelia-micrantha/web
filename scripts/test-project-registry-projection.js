@@ -126,20 +126,14 @@ assert.deepEqual(
 
 {
   const broken = clone(presentation)
-  const classifiedSnapshot = clone(snapshot)
-  classifiedSnapshot.projects.find(
-    (project) => project.id === "phyllotaxis",
-  ).classification = "laboratory"
-  broken.projects.push({
-    kind: "canonical",
-    canonicalId: "phyllotaxis",
-    slug: "phyllotaxis",
-    summary: "Hidden portfolio projects must not leak into the catalogue.",
-    url: "/phyllotaxis",
-    architectureRole: "Invalid hidden catalogue entry",
-  })
+  const disposition = broken.portfolioDispositions.find(
+    (entry) => entry.canonicalId === "phyllotaxis",
+  )
+  disposition.disposition = "hidden"
+  disposition.rationale = "Synthetic hidden-project fixture"
+  delete disposition.surfaces
   assert.throws(
-    () => validateProjectRegistryProjection(classifiedSnapshot, broken),
+    () => validateProjectRegistryProjection(clone(snapshot), broken),
     /hidden portfolio project phyllotaxis must not have a canonical presentation entry/,
   )
 }
@@ -148,16 +142,16 @@ assert.deepEqual(
   const broken = clone(presentation)
   broken.projects.push({
     kind: "presentation-only",
-    slug: "phyllotaxis",
-    name: "Phyllotaxis Override",
+    slug: "mobuild",
+    name: "Mobuild Override",
     collection: "laboratory",
     summary: "Must use canonical identity instead of presentation-only bypass.",
-    url: "/phyllotaxis",
+    url: "/mobuild",
     architectureRole: "Invalid canonical bypass",
   })
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
-    /presentation-only project phyllotaxis collides with a canonical project id/,
+    /presentation-only project mobuild collides with a canonical project id/,
   )
 }
 

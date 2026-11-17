@@ -103,6 +103,10 @@ const laboratoryCardPresentation: Record<string, ProjectCardPresentation> = {
     icon: <GithubIcon />,
     className: cardStyles.yellow,
   },
+  phyllotaxis: {
+    icon: <GithubIcon />,
+    className: cardStyles.green,
+  },
   compost: {
     icon: <GardenIcon />,
     className: cardStyles.lime,

@@ -5,7 +5,7 @@ export const projectRegistrySnapshot = {
     repository: "hackelia-micrantha/hackelia-micrantha",
     registryPath: "registry/projects.yaml",
     inventoryPath: "registry/inventory.md",
-    commit: "8f0eef6be319be343381ad75dbda4a952e2d0f9e",
+    commit: "6f3fba15f38349ab81d1b21f3d7bafce3899c604",
   },
   excludedPortfolioFamilies: ["garden", "scouter"],
   projects: [
@@ -196,7 +196,7 @@ export const projectRegistrySnapshot = {
     {
       id: "phyllotaxis",
       name: "Phyllotaxis",
-      classification: null,
+      classification: "laboratory",
       portfolio: "featured",
       role: "platform",
       lifecycle: "experimental",
@@ -452,6 +452,15 @@ export const projectPresentation = {
       architectureRole: "Digital music interoperability specification",
     },
     {
+      kind: "canonical",
+      canonicalId: "phyllotaxis",
+      slug: "phyllotaxis",
+      summary:
+        "A shared design-system specification for themeable values, layout relationships, and reusable UI semantics.",
+      url: "https://github.com/hackelia-micrantha/phyllotaxis-community",
+      architectureRole: "Shared UI design-system contracts",
+    },
+    {
       kind: "presentation-only",
       slug: "compost",
       name: "Compost",
@@ -497,9 +506,8 @@ export const projectPresentation = {
     },
     {
       canonicalId: "phyllotaxis",
-      disposition: "hidden",
-      rationale:
-        "Public design-system contracts are available; catalogue admission awaits canonical classification.",
+      disposition: "shown",
+      surfaces: ["catalog"],
     },
     {
       canonicalId: "repora",

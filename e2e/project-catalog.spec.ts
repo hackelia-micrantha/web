@@ -18,6 +18,7 @@ const expectedCoreTaxonomy = {
     "testule",
     "sandcastle",
     "outermesh",
+    "phyllotaxis",
   ],
 } as const
 

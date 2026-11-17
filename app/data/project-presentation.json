@@ -190,6 +190,14 @@
       "architectureRole": "Digital music interoperability specification"
     },
     {
+      "kind": "canonical",
+      "canonicalId": "phyllotaxis",
+      "slug": "phyllotaxis",
+      "summary": "A shared design-system specification for themeable values, layout relationships, and reusable UI semantics.",
+      "url": "https://github.com/hackelia-micrantha/phyllotaxis-community",
+      "architectureRole": "Shared UI design-system contracts"
+    },
+    {
       "kind": "presentation-only",
       "slug": "compost",
       "name": "Compost",
@@ -232,8 +240,8 @@
     },
     {
       "canonicalId": "phyllotaxis",
-      "disposition": "hidden",
-      "rationale": "Public design-system contracts are available; catalogue admission awaits canonical classification."
+      "disposition": "shown",
+      "surfaces": ["catalog"]
     },
     {
       "canonicalId": "repora",

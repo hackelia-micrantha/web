@@ -4,7 +4,7 @@
     "repository": "hackelia-micrantha/hackelia-micrantha",
     "registryPath": "registry/projects.yaml",
     "inventoryPath": "registry/inventory.md",
-    "commit": "8f0eef6be319be343381ad75dbda4a952e2d0f9e"
+    "commit": "6f3fba15f38349ab81d1b21f3d7bafce3899c604"
   },
   "excludedPortfolioFamilies": ["garden", "scouter"],
   "projects": [
@@ -195,7 +195,7 @@
     {
       "id": "phyllotaxis",
       "name": "Phyllotaxis",
-      "classification": null,
+      "classification": "laboratory",
       "portfolio": "featured",
       "role": "platform",
       "lifecycle": "experimental"
