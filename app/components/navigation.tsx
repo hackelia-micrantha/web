@@ -4,13 +4,34 @@ import { ExternalLink } from "./external-link"
 
 const MOBILE_NAVIGATION_ID = "mobile-navigation"
 
-const navLinks = [
+type NavigationLink = { to: string; label: string }
+
+type NavigationSection =
+  | NavigationLink
+  | { label: string; id: string; links: NavigationLink[] }
+
+const navSections: NavigationSection[] = [
   { to: "/services", label: "Services" },
-  { to: "/solutions", label: "Solutions" },
+  {
+    label: "Projects",
+    id: "projects-navigation",
+    links: [
+      { to: "/solutions", label: "Solutions" },
+      { to: "/laboratory", label: "Laboratory" },
+      { to: "/compost", label: "Compost" },
+    ],
+  },
+  { to: "/research", label: "Research" },
   { to: "/blog", label: "Blog" },
-  { to: "/laboratory", label: "Laboratory" },
-  { to: "/philosophy", label: "Philosophy" },
-  { to: "/support", label: "Support" },
+  {
+    label: "About",
+    id: "about-navigation",
+    links: [
+      { to: "/philosophy", label: "Philosophy" },
+      { to: "/support", label: "Support" },
+      { to: "/contact", label: "Contact" },
+    ],
+  },
 ]
 
 export const Navigation = () => {
@@ -22,6 +43,21 @@ export const Navigation = () => {
     return location.pathname === to || location.pathname.startsWith(`${to}/`)
   }
 
+  const panelLink = (link: NavigationLink) => (
+    <Link
+      key={link.to}
+      to={link.to}
+      aria-current={isActive(link.to) ? "page" : undefined}
+      className={`block rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+        isActive(link.to)
+          ? "bg-slate-100 text-slate-950"
+          : "text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+      }`}
+    >
+      {link.label}
+    </Link>
+  )
+
   return (
     <nav
       aria-label="Primary"
@@ -31,7 +67,7 @@ export const Navigation = () => {
         <Link
           to="/"
           aria-current={location.pathname === "/" ? "page" : undefined}
-          className="flex items-center gap-3"
+          className="flex shrink-0 items-center gap-3"
         >
           <img
             src="/img/logo.png"
@@ -45,14 +81,50 @@ export const Navigation = () => {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 text-sm sm:flex">
-          {navLinks.map((link) => {
-            const active = isActive(link.to)
+        <div className="hidden items-center gap-1 text-sm md:flex">
+          {navSections.map((section) => {
+            if ("links" in section) {
+              const active = section.links.some((link) => isActive(link.to))
+
+              return (
+                <details
+                  key={section.id}
+                  data-nav-group
+                  name="primary-navigation"
+                  className="group relative"
+                >
+                  <summary
+                    aria-controls={section.id}
+                    className={`flex cursor-pointer list-none items-center gap-1 px-3 py-2 transition-colors [&::-webkit-details-marker]:hidden ${
+                      active
+                        ? "font-semibold text-slate-950"
+                        : "text-slate-700 hover:text-slate-950"
+                    }`}
+                  >
+                    {section.label}
+                    <span
+                      aria-hidden="true"
+                      className="text-xs transition-transform group-open:rotate-180"
+                    >
+                      ▾
+                    </span>
+                  </summary>
+                  <div
+                    id={section.id}
+                    className="mobile-nav-panel absolute right-0 top-full z-[60] mt-3 w-48 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_24px_50px_rgba(15,23,42,0.14)]"
+                  >
+                    {section.links.map(panelLink)}
+                  </div>
+                </details>
+              )
+            }
+
+            const active = isActive(section.to)
 
             return (
               <Link
-                key={link.to}
-                to={link.to}
+                key={section.to}
+                to={section.to}
                 aria-current={active ? "page" : undefined}
                 className={`group relative px-3 py-2 transition-colors ${
                   active
@@ -60,7 +132,7 @@ export const Navigation = () => {
                     : "text-slate-700 hover:text-slate-950"
                 }`}
               >
-                {link.label}
+                {section.label}
                 <span
                   aria-hidden="true"
                   className={`absolute inset-x-3 bottom-1 h-px origin-left bg-slate-900 transition-transform duration-200 ${
@@ -79,10 +151,9 @@ export const Navigation = () => {
           </ExternalLink>
         </div>
 
-        <details data-mobile-navigation className="group relative sm:hidden">
+        <details data-mobile-navigation className="group relative md:hidden">
           <summary
             aria-controls={MOBILE_NAVIGATION_ID}
-            aria-expanded="false"
             className="flex h-11 w-11 list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:bg-slate-50 [&::-webkit-details-marker]:hidden"
           >
             <span className="sr-only">Navigation menu</span>
@@ -95,27 +166,26 @@ export const Navigation = () => {
 
           <div
             id={MOBILE_NAVIGATION_ID}
-            className="mobile-nav-panel absolute right-0 top-full z-[60] mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_24px_50px_rgba(15,23,42,0.14)]"
+            className="mobile-nav-panel absolute right-0 top-full z-[60] mt-3 max-h-[calc(100dvh-6rem)] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_24px_50px_rgba(15,23,42,0.14)]"
           >
             <div className="flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const active = isActive(link.to)
-
-                return (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    aria-current={active ? "page" : undefined}
-                    className={`rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
-                      active
-                        ? "bg-slate-100 text-slate-950"
-                        : "text-slate-700 hover:bg-slate-50 hover:text-slate-950"
-                    }`}
+              {navSections.map((section) =>
+                "links" in section ? (
+                  <div
+                    key={section.id}
+                    role="group"
+                    aria-label={section.label}
+                    className="border-t border-slate-200 pt-2"
                   >
-                    {link.label}
-                  </Link>
-                )
-              })}
+                    <p className="px-3 text-xs font-semibold text-slate-600">
+                      {section.label}
+                    </p>
+                    <div className="pl-3">{section.links.map(panelLink)}</div>
+                  </div>
+                ) : (
+                  panelLink(section)
+                ),
+              )}
               <ExternalLink
                 href="https://github.com/hackelia-micrantha"
                 className="rounded-xl px-3 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950"
