@@ -51,12 +51,12 @@ test("React effects run and Remix navigation preserves the document", async ({
     return identity
   })
 
-  await page
-    .getByRole("navigation", { name: "Primary" })
-    .getByRole("link", { name: "Solutions", exact: true })
-    .click()
+  const navigation = page.getByRole("navigation", { name: "Primary" })
+  await navigation.locator('summary[aria-controls="projects-navigation"]').click()
+  await navigation.getByRole("link", { name: "Solutions", exact: true }).click()
 
   await expect(page).toHaveURL(/\/solutions$/)
+  await navigation.locator('summary[aria-controls="projects-navigation"]').click()
   await expect(
     page
       .getByRole("navigation", { name: "Primary" })
@@ -120,8 +120,9 @@ test("core article content remains usable without JavaScript", async ({
       "Proposed change or effect",
     )
 
-    await page
-      .getByRole("navigation", { name: "Primary" })
+    const navigation = page.getByRole("navigation", { name: "Primary" })
+    await navigation.locator('summary[aria-controls="projects-navigation"]').click()
+    await navigation
       .getByRole("link", { name: "Solutions", exact: true })
       .click()
     await expect(page).toHaveURL(/\/solutions$/)
