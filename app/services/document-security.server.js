@@ -1,12 +1,9 @@
-const ANALYTICS_ORIGIN = "https://analytics.micrantha.com"
-
 export const CSP_NONCE_HEADER = "X-CSP-Nonce"
 
 /**
  * @typedef {object} DocumentSecurityOptions
  * @property {string | null | undefined} [nonce]
  * @property {boolean} [isDevelopment]
- * @property {boolean} [analyticsEnabled]
  */
 
 function baseDirectives() {
@@ -29,7 +26,6 @@ function baseDirectives() {
 export function buildContentSecurityPolicy({
   nonce,
   isDevelopment = false,
-  analyticsEnabled = false,
 } = {}) {
   const directives = baseDirectives()
 
@@ -39,11 +35,6 @@ export function buildContentSecurityPolicy({
 
   const connectSources = ["'self'"]
   const scriptSources = ["'self'", `'nonce-${nonce}'`]
-
-  if (analyticsEnabled) {
-    connectSources.push(ANALYTICS_ORIGIN)
-    scriptSources.push(ANALYTICS_ORIGIN)
-  }
 
   if (isDevelopment) {
     connectSources.push("ws:", "wss:")
@@ -63,14 +54,12 @@ export function buildContentSecurityPolicy({
 export function buildDocumentSecurityHeaders({
   nonce,
   isDevelopment = false,
-  analyticsEnabled = false,
 } = {}) {
   /** @type {Record<string, string>} */
   const headers = {
     "Content-Security-Policy": buildContentSecurityPolicy({
       nonce,
       isDevelopment,
-      analyticsEnabled,
     }),
     "Cross-Origin-Opener-Policy": "same-origin",
     "Cross-Origin-Resource-Policy": "same-origin",
