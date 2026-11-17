@@ -292,7 +292,7 @@ export default function Index() {
             Solutions
           </p>
           <h2 className="mt-2 text-2xl tracking-tight md:text-3xl">
-            Deployable systems for governed delivery.
+            Systems for governed delivery.
           </h2>
           <p className="mt-3 text-base leading-7 text-slate-700">
             {projectCollectionDescriptions.solution}

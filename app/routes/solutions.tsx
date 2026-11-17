@@ -96,7 +96,7 @@ const Solutions = () => (
   <div>
     <PageTitle
       title="Solutions"
-      subtitle="Deployable systems, distributions, tools, and platforms."
+      subtitle="Systems, distributions, tools, and platforms."
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

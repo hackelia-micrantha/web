@@ -90,6 +90,18 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   await expect(
     page.getByRole("heading", { name: "EyesPie", exact: true }),
   ).toBeVisible()
+  for (const name of [
+    "Invokrum",
+    "Keylix",
+    "Modolia",
+    "Testule",
+    "Sandcastle",
+    "Outermesh",
+    "MUSICPKG",
+    "Phyllotaxis",
+  ]) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
+  }
   await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
     "href",
     "/compost",
@@ -99,6 +111,31 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   ).toHaveCount(0)
   await expect(
     page.getByRole("heading", { name: "Envuscator", exact: true }),
+  ).toHaveCount(0)
+})
+
+test("/compost preserves historical project context", async ({ page }) => {
+  await page.goto("/compost")
+
+  await expect(
+    page.getByRole("heading", { name: "Laboratory Compost", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "Earlier experiments, retired implementations, and ideas that continue to inform new work.",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Sandbox", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/ideas helped shape the later Sandcastle/),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "The Garden", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Outermesh", exact: true }),
   ).toHaveCount(0)
 })
 
