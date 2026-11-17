@@ -42,6 +42,10 @@ See <PostLink slug="related-post">the related post</PostLink>.
     },
   ]}
 />
+
+<PolicyTable
+  rows={[{ effect: "Read", risk: "Tier 0", approval: "none", result: "allow" }]}
+/>
 `)
 
 const invalidCases = [
@@ -68,6 +72,16 @@ const invalidCases = [
     "executable table value",
     '<ControlTable rows={[{ failureMode: makeValue(), cause: "x", response: "x" }]} />',
     /failureMode must be a string literal/u,
+  ],
+  [
+    "executable policy table value",
+    '<PolicyTable rows={[{ effect: call(), risk: "x", approval: "x", result: "x" }]} />',
+    /effect must be a string literal/u,
+  ],
+  [
+    "missing policy table field",
+    '<PolicyTable rows={[{ effect: "x", risk: "x", approval: "x" }]} />',
+    /must define effect, risk, approval, result/u,
   ],
   [
     "spread prop",

@@ -29,8 +29,14 @@ jobs:
       - name: Set up project toolchain
         uses: ./.github/actions/setup
 
+      - name: Verify tracked-publication secret policy
+        run: yarn security:publication
+
       - name: Run unit tests with coverage thresholds
         run: yarn test:unit
+
+      - name: Test production deployment admission gate
+        run: node --test tests/operations/cloudflare-deployment-gate.test.js
 
       - name: Validate project registry projection
         run: yarn test:project-registry-projection
@@ -69,6 +75,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Check generated public assets for accidental key publication
+        run: node scripts/check-publication-secrets.js --public
+
       - name: Verify blog browser chunk isolation
         run: yarn test:blog-chunk-isolation
 
@@ -88,6 +97,9 @@ jobs:
 
       - name: Bundle Cloudflare Pages Function
         run: yarn cloudflare:functions:build
+
+      - name: Verify generated Cloudflare Functions bundle
+        run: node scripts/check-publication-secrets.js --functions
 
       - name: Enforce Cloudflare Worker bundle budget
         run: yarn test:cloudflare:bundle-budget
@@ -116,6 +128,25 @@ jobs:
             .cloudflare/runtime/performance-report.json
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Preserve failed quality-build diagnostics
+        id: failure_evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-quality-failure-${{ github.run_id }}
+          path: |
+            build/
+            public/build/
+            public/tailwind.css
+            .cloudflare/functions/
+            .performance/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Clean task-local generated build outputs
+        if: ${{ always() && (success() || steps.failure_evidence.outcome == 'success') }}
+        run: yarn clean:build
 
   end-to-end:
     name: End-to-end
@@ -146,6 +177,7 @@ jobs:
         run: yarn test:e2e:cloudflare
 
       - name: Upload Playwright failure artifacts
+        id: failure_evidence
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -155,5 +187,10 @@ jobs:
             playwright-report-cloudflare
             test-results
             test-results-cloudflare
-          if-no-files-found: ignore
+            .performance/browser
+          if-no-files-found: error
           retention-days: 7
+
+      - name: Clean task-local browser outputs after evidence uploads
+        if: ${{ always() && (success() || steps.failure_evidence.outcome == 'success') }}
+        run: yarn clean:browser

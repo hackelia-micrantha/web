@@ -129,7 +129,7 @@ Per-response CSP nonces require the HTML document and CSP header to remain one c
 
 Runtime configuration is resolved through the Pages Function context and request environment. Secrets and bindings are not committed.
 
-The analytics identifier is optional. Missing analytics configuration must not prevent rendering. Adding a new runtime binding requires documentation of:
+The application has no analytics identifier or browser analytics integration. Cloudflare Web Analytics is managed separately. Adding a new runtime binding requires documentation of:
 
 - its owner;
 - preview and production behavior;

@@ -11,6 +11,10 @@ import {
 const buildDirectory = path.join(repositoryRoot, "public/build")
 const bodyMarkers = new Map([
   [
+    "ai-native-sdlc-governed-software-delivery",
+    "The scarce resource becomes confidence",
+  ],
+  [
     "secure-platform-integration-is-not-plumbing",
     "Integration layers deserve architectural attention",
   ],

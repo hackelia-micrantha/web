@@ -13,6 +13,7 @@ const routes: AccessibilityRoute[] = [
   { path: "/solutions", heading: "Solutions" },
   { path: "/laboratory", heading: "Laboratory" },
   { path: "/blog", heading: "Blog" },
+  { path: "/research", heading: "Research" },
   {
     path: "/blog/ai-pipelines-need-control-boundaries",
     heading: "AI Pipelines Need Control Boundaries",
@@ -88,6 +89,7 @@ test("narrow long-form routes keep wide content locally contained", async ({
     "/blog/governance-native-engineering-control-plane",
     "/blog/intent-is-security-state",
     "/security",
+    "/research",
   ]) {
     await page.goto(path)
 
@@ -139,9 +141,9 @@ test("narrow long-form routes keep wide content locally contained", async ({
 
   await page.goto("/blog/intent-is-security-state")
 
-  const policyTable = page.getByRole("table").first()
+  const policyTable = page.getByRole("table", { name: "Policy decisions" })
   const policyTableRegion = page.getByRole("region", {
-    name: "Scrollable article table",
+    name: "Policy decisions table",
   })
   const policyTableFrame = policyTableRegion.locator("..")
 

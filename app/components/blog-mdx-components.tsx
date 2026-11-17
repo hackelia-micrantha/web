@@ -82,6 +82,40 @@ export function BlogMdxTable(props: ComponentPropsWithoutRef<"table">) {
   )
 }
 
+type PolicyTableRow = {
+  effect: string
+  risk: string
+  approval: string
+  result: string
+}
+
+export function PolicyTable({ rows }: { rows: PolicyTableRow[] }) {
+  return (
+    <ScrollableTableFrame label="Policy decisions table">
+      <table aria-label="Policy decisions" className="text-left">
+        <thead>
+          <tr>
+            <th scope="col">Current effect</th>
+            <th scope="col">Risk result</th>
+            <th scope="col">Approval</th>
+            <th scope="col">Policy result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.effect}>
+              <th scope="row">{row.effect}</th>
+              <td>{row.risk}</td>
+              <td>{row.approval}</td>
+              <td>{row.result}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </ScrollableTableFrame>
+  )
+}
+
 export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
   return (
     <ScrollableTableFrame label="AI pipeline failure modes table">
@@ -147,6 +181,7 @@ export const blogMdxComponents = {
   Callout,
   ControlTable,
   Figure,
+  PolicyTable,
   PostLink,
   pre: BlogMdxPre,
   table: BlogMdxTable,

@@ -14,6 +14,7 @@ const allowedComponents = new Set([
   "Callout",
   "ControlTable",
   "Figure",
+  "PolicyTable",
   "PostLink",
 ])
 
@@ -223,7 +224,7 @@ function literalString(node, context) {
   return node.text
 }
 
-function validateControlTableRows(expression, context) {
+function validateTableRows(expression, context, fields, keyField) {
   const node = parseExpression(expression, context)
 
   assert.ok(
@@ -235,7 +236,7 @@ function validateControlTableRows(expression, context) {
     `${context} must contain at least one row`,
   )
 
-  const failureModes = []
+  const rowKeys = []
 
   for (const [index, element] of node.elements.entries()) {
     const rowContext = `${context}[${index}]`
@@ -258,7 +259,7 @@ function validateControlTableRows(expression, context) {
 
       const name = property.name.text
       assert.ok(
-        ["failureMode", "cause", "response"].includes(name),
+        fields.includes(name),
         `${rowContext} contains unsupported property ${name}`,
       )
       assert.equal(
@@ -274,16 +275,16 @@ function validateControlTableRows(expression, context) {
 
     assert.deepEqual(
       [...values.keys()].sort(),
-      ["cause", "failureMode", "response"],
-      `${rowContext} must define failureMode, cause, and response`,
+      [...fields].sort(),
+      `${rowContext} must define ${fields.join(", ")}`,
     )
-    failureModes.push(values.get("failureMode"))
+    rowKeys.push(values.get(keyField))
   }
 
   assert.equal(
-    new Set(failureModes).size,
-    failureModes.length,
-    `${context} contains duplicate failureMode values`,
+    new Set(rowKeys).size,
+    rowKeys.length,
+    `${context} contains duplicate ${keyField} values`,
   )
 }
 
@@ -364,7 +365,7 @@ async function validateComponent(node, options) {
   assert.equal(
     node.children?.length ?? 0,
     0,
-    `${context} ControlTable must be self-closing`,
+    `${context} ${node.name} must be self-closing`,
   )
   assert.ok(
     attributes.has("rows"),
@@ -377,7 +378,11 @@ async function validateComponent(node, options) {
     "mdxJsxAttributeValueExpression",
     `${context}.rows must be a controlled array expression`,
   )
-  validateControlTableRows(rows.value, `${context}.rows`)
+  const fields =
+    node.name === "ControlTable"
+      ? ["failureMode", "cause", "response"]
+      : ["effect", "risk", "approval", "result"]
+  validateTableRows(rows.value, `${context}.rows`, fields, fields[0])
 }
 
 async function validateNode(node, options) {

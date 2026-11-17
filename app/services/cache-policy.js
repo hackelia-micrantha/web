@@ -19,6 +19,7 @@ const EXACT_PUBLIC_ROUTES = new Map([
   ["/security", "reference"],
   ["/support", "reference"],
   ["/blog", "content"],
+  ["/research", "content"],
 ])
 
 const DYNAMIC_PUBLIC_ROUTES = Object.freeze([
@@ -44,6 +45,7 @@ export const PUBLIC_DOCUMENT_CACHE_CASES = Object.freeze([
   Object.freeze({ pathname: "/security", className: "reference" }),
   Object.freeze({ pathname: "/support", className: "reference" }),
   Object.freeze({ pathname: "/blog", className: "content" }),
+  Object.freeze({ pathname: "/research", className: "content" }),
   Object.freeze({
     pathname: "/blog/series/governance-native-engineering",
     className: "content",
