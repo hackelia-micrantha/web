@@ -29,6 +29,14 @@ Avoid manually maintained patch/minor version badges when they do not enforce an
 - Required CI must not assume Playwright, Node, or other project dependencies are present in the Dubnium runner image.
 - Changes to production topology must preserve the Cloudflare adapter/runtime contracts.
 
+## Supply-chain controls
+
+External GitHub Actions are pinned to full commit SHAs. Keep a human-readable release comment beside each pin so review can identify the intended upstream version; the shared organization Dependabot policy owns reviewed GitHub Actions updates.
+
+Pull requests run GitHub's first-party dependency review with a `moderate` vulnerability threshold. JavaScript/TypeScript source is analyzed with CodeQL's `security-extended` queries on GitHub-hosted runners. These action-only security jobs intentionally do not consume the repository Nix toolchain or the Dubnium JIT image.
+
+CodeQL is skipped for fork-origin pull requests because their read-only token cannot upload code-scanning results. Main-branch pushes and same-repository pull requests retain CodeQL coverage.
+
 ## Supply-chain follow-up
 
-Issue #60 remains the tracking authority for controls not completed by this normalization slice, including dependency review, CodeQL or an equivalent static-analysis gate, immutable action pinning, secret-scanning posture, dependency-update grouping, and any artifact/SBOM policy justified by an operational release artifact.
+Issue #60 remains the tracking authority for controls not completed by this slice: document/verify secret-scanning and push-protection posture, complete dependency-update grouping/supersession in the shared organization policy, and add artifact/SBOM scanning only where an operational release artifact justifies it.

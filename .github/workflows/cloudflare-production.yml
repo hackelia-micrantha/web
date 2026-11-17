@@ -37,7 +37,7 @@ jobs:
       # Never checkout a user-selected ref before the source identity gate.
       # Any unexpected main movement is rejected by the exact-head gate below.
       - name: Check out current main for admission
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: main
           persist-credentials: false

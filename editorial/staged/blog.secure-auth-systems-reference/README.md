@@ -13,8 +13,10 @@ future route but are not part of any current Micrantha site build.
 ## Publication and reconciliation
 
 A separate publication PR must confirm the canonical source is live and
-consistent with the cross-post. The authentication article also depends on
-the canonical ryjen/blog PR #145 corrections being accepted.
+consistent with the cross-post. The canonical ryjen/blog PR #145 corrections are merged and deployed
+(`d7410d7a94cba4d64ffa849b8b5bd28c9cd99221`). A fresh custom-domain HTTP
+smoke remains unverified. This staged folder is not authorization to publish
+the Micrantha cross-post.
 
 After explicit authorization, move content.mdx and route.tsx.template
 to app/routes/blog.secure-auth-systems-reference/, move cover.webp to

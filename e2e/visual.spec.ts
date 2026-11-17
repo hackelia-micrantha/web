@@ -29,7 +29,8 @@ test.describe("visual regressions", () => {
 
   test.beforeEach(({ browserName }, testInfo) => {
     test.skip(
-      browserName !== "chromium" || testInfo.project.name !== "desktop-chromium",
+      browserName !== "chromium" ||
+        testInfo.project.name !== "desktop-chromium",
       "Visual regression snapshots run once on the desktop project to keep baselines stable.",
     )
   })

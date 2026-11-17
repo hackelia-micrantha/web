@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
-import { isValidElement } from "react"
+import { isValidElement, useId } from "react"
 import { Link } from "@remix-run/react"
 
 import { MermaidDiagram } from "./mermaid-diagram"
@@ -47,12 +47,78 @@ type ControlTableRow = {
   response: string
 }
 
+function ScrollableTableFrame({
+  children,
+  label,
+}: {
+  children: ReactNode
+  label: string
+}) {
+  const hintId = useId()
+
+  return (
+    <div className="article-table-frame">
+      <p id={hintId} className="article-table-scroll-hint">
+        Scroll horizontally if needed to view all columns.
+      </p>
+      <div
+        aria-describedby={hintId}
+        aria-label={label}
+        className="article-table-scroll overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
+        role="region"
+        tabIndex={0}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+export function BlogMdxTable(props: ComponentPropsWithoutRef<"table">) {
+  return (
+    <ScrollableTableFrame label="Scrollable article table">
+      <table {...props} />
+    </ScrollableTableFrame>
+  )
+}
+
+type PolicyTableRow = {
+  effect: string
+  risk: string
+  approval: string
+  result: string
+}
+
+export function PolicyTable({ rows }: { rows: PolicyTableRow[] }) {
+  return (
+    <ScrollableTableFrame label="Policy decisions table">
+      <table aria-label="Policy decisions" className="text-left">
+        <thead>
+          <tr>
+            <th scope="col">Current effect</th>
+            <th scope="col">Risk result</th>
+            <th scope="col">Approval</th>
+            <th scope="col">Policy result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.effect}>
+              <th scope="row">{row.effect}</th>
+              <td>{row.risk}</td>
+              <td>{row.approval}</td>
+              <td>{row.result}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </ScrollableTableFrame>
+  )
+}
+
 export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
   return (
-    <div
-      className="article-table-scroll overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
-      tabIndex={0}
-    >
+    <ScrollableTableFrame label="AI pipeline failure modes table">
       <table
         aria-label="AI pipeline failure modes"
         className="article-control-table min-w-[48rem] border-collapse text-left"
@@ -74,7 +140,7 @@ export function ControlTable({ rows }: { rows: ControlTableRow[] }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </ScrollableTableFrame>
   )
 }
 
@@ -115,6 +181,8 @@ export const blogMdxComponents = {
   Callout,
   ControlTable,
   Figure,
+  PolicyTable,
   PostLink,
   pre: BlogMdxPre,
+  table: BlogMdxTable,
 }
