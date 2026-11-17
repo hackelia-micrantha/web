@@ -1,0 +1,54 @@
+import type { MetaFunction } from "@remix-run/node"
+import { createBlogMdxRoute } from "~/content/blog-mdx-route"
+
+import Content from "./content.mdx"
+
+// The personal essay is the canonical edition; this is its Micrantha cross-post.
+const canonicalUrl =
+  "https://ryanjennin.gs/posts/the-envelope-contract-based-agentic-ai/"
+const coverUrl =
+  "https://micrantha.com/img/blog/the-envelope-contract-based-agentic-ai.webp"
+const coverAlt =
+  "An AI request envelope in a muted pastel office, surrounded by specialized security and execution stations"
+
+const route = createBlogMdxRoute(
+  "the-envelope-contract-based-agentic-ai",
+  Content,
+)
+
+export const meta: MetaFunction = (args) =>
+  route.meta(args).map((descriptor) => {
+    if (
+      "tagName" in descriptor &&
+      descriptor.tagName === "link" &&
+      "rel" in descriptor &&
+      descriptor.rel === "canonical"
+    ) {
+      return { ...descriptor, href: canonicalUrl }
+    }
+
+    if ("property" in descriptor && descriptor.property === "og:image") {
+      return { ...descriptor, content: coverUrl }
+    }
+    if ("property" in descriptor && descriptor.property === "og:image:alt") {
+      return { ...descriptor, content: coverAlt }
+    }
+    if ("name" in descriptor && descriptor.name === "twitter:image") {
+      return { ...descriptor, content: coverUrl }
+    }
+    if ("name" in descriptor && descriptor.name === "twitter:image:alt") {
+      return { ...descriptor, content: coverAlt }
+    }
+
+    return descriptor
+  })
+
+export const handle = {
+  structuredData: {
+    ...route.handle.structuredData,
+    author: { "@type": "Person", name: "Ryan Jennings" },
+    image: [coverUrl],
+    isBasedOn: canonicalUrl,
+  },
+}
+export default route.Component

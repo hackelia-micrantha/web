@@ -4,7 +4,7 @@
     "repository": "hackelia-micrantha/hackelia-micrantha",
     "registryPath": "registry/projects.yaml",
     "inventoryPath": "registry/inventory.md",
-    "commit": "e711c5e3bc5bf306e55af531701b37eab1fa4ee3"
+    "commit": "6f3fba15f38349ab81d1b21f3d7bafce3899c604"
   },
   "excludedPortfolioFamilies": ["garden", "scouter"],
   "projects": [
@@ -90,7 +90,7 @@
     },
     {
       "id": "fatherless",
-      "name": "The Fatherless / Entanglement of Ages",
+      "name": "Entanglement of Ages",
       "classification": null,
       "portfolio": "featured",
       "role": "creative",
@@ -115,7 +115,7 @@
     {
       "id": "invokrum",
       "name": "Invokrum",
-      "classification": null,
+      "classification": "laboratory",
       "portfolio": "supporting",
       "role": "tooling",
       "lifecycle": "incubating"
@@ -123,7 +123,7 @@
     {
       "id": "keylix",
       "name": "Keylix",
-      "classification": null,
+      "classification": "laboratory",
       "portfolio": "supporting",
       "role": "library",
       "lifecycle": "incubating"
@@ -163,7 +163,7 @@
     {
       "id": "modolia",
       "name": "Modolia",
-      "classification": null,
+      "classification": "laboratory",
       "portfolio": "supporting",
       "role": "tooling",
       "lifecycle": "incubating"
@@ -187,7 +187,7 @@
     {
       "id": "outermesh",
       "name": "Outermesh",
-      "classification": null,
+      "classification": "laboratory",
       "portfolio": "supporting",
       "role": "solution",
       "lifecycle": "experimental"
@@ -219,9 +219,17 @@
     {
       "id": "testule",
       "name": "Testule",
-      "classification": null,
+      "classification": "laboratory",
       "portfolio": null,
       "role": "tooling",
+      "lifecycle": "incubating"
+    },
+    {
+      "id": "veil",
+      "name": "Veil",
+      "classification": "solution",
+      "portfolio": null,
+      "role": "solution",
       "lifecycle": "incubating"
     }
   ]

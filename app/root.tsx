@@ -18,7 +18,7 @@ import {
   useRouteLoaderData,
 } from "@remix-run/react"
 
-import { Navigation, Footer, Analytics } from "./components"
+import { Navigation, Footer } from "./components"
 import {
   PRIVATE_NO_STORE_CACHE_CONTROL,
   getRequestCacheControl,
@@ -27,7 +27,6 @@ import {
   CSP_NONCE_HEADER,
   buildDocumentSecurityHeaders,
 } from "./services/document-security.server"
-import { resolveRuntimePlatform } from "./services/platform.server"
 import { buildSiteMeta } from "./utils/seo"
 
 export const links: LinksFunction = () => [
@@ -75,23 +74,19 @@ export const headers: HeadersFunction = ({ errorHeaders, loaderHeaders }) => {
   }
 }
 
-type State = { analyticsId: string | null; nonce: string }
+type State = { nonce: string }
 
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const runtime = resolveRuntimePlatform(context, request)
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cacheControl = getRequestCacheControl(request)
   const nonce = globalThis.crypto.randomUUID()
 
-  return new Response(
-    JSON.stringify({ analyticsId: runtime.analyticsId, nonce }),
-    {
-      headers: {
-        "Cache-Control": cacheControl,
-        "Content-Type": "application/json; charset=utf-8",
-        [CSP_NONCE_HEADER]: nonce,
-      },
+  return new Response(JSON.stringify({ nonce }), {
+    headers: {
+      "Cache-Control": cacheControl,
+      "Content-Type": "application/json; charset=utf-8",
+      [CSP_NONCE_HEADER]: nonce,
     },
-  )
+  })
 }
 
 export default function App() {
@@ -159,7 +154,6 @@ export default function App() {
         <script nonce={state?.nonce} src="/navigation.js" defer />
         <ScrollRestoration nonce={state?.nonce} />
         <Scripts nonce={state?.nonce} />
-        <Analytics id={state?.analyticsId} nonce={state?.nonce} />
         {isDev ? <LiveReload nonce={state?.nonce} /> : null}
       </body>
     </html>

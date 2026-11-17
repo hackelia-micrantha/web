@@ -42,14 +42,38 @@ export const Footer = () => {
   return (
     <footer className="mt-20 border-t border-gray-200 px-4 py-8 text-center sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4">
+        <nav
+          aria-label="Footer"
+          className="grid w-full max-w-xl grid-cols-1 gap-6 text-sm text-gray-600 sm:grid-cols-3 sm:text-left"
+        >
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold text-slate-950">Projects</p>
+            <Link to="/solutions">Solutions</Link>
+            <Link to="/laboratory">Laboratory</Link>
+            <Link to="/compost">Compost</Link>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold text-slate-950">Resources</p>
+            <Link to="/services">Services</Link>
+            <Link to="/research">Research</Link>
+            <Link to="/blog">Blog</Link>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold text-slate-950">About</p>
+            <Link to="/philosophy">Philosophy</Link>
+            <Link to="/support">Support</Link>
+            <Link to="/contact">Contact</Link>
+          </div>
+        </nav>
         <div className="flex w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-gray-600">
-          <Link to="/services">Services</Link>
-          <Link to="/solutions">Solutions</Link>
-          <Link to="/blog">Blog</Link>
-          <Link to="/support">Support</Link>
           <Link to="/security">Security</Link>
           <Link to="/privacy">Privacy</Link>
-          <Link to="/philosophy">Philosophy</Link>
+          <ExternalLink href="https://github.com/sponsors/hackelia-micrantha">
+            Sponsor
+          </ExternalLink>
+          <ExternalLink href="https://github.com/hackelia-micrantha">
+            GitHub
+          </ExternalLink>
         </div>
 
         {fortune ? (

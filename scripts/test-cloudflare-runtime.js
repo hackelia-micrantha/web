@@ -18,7 +18,7 @@ const wranglerExecutable = path.join(
   process.platform === "win32" ? "wrangler.cmd" : "wrangler",
 )
 const host = "127.0.0.1"
-const analyticsId = "cloudflare-runtime-contract"
+const legacyAnalyticsId = "cloudflare-runtime-contract"
 const runtimeLog = []
 
 async function getAvailablePort() {
@@ -117,7 +117,9 @@ const runtime = spawn(
     "--local-protocol",
     "http",
     "--var",
-    `MICRANTHA_ANALYTICS_ID:${analyticsId}`,
+    `MICRANTHA_ANALYTICS_ID:${legacyAnalyticsId}`,
+    "--var",
+    `ANALYTICS_ID:${legacyAnalyticsId}`,
     "--var",
     "MICRANTHA_RUNTIME_CONTRACT:enabled",
     "--show-interactive-dev-session=false",
@@ -253,6 +255,8 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   assert.ok(policy, "expected a CSP on every HTML document response")
   assert.match(policy, /img-src 'self' data:/)
   assert.doesNotMatch(policy, /img-src[^;]*https:/)
+  assert.doesNotMatch(policy, /analytics\.micrantha\.com/)
+  assert.doesNotMatch(body, /data-website-id=|\/umami\.js/)
 
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
 
@@ -283,7 +287,8 @@ try {
   assert.equal(home.response.status, 200)
   assert.match(home.body, /<!DOCTYPE html>/i)
   assert.match(home.body, /id="content"/)
-  assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
+  assert.doesNotMatch(home.body, /cloudflare-runtime-contract|analyticsId/)
+  assert.equal(home.response.headers.get("x-micrantha-analytics-enabled"), null)
   assert.match(home.body, /https:\/\/micrantha\.com/)
   assertDocumentHeaders(home.response, home.body)
 

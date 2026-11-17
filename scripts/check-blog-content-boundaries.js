@@ -15,6 +15,7 @@ import {
 import { buildBlogMetadataModule } from "./blog-metadata-projection.js"
 import { validateBlogMdxFile } from "./blog-mdx-validation.js"
 import { validateBlogMermaidBlocks } from "./blog-mermaid-validation.js"
+import { validateStagedBlogCrossposts } from "./staged-blog-crosspost-validation.js"
 
 const routesDirectory = path.join(repositoryRoot, "app/routes")
 const legacyDynamicRoutePath = path.join(routesDirectory, "blog.$slug.tsx")
@@ -76,6 +77,11 @@ assert.equal(
   currentSitemap,
   expectedSitemap,
   "public/sitemap.xml is stale; run node scripts/generate-blog-content.js",
+)
+
+const stagedCrosspostCount = await validateStagedBlogCrossposts(inventory)
+console.log(
+  `Staged non-routable blog cross-posts validated: ${stagedCrosspostCount}`,
 )
 
 console.log(
