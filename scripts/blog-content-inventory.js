@@ -24,6 +24,7 @@ const siteOrigin = "https://micrantha.com"
 const staticPathsBeforeBlogContent = ["/", "/solutions"]
 const staticPathsAfterBlogContent = [
   "/laboratory",
+  "/research",
   "/compost",
   "/services",
   "/support",
