@@ -90,7 +90,9 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
     exact: true,
   })
   await expect(solutionsLink).toBeVisible()
-  await expect(navigation.getByRole("group", { name: "Projects" })).toBeVisible()
+  await expect(
+    navigation.getByRole("group", { name: "Projects" }),
+  ).toBeVisible()
   await expect(navigation.getByRole("group", { name: "About" })).toBeVisible()
   await expect(
     navigation.getByRole("link", { name: "Research", exact: true }),
