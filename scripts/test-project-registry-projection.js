@@ -111,29 +111,27 @@ assert.deepEqual(
   const broken = clone(presentation)
   broken.projects.push({
     kind: "canonical",
-    canonicalId: "invokrum",
-    slug: "invokrum",
+    canonicalId: "mobuild",
+    slug: "mobuild",
     summary:
       "Unclassified canonical projects cannot enter the current catalogue.",
-    url: "/invokrum",
+    url: "/mobuild",
     architectureRole: "Invalid unclassified catalogue entry",
   })
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
-    /canonical presentation project invokrum requires a solution\/laboratory classification/,
+    /canonical presentation project mobuild requires a solution\/laboratory classification/,
   )
 }
 
 {
   const broken = clone(presentation)
-  broken.projects.push({
-    kind: "canonical",
-    canonicalId: "phyllotaxis",
-    slug: "phyllotaxis",
-    summary: "Hidden portfolio projects must not leak into the catalogue.",
-    url: "/phyllotaxis",
-    architectureRole: "Invalid hidden catalogue entry",
-  })
+  const disposition = broken.portfolioDispositions.find(
+    (entry) => entry.canonicalId === "phyllotaxis",
+  )
+  disposition.disposition = "hidden"
+  disposition.rationale = "Synthetic hidden-project fixture"
+  delete disposition.surfaces
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
     /hidden portfolio project phyllotaxis must not have a canonical presentation entry/,
@@ -144,16 +142,16 @@ assert.deepEqual(
   const broken = clone(presentation)
   broken.projects.push({
     kind: "presentation-only",
-    slug: "phyllotaxis",
-    name: "Phyllotaxis Override",
+    slug: "mobuild",
+    name: "Mobuild Override",
     collection: "laboratory",
     summary: "Must use canonical identity instead of presentation-only bypass.",
-    url: "/phyllotaxis",
+    url: "/mobuild",
     architectureRole: "Invalid canonical bypass",
   })
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
-    /presentation-only project phyllotaxis collides with a canonical project id/,
+    /presentation-only project mobuild collides with a canonical project id/,
   )
 }
 

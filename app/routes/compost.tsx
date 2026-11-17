@@ -5,16 +5,15 @@ import {
   SandboxIcon,
   MicraIcon,
   CodemuxIcon,
-  OutermeshIcon,
   GardenIcon,
-  MusingsIcon,
   SolidagoIcon,
 } from "~/components/icons"
 
 export const meta: MetaFunction = () =>
   buildPageMeta({
     title: "Laboratory Compost",
-    description: "Recycled or paused projects from the Micrantha laboratory.",
+    description:
+      "Earlier experiments, retired implementations, and reusable ideas from the Micrantha laboratory.",
     path: "/compost",
   })
 
@@ -22,7 +21,7 @@ const Compost = () => (
   <div>
     <PageTitle
       title="Laboratory Compost"
-      subtitle="Projects listed here were neglected and recycled."
+      subtitle="Earlier experiments, retired implementations, and ideas that continue to inform new work."
     />
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -31,67 +30,43 @@ const Compost = () => (
         url="https://emotext.micrantha.com"
         headingLevel={2}
       >
-        A scalable chat app that has predefined textual representations of
-        emotions. Emotext's are displayed for first, second and third persons,
-        leading to a more rich and humorous expression context. Got too far
-        behind on elixir/phoenix major version, upgrades and not worth
-        maintaining
+        An experiment in expressive chat using predefined emotional phrases
+        adapted to the speaker and recipient. The original application is no
+        longer actively maintained.
       </Card>
 
       <Card title="🐞 Testmanship" headingLevel={2}>
-        Research on test automation, fuzz testing, security and machine learning
-        and how to bring them all together.
+        Earlier research into combining test automation, fuzz testing, security,
+        and machine learning.
       </Card>
 
       <Card title="🥠 Fortunes Mobile" headingLevel={2}>
-        A mobile app for the fortunes service. Fortunes are told with a variety
-        of extra cute characters like cows and androids. Extra fortune content
-        and redesigned categories with the ability for users to submit their
-        own.
+        An earlier mobile companion to Fortunes Service, exploring playful
+        characters, additional content, and user-submitted fortunes.
       </Card>
 
       <Card title="The Garden" icon={<GardenIcon />} headingLevel={2}>
-        The garden is a lightweight extension to turn any relational database
-        with native JSON support into a hybrid nosql mesh network for efficient
-        data sync.
+        A historical experiment in hybrid relational and document-oriented data
+        storage and synchronization.
       </Card>
 
       <Card icon={<SandboxIcon />} title="Sandbox" headingLevel={2}>
-        Development environments saved and reused as sandcastles. Project
-        specific bastions with hooks. Requires mouseless editing skill.
+        An early utility for reusable, isolated development environments. Its
+        ideas helped shape the later Sandcastle project.
       </Card>
 
       <Card title="Micra" icon={<MicraIcon />} headingLevel={2}>
-        A plugin based tool to create development projects and to manage git and
-        build versions. Plugin/templating system for new projects needs better
-        design.
-      </Card>
-
-      <Card
-        title="Outermesh"
-        icon={<OutermeshIcon />}
-        url="https://outermesh.micrantha.com"
-        headingLevel={2}
-      >
-        An e-book on learning software development that has turned into a
-        project in its own right: a multiplayer TUI game about hacking
+        An early plugin-based approach to project scaffolding, Git workflows,
+        and build-version management.
       </Card>
 
       <Card title="Codemux" icon={<CodemuxIcon />} headingLevel={2}>
-        A secure group coding solution in the terminal. Basically tmux and ssh
-        but with a few extras for communication and managing edit control.
-        Requires mouseless editing skill.
-      </Card>
-
-      <Card title="Musings" icon={<MusingsIcon />} headingLevel={2}>
-        A social network inside sanity and in sanity's side. Where negative
-        sentiment is turned into a poem by AI and toxic positivity has to fight
-        its own shadow with an advanced chatbot.
+        An experiment in collaborative terminal-based development using tmux,
+        SSH, communication, and editing controls.
       </Card>
 
       <Card title="Solidago" icon={<SolidagoIcon />} headingLevel={2}>
-        An internal API to manage invoicing and/or payroll (scientific flower
-        name for the 'Goldenrod').
+        An early administrative API experiment for invoicing and payroll.
       </Card>
     </div>
   </div>

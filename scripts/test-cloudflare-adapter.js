@@ -5,14 +5,14 @@ process.env.NODE_ENV = "production"
 const { onRequest } = await import("../functions/[[path]].js")
 
 const origin = "https://micrantha.example"
-const analyticsId = "adapter-contract-test"
+const legacyAnalyticsId = "adapter-contract-test"
 
 async function request(
   pathname,
   {
     userAgent = "adapter-contract",
     method = "GET",
-    analyticsBinding = analyticsId,
+    analyticsBinding = legacyAnalyticsId,
   } = {},
 ) {
   const request = new Request(new URL(pathname, origin), {
@@ -27,6 +27,7 @@ async function request(
     env: analyticsBinding
       ? {
           MICRANTHA_ANALYTICS_ID: analyticsBinding,
+          ANALYTICS_ID: analyticsBinding,
         }
       : {},
     params: {},
@@ -81,6 +82,8 @@ function assertDocumentHeaders(response, body, { requireNonce = true } = {}) {
   assert.ok(policy, "expected a CSP on every HTML document response")
   assert.match(policy, /img-src 'self' data:/)
   assert.doesNotMatch(policy, /img-src[^;]*https:/)
+  assert.doesNotMatch(policy, /analytics\.micrantha\.com/)
+  assert.doesNotMatch(body, /data-website-id=|\/umami\.js/)
 
   const nonce = policy.match(/'nonce-([^']+)'/)?.[1]
 
@@ -108,27 +111,27 @@ const home = await read("/")
 assert.equal(home.response.status, 200)
 assert.match(home.body, /<!DOCTYPE html>/i)
 assert.match(home.body, /id="content"/)
-assert.match(home.body, new RegExp(`data-website-id="${analyticsId}"`))
 assertDocumentHeaders(home.response, home.body)
+assert.doesNotMatch(home.body, /adapter-contract-test|analyticsId/)
+assert.equal(home.response.headers.get("x-micrantha-analytics-enabled"), null)
 
-const privacyEnabled = await read("/privacy")
-assert.equal(privacyEnabled.response.status, 200)
-assert.match(
-  privacyEnabled.body,
-  /Product analytics is enabled for this rendered deployment\./,
-)
-assert.match(
-  privacyEnabled.body,
-  new RegExp(`data-website-id="${analyticsId}"`),
-)
+const noBindingHome = await read("/", { analyticsBinding: null })
+assert.equal(noBindingHome.response.status, 200)
+assertDocumentHeaders(noBindingHome.response, noBindingHome.body)
 
-const privacyDisabled = await read("/privacy", { analyticsBinding: null })
-assert.equal(privacyDisabled.response.status, 200)
-assert.match(
-  privacyDisabled.body,
-  /Product analytics is disabled for this rendered deployment\./,
-)
-assert.doesNotMatch(privacyDisabled.body, /data-website-id=/)
+for (const analyticsBinding of [legacyAnalyticsId, null]) {
+  const privacy = await read("/privacy", { analyticsBinding })
+  assert.equal(privacy.response.status, 200)
+  assert.match(
+    privacy.body,
+    /The website application does not include its own product analytics/,
+  )
+  assert.match(
+    privacy.body,
+    /Cloudflare Web Analytics is independently enabled for/,
+  )
+  assertDocumentHeaders(privacy.response, privacy.body)
+}
 
 const contactRedirect = await read("/contact")
 assert.equal(contactRedirect.response.status, 301)

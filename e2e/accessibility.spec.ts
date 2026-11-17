@@ -13,6 +13,7 @@ const routes: AccessibilityRoute[] = [
   { path: "/solutions", heading: "Solutions" },
   { path: "/laboratory", heading: "Laboratory" },
   { path: "/blog", heading: "Blog" },
+  { path: "/research", heading: "Research" },
   {
     path: "/blog/ai-pipelines-need-control-boundaries",
     heading: "AI Pipelines Need Control Boundaries",
@@ -87,6 +88,7 @@ test("narrow long-form routes keep wide content locally contained", async ({
     "/blog/ai-pipelines-need-control-boundaries",
     "/blog/governance-native-engineering-control-plane",
     "/security",
+    "/research",
   ]) {
     await page.goto(path)
 

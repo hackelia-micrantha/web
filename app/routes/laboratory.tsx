@@ -8,10 +8,13 @@ import {
   CalatheaIcon,
   DubniumIcon,
   GardenIcon,
+  GithubIcon,
   HyperionIcon,
   MobuildIcon,
   MyosotisIcon,
+  OutermeshIcon,
   ReporaIcon,
+  SandboxIcon,
 } from "~/components/icons"
 import {
   projectCollectionDescriptions,
@@ -71,6 +74,38 @@ const laboratoryCardPresentation: Record<string, ProjectCardPresentation> = {
   eyespie: {
     icon: <BluebellIcon />,
     className: cardStyles.blue,
+  },
+  invokrum: {
+    icon: <GithubIcon />,
+    className: cardStyles.neutral,
+  },
+  keylix: {
+    icon: <GithubIcon />,
+    className: cardStyles.purple,
+  },
+  modolia: {
+    icon: <GithubIcon />,
+    className: cardStyles.cyan,
+  },
+  testule: {
+    icon: <GithubIcon />,
+    className: cardStyles.blue,
+  },
+  sandcastle: {
+    icon: <SandboxIcon />,
+    className: cardStyles.neutral,
+  },
+  outermesh: {
+    icon: <OutermeshIcon />,
+    className: cardStyles.red,
+  },
+  "musicpkg-specification": {
+    icon: <GithubIcon />,
+    className: cardStyles.yellow,
+  },
+  phyllotaxis: {
+    icon: <GithubIcon />,
+    className: cardStyles.green,
   },
   compost: {
     icon: <GardenIcon />,

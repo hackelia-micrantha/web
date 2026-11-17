@@ -14,30 +14,36 @@ evidence, and application authority.
 
 ## Current implementation
 
-The site has one optional analytics integration:
+The application has no browser analytics client, provider website identifier,
+custom events, identity API, replay, fingerprinting, or analytics browser
+storage. The obsolete Umami integration and its CSP permissions are removed;
+the legacy `MICRANTHA_ANALYTICS_ID` and `ANALYTICS_ID` bindings have no effect.
+The reserved Micrantha analytics hostname and Phenology product are not
+activated by this change.
 
-- component: `app/components/analytics.tsx`;
-- script origin: `https://analytics.micrantha.com/umami.js`;
-- repository-supplied analytics data: website ID only;
-- enabled only when `MICRANTHA_ANALYTICS_ID` or the compatible
-  `ANALYTICS_ID` binding is present;
-- absent binding means no analytics script is rendered.
+These are source-code facts, not proof of removal from previously deployed
+or cached documents, edge-managed collection, or historical database retention.
 
-Repository search currently finds no:
+## Separately managed Cloudflare Web Analytics
 
-- custom analytics events;
-- `umami.identify` or equivalent user identity calls;
-- session replay;
-- fingerprinting library;
-- application cookie API;
-- `localStorage`/`sessionStorage` analytics identity.
+The Cloudflare `micrantha.com` zone has RUM enabled and its Web Analytics
+site is configured for automatic injection. A read-only GraphQL query on
+2026-11-14 recorded browser page-load events for `micrantha.com` during
+November 7–14, 2026. This is observed aggregate collection, but not a
+page-by-page injected-HTML, CSP, or browser-network verification.
 
-These are source-code facts. They are not claims about reverse proxies,
-Cloudflare, the deployed Umami version/configuration, or database retention.
+Removing the application-owned integration does **not** disable Cloudflare's
+independent edge-managed Web Analytics. The privacy route distinguishes
+application behavior from provider configuration.
+
+Live document/network verification, any historical provider/database and
+backup inventory, and the final retention and disablement disposition
+remain governed by `hackelia-micrantha/hackelia-micrantha#64`.
 
 ## Measurement questions
 
-The current pageview-only integration exists to answer two bounded questions:
+Use existing aggregate Cloudflare page-load data to answer two bounded
+questions:
 
 1. **Which public pages receive enough use to justify continued maintenance and
    prominence?**
@@ -53,14 +59,6 @@ review the minimum new event/property set before instrumenting it.
 
 The application intentionally emits no custom event payload.
 
-The maximum repository-owned collection surface is therefore:
-
-```text
-page rendered
-  -> optional provider script
-  -> automatic pageview behavior of the verified deployed provider
-```
-
 The application does not add:
 
 - account/user identity;
@@ -72,9 +70,8 @@ The application does not add:
 - custom device fingerprinting;
 - unrestricted application state.
 
-Provider-default pageview fields must be verified against the deployed
-`analytics.micrantha.com` version/configuration before being described as
-current production behavior.
+Provider-default pageview fields must be verified against the actual
+Cloudflare deployment before being described as current production behavior.
 
 ## Identity and aggregation
 
@@ -91,23 +88,15 @@ Do not add application-level identity merely to improve analytics continuity.
 
 ### Operator disablement
 
-Omit `MICRANTHA_ANALYTICS_ID` / `ANALYTICS_ID`, then allow existing
-browser/edge cache entries to expire or explicitly invalidate the affected
-cached HTML before treating the deployment as analytics-disabled.
+Cloudflare collection is controlled through Cloudflare configuration.
+Application source does not include an analytics switch. After an application
+release, allow earlier cached documents to expire or be invalidated before
+evaluating the current deployment.
 
-Verify the post-invalidation/expiry deployment by requesting representative
-public pages and confirming:
-
-- no analytics script element is present;
-- no request to the analytics script origin occurs from this integration;
-- rendering, navigation, SEO, accessibility, and content remain functional.
-
-The repository's cache policy can retain previously rendered HTML after a
-binding change, so removing the binding is the configuration step, not by
-itself proof that already-cached documents have stopped referencing analytics.
-
-Analytics is therefore optional deployment configuration, not application
-authority.
+Verify representative rendered pages, response headers and browser requests.
+Distinguish provider-injected measurement from application-owned code and
+confirm that rendering, navigation, SEO, accessibility and content remain
+functional.
 
 ### Provider/export failure
 
@@ -146,7 +135,7 @@ The repository does not own or currently encode analytics database retention.
 Before privacy copy makes a concrete retention/deletion claim, deployment
 evidence must identify:
 
-- deployed Umami version;
+- active provider configuration and any historical Umami data;
 - data store/operator;
 - retention window;
 - deletion mechanism;
@@ -164,7 +153,7 @@ or generic privacy-policy boilerplate.
 
 Do not update provider-specific cookie, identity, IP, retention, or deletion
 claims from this document alone. First attach deployment evidence to
-`hackelia-micrantha/web#166`.
+`hackelia-micrantha/hackelia-micrantha#64`.
 
 ## Change control
 

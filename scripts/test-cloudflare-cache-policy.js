@@ -5,7 +5,6 @@ process.env.NODE_ENV = "production"
 const { onRequest } = await import("../functions/[[path]].js")
 
 const origin = "https://micrantha.example"
-const analyticsId = "cache-policy-contract"
 const cacheControls = {
   home: "public, max-age=60, s-maxage=300, stale-while-revalidate=900",
   catalog: "public, max-age=60, s-maxage=600, stale-while-revalidate=1800",
@@ -20,7 +19,7 @@ async function request(pathname, { method = "GET" } = {}) {
       method,
       headers: { "User-Agent": "cache-policy-contract" },
     }),
-    env: { MICRANTHA_ANALYTICS_ID: analyticsId },
+    env: {},
     params: {},
     data: {},
     functionPath: "[[path]]",

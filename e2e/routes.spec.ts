@@ -90,15 +90,51 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   await expect(
     page.getByRole("heading", { name: "EyesPie", exact: true }),
   ).toBeVisible()
-  await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
-    "href",
-    "/compost",
-  )
+  for (const name of [
+    "Invokrum",
+    "Keylix",
+    "Modolia",
+    "Testule",
+    "Sandcastle",
+    "Outermesh",
+    "MUSICPKG",
+    "Phyllotaxis",
+  ]) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
+  }
+  await expect(
+    page.getByRole("main").getByRole("link", { name: "Compost" }),
+  ).toHaveAttribute("href", "/compost")
   await expect(
     page.getByRole("heading", { name: "Project Anthesis", exact: true }),
   ).toHaveCount(0)
   await expect(
     page.getByRole("heading", { name: "Envuscator", exact: true }),
+  ).toHaveCount(0)
+})
+
+test("/compost preserves historical project context", async ({ page }) => {
+  await page.goto("/compost")
+
+  await expect(
+    page.getByRole("heading", { name: "Laboratory Compost", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "Earlier experiments, retired implementations, and ideas that continue to inform new work.",
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Sandbox", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/ideas helped shape the later Sandcastle/),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "The Garden", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Outermesh", exact: true }),
   ).toHaveCount(0)
 })
 
@@ -117,11 +153,18 @@ test("/privacy retains the tailored long-form policy copy", async ({
   ).toBeVisible()
   await expect(
     page.getByText(
-      "Product analytics is disabled for this rendered deployment.",
+      "The website application does not include its own product analytics script",
     ),
   ).toBeVisible()
+  await expect(
+    page.getByText("Cloudflare Web Analytics is independently enabled for", {
+      exact: false,
+    }),
+  ).toBeVisible()
   await expect(page.getByText("Cookies and Browser Storage")).toBeVisible()
-  await expect(page.getByText("Contact", { exact: true })).toBeVisible()
+  await expect(
+    page.getByRole("main").getByText("Contact", { exact: true }),
+  ).toBeVisible()
   await expect(page.getByText("fortunes.micrantha.com")).toHaveCount(0)
 })
 

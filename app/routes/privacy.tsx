@@ -1,5 +1,4 @@
 import type { MetaFunction } from "@remix-run/node"
-import { useRouteLoaderData } from "@remix-run/react"
 import { PageTitle } from "~/components"
 import { buildPageMeta } from "~/utils/seo"
 
@@ -10,14 +9,7 @@ export const meta: MetaFunction = () =>
     path: "/privacy",
   })
 
-type RootState = {
-  analyticsId?: string | null
-}
-
 const Privacy = () => {
-  const rootState = useRouteLoaderData<RootState>("root")
-  const analyticsEnabled = Boolean(rootState?.analyticsId)
-
   return (
     <div>
       <PageTitle
@@ -67,27 +59,19 @@ const Privacy = () => {
 
         <section className="space-y-3">
           <h2 className="text-xl">Product Analytics</h2>
-          {analyticsEnabled ? (
-            <>
-              <p>
-                Product analytics is enabled for this rendered deployment. The
-                site is configured to load the optional pageview analytics
-                script from <i>analytics.micrantha.com</i>.
-              </p>
-              <p>
-                The application supplies a website identifier but does not add
-                custom analytics events, application user identity, session
-                replay, fingerprinting, form contents, or an application-owned
-                analytics browser-storage mechanism.
-              </p>
-            </>
-          ) : (
-            <p>
-              Product analytics is disabled for this rendered deployment. No
-              analytics binding was present when this page was generated, so the
-              application does not emit its optional analytics script.
-            </p>
-          )}
+          <p>
+            The website application does not include its own product analytics
+            script or provider website identifier. It does not add custom
+            analytics events, application user identity, session replay,
+            fingerprinting, form contents, or an application-owned analytics
+            browser-storage mechanism.
+          </p>
+          <p>
+            Cloudflare Web Analytics is independently enabled for{" "}
+            <i>micrantha.com</i>. It records browser page loads and performance
+            through a Cloudflare-managed beacon on eligible pages. This
+            measurement is managed independently of the website application.
+          </p>
           <p>
             Provider-side session identity, IP and user-agent processing,
             referrer handling, retention, deletion, proxy behavior, and data
@@ -96,9 +80,9 @@ const Privacy = () => {
             site rendering or navigation.
           </p>
           <p>
-            Analytics is deployment configuration. After an operator changes the
-            binding, cached pages must expire or be invalidated before the
-            rendered state can be treated as current.
+            Cloudflare measurement is managed through Cloudflare configuration.
+            Cached documents may reflect an earlier website release until they
+            expire or are invalidated.
           </p>
         </section>
 
@@ -126,10 +110,9 @@ const Privacy = () => {
             route, cache, and protect requests.
           </p>
           <p>
-            The optional analytics provider receives pageview-related data only
-            when analytics is configured and its client is loaded. Other related
-            Micrantha services may use different providers for their specific
-            functions.
+            Cloudflare also provides the independently managed Web Analytics
+            described above. Other related Micrantha services may use different
+            providers for their specific functions.
           </p>
         </section>
 
