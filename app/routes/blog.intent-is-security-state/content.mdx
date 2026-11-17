@@ -266,10 +266,22 @@ The more interesting result appears when exact intent identity is composed with 
 
 Two deterministic cases exercise different assurance paths.
 
-| Current effect               | Risk result | Approval | Policy result     |
-| ---------------------------- | ----------- | -------- | ----------------- |
-| Draft internal documentation | Tier 0      | none     | allow             |
-| Modify CI/CD workflow        | Tier 3      | reviewer | approval required |
+<PolicyTable
+  rows={[
+    {
+      effect: "Draft internal documentation",
+      risk: "Tier 0",
+      approval: "none",
+      result: "allow",
+    },
+    {
+      effect: "Modify CI/CD workflow",
+      risk: "Tier 3",
+      approval: "reviewer",
+      result: "approval required",
+    },
+  ]}
+/>
 
 Both begin with an exact current intent subject. They do not receive the same process simply because an agent proposed them.
 
