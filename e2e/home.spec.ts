@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test"
 
 const navTargets = {
   Blog: "/blog",
+  Research: "/research",
   Solutions: "/solutions",
   Support: "/support",
 }
@@ -12,7 +13,18 @@ async function clickNavigationLink(page: Page, name: keyof typeof navTargets) {
   const visibleLink = navigation.locator(`a[href="${target}"]:visible`)
 
   if ((await visibleLink.count()) === 0) {
-    await navigation.locator("details[data-mobile-navigation] summary").click()
+    const mobileTrigger = navigation.locator(
+      "details[data-mobile-navigation] summary",
+    )
+    if (await mobileTrigger.isVisible()) {
+      await mobileTrigger.click()
+    } else {
+      await navigation
+        .locator("details[data-nav-group]")
+        .filter({ has: page.locator(`a[href="${target}"]`) })
+        .locator("summary")
+        .click()
+    }
   }
 
   await visibleLink.click()
@@ -87,6 +99,18 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
       "Architecture notes on secure platform integration, delivery governance, AI-assisted systems, and long-lived software design.",
     ),
   ).toBeVisible()
+
+  await clickNavigationLink(page, "Research")
+  await expect(page).toHaveURL(/\/research$/)
+  await expect(
+    page.getByRole("heading", { name: "Research", exact: true }),
+  ).toBeVisible()
+  await expect(
+    page
+      .getByRole("navigation", { name: "Primary" })
+      .locator('a[href="/research"]')
+      .first(),
+  ).toHaveAttribute("aria-current", "page")
 
   await clickNavigationLink(page, "Support")
   await expect(page).toHaveURL(/\/support$/)

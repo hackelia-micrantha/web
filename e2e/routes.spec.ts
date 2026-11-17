@@ -163,7 +163,9 @@ test("/privacy retains the tailored long-form policy copy", async ({
     }),
   ).toBeVisible()
   await expect(page.getByText("Cookies and Browser Storage")).toBeVisible()
-  await expect(page.getByText("Contact", { exact: true })).toBeVisible()
+  await expect(
+    page.getByRole("main").getByText("Contact", { exact: true }),
+  ).toBeVisible()
   await expect(page.getByText("fortunes.micrantha.com")).toHaveCount(0)
 })
 
