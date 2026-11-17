@@ -1,6 +1,8 @@
-const mobileNavigations = document.querySelectorAll("[data-mobile-navigation]")
+const navigations = document.querySelectorAll(
+  "[data-mobile-navigation], [data-nav-group]",
+)
 
-for (const navigation of mobileNavigations) {
+for (const navigation of navigations) {
   if (!(navigation instanceof HTMLDetailsElement)) continue
 
   const trigger = navigation.querySelector("summary")
