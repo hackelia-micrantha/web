@@ -79,6 +79,19 @@ test("homepage exposes primary marketing content", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Anthesis agentic-system trials" }),
   ).toHaveAttribute("href", "https://anthesis.micrantha.com/#collaborate")
+
+  const scanOrder = await page
+    .locator("main section[id]")
+    .evaluateAll((sections) => sections.map((section) => section.id))
+  expect(scanOrder).toEqual([
+    "solutions",
+    "services",
+    "laboratory",
+    "insights",
+    "philosophy",
+    "collaborate",
+    "contact",
+  ])
 })
 
 test("primary navigation reaches key sections and routes", async ({ page }) => {

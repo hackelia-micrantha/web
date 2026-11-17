@@ -502,7 +502,7 @@ export const projectPresentation = {
     {
       canonicalId: "myosotis",
       disposition: "shown",
-      surfaces: ["catalog", "homepage"],
+      surfaces: ["catalog"],
     },
     {
       canonicalId: "phyllotaxis",
