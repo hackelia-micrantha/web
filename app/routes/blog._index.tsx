@@ -84,6 +84,13 @@ export default function BlogIndexRoute() {
           copy: secure platform integration, delivery governance, AI-assisted
           workflows, and long-lived software boundaries.
         </p>
+        <p className="page-copy-sm mt-4">
+          Explore the evidence behind our engineering decisions in the{" "}
+          <Link className="article-meta-link" to="/research">
+            Research index
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="space-y-4" aria-labelledby="blog-series-heading">
