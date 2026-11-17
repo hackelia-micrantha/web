@@ -16,7 +16,10 @@ const themes = [...new Set(featured.map((entry) => entry.theme))].sort()
 const totals = [
   { label: "Tracked records", value: coverage.tracked },
   { label: "Marked reviewed", value: coverage.marked_reviewed },
-  { label: "Score-eligible reviews", value: coverage.reviewed_with_complete_scores },
+  {
+    label: "Score-eligible reviews",
+    value: coverage.reviewed_with_complete_scores,
+  },
   { label: "Featured selections", value: featured.length },
 ]
 
@@ -53,9 +56,13 @@ export default function ResearchRoute() {
         className="editorial-panel space-y-4 px-6 py-6"
       >
         <p className="meta-kicker">
-          Edition <time dateTime={researchIndex.as_of}>{researchIndex.as_of}</time>
+          Edition{" "}
+          <time dateTime={researchIndex.as_of}>{researchIndex.as_of}</time>
         </p>
-        <h2 id="coverage-heading" className="text-2xl font-semibold tracking-tight">
+        <h2
+          id="coverage-heading"
+          className="text-2xl font-semibold tracking-tight"
+        >
           Research coverage
         </h2>
         <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -70,8 +77,9 @@ export default function ResearchRoute() {
         </dl>
         <p className="page-copy-sm">
           {coverage.review_status_completion_pct}% marked reviewed;{" "}
-          {coverage.triaged} triaged; {coverage.reviewed_without_complete_scores}{" "}
-          marked-reviewed records lack complete valid scores.
+          {coverage.triaged} triaged;{" "}
+          {coverage.reviewed_without_complete_scores} marked-reviewed records
+          lack complete valid scores.
         </p>
         <p className="page-copy-sm">{coverage.definition}</p>
         <h3 className="text-lg font-semibold">Selected research domains</h3>
@@ -86,19 +94,19 @@ export default function ResearchRoute() {
         <p className="page-copy-sm">{researchIndex.domain_definition}</p>
       </section>
 
-      <section
-        aria-labelledby="ranking-heading"
-        className="space-y-4"
-      >
-        <h2 id="ranking-heading" className="text-2xl font-semibold tracking-tight">
+      <section aria-labelledby="ranking-heading" className="space-y-4">
+        <h2
+          id="ranking-heading"
+          className="text-2xl font-semibold tracking-tight"
+        >
           Ranked editorial selections
         </h2>
         <p className="page-copy-sm">{ranking.selection_note}</p>
         <p className="page-copy-sm">
           Target: {ranking.target_selection_size} from{" "}
-          {ranking.screened_candidates} screened candidates.{" "}
-          {featured.length} included with cutoff ties at{" "}
-          {ranking.cutoff_score}/100. {ranking.tie_rule}
+          {ranking.screened_candidates} screened candidates. {featured.length}{" "}
+          included with cutoff ties at {ranking.cutoff_score}/100.{" "}
+          {ranking.tie_rule}
         </p>
         <details className="editorial-panel space-y-3 px-6 py-4">
           <summary className="cursor-pointer font-semibold">
@@ -141,13 +149,16 @@ export default function ResearchRoute() {
                 Rank {entry.rank} · {entry.score}/100 · {entry.theme}
               </p>
               <h3 className="break-words text-xl font-semibold tracking-tight text-slate-900">
-                <ExternalLink href={entry.source_url}>{entry.title}</ExternalLink>
+                <ExternalLink href={entry.source_url}>
+                  {entry.title}
+                </ExternalLink>
               </h3>
               <p className="text-sm text-slate-700">
                 {entry.authors} · Source date {entry.source_date}
               </p>
               <p className="text-sm text-slate-700">
-                Assessed <time dateTime={entry.assessed_on}>{entry.assessed_on}</time>
+                Assessed{" "}
+                <time dateTime={entry.assessed_on}>{entry.assessed_on}</time>
                 {" · "}
                 {entry.review_basis}
               </p>
@@ -174,13 +185,17 @@ export default function ResearchRoute() {
                 <p className="page-copy-sm">{entry.rationale}</p>
                 <p className="page-copy-sm">
                   Momentum {entry.components.momentum}, novelty{" "}
-                  {entry.components.novelty}, evidence {entry.components.evidence},
-                  practicality {entry.components.practical}, long-term value{" "}
+                  {entry.components.novelty}, evidence{" "}
+                  {entry.components.evidence}, practicality{" "}
+                  {entry.components.practical}, long-term value{" "}
                   {entry.components.long_term} (each out of 5).
                 </p>
               </details>
               {entry.review_url ? (
-                <ExternalLink className="article-meta-link" href={entry.review_url}>
+                <ExternalLink
+                  className="article-meta-link"
+                  href={entry.review_url}
+                >
                   Full community review
                 </ExternalLink>
               ) : null}
@@ -194,12 +209,18 @@ export default function ResearchRoute() {
           Source and attribution
         </h2>
         <p className="page-copy-sm">
-          <ExternalLink className="article-meta-link" href={researchIndexSource}>
+          <ExternalLink
+            className="article-meta-link"
+            href={researchIndexSource}
+          >
             Version-pinned community research index (JSON)
           </ExternalLink>
           {" · "}
           {researchIndex.attribution} ·{" "}
-          <ExternalLink className="article-meta-link" href={researchIndex.license_url}>
+          <ExternalLink
+            className="article-meta-link"
+            href={researchIndex.license_url}
+          >
             {researchIndex.license}
           </ExternalLink>
         </p>
@@ -207,7 +228,10 @@ export default function ResearchRoute() {
         {researchIndex.adaptations.map((adaptation) => (
           <p key={adaptation.id} className="page-copy-sm">
             Adapted from{" "}
-            <ExternalLink className="article-meta-link" href={adaptation.source_url}>
+            <ExternalLink
+              className="article-meta-link"
+              href={adaptation.source_url}
+            >
               {adaptation.title}
             </ExternalLink>
             {" by "}
