@@ -12,15 +12,21 @@ test("research index preserves the edition totals, ranks and source links", asyn
   ).toBeVisible()
 
   const coverage = page.getByRole("region", { name: "Research coverage" })
-  for (const value of [
-    researchIndex.coverage.tracked,
-    researchIndex.coverage.marked_reviewed,
-    researchIndex.coverage.reviewed_with_complete_scores,
-    researchIndex.featured.length,
-  ]) {
-    await expect(coverage.getByText(String(value), { exact: true })).toBeVisible()
+  for (const [label, value] of [
+    ["Tracked records", researchIndex.coverage.tracked],
+    ["Marked reviewed", researchIndex.coverage.marked_reviewed],
+    [
+      "Score-eligible reviews",
+      researchIndex.coverage.reviewed_with_complete_scores,
+    ],
+    ["Featured selections", researchIndex.featured.length],
+  ] as const) {
+    const metric = coverage.getByText(label, { exact: true }).locator("..")
+    await expect(metric.locator("dd")).toHaveText(String(value))
   }
-  await expect(coverage.getByText(researchIndex.coverage.definition)).toBeVisible()
+  await expect(
+    coverage.getByText(researchIndex.coverage.definition),
+  ).toBeVisible()
   const entries = page.locator("[data-research-entry]")
   await expect(entries).toHaveCount(researchIndex.featured.length)
   for (const [i, entry] of researchIndex.featured.entries()) {
@@ -31,16 +37,23 @@ test("research index preserves the edition totals, ranks and source links", asyn
       "href",
       entry.source_url,
     )
-    await expect(card.getByText(entry.limitation, { exact: false })).toBeVisible()
-    await expect(card.getByText(entry.review_basis, { exact: false })).toBeVisible()
+    await expect(
+      card.getByText(entry.limitation, { exact: false }),
+    ).toBeVisible()
+    await expect(
+      card.getByText(entry.review_basis, { exact: false }),
+    ).toBeVisible()
   }
   const topic = researchIndex.featured[0].theme
   await page.getByLabel("Filter by topic").selectOption(topic)
-  const matching = researchIndex.featured.filter((entry) => entry.theme === topic)
+  const matching = researchIndex.featured.filter(
+    (entry) => entry.theme === topic,
+  )
   await expect(entries).toHaveCount(matching.length)
-  await expect(
-    entries.first(),
-  ).toHaveAttribute("data-rank", String(matching[0].rank))
+  await expect(entries.first()).toHaveAttribute(
+    "data-rank",
+    String(matching[0].rank),
+  )
   await page.getByLabel("Filter by topic").selectOption("")
   await expect(entries).toHaveCount(researchIndex.featured.length)
   await expect(page.getByRole("link", { name: "CC-BY-4.0" })).toHaveAttribute(
@@ -49,7 +62,9 @@ test("research index preserves the edition totals, ranks and source links", asyn
   )
 })
 
-test("research index is server-rendered without JavaScript", async ({ browser }) => {
+test("research index is server-rendered without JavaScript", async ({
+  browser,
+}) => {
   const context = await browser.newContext({ javaScriptEnabled: false })
   try {
     const page = await context.newPage()
