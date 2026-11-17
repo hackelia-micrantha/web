@@ -11,6 +11,7 @@ type LoaderData = {
   series: {
     slug: string
     title: string
+    description: string
     posts: {
       slug: string
       title: string
@@ -32,6 +33,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     series: {
       slug: series.slug,
       title: series.title,
+      description: series.description,
       posts: series.posts.map((post) => ({
         slug: post.slug,
         title: post.title,
@@ -49,7 +51,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
   return buildPageMeta({
     title: data.series.title + " Series",
-    description: "Posts in the " + data.series.title + " series.",
+    description: data.series.description,
     path: "/blog/series/" + data.series.slug,
   })
 }
@@ -63,10 +65,7 @@ export default function BlogSeriesRoute() {
         <Link className="article-meta-link inline-flex text-sm" to="/blog">
           Back to blog
         </Link>
-        <PageTitle
-          title={series.title}
-          subtitle="Ordered notes and essays grouped as a connected series."
-        />
+        <PageTitle title={series.title} subtitle={series.description} />
       </div>
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -85,7 +84,7 @@ export default function BlogSeriesRoute() {
             }
           >
             <>
-              <span className="meta-kicker mb-3 block">
+              <span className="mb-3 block text-sm font-semibold tracking-wide text-slate-600">
                 Part {index + 1} / {formatBlogDate(post.date)}
               </span>
               <span className="block text-[1.02rem] leading-8 text-slate-700">

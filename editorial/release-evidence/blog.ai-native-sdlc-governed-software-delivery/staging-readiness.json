@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "slug": "ai-native-sdlc-governed-software-delivery",
+  "authorization": "not-granted",
+  "source": {
+    "repository": "ryjen/blog",
+    "path": "content/posts/ai-native-sdlc-governed-software-delivery.md",
+    "gitCommit": "9710c214c744daed3e59a3e428372ae687ee0774",
+    "sha256": "1efcd1f26a73df73255018bf716ddb490e3351fba64de55b8f19de8631f9a890",
+    "canonicalUrl": "https://ryanjennin.gs/posts/ai-native-sdlc-governed-software-delivery/"
+  },
+  "staged": {
+    "contentSha256": "1485aee7b7a5456497382af2b3678bf89f01c13e80d4d631cd95f4756862eadd",
+    "coverSha256": "1b536341f60a4417c668d1e2ff20eb3e05e4b1154f1b1e95b559c4c2a1b835a0",
+    "routeTemplateSha256": "09dbd08a09b518494de68891a27565c1adead8c391731efb2a41b6fd3710f6ac"
+  },
+  "observed": {
+    "checkedAt": "2026-11-06",
+    "httpStatus": 200,
+    "finalUrl": "https://ryanjennin.gs/posts/ai-native-sdlc-governed-software-delivery/",
+    "canonicalUrl": "https://ryanjennin.gs/posts/ai-native-sdlc-governed-software-delivery/",
+    "robots": "index, follow"
+  }
+}
