@@ -13,20 +13,13 @@ for (const navigation of navigations) {
     continue
   }
 
-  const syncExpandedState = () => {
-    trigger.setAttribute("aria-expanded", String(navigation.open))
-  }
-
   const closeNavigation = (restoreFocus = false) => {
     navigation.open = false
-    syncExpandedState()
 
     if (restoreFocus) {
       trigger.focus()
     }
   }
-
-  navigation.addEventListener("toggle", syncExpandedState)
 
   navigation.addEventListener("keydown", (event) => {
     if (event.key !== "Escape" || !navigation.open) return
@@ -59,5 +52,4 @@ for (const navigation of navigations) {
     closeNavigation()
   })
 
-  syncExpandedState()
 }
