@@ -1,8 +1,27 @@
 import assert from "node:assert/strict"
-import { existsSync, readFileSync } from "node:fs"
+import { existsSync, readFileSync, readdirSync } from "node:fs"
 import test from "node:test"
 
 const workflow = readFileSync(".github/workflows/ci.yml", "utf8")
+function yamlFiles(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = `${directory}/${entry.name}`
+
+    if (entry.isDirectory()) {
+      return yamlFiles(entryPath)
+    }
+
+    return /\.ya?ml$/u.test(entry.name)
+      ? [{ name: entryPath, source: readFileSync(entryPath, "utf8") }]
+      : []
+  })
+}
+
+const actionFiles = [
+  ...yamlFiles(".github/workflows"),
+  ...yamlFiles(".github/actions"),
+]
+const securityWorkflow = readFileSync(".github/workflows/security.yml", "utf8")
 const dockerfile = readFileSync("Dockerfile", "utf8")
 const flake = readFileSync("flake.nix", "utf8")
 const lock = readFileSync("flake.lock", "utf8")
@@ -35,6 +54,55 @@ test("every runner-web job uses the repository-owned setup action", () => {
       "every runner-web job must activate the project-owned setup exactly once",
     )
   }
+})
+
+test("external GitHub Actions use immutable commit pins", () => {
+  for (const { name, source } of actionFiles) {
+    for (const match of source.matchAll(
+      /^\s*(?:-\s*)?uses:\s*([^\s#]+)(?:\s+#\s*(.+))?$/gmu,
+    )) {
+      const reference = match[1]
+      const comment = match[2]
+
+      if (reference.startsWith("./") || reference.startsWith("docker://")) {
+        continue
+      }
+
+      const separator = reference.lastIndexOf("@")
+      assert.notEqual(
+        separator,
+        -1,
+        `${name}: external action is missing a ref`,
+      )
+
+      const action = reference.slice(0, separator)
+      const ref = reference.slice(separator + 1)
+
+      assert.match(
+        ref,
+        /^[0-9a-f]{40}$/u,
+        `${name}: ${action} must use an immutable commit SHA`,
+      )
+      assert.match(
+        comment ?? "",
+        /^v\d/u,
+        `${name}: ${action} must retain a human-readable version comment`,
+      )
+    }
+  }
+})
+
+test("security workflow keeps first-party analysis off the Dubnium JIT image", () => {
+  assert.match(securityWorkflow, /runs-on: ubuntu-latest/u)
+  assert.doesNotMatch(securityWorkflow, /runs-on: runner-web/u)
+  assert.doesNotMatch(securityWorkflow, /\.\/\.github\/actions\/setup/u)
+  assert.match(securityWorkflow, /actions\/dependency-review-action@/u)
+  assert.match(securityWorkflow, /fail-on-severity: moderate/u)
+  assert.match(securityWorkflow, /github\/codeql-action\/init@/u)
+  assert.match(securityWorkflow, /github\/codeql-action\/analyze@/u)
+  assert.match(securityWorkflow, /languages: javascript-typescript/u)
+  assert.match(securityWorkflow, /build-mode: none/u)
+  assert.match(securityWorkflow, /security-events: write/u)
 })
 
 test("project toolchain pins Node 24 and Yarn 1 through Nix", () => {
