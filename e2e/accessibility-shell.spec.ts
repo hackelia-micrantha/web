@@ -19,6 +19,7 @@ test("desktop navigation exposes the current route", async ({
     "Desktop navigation is visible only in the desktop project.",
   )
 
+  await page.setViewportSize({ width: 768, height: 900 })
   await page.goto("/solutions")
   const navigation = page.getByRole("navigation", { name: "Primary" })
 
@@ -26,10 +27,13 @@ test("desktop navigation exposes the current route", async ({
     'summary[aria-controls="projects-navigation"]',
   )
   const about = navigation.locator('summary[aria-controls="about-navigation"]')
-  await expect(projects).toHaveAttribute("aria-expanded", "false")
+  await expect(projects.locator("..")).not.toHaveAttribute("open", "")
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(768)
   await projects.focus()
   await page.keyboard.press("Enter")
-  await expect(projects).toHaveAttribute("aria-expanded", "true")
+  await expect(projects.locator("..")).toHaveAttribute("open", "")
   const solutions = navigation.getByRole("link", {
     name: "Solutions",
     exact: true,
@@ -43,10 +47,10 @@ test("desktop navigation exposes the current route", async ({
   ).toBeVisible()
   await solutions.focus()
   await page.keyboard.press("Escape")
-  await expect(projects).toHaveAttribute("aria-expanded", "false")
+  await expect(projects.locator("..")).not.toHaveAttribute("open", "")
   await expect(projects).toBeFocused()
   await about.click()
-  await expect(about).toHaveAttribute("aria-expanded", "true")
+  await expect(about.locator("..")).toHaveAttribute("open", "")
   await expect(
     navigation.getByRole("link", { name: "Philosophy", exact: true }),
   ).toBeVisible()
@@ -54,7 +58,7 @@ test("desktop navigation exposes the current route", async ({
     navigation.getByRole("link", { name: "Support", exact: true }),
   ).toBeVisible()
   await projects.click()
-  await expect(about).toHaveAttribute("aria-expanded", "false")
+  await expect(about.locator("..")).not.toHaveAttribute("open", "")
   await expect(
     navigation.getByRole("link", { name: "Research", exact: true }),
   ).toBeVisible()
@@ -77,11 +81,9 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   const trigger = disclosure.locator("summary")
 
   await expect(trigger).toHaveAccessibleName("Navigation menu")
-  await expect(trigger).toHaveAttribute("aria-expanded", "false")
   await trigger.focus()
   await page.keyboard.press("Enter")
   await expect(disclosure).toHaveAttribute("open", "")
-  await expect(trigger).toHaveAttribute("aria-expanded", "true")
 
   const solutionsLink = navigation.getByRole("link", {
     name: "Solutions",
@@ -96,7 +98,6 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   await solutionsLink.focus()
   await page.keyboard.press("Escape")
   await expect(disclosure).not.toHaveAttribute("open", "")
-  await expect(trigger).toHaveAttribute("aria-expanded", "false")
   await expect(trigger).toBeFocused()
 
   await trigger.click()
@@ -110,7 +111,6 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   const updatedTrigger = updatedDisclosure.locator("summary")
 
   await expect(updatedDisclosure).not.toHaveAttribute("open", "")
-  await expect(updatedTrigger).toHaveAttribute("aria-expanded", "false")
   await updatedTrigger.click()
   await expect(
     updatedNavigation.getByRole("link", {
