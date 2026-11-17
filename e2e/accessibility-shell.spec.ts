@@ -19,12 +19,49 @@ test("desktop navigation exposes the current route", async ({
     "Desktop navigation is visible only in the desktop project.",
   )
 
+  await page.setViewportSize({ width: 768, height: 900 })
   await page.goto("/solutions")
   const navigation = page.getByRole("navigation", { name: "Primary" })
 
+  const projects = navigation.locator(
+    'summary[aria-controls="projects-navigation"]',
+  )
+  const about = navigation.locator('summary[aria-controls="about-navigation"]')
+  await expect(projects.locator("..")).not.toHaveAttribute("open", "")
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(768)
+  await projects.focus()
+  await page.keyboard.press("Enter")
+  await expect(projects.locator("..")).toHaveAttribute("open", "")
+  const solutions = navigation.getByRole("link", {
+    name: "Solutions",
+    exact: true,
+  })
+  await expect(solutions).toHaveAttribute("aria-current", "page")
   await expect(
-    navigation.getByRole("link", { name: "Solutions", exact: true }),
-  ).toHaveAttribute("aria-current", "page")
+    navigation.getByRole("link", { name: "Laboratory", exact: true }),
+  ).toBeVisible()
+  await expect(
+    navigation.getByRole("link", { name: "Compost", exact: true }),
+  ).toBeVisible()
+  await solutions.focus()
+  await page.keyboard.press("Escape")
+  await expect(projects.locator("..")).not.toHaveAttribute("open", "")
+  await expect(projects).toBeFocused()
+  await about.click()
+  await expect(about.locator("..")).toHaveAttribute("open", "")
+  await expect(
+    navigation.getByRole("link", { name: "Philosophy", exact: true }),
+  ).toBeVisible()
+  await expect(
+    navigation.getByRole("link", { name: "Support", exact: true }),
+  ).toBeVisible()
+  await projects.click()
+  await expect(about.locator("..")).not.toHaveAttribute("open", "")
+  await expect(
+    navigation.getByRole("link", { name: "Research", exact: true }),
+  ).toBeVisible()
   await expect(
     navigation.getByRole("link", { name: "Services", exact: true }),
   ).not.toHaveAttribute("aria-current", "page")
@@ -41,27 +78,45 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   await page.goto("/")
   const navigation = page.getByRole("navigation", { name: "Primary" })
   const disclosure = navigation.locator("details[data-mobile-navigation]")
-  const trigger = disclosure.locator("summary")
+  const trigger = disclosure.locator(":scope > summary")
 
   await expect(trigger).toHaveAccessibleName("Navigation menu")
-  await expect(trigger).toHaveAttribute("aria-expanded", "false")
   await trigger.focus()
   await page.keyboard.press("Enter")
   await expect(disclosure).toHaveAttribute("open", "")
-  await expect(trigger).toHaveAttribute("aria-expanded", "true")
 
-  const solutionsLink = navigation.getByRole("link", {
-    name: "Solutions",
-    exact: true,
-  })
+  const projects = disclosure.locator("#mobile-projects-navigation")
+  const projectsTrigger = disclosure.locator(
+    'summary[aria-controls="mobile-projects-navigation"]',
+  )
+  const aboutTrigger = disclosure.locator(
+    'summary[aria-controls="mobile-about-navigation"]',
+  )
+  await expect(projects).toBeHidden()
+  await expect(projectsTrigger).toBeVisible()
+  await expect(aboutTrigger).toBeVisible()
+  await projectsTrigger.focus()
+  await page.keyboard.press("Enter")
+  const solutionsLink = projects.getByRole("link", { name: "Solutions" })
   await expect(solutionsLink).toBeVisible()
+  await aboutTrigger.click()
+  await expect(projects).toBeHidden()
+  await projectsTrigger.click()
+  await expect(solutionsLink).toBeVisible()
+  await expect(
+    navigation.getByRole("link", { name: "Research", exact: true }),
+  ).toBeVisible()
   await solutionsLink.focus()
   await page.keyboard.press("Escape")
+  await expect(projects).toBeHidden()
+  await expect(projectsTrigger).toBeFocused()
+  await expect(disclosure).toHaveAttribute("open", "")
+  await page.keyboard.press("Escape")
   await expect(disclosure).not.toHaveAttribute("open", "")
-  await expect(trigger).toHaveAttribute("aria-expanded", "false")
   await expect(trigger).toBeFocused()
 
   await trigger.click()
+  await projectsTrigger.click()
   await solutionsLink.click()
   await expect(page).toHaveURL(/\/solutions$/)
 
@@ -69,11 +124,13 @@ test("mobile navigation supports keyboard dismissal and route changes", async ({
   const updatedDisclosure = updatedNavigation.locator(
     "details[data-mobile-navigation]",
   )
-  const updatedTrigger = updatedDisclosure.locator("summary")
+  const updatedTrigger = updatedDisclosure.locator(":scope > summary")
 
   await expect(updatedDisclosure).not.toHaveAttribute("open", "")
-  await expect(updatedTrigger).toHaveAttribute("aria-expanded", "false")
   await updatedTrigger.click()
+  await updatedDisclosure
+    .locator('summary[aria-controls="mobile-projects-navigation"]')
+    .click()
   await expect(
     updatedNavigation.getByRole("link", {
       name: "Solutions",
@@ -95,7 +152,7 @@ test("mobile menu remains inside a 320px viewport", async ({
 
   const navigation = page.getByRole("navigation", { name: "Primary" })
   const disclosure = navigation.locator("details[data-mobile-navigation]")
-  await disclosure.locator("summary").click()
+  await disclosure.locator(":scope > summary").click()
 
   const panel = page.locator("#mobile-navigation")
   await expect(disclosure).toHaveAttribute("open", "")
@@ -133,12 +190,15 @@ test("mobile navigation remains usable without JavaScript", async ({
 
     const navigation = page.getByRole("navigation", { name: "Primary" })
     const disclosure = navigation.locator("details[data-mobile-navigation]")
-    const trigger = disclosure.locator("summary")
+    const trigger = disclosure.locator(":scope > summary")
 
     await expect(trigger).toHaveAccessibleName("Navigation menu")
     await trigger.click()
     await expect(disclosure).toHaveAttribute("open", "")
 
+    await disclosure
+      .locator('summary[aria-controls="mobile-projects-navigation"]')
+      .click()
     const solutionsLink = navigation.getByRole("link", {
       name: "Solutions",
       exact: true,

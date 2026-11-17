@@ -4,11 +4,23 @@
     <loc>https://micrantha.com/</loc>
   </url>
   <url>
+    <loc>https://micrantha.com/services</loc>
+  </url>
+  <url>
     <loc>https://micrantha.com/solutions</loc>
   </url>
   <url>
+    <loc>https://micrantha.com/laboratory</loc>
+  </url>
+  <url>
+    <loc>https://micrantha.com/compost</loc>
+  </url>
+  <url>
+    <loc>https://micrantha.com/research</loc>
+  </url>
+  <url>
     <loc>https://micrantha.com/blog</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://micrantha.com/blog/series/governance-native-engineering</loc>
@@ -47,22 +59,17 @@
     <lastmod>2026-04-24</lastmod>
   </url>
   <url>
-    <loc>https://micrantha.com/laboratory</loc>
+    <loc>https://micrantha.com/blog/ai-native-sdlc-governed-software-delivery</loc>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
-    <loc>https://micrantha.com/compost</loc>
-  </url>
-  <url>
-    <loc>https://micrantha.com/services</loc>
+    <loc>https://micrantha.com/philosophy</loc>
   </url>
   <url>
     <loc>https://micrantha.com/support</loc>
   </url>
   <url>
     <loc>https://micrantha.com/security</loc>
-  </url>
-  <url>
-    <loc>https://micrantha.com/philosophy</loc>
   </url>
   <url>
     <loc>https://micrantha.com/privacy</loc>

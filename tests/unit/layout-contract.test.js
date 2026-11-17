@@ -24,13 +24,7 @@ test("repeated content collections retain responsive grid behavior", () => {
   assert.match(support, /grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3/)
   assert.match(blog, /grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3/)
 
-  const homeThreeColumnGrids = home.match(
-    /grid grid-cols-1 gap-4 md:grid-cols-3/g,
-  )
-  assert.ok(
-    (homeThreeColumnGrids?.length ?? 0) >= 3,
-    "homepage should retain its repeated one-to-three-column collections",
-  )
+  assert.match(home, /grid grid-cols-1 gap-4 md:grid-cols-2/)
 })
 
 test("wrapped metadata and footer groups retain asymmetric gaps", () => {

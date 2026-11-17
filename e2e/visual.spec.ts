@@ -27,9 +27,9 @@ test.describe("visual regressions", () => {
     viewport: { width: 1440, height: 1600 },
   })
 
-  test.beforeEach(async ({}, testInfo) => {
+  test.beforeEach(({ browserName }, testInfo) => {
     test.skip(
-      testInfo.project.name !== "desktop-chromium",
+      browserName !== "chromium" || testInfo.project.name !== "desktop-chromium",
       "Visual regression snapshots run once on the desktop project to keep baselines stable.",
     )
   })
