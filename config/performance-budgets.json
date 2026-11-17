@@ -33,6 +33,11 @@
         "compressedBytes": 240000
       },
       {
+        "pathname": "/research",
+        "uncompressedBytes": 800000,
+        "compressedBytes": 240000
+      },
+      {
         "pathname": "/blog/governance-native-engineering-control-plane",
         "uncompressedBytes": 1000000,
         "compressedBytes": 300000
@@ -55,6 +60,7 @@
       { "pathname": "/solutions", "uncompressedBytes": 250000 },
       { "pathname": "/laboratory", "uncompressedBytes": 250000 },
       { "pathname": "/blog", "uncompressedBytes": 250000 },
+      { "pathname": "/research", "uncompressedBytes": 250000 },
       {
         "pathname": "/blog/governance-native-engineering-control-plane",
         "uncompressedBytes": 350000
