@@ -129,9 +129,7 @@ test("core article content remains usable without JavaScript", async ({
       page.getByRole("heading", { name: "Solutions", level: 1 }),
     ).toBeVisible()
     await expect(
-      page.getByText(
-        "Systems, distributions, tools, and platforms.",
-      ),
+      page.getByText("Systems, distributions, tools, and platforms."),
     ).toBeVisible()
   } finally {
     await context.close()
