@@ -30,8 +30,12 @@ Run the visual suite in the repository toolchain:
 yarn playwright test e2e/visual.spec.ts --project=desktop-chromium
 ```
 
-On a difference, inspect the expected baseline, actual image, diff image, Playwright
-report, trace/video when produced, and workflow log before accepting a new baseline.
+CI targets the local public-page test server with read-only repository permissions
+and does not persist checkout credentials. It uploads only expected, actual, and
+diff PNGs from failed visual comparisons for seven days. The committed baseline
+remains available in Git; full reports, traces, and videos are not uploaded by
+this job. Inspect these images and the workflow log before accepting a new baseline.
+Investigate any further diagnostics locally.
 A changed project card, name, lifecycle, or ordering must be checked against the
 canonical public project projection rather than accepted because it appears in a new
 screenshot.
