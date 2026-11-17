@@ -14,15 +14,17 @@ async function clickNavigationLink(page: Page, name: keyof typeof navTargets) {
 
   if ((await visibleLink.count()) === 0) {
     const mobileTrigger = navigation.locator(
-      "details[data-mobile-navigation] summary",
+      "details[data-mobile-navigation] > summary",
     )
     if (await mobileTrigger.isVisible()) {
       await mobileTrigger.click()
-    } else {
+    }
+
+    if ((await visibleLink.count()) === 0) {
       await navigation
-        .locator("details[data-nav-group]")
+        .locator("details[data-nav-group]:visible")
         .filter({ has: page.locator(`a[href="${target}"]`) })
-        .locator("summary")
+        .locator(":scope > summary")
         .click()
     }
   }
@@ -123,4 +125,37 @@ test("primary navigation reaches key sections and routes", async ({ page }) => {
       "Choose the support channel that fits the urgency and shape of the issue.",
     ),
   ).toBeVisible()
+})
+
+test("footer links and canonical sitemap cover public destinations", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/")
+  const footer = page.getByRole("contentinfo")
+  const response = await request.get("/sitemap.xml")
+  expect(response.ok()).toBe(true)
+  const sitemap = await response.text()
+
+  for (const path of [
+    "/services",
+    "/solutions",
+    "/laboratory",
+    "/compost",
+    "/research",
+    "/blog",
+    "/philosophy",
+    "/support",
+    "/security",
+    "/privacy",
+  ]) {
+    await expect(footer.locator(`a[href="${path}"]`)).toBeVisible()
+    expect(sitemap).toContain(`<loc>https://micrantha.com${path}</loc>`)
+  }
+
+  await expect(footer.getByRole("link", { name: "Contact" })).toHaveAttribute(
+    "href",
+    "/contact",
+  )
+  expect(sitemap).not.toContain("<loc>https://micrantha.com/contact</loc>")
 })
