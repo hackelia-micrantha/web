@@ -51,5 +51,4 @@ for (const navigation of navigations) {
   window.addEventListener("pageshow", () => {
     closeNavigation()
   })
-
 }
