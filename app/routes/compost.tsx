@@ -5,7 +5,6 @@ import {
   SandboxIcon,
   MicraIcon,
   CodemuxIcon,
-  OutermeshIcon,
   GardenIcon,
   SolidagoIcon,
 } from "~/components/icons"
@@ -59,16 +58,6 @@ const Compost = () => (
       <Card title="Micra" icon={<MicraIcon />} headingLevel={2}>
         An early plugin-based approach to project scaffolding, Git workflows,
         and build-version management.
-      </Card>
-
-      <Card
-        title="Outermesh"
-        icon={<OutermeshIcon />}
-        url="https://outermesh.micrantha.com"
-        headingLevel={2}
-      >
-        An e-book on learning software development that has turned into a
-        project in its own right: a multiplayer TUI game about hacking
       </Card>
 
       <Card title="Codemux" icon={<CodemuxIcon />} headingLevel={2}>

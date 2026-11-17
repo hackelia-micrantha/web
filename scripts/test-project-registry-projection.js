@@ -111,8 +111,8 @@ assert.deepEqual(
   const broken = clone(presentation)
   broken.projects.push({
     kind: "canonical",
-    canonicalId: "invokrum",
-    slug: "invokrum",
+    canonicalId: "mobuild",
+    slug: "mobuild",
     summary:
       "Unclassified canonical projects cannot enter the current catalogue.",
     url: "/invokrum",
@@ -120,12 +120,16 @@ assert.deepEqual(
   })
   assert.throws(
     () => validateProjectRegistryProjection(clone(snapshot), broken),
-    /canonical presentation project invokrum requires a solution\/laboratory classification/,
+    /canonical presentation project mobuild requires a solution\/laboratory classification/,
   )
 }
 
 {
   const broken = clone(presentation)
+  const classifiedSnapshot = clone(snapshot)
+  classifiedSnapshot.projects.find(
+    (project) => project.id === "phyllotaxis",
+  ).classification = "laboratory"
   broken.projects.push({
     kind: "canonical",
     canonicalId: "phyllotaxis",
@@ -135,7 +139,7 @@ assert.deepEqual(
     architectureRole: "Invalid hidden catalogue entry",
   })
   assert.throws(
-    () => validateProjectRegistryProjection(clone(snapshot), broken),
+    () => validateProjectRegistryProjection(classifiedSnapshot, broken),
     /hidden portfolio project phyllotaxis must not have a canonical presentation entry/,
   )
 }

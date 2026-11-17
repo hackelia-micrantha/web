@@ -90,6 +90,17 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
   await expect(
     page.getByRole("heading", { name: "EyesPie", exact: true }),
   ).toBeVisible()
+  for (const name of [
+    "Invokrum",
+    "Keylix",
+    "Modolia",
+    "Testule",
+    "Sandcastle",
+    "Outermesh",
+    "MUSICPKG",
+  ]) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
+  }
   await expect(page.getByRole("link", { name: "Compost" })).toHaveAttribute(
     "href",
     "/compost",
@@ -122,6 +133,9 @@ test("/compost preserves historical project context", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "The Garden", exact: true }),
   ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Outermesh", exact: true }),
+  ).toHaveCount(0)
 })
 
 test("/privacy retains the tailored long-form policy copy", async ({

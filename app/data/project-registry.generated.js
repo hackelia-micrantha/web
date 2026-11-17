@@ -5,7 +5,7 @@ export const projectRegistrySnapshot = {
     repository: "hackelia-micrantha/hackelia-micrantha",
     registryPath: "registry/projects.yaml",
     inventoryPath: "registry/inventory.md",
-    commit: "e711c5e3bc5bf306e55af531701b37eab1fa4ee3",
+    commit: "8f0eef6be319be343381ad75dbda4a952e2d0f9e",
   },
   excludedPortfolioFamilies: ["garden", "scouter"],
   projects: [
@@ -91,7 +91,7 @@ export const projectRegistrySnapshot = {
     },
     {
       id: "fatherless",
-      name: "The Fatherless / Entanglement of Ages",
+      name: "Entanglement of Ages",
       classification: null,
       portfolio: "featured",
       role: "creative",
@@ -116,7 +116,7 @@ export const projectRegistrySnapshot = {
     {
       id: "invokrum",
       name: "Invokrum",
-      classification: null,
+      classification: "laboratory",
       portfolio: "supporting",
       role: "tooling",
       lifecycle: "incubating",
@@ -124,7 +124,7 @@ export const projectRegistrySnapshot = {
     {
       id: "keylix",
       name: "Keylix",
-      classification: null,
+      classification: "laboratory",
       portfolio: "supporting",
       role: "library",
       lifecycle: "incubating",
@@ -164,7 +164,7 @@ export const projectRegistrySnapshot = {
     {
       id: "modolia",
       name: "Modolia",
-      classification: null,
+      classification: "laboratory",
       portfolio: "supporting",
       role: "tooling",
       lifecycle: "incubating",
@@ -188,7 +188,7 @@ export const projectRegistrySnapshot = {
     {
       id: "outermesh",
       name: "Outermesh",
-      classification: null,
+      classification: "laboratory",
       portfolio: "supporting",
       role: "solution",
       lifecycle: "experimental",
@@ -196,7 +196,7 @@ export const projectRegistrySnapshot = {
     {
       id: "phyllotaxis",
       name: "Phyllotaxis",
-      classification: "laboratory",
+      classification: null,
       portfolio: "featured",
       role: "platform",
       lifecycle: "experimental",
@@ -220,9 +220,17 @@ export const projectRegistrySnapshot = {
     {
       id: "testule",
       name: "Testule",
-      classification: null,
+      classification: "laboratory",
       portfolio: null,
       role: "tooling",
+      lifecycle: "incubating",
+    },
+    {
+      id: "veil",
+      name: "Veil",
+      classification: "solution",
+      portfolio: null,
+      role: "solution",
       lifecycle: "incubating",
     },
   ],
@@ -236,7 +244,7 @@ export const projectPresentation = {
       canonicalId: "amaryllis",
       slug: "amaryllis",
       summary:
-        "A React Native and mobile inference toolkit for privacy-conscious on-device ML and AI-enabled components.",
+        "A React Native toolkit for on-device multimodal inference, offline-first context, and governed adaptive interfaces.",
       url: "https://amaryllis.micrantha.com",
       architectureRole: "Mobile inference SDK and component toolkit",
     },
@@ -245,7 +253,7 @@ export const projectPresentation = {
       canonicalId: "anthesis",
       slug: "anthesis",
       summary:
-        "A deterministic governance and provenance platform for evaluating agent actions, approvals, and evidence.",
+        "A governance platform for agent actions, with deterministic authorization, explicit approvals, and verifiable decision evidence.",
       url: "https://anthesis.micrantha.com",
       architectureRole: "Governance decision and provenance authority",
     },
@@ -254,7 +262,7 @@ export const projectPresentation = {
       canonicalId: "dubnium",
       slug: "dubnium",
       summary:
-        "Micrantha's reproducible, local-first distribution for agentic software development and operations.",
+        "A personal, self-hosted AI engineering system and reference integration for local models, governed tools, and bounded execution.",
       url: "https://github.com/hackelia-micrantha/dubnium-community",
       architectureRole:
         "Agentic development distribution and bounded execution environment",
@@ -264,7 +272,7 @@ export const projectPresentation = {
       canonicalId: "envuscator",
       slug: "envuscator",
       summary:
-        "A mobile build-time obfuscation layer delivered through a local CLI and licensed GitHub Actions and GitLab CI/CD adapters.",
+        "Mobile build-time configuration obfuscation with local tooling and customer-controlled CI delivery.",
       url: "https://envuscator.micrantha.com",
       sourceUrl: "https://github.com/hackelia-micrantha/envuscator-community",
       architectureRole: "Customer-runner mobile build protection",
@@ -274,18 +282,18 @@ export const projectPresentation = {
       canonicalId: "fortunes",
       slug: "fortunes",
       summary:
-        "A microservice, progressive web app, and Slack integration for UNIX fortunes.",
+        "A web application and API for UNIX fortunes, with a Slack app integration.",
       url: "https://fortunes.micrantha.com",
       architectureRole: "Service and delivery-pattern reference implementation",
     },
     {
-      kind: "presentation-only",
+      kind: "canonical",
+      canonicalId: "veil",
       slug: "veil",
-      name: "Veil",
-      collection: "solution",
-      summary: "An image-obfuscation and privacy utility service.",
+      summary:
+        "Geometric image obfuscation and abstract art, with reversible text and image formats under investigation.",
       url: "https://veil.micrantha.com",
-      architectureRole: "Image concealment and privacy utility",
+      architectureRole: "Content obfuscation and privacy research",
     },
     {
       kind: "canonical",
@@ -320,7 +328,7 @@ export const projectPresentation = {
       canonicalId: "calathea",
       slug: "calathea",
       summary:
-        "A CLI-first, AI-assisted system for deciding what work deserves focus and correcting that decision from operational evidence.",
+        "A local-first tool for deciding what work deserves attention using reviewable prioritization and operational evidence.",
       url: "https://calathea.micrantha.com",
       architectureRole: "Work prioritization and feedback experimentation",
     },
@@ -329,7 +337,7 @@ export const projectPresentation = {
       canonicalId: "repora",
       slug: "repora",
       summary:
-        "A deterministic, policy-driven repository control plane for defining and enforcing desired codebase state.",
+        "Deterministic repository management through explicit policy, planning, and reviewable execution evidence.",
       url: "https://github.com/hackelia-micrantha/repora",
       architectureRole: "Repository reconciliation and policy control plane",
     },
@@ -338,7 +346,7 @@ export const projectPresentation = {
       canonicalId: "bluebell",
       slug: "bluebell",
       summary:
-        "A Kotlin Multiplatform SDK and project template for reusable cross-platform build and library patterns.",
+        "A Kotlin Multiplatform SDK and application foundation for reusable cross-platform engineering patterns.",
       url: "https://github.com/hackelia-micrantha/bluebell",
       architectureRole: "Mobile SDK template and build patterns",
     },
@@ -380,12 +388,76 @@ export const projectPresentation = {
       architectureRole: "Computer vision and mobile inference testbed",
     },
     {
+      kind: "canonical",
+      canonicalId: "invokrum",
+      slug: "invokrum",
+      summary:
+        "A deterministic prompt composition and attestation engine for governed AI contexts.",
+      url: "https://github.com/hackelia-micrantha/invokrum-community",
+      architectureRole: "Deterministic context composition",
+    },
+    {
+      kind: "canonical",
+      canonicalId: "keylix",
+      slug: "keylix",
+      summary:
+        "Pre-release cryptographic proof-of-possession and sender-constrained authorization primitives for OAuth, DPoP, and MCP.",
+      url: "https://github.com/hackelia-micrantha/keylix-community",
+      architectureRole: "Authorization proof primitives",
+    },
+    {
+      kind: "canonical",
+      canonicalId: "modolia",
+      slug: "modolia",
+      summary:
+        "A deterministic model selection contract that ranks eligible model surfaces and records auditable routing decisions.",
+      url: "https://github.com/hackelia-micrantha/modolia-community",
+      architectureRole: "Model selection and routing contracts",
+    },
+    {
+      kind: "canonical",
+      canonicalId: "testule",
+      slug: "testule",
+      summary:
+        "Incubating testability contracts, gap analysis, and normalized verification evidence for native testing tools.",
+      url: "https://github.com/hackelia-micrantha/testule-community",
+      architectureRole: "Testability and verification evidence",
+    },
+    {
+      kind: "canonical",
+      canonicalId: "sandcastle",
+      slug: "sandcastle",
+      summary:
+        "An experimental checkpoint layer for disposable execution environments, supporting reusable workspace state and reproducible transitions.",
+      url: "https://github.com/hackelia-micrantha/sandcastle-community",
+      architectureRole: "Execution state checkpoints",
+    },
+    {
+      kind: "canonical",
+      canonicalId: "outermesh",
+      slug: "outermesh",
+      summary:
+        "An experimental software-engineering learning project combining a curriculum with a multiplayer security-simulation game.",
+      url: "https://outermesh.micrantha.com",
+      architectureRole: "Software engineering education",
+    },
+    {
+      kind: "presentation-only",
+      slug: "musicpkg-specification",
+      name: "MUSICPKG",
+      collection: "laboratory",
+      summary:
+        "A working-draft open music ownership and interoperability format, with published specifications and conformance vectors.",
+      url: "https://github.com/hackelia-micrantha/musicpkg-community",
+      architectureRole: "Digital music interoperability specification",
+    },
+    {
       kind: "presentation-only",
       slug: "compost",
       name: "Compost",
       collection: "laboratory",
       summary:
-        "A collection of recycled projects retained for reusable parts and future laboratory work.",
+        "Earlier experiments, retired implementations, and ideas that continue to inform new work.",
       url: "/compost",
       architectureRole: "Archived and reusable project inventory",
     },
@@ -427,7 +499,7 @@ export const projectPresentation = {
       canonicalId: "phyllotaxis",
       disposition: "hidden",
       rationale:
-        "No public project surface is currently exposed; presentation should be added only with an intentional public Work treatment.",
+        "Public design-system contracts are available; catalogue admission awaits canonical classification.",
     },
     {
       canonicalId: "repora",
@@ -451,15 +523,13 @@ export const projectPresentation = {
     },
     {
       canonicalId: "invokrum",
-      disposition: "hidden",
-      rationale:
-        "Supporting project is not yet represented in the current public project catalogue.",
+      disposition: "shown",
+      surfaces: ["catalog"],
     },
     {
       canonicalId: "keylix",
-      disposition: "hidden",
-      rationale:
-        "Supporting project is not yet represented in the current public project catalogue.",
+      disposition: "shown",
+      surfaces: ["catalog"],
     },
     {
       canonicalId: "mobuild",
@@ -469,21 +539,18 @@ export const projectPresentation = {
     },
     {
       canonicalId: "modolia",
-      disposition: "hidden",
-      rationale:
-        "Supporting project is not yet represented in the current public project catalogue.",
+      disposition: "shown",
+      surfaces: ["catalog"],
     },
     {
       canonicalId: "outermesh",
-      disposition: "hidden",
-      rationale:
-        "Supporting project is not yet represented in the current public project catalogue.",
+      disposition: "shown",
+      surfaces: ["catalog"],
     },
     {
       canonicalId: "sandcastle",
-      disposition: "hidden",
-      rationale:
-        "Supporting project is not yet represented in the current public project catalogue.",
+      disposition: "shown",
+      surfaces: ["catalog"],
     },
   ],
 }
