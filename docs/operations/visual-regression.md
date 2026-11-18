@@ -24,10 +24,19 @@ repository-owned setup/flake path. Do not restore a privileged browser bootstrap
 
 ## Reviewing a change
 
-Run the visual suite in the repository toolchain:
+Generate and verify the Linux snapshots on x86_64 Linux with the same pinned
+browser and font configuration as CI. The default development shell alone does
+not select the browser. Do not use a system Chromium or host font configuration
+for baseline acceptance.
 
 ```sh
-yarn playwright test e2e/visual.spec.ts --project=desktop-chromium
+unset PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+export PLAYWRIGHT_BROWSERS_PATH="$(nix build --no-link --print-out-paths .#playwright-browsers)"
+export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1
+export PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000
+
+CI=1 nix develop -c yarn playwright test e2e/visual.spec.ts --project=desktop-chromium
 ```
 
 CI targets the local public-page test server with read-only repository permissions
@@ -44,7 +53,7 @@ After the visual difference is understood and intentionally approved, update sna
 in the same pinned environment:
 
 ```sh
-yarn playwright test e2e/visual.spec.ts --project=desktop-chromium --update-snapshots
+CI=1 nix develop -c yarn playwright test e2e/visual.spec.ts --project=desktop-chromium --update-snapshots
 ```
 
 Commit only reviewed snapshot changes. Do not use snapshot regeneration to mask font,

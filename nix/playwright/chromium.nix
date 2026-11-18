@@ -106,7 +106,7 @@ let
 
       wrapProgram $out/${chromeDir}/chrome \
         --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-        --set-default FONTCONFIG_FILE ${fontconfig_file}
+        --set FONTCONFIG_FILE ${fontconfig_file}
 
       runHook postInstall
     '';

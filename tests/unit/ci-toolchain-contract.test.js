@@ -153,18 +153,23 @@ test("Playwright browser runtime matches the Yarn-locked client", () => {
   assert.match(setup, /PLAYWRIGHT_BROWSERS_PATH/)
   assert.match(setup, /PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1/)
   assert.match(setup, /PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1/)
+  assert.match(playwrightConfig, /!process\.env\.PLAYWRIGHT_BROWSERS_PATH/)
 })
 
 test("Playwright browser runtime owns its font availability", () => {
   assert.match(
     flake,
-    /fontDirectories = \[ pkgs\.dejavu_fonts \];/,
+    /<dir>\$\{pkgs\.dejavu_fonts\}<\/dir>/,
     "browser fontconfig must not depend on host fonts",
   )
   assert.match(
     flake,
     /chromiumHeadlessShell = pkgs\.callPackage[\s\S]*fontconfig_file = fontconfigFile;/,
     "headless shell must receive the same repository-owned fontconfig",
+  )
+  assert.match(
+    flake,
+    /<family>system-ui<\/family>\s*<prefer><family>DejaVu Sans<\/family><\/prefer>/,
   )
   assert.match(headlessShell, /makeWrapper/)
   assert.match(
@@ -179,7 +184,7 @@ test("Playwright browser runtime owns its font availability", () => {
   )
   assert.match(
     headlessShell,
-    /wrapProgram \$out\/\$\{headlessShellPath\}[\s\\\n]*--set-default FONTCONFIG_FILE \$\{fontconfig_file\}/,
+    /wrapProgram \$out\/\$\{headlessShellPath\}[\s\\\n]*--set FONTCONFIG_FILE \$\{fontconfig_file\}/,
   )
 })
 
