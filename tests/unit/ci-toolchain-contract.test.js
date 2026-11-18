@@ -167,7 +167,10 @@ test("Playwright browser runtime owns its font availability", () => {
     /chromiumHeadlessShell = pkgs\.callPackage[\s\S]*fontconfig_file = fontconfigFile;/,
     "headless shell must receive the same repository-owned fontconfig",
   )
-  assert.match(flake, /<family>system-ui<\/family>\s*<prefer><family>DejaVu Sans<\/family><\/prefer>/)
+  assert.match(
+    flake,
+    /<family>system-ui<\/family>\s*<prefer><family>DejaVu Sans<\/family><\/prefer>/,
+  )
   assert.match(headlessShell, /makeWrapper/)
   assert.match(
     headlessShell,
