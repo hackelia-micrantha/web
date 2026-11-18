@@ -22,7 +22,6 @@ test.describe("visual regressions", () => {
     colorScheme: "light",
     deviceScaleFactor: 1,
     locale: "en-CA",
-    reducedMotion: "reduce",
     timezoneId: "America/Vancouver",
     viewport: { width: 1440, height: 1600 },
   })
