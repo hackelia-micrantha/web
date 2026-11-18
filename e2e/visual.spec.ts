@@ -37,6 +37,35 @@ test.describe("visual regressions", () => {
   test("homepage hero remains stable", async ({ page }) => {
     await prepareVisualPage(page, "/")
 
+    // Temporary #53 diagnostic: distinguish computed CSS from rendered fonts.
+    const session = await page.context().newCDPSession(page)
+    try {
+      await session.send("DOM.enable")
+      await session.send("CSS.enable")
+      const { root } = await session.send("DOM.getDocument")
+      for (const selector of [
+        "main#content h1",
+        "main#content p",
+        "main#content a.button",
+      ]) {
+        const { nodeId } = await session.send("DOM.querySelector", {
+          nodeId: root.nodeId,
+          selector,
+        })
+        if (!nodeId) continue
+        const { fonts } = await session.send("CSS.getPlatformFontsForNode", {
+          nodeId,
+        })
+        const family = await page
+          .locator(selector)
+          .first()
+          .evaluate((element) => getComputedStyle(element).fontFamily)
+        console.log("Visual font diagnostic:", { selector, family, fonts })
+      }
+    } finally {
+      await session.detach()
+    }
+
     await expectVisualSnapshot(
       page.locator("main#content > div > section").first(),
       "home-hero.png",
