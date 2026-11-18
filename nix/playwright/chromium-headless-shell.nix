@@ -76,7 +76,7 @@ let
     buildPhase = ''
       cp -R . $out
       wrapProgram $out/${headlessShellPath} \
-        --set-default FONTCONFIG_FILE ${fontconfig_file}
+        --set FONTCONFIG_FILE ${fontconfig_file}
     '';
   };
 

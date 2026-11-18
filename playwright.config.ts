@@ -3,7 +3,7 @@ import { defineConfig, devices } from "@playwright/test"
 
 const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   ? process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
-  : fs.existsSync("/usr/bin/chromium")
+  : !process.env.PLAYWRIGHT_BROWSERS_PATH && fs.existsSync("/usr/bin/chromium")
     ? "/usr/bin/chromium"
     : undefined
 

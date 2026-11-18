@@ -44,12 +44,37 @@
           playwrightFfmpegRevision = "1011";
           throwSystem = throw "Unsupported system: ${system}";
 
-          # Browser rendering is part of the repository-owned CI runtime. Do
-          # not rely on host/JIT runner fonts: isolated runners may otherwise
-          # render text as zero-size/invisible while preserving DOM semantics.
-          fontconfigFile = pkgs.makeFontsConf {
-            fontDirectories = [ pkgs.dejavu_fonts ];
-          };
+          # Use only pinned fonts and explicit generic-family aliases. The
+          # default makeFontsConf also reads host rules and font directories.
+          # Unmapped system-ui can select DejaVu Math TeX Gyre in headless CI.
+          fontconfigFile = pkgs.writeText "micrantha-playwright-fonts.conf" ''
+            <?xml version="1.0"?>
+            <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+            <fontconfig>
+              <dir>${pkgs.dejavu_fonts}</dir>
+              <cachedir prefix="xdg">fontconfig</cachedir>
+              <alias binding="strong">
+                <family>ui-sans-serif</family>
+                <prefer><family>DejaVu Sans</family></prefer>
+              </alias>
+              <alias binding="strong">
+                <family>system-ui</family>
+                <prefer><family>DejaVu Sans</family></prefer>
+              </alias>
+              <alias binding="strong">
+                <family>sans-serif</family>
+                <prefer><family>DejaVu Sans</family></prefer>
+              </alias>
+              <alias binding="strong">
+                <family>serif</family>
+                <prefer><family>DejaVu Serif</family></prefer>
+              </alias>
+              <alias binding="strong">
+                <family>monospace</family>
+                <prefer><family>DejaVu Sans Mono</family></prefer>
+              </alias>
+            </fontconfig>
+          '';
           chromium = pkgs.callPackage ./nix/playwright/chromium.nix {
             inherit system throwSystem;
             inherit (playwrightChromium) revision browserVersion;
