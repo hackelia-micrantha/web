@@ -16,8 +16,8 @@ test("research index preserves the edition totals, ranks and source links", asyn
     ["Tracked records", researchIndex.coverage.tracked],
     ["Marked reviewed", researchIndex.coverage.marked_reviewed],
     [
-      "Score-eligible reviews",
-      researchIndex.coverage.reviewed_with_complete_scores,
+      "Editorial candidates screened",
+      researchIndex.ranking.screened_candidates,
     ],
     ["Featured selections", researchIndex.featured.length],
   ] as const) {
