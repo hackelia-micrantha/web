@@ -77,10 +77,10 @@ export default function ResearchRoute() {
         </dl>
         <p className="page-copy-sm">
           {coverage.review_status_completion_pct}% marked reviewed;{" "}
-          {coverage.triaged} triaged;{" "}
-          {coverage.reviewed_with_complete_scores} marked-reviewed records have
-          complete valid scores; {coverage.reviewed_without_complete_scores} lack
-          complete valid scores.
+          {coverage.triaged} triaged; {coverage.reviewed_with_complete_scores}{" "}
+          marked-reviewed records have complete valid scores;{" "}
+          {coverage.reviewed_without_complete_scores} lack complete valid
+          scores.
         </p>
         <p className="page-copy-sm">{coverage.definition}</p>
         <h3 className="text-lg font-semibold">Selected research domains</h3>
