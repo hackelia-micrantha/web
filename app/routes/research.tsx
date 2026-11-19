@@ -17,8 +17,8 @@ const totals = [
   { label: "Tracked records", value: coverage.tracked },
   { label: "Marked reviewed", value: coverage.marked_reviewed },
   {
-    label: "Score-eligible reviews",
-    value: coverage.reviewed_with_complete_scores,
+    label: "Editorial candidates screened",
+    value: ranking.screened_candidates,
   },
   { label: "Featured selections", value: featured.length },
 ]
@@ -77,9 +77,10 @@ export default function ResearchRoute() {
         </dl>
         <p className="page-copy-sm">
           {coverage.review_status_completion_pct}% marked reviewed;{" "}
-          {coverage.triaged} triaged;{" "}
-          {coverage.reviewed_without_complete_scores} marked-reviewed records
-          lack complete valid scores.
+          {coverage.triaged} triaged; {coverage.reviewed_with_complete_scores}{" "}
+          marked-reviewed records have complete valid scores;{" "}
+          {coverage.reviewed_without_complete_scores} lack complete valid
+          scores.
         </p>
         <p className="page-copy-sm">{coverage.definition}</p>
         <h3 className="text-lg font-semibold">Selected research domains</h3>

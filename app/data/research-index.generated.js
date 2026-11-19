@@ -1,52 +1,52 @@
 // SPDX-License-Identifier: CC-BY-4.0
 // Vendored public edition; preserve the data values and attribution.
 // Replace only with an approved, version-pinned community edition.
-// Source: https://github.com/hackelia-micrantha/research-community/blob/45f989a11895ffe8c817c9333c25f860acd05c25/indexes/2026-11-17.json
+// Source: https://github.com/hackelia-micrantha/research-community/blob/c423b816f79dffd1ac6dc12aeea6c7587107e212/indexes/2026-11-18.json
 export const researchIndexSource =
-  "https://github.com/hackelia-micrantha/research-community/blob/45f989a11895ffe8c817c9333c25f860acd05c25/indexes/2026-11-17.json"
+  "https://github.com/hackelia-micrantha/research-community/blob/c423b816f79dffd1ac6dc12aeea6c7587107e212/indexes/2026-11-18.json"
 
 // prettier-ignore
 export const researchIndex = {
   "schema_version": 1,
-  "as_of": "2026-11-17",
+  "as_of": "2026-11-18",
   "title": "Micrantha Research",
   "coverage": {
-    "tracked": 349,
-    "marked_reviewed": 333,
-    "triaged": 16,
+    "tracked": 352,
+    "marked_reviewed": 352,
+    "triaged": 0,
     "reviewed_with_complete_scores": 266,
-    "reviewed_without_complete_scores": 67,
-    "review_status_completion_pct": 95.4,
+    "reviewed_without_complete_scores": 86,
+    "review_status_completion_pct": 100,
     "definition": "Tracker records with a source URL; reviewed means the tracker review status, not independent full-text verification or reproduction."
   },
   "domains": [
     {
       "name": "AI & ML",
-      "count": 280
+      "count": 283
     },
     {
       "name": "Computer Science",
-      "count": 272
+      "count": 275
     },
     {
       "name": "Cybersecurity",
-      "count": 169
+      "count": 170
     },
     {
       "name": "Software Engineering",
-      "count": 36
+      "count": 39
     }
   ],
   "domain_definition": "Selected tracker domain labels; counts overlap and do not sum to the total. Each source identity is counted at most once within each label.",
   "ranking": {
     "method": "Editorial merit: momentum 5%, novelty 15%, evidence 30%, practicality 25%, long-term value 25%. Component ratings range from 1 to 5. Scores are nominally out of 100 (minimum 20).",
-    "selection_note": "Provisional editorial selection from 145 previously assessed or screened candidates plus 176 conservatively screened historical and other reviewed records. Twelve reviewed records lack usable technical scores. Twenty-one historical high-merit papers received targeted primary-text checks; 89 priority source checks remain. Conservative screening is not individual reassessment or a claim that excluded work is intrinsically weaker. Scores and rankings may change as evidence is verified.",
+    "selection_note": "Provisional editorial selection from 321 previously screened candidates and 19 newly reviewed records. Six newly reviewed records received targeted primary-text checks; other new records were conservatively screened. Twelve reviewed records lack usable technical scores. Eighty-nine priority historical source checks remain from the prior edition. Conservative screening is not individual reassessment or a claim that excluded work is intrinsically weaker. Scores and rankings may change as evidence is verified. Conservative screens use a publication-only momentum rating of 2 and technical ratings capped at 4.5; their maximum possible score (87.5) falls below this edition’s cutoff. A source-grounded recalibration is required for those candidates to enter the featured set.",
     "tie_rule": "Equal scores share rank; alphabetical order within each tie. Include cutoff ties.",
     "score_anchors": "1 weak; 3 materially supported; 4 strong; 5 exceptional with explicit justification. Intermediate half-points allowed. Momentum 2: publication only; 3: documented research activity, revisions or released resources, not proof of adoption. Evidence capped at 3.5 for abstract/proceedings-only rechecks.",
-    "screened_candidates": 321,
+    "screened_candidates": 340,
     "target_selection_size": 25,
-    "cutoff_score": 88.5,
-    "selection_size": 25,
+    "cutoff_score": 89,
+    "selection_size": 27,
     "reproduction_note": "Not-run means no independent execution was performed for this assessment; historical reproduction metadata is incomplete."
   },
   "featured": [
@@ -173,6 +173,30 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
+      "title": "From Tool Connection to Execution Control: Benchmarking Security Invariants in MCP-Style Agent Runtimes",
+      "id": "arxiv:2606.29073v2",
+      "authors": "Ting Liu",
+      "source_date": "2026-11-07",
+      "theme": "Agent authorization",
+      "components": {
+        "momentum": 3,
+        "novelty": 4.5,
+        "evidence": 4.5,
+        "practical": 5,
+        "long_term": 4.5
+      },
+      "rationale": "A revised reference implementation, explicit invariants, paired enforcement designs, negative controls and ablations support strong evidence. The contract is directly actionable without mandating centralization.",
+      "takeaway": "Security depends on enforcing execution-time invariants at every controlled entrance, not on whether a runtime is centralized.",
+      "evidence": "In the paper’s scripted corpus, both implementations deny all 18 modeled violations and complete 25 benign workflows; 16 ablations probe the checks. In 24 live-model AgentDojo tasks, both controllers deny all attempted attacker calls, but restrictive grants also deny 40 non-attacker-directed calls.",
+      "limitation": "Thirteen matched sessions succeed directly but not under enforcement. The scripted outcomes do not establish universal live utility; providers and resolvers are trusted. Per-call grants cannot prevent plaintext transfer through an authorized sink, nor establish durable replay protection.",
+      "source_url": "https://arxiv.org/abs/2606.29073v2",
+      "assessed_on": "2026-11-18",
+      "score": 91,
+      "reproduction": "not-run",
+      "review_basis": "Recorded primary review; targeted exact-version primary-text recheck",
+      "rank": 5
+    },
+    {
       "rank": 5,
       "score": 91,
       "title": "Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems",
@@ -270,7 +294,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-version primary-text recheck"
     },
     {
-      "rank": 10,
+      "rank": 11,
       "score": 90.5,
       "title": "ResidualAuth: What Authorization State Must Agent Systems Preserve under Revocable Delegation?",
       "id": "arxiv:2609.08062v2",
@@ -294,7 +318,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "Approve What, Exactly? Effect Binding and Trusted Rendering for Agent Step-Up Authorization",
       "id": "arxiv:2610.21063v1",
@@ -318,7 +342,7 @@ export const researchIndex = {
       "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "Beyond Prompt Injection: The Tool Update Gap in LLM Agent Security",
       "id": "arxiv:2611.01976v1",
@@ -342,7 +366,7 @@ export const researchIndex = {
       "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "Compaction Laundering: Provenance Destruction in Context-Compacting Coding Agents",
       "id": "arxiv:2610.29869v1",
@@ -366,7 +390,7 @@ export const researchIndex = {
       "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "Context-to-Execution Integrity for LLM Agents",
       "id": "arxiv:2607.06000v1",
@@ -390,7 +414,7 @@ export const researchIndex = {
       "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "Last Secure Code Benchmark: Is the Code You Vibe Secure?",
       "id": "arxiv:2610.14766v1",
@@ -414,7 +438,7 @@ export const researchIndex = {
       "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "LLM Agents Can Easily Tamper With Their Own Traces",
       "id": "arxiv:2609.30266v1",
@@ -438,7 +462,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "score": 89.5,
       "title": "MemCut: Every Secret Leaves a Trail in the Long-Term Memory of LLM Agents",
       "id": "arxiv:2610.21405v1",
@@ -462,7 +486,55 @@ export const researchIndex = {
       "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     },
     {
-      "rank": 18,
+      "title": "Revision-Consistent Code Context for Agents That Edit Their Environment",
+      "id": "arxiv:2611.21616v1",
+      "authors": "Meng Shi",
+      "source_date": "2026-08-20",
+      "theme": "Agent infrastructure",
+      "components": {
+        "momentum": 3,
+        "novelty": 4,
+        "evidence": 4.5,
+        "practical": 5,
+        "long_term": 4.5
+      },
+      "rationale": "Controlled update comparisons, process-kill experiments and public benchmark artifacts provide strong evidence for a practical repository-context boundary. The contribution applies established consistency mechanisms to a new observable contract.",
+      "takeaway": "Every successful composite code-context response should describe one coherent repository revision, even while an agent edits the repository.",
+      "evidence": "The author reports two unsafe responses in 150 live-source trials versus none with complete-revision publication; 300 evaluable interrupted-publication recoveries matched a clean full rebuild.",
+      "limitation": "Two Go repositories, selected edit scenarios, a single service owner and process-kill rather than power-loss faults constrain generalization. Recovery equivalence covers the fixture’s query projection, not every internal index byte; the cross-system probe compares different refresh workflows.",
+      "source_url": "https://arxiv.org/abs/2611.21616v1",
+      "assessed_on": "2026-11-18",
+      "score": 89.5,
+      "reproduction": "not-run",
+      "review_basis": "Recorded primary review; targeted exact-version primary-text recheck",
+      "rank": 12
+    },
+    {
+      "title": "Who Verifies the Builder? Toward Independent Assurance for Agent-Produced Software",
+      "id": "arxiv:2610.28667v1",
+      "authors": "Sion Israel Sion, Alain April",
+      "source_date": "2026-10-16",
+      "theme": "Software engineering",
+      "components": {
+        "momentum": 3,
+        "novelty": 4,
+        "evidence": 4.5,
+        "practical": 5,
+        "long_term": 4.5
+      },
+      "rationale": "Preregistered fault-level comparisons, explicit measurement-defect disclosure, and sensitivity rescoring support the limited independence result; the assurance-plane separation has high practical value.",
+      "takeaway": "Separate building from verification; design specification-first checks before inspecting the implementation, then complement them with implementation-aware tests.",
+      "evidence": "Across three services and 46 seeded faults, the authors report 85.1% detection by builder tests and 95.4% by the combined independent phases; changing provider did not add detection in the tested pair.",
+      "limitation": "All original programs passed hidden tests; the fault study uses 46 seeded defects across three services. A harness defect excluded 282 parameterized verifier tests from confirmatory detection; exploratory rescoring preserved the direction. Independent verification costs roughly 67k–126k tokens per unit; provider diversity is confounded by model capability.",
+      "source_url": "https://arxiv.org/abs/2610.28667v1",
+      "assessed_on": "2026-11-18",
+      "score": 89.5,
+      "reproduction": "not-run",
+      "review_basis": "Recorded primary review; targeted exact-version primary-text recheck",
+      "rank": 12
+    },
+    {
+      "rank": 21,
       "score": 89,
       "title": "Agent Memory Is a Surface for Endogenous Authorization Laundering",
       "id": "arxiv:2609.01836v2",
@@ -487,7 +559,7 @@ export const researchIndex = {
       "review_basis": "Existing published review; targeted exact-version primary-text recheck"
     },
     {
-      "rank": 18,
+      "rank": 21,
       "score": 89,
       "title": "Audit Without Verification: When LLM Accountability Layers Relay Rather Than Check",
       "id": "arxiv:2609.07680v1",
@@ -511,7 +583,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
-      "rank": 18,
+      "rank": 21,
       "score": 89,
       "title": "Bounded Agents: Delegation Security for Multi-Agent AI Systems",
       "id": "arxiv:2608.15888v1",
@@ -535,7 +607,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
-      "rank": 18,
+      "rank": 21,
       "score": 89,
       "title": "CONTINUITY: Security-Context Contracts for Composable LLM Agent Controls",
       "id": "arxiv:2609.05269v1",
@@ -559,7 +631,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
-      "rank": 18,
+      "rank": 21,
       "score": 89,
       "title": "CULPA: Universal Detection of Memory-Safety Bugs in Unsafe Rust Through the Lens of Safety Requirements",
       "id": "usenix-security26:chen-hung-mao",
@@ -584,7 +656,7 @@ export const researchIndex = {
       "source_version": "USENIX Security '26 proceedings"
     },
     {
-      "rank": 18,
+      "rank": 21,
       "score": 89,
       "title": "Substrate-Portable Execution for Production LLM Workflows (Industry Track)",
       "id": "arxiv:2609.06128v1",
@@ -608,7 +680,7 @@ export const researchIndex = {
       "review_basis": "Historical assessment; targeted exact-source primary-text recheck"
     },
     {
-      "rank": 18,
+      "rank": 21,
       "score": 89,
       "title": "TestSuiteBench: Coding Agents Struggle to Generate Strong Test Suites from Specifications",
       "id": "arxiv:2610.13065v1",
@@ -630,30 +702,6 @@ export const researchIndex = {
       "limitation": "Generated mutants sample requirements and may not represent real fault distributions; specifications derive from reference tests.",
       "reproduction": "not-run",
       "review_basis": "Historical assessment; targeted exact-version primary-text recheck"
-    },
-    {
-      "rank": 25,
-      "score": 88.5,
-      "title": "DDBench: A Benchmark for Agentic Debugging on Distributed Systems",
-      "id": "arxiv:2608.14863v2",
-      "source_url": "https://arxiv.org/abs/2608.14863v2",
-      "authors": "Yibo Yan, Huijuan Wang, Junzhou He, Yizhuo Liang, Shaoyu Wang, Huanchen Sun, Seo Jin Park",
-      "source_date": "2026-11-07",
-      "assessed_on": "2026-11-17",
-      "theme": "Distributed systems",
-      "components": {
-        "momentum": 3,
-        "novelty": 4.5,
-        "evidence": 4.5,
-        "practical": 4.5,
-        "long_term": 4.5
-      },
-      "rationale": "Historical bug corpus, paired intervention and negative cases make the evidence especially strong; released benchmark and revised work establish research activity.",
-      "takeaway": "Separate trusted observations from causal hypotheses: even accurate symptoms may misdirect debugging; verify root-cause repairs independently.",
-      "evidence": "Across 60 historical bugs in 13 systems and ten models, paired context interventions improved mean success from 31% to 50% in the first reasoning tier; 72 of 310 paired cases improved and 13 regressed.",
-      "limitation": "A single agent scaffold and context generator, containerized logical clusters and narrow verification oracles limit transfer to production incidents.",
-      "reproduction": "not-run",
-      "review_basis": "Historical full primary-text review; exact-source metadata recheck"
     }
   ],
   "license": "CC-BY-4.0",
