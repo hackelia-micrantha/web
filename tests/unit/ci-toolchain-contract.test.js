@@ -56,6 +56,34 @@ test("every runner-web job uses the repository-owned setup action", () => {
   }
 })
 
+test("only the dependent advisory visual job reuses full-flake validation", () => {
+  const visual = jobBlocks.find((block) =>
+    /^ {2}visual-regression:$/m.test(block),
+  )
+  assert.ok(visual)
+  assert.match(visual, /needs:\n {6}- quality\n {6}- end-to-end/u)
+  assert.ok(
+    visual.includes(
+      "needs.quality.result == 'success' && needs.end-to-end.result == 'success'",
+    ),
+  )
+  assert.match(visual, /reuse-flake-validation: "true"/u)
+  assert.equal(
+    (workflow.match(/reuse-flake-validation: "true"/gu) ?? []).length,
+    1,
+  )
+  assert.match(
+    setup,
+    /reuse-flake-validation:\n[\s\S]*?default: "false"/u,
+  )
+  assert.match(setup, /if: inputs\.reuse-flake-validation != 'true'/u)
+  for (const { name, source } of actionFiles) {
+    if (name !== ".github/workflows/ci.yml") {
+      assert.doesNotMatch(source, /reuse-flake-validation: "true"/u)
+    }
+  }
+})
+
 test("external GitHub Actions use immutable commit pins", () => {
   for (const { name, source } of actionFiles) {
     for (const match of source.matchAll(
