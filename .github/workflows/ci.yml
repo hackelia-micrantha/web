@@ -216,6 +216,8 @@ jobs:
         uses: ./.github/actions/setup
         with:
           playwright: "true"
+          # Both required jobs have validated this exact workflow revision.
+          reuse-flake-validation: "true"
 
       - name: Run advisory visual regression tests
         id: visual
