@@ -72,10 +72,7 @@ test("only the dependent advisory visual job reuses full-flake validation", () =
     (workflow.match(/reuse-flake-validation: "true"/gu) ?? []).length,
     1,
   )
-  assert.match(
-    setup,
-    /reuse-flake-validation:\n[\s\S]*?default: "false"/u,
-  )
+  assert.match(setup, /reuse-flake-validation:\n[\s\S]*?default: "false"/u)
   assert.match(setup, /if: inputs\.reuse-flake-validation != 'true'/u)
   for (const { name, source } of actionFiles) {
     if (name !== ".github/workflows/ci.yml") {
