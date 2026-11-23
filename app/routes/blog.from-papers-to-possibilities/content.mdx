@@ -63,6 +63,14 @@ flowchart TD
 
 Monitoring can help with discovery. It shouldn't automatically turn every paper into an issue, a dependency, or a production change. Human judgment still determines relevance, review, and whether a finding justifies the maintenance cost.
 
+## Selected papers behind this approach
+
+These papers are especially useful as evaluation references; they do not prove that an AI-generated research synthesis is reliable without verification.
+
+- [Can Large Language Models Review the Scientific Literature?](https://arxiv.org/abs/2611.05459) (November 2026, preprint): evaluates discovery, interpretation, synthesis, and research proposals against a 102-paper review. Missed sources, false relevance judgments, and overstated consensus are concrete reasons to retain primary-source checks and expert review.
+- [Synthesizing Scientific Literature with Retrieval-Augmented Language Models](https://www.nature.com/articles/s41586-025-10072-4) (Nature 2026): OpenScholar and ScholarQABench demonstrate why citation grounding and multi-paper synthesis correctness belong in the evaluation, not just fluent summaries.
+- [ResearchBench: Benchmarking LLMs in Scientific Discovery via Inspiration-Based Task Decomposition](https://aclanthology.org/2026.findings-acl.644/) (Findings of ACL 2026): separates inspiration retrieval, hypothesis composition, and hypothesis ranking. That is a useful model for tracking which stage of a project idea actually needs human judgment or improvement.
+
 ## Two small examples
 
 [Veil](/blog/veil-encrypted-obfuscation) began as a geometric profile-image experiment. Research now suggests a harder possibility: **encrypt the exact original and embed it inside the obfuscation itself**, with a related direction for text. That has not been demonstrated as a shipping recovery feature.

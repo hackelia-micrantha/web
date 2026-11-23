@@ -14,10 +14,7 @@ const bodyMarkers = new Map([
     "from-papers-to-possibilities",
     "A paper becomes useful when its claims meet a real project constraint",
   ],
-  [
-    "veil-encrypted-obfuscation",
-    "That was supposed to be the whole project",
-  ],
+  ["veil-encrypted-obfuscation", "That was supposed to be the whole project"],
   [
     "fortunes-modern-unix-humor",
     "The customer scenario is a team-specific humor corpus",

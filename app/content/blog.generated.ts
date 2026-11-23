@@ -52,7 +52,10 @@ export const blogPosts = [
       "computational-creativity",
       "ai-research",
     ],
-    relatedSlugs: ["from-papers-to-possibilities", "veil-encrypted-obfuscation"],
+    relatedSlugs: [
+      "from-papers-to-possibilities",
+      "veil-encrypted-obfuscation",
+    ],
     series: {
       slug: "ai-research-transforming-tools",
       order: 3,

@@ -50,17 +50,19 @@ The images below are an actual before-and-after pair from an existing Veil CLI e
 
 ### What AI research has opened up
 
-Academic work gives us ways to reason about the problem: how much encrypted information can a transformed image carry, how much size overhead does that create, and can it restore the source *exactly*? AI helps explore alternatives and connect research ideas; it hasn't solved these constraints.
+Academic work gives us ways to reason about the problem: how much encrypted information can a transformed image carry, how much size overhead does that create, and can it restore the source _exactly_? AI helps explore alternatives and connect research ideas; it hasn't solved these constraints.
 
 A parallel idea applies to text: could a readable, abstract message **embed its encrypted original within the text itself**, so a key holder can recover the exact wording?
 
 Both approaches are **research goals, not available recovery features**. Compression, resaving, or reformatting may destroy the payload; visible obfuscation is not secure redaction. The test is whether a self-contained, keyed artifact is useful enough to justify its complexity.
 
-### Selected research
+### Top research for Veil
 
-- [Lossless image recovery and watermarking](https://openaccess.thecvf.com/content/ICCV2025/html/Chen_Learning_Robust_Image_Watermarking_with_Lossless_Cover_Recovery_ICCV_2025_paper.html) (ICCV 2025): distinguishing exact recovery from visual similarity.
-- [FlexMark: adaptive image watermarking](https://www.cs.sfu.ca/~mhefeeda/Papers/mmsys24_flexmark.pdf) (MMSys 2024): quality, capacity, and resilience trade-offs.
-- [Reversible data hiding and compression efficiency](https://www.mdpi.com/2313-433X/7/12/268) (2021): embedding capacity has a real size cost.
-- [Linguistic steganography survey](https://aclanthology.org/2026.emnlp-main.1058/) (EMNLP 2026): capacity and fidelity challenges for text.
+These papers offer useful constraints and experimental baselines, not a ready-made algorithm for Veil's visibly abstract, self-contained carrier.
 
-Research is changing what a small image-obfuscation experiment *might become*. The challenge now is proving that its original can actually live, encrypted, inside the artwork.
+- [Lossless cover recovery from image watermarking](https://openaccess.thecvf.com/content/ICCV2025/html/Chen_Learning_Robust_Image_Watermarking_with_Lossless_Cover_Recovery_ICCV_2025_paper.html) (ICCV 2025): separate *exact original recovery* from successful payload extraction or perceptual similarity.
+- [High-Capacity Reversible Data Hiding in Encrypted Images Using D4-Symmetry](https://www.mdpi.com/2076-3417/16/20/10343) (Applied Sciences 2026): measure **net payload after recovery metadata**, not gross embedding capacity. The paper explicitly discusses negative net capacity as a failure mode in some evaluated configurations; its encrypted-image setting is not the same as Veil's visible artwork.
+- [Reversible data hiding and compression efficiency](https://www.mdpi.com/2313-433X/7/12/268) (2021): compare recovery overhead, compression, and practical capacity rather than maximizing a single metric.
+- [Linguistic steganography survey](https://aclanthology.org/2026.emnlp-main.1058/) (EMNLP 2026): distinguish readable text from reliable encrypted-payload capacity, including robustness to subsequent editing.
+
+Research is changing what a small image-obfuscation experiment _might become_. The challenge now is proving that its original can actually live, encrypted, inside the artwork.
