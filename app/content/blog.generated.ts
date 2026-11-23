@@ -3,22 +3,41 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
-    slug: "veil-fortunes-research",
+    slug: "veil-encrypted-obfuscation",
     status: "published",
-    title: "From Obfuscation to Irony: Research Behind Veil and Fortunes",
+    title: "Veil: From a GitHub Profile Image to Encrypted Recovery",
     description:
-      "Micrantha explores recoverable image and text obfuscation alongside original UNIX-style technical humor, informed by research.",
-    date: "2026-11-22",
+      "A security-minded GitHub profile experiment becomes research into embedding encrypted originals inside obfuscated images and text.",
+    date: "2026-11-23",
     excerpt:
-      "Veil studies recoverable meaning in obfuscated images and text. Fortunes explores whether AI can recognize and create genuinely funny technical observations.",
+      "A humble GitHub image experiment became research into encrypting originals and embedding them in the obfuscation itself.",
+    tags: ["applied-research", "veil", "privacy-engineering", "ai-research"],
+    relatedSlugs: ["fortunes-modern-unix-humor"],
+    series: {
+      slug: "ai-research-transforming-tools",
+      order: 1,
+    },
+  },
+  {
+    slug: "fortunes-modern-unix-humor",
+    status: "published",
+    title: "Fortunes: From Footer Jokes to Team-Specific Humor",
+    description:
+      "A tiny UNIX-style footer-joke API inspires AI research into modern, team-specific technical humor.",
+    date: "2026-11-23",
+    excerpt:
+      "A website footer joke grew into a question: can AI automatically create modern fortunes for specific teams and technologies?",
     tags: [
-      "research",
-      "veil",
+      "applied-research",
       "fortunes",
       "computational-creativity",
-      "privacy-engineering",
+      "ai-research",
     ],
-    relatedSlugs: ["ai-pipelines-need-control-boundaries"],
+    relatedSlugs: ["veil-encrypted-obfuscation"],
+    series: {
+      slug: "ai-research-transforming-tools",
+      order: 2,
+    },
   },
   {
     slug: "ai-native-sdlc-governed-software-delivery",

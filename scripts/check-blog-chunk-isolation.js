@@ -11,8 +11,12 @@ import {
 const buildDirectory = path.join(repositoryRoot, "public/build")
 const bodyMarkers = new Map([
   [
-    "veil-fortunes-research",
-    "The research is not simply whether a model can write a pun",
+    "veil-encrypted-obfuscation",
+    "That was supposed to be the whole project",
+  ],
+  [
+    "fortunes-modern-unix-humor",
+    "The customer scenario is a team-specific humor corpus",
   ],
   [
     "ai-native-sdlc-governed-software-delivery",

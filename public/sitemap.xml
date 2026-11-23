@@ -20,7 +20,7 @@
   </url>
   <url>
     <loc>https://micrantha.com/blog</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-23</lastmod>
   </url>
   <url>
     <loc>https://micrantha.com/blog/series/governance-native-engineering</loc>
@@ -59,8 +59,16 @@
     <lastmod>2026-04-24</lastmod>
   </url>
   <url>
-    <loc>https://micrantha.com/blog/veil-fortunes-research</loc>
-    <lastmod>2026-11-22</lastmod>
+    <loc>https://micrantha.com/blog/series/ai-research-transforming-tools</loc>
+    <lastmod>2026-11-23</lastmod>
+  </url>
+  <url>
+    <loc>https://micrantha.com/blog/veil-encrypted-obfuscation</loc>
+    <lastmod>2026-11-23</lastmod>
+  </url>
+  <url>
+    <loc>https://micrantha.com/blog/fortunes-modern-unix-humor</loc>
+    <lastmod>2026-11-23</lastmod>
   </url>
   <url>
     <loc>https://micrantha.com/blog/ai-native-sdlc-governed-software-delivery</loc>

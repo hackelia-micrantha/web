@@ -1,9 +1,7 @@
-import { createBlogMdxRoute } from "~/content/blog-mdx-route"
+import { redirect } from "@remix-run/node"
 
-import Content from "./content.mdx"
+export const loader = () => redirect("/blog/series/ai-research-transforming-tools", 301)
 
-const route = createBlogMdxRoute("veil-fortunes-research", Content)
-
-export const meta = route.meta
-export const handle = route.handle
-export default route.Component
+export default function ResearchSeriesRedirect() {
+  return null
+}
