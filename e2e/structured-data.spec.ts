@@ -107,7 +107,7 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
     .evaluateAll((anchors) =>
       anchors.map((anchor) => ({
         name: anchor.querySelector("h2")?.textContent?.trim(),
-        url: (anchor as HTMLAnchorElement).href,
+        pathname: (anchor as HTMLAnchorElement).pathname,
       })),
     )
   expect(cards.length).toBeGreaterThan(0)
@@ -117,7 +117,9 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(list.map((entry) => entry.item?.name)).toEqual(
     cards.map((card) => card.name),
   )
-  expect(list.map((entry) => entry.url)).toEqual(cards.map((card) => card.url))
+  expect(list.map((entry) => entry.url)).toEqual(
+    cards.map((card) => `https://micrantha.com${card.pathname}`),
+  )
   expect(list.map((entry) => entry.position)).toEqual(
     cards.map((_, index) => index + 1),
   )
