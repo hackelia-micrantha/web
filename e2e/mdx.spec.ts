@@ -311,12 +311,16 @@ test.describe("canonical MDX articles", () => {
   })
 })
 
-test("legacy combined research URL redirects to the new series", async ({ page }) => {
+test("legacy research URL redirects to its series", async ({ page }) => {
   const response = await page.goto("/blog/veil-fortunes-research")
   expect(response?.status()).toBe(200)
-  await expect(page).toHaveURL(/\/blog\/series\/ai-research-transforming-tools$/)
+  await expect(page).toHaveURL(
+    /\/blog\/series\/ai-research-transforming-tools$/,
+  )
   await expect(
-    page.getByRole("heading", { name: "How AI Research Transforms Small Tools" }),
+    page.getByRole("heading", {
+      name: "How AI Research Transforms Small Tools",
+    }),
   ).toBeVisible()
 })
 
