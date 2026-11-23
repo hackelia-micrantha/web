@@ -10,7 +10,7 @@
 - Sources: linked, publicly available academic papers and project descriptions already on the public Micrantha site
 - Editorial selection: six papers per project, selected for direct relevance rather than a citation-based academic ranking
 - **Veil:** explicitly distinguishes its current one-way Voronoi renderer from proposed key-enabled, image-carried encrypted original-file recovery; describes candidate carrier layers and validation questions without publishing a format or algorithm.
-- **Fortunes:** distinguishes the current curated UNIX-humor API from proposed offline AI-assisted idea composition; contains two original, unapproved Git-irony *illustrations* grounded in public Git command documentation.
+- **Fortunes:** distinguishes the current curated UNIX-humor API from proposed offline AI-assisted idea composition; explicitly covers one-command tool-native wordplay and multi-concept irony. Includes the historical `man woman` joke as a contextualized reference and three new, unapproved Git-themed *illustrations* grounded in public documentation.
 
 ## Disclosure and accuracy boundary
 
