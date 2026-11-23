@@ -28,7 +28,10 @@ export const blogPosts = [
     excerpt:
       "A humble GitHub image experiment became research into encrypting originals and embedding them in the obfuscation itself.",
     tags: ["applied-research", "veil", "privacy-engineering", "ai-research"],
-    relatedSlugs: ["from-papers-to-possibilities", "fortunes-modern-unix-humor"],
+    relatedSlugs: [
+      "from-papers-to-possibilities",
+      "fortunes-modern-unix-humor",
+    ],
     series: {
       slug: "ai-research-transforming-tools",
       order: 2,

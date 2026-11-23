@@ -32,14 +32,16 @@ const articles: ArticleContract[] = [
     series: "How AI Research Transforms Small Tools",
     part: 1,
     next: "Veil: From a GitHub Profile Image to Encrypted Recovery",
-    finalText: "A paper becomes useful when its claims meet a real project constraint",
+    finalText:
+      "A paper becomes useful when its claims meet a real project constraint",
   },
   {
     slug: "veil-encrypted-obfuscation",
     title: "Veil: From a GitHub Profile Image to Encrypted Recovery",
     series: "How AI Research Transforms Small Tools",
     part: 2,
-    previous: "From Papers to Possibilities: AI-Assisted Research for Small Tools",
+    previous:
+      "From Papers to Possibilities: AI-Assisted Research for Small Tools",
     next: "Fortunes: From Footer Jokes to Team-Specific Humor",
     imageAlt: /portrait transformed into a mosaic of geometric color cells/i,
     finalText: "That was supposed to be the whole project",
