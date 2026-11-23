@@ -127,14 +127,14 @@ A pair of existing quotations does not become original simply because a model co
 
 Git is a useful research subject because its real commands carry both technical meaning and a vocabulary that overlaps with human behavior. The modern candidate lines below are **illustrative, unverified drafts for the article**, not existing Fortunes entries, model results, or cleared-for-publication jokes. The older UNIX example is labeled separately because it is folklore rather than a new invention.
 
-**Example 0 — the classic `man woman` command (historical reference)**
+**Example A — the classic `man woman` command (historical reference)**
 
 - **Tool behavior:** `man` searches manual pages. On systems without a manual page named `woman`, `man woman` may produce an error such as "No manual entry for woman"; output depends on the installed manuals and implementation. See this [historical UNIX humor example](https://www.linux.co.cr/lg/issue86/TWDT.html).
 - **Mechanism:** The word `man` doubles as a manual-page command and an English noun. A literal missing-document error is read as a human statement.
 - **Research question:** Can a model detect command-name ambiguity and unintended double meanings in modern tools **without copying** the old line or mistaking a contingent message for a universal command result?
 - **Editorial caution:** The historical punchline can also trade on a gender stereotype. Its inclusion here illustrates *how* technical wordplay works, not an endorsement or a candidate for a modern corpus.
 
-**Example 0b — Git detached HEAD (new illustrative draft)**
+**Example B — Git detached HEAD (new illustrative draft)**
 
 - **Verified tool fact:** In [Git's detached HEAD state](https://git-scm.com/docs/user-manual#detached-head), `HEAD` refers directly to a commit instead of a branch. You can still create commits, but a new branch or another reference is needed if you want to keep that line of work readily reachable after switching away.
 - **Mechanism:** A technical name invokes ordinary-language ideas of identity, direction, and commitment.
@@ -143,7 +143,7 @@ Git is a useful research subject because its real commands carry both technical 
 
 The contrast matters: the `man` and detached-HEAD examples start with **one tool-native ambiguity**. The next two start with **relations between multiple ideas**, where humor depends on discovering a bridge rather than just noticing a double meaning.
 
-**Example A — accountability versus root cause**
+**Example C — accountability versus root cause**
 
 - **Verified tool fact:** [`git blame`](https://git-scm.com/docs/git-blame) identifies the revision and author that last changed each line; it does not prove why a bug happened.
 - **Second concept:** An organization can mistake identifying a person for explaining a systemic failure.
@@ -151,7 +151,7 @@ The contrast matters: the `man` and detached-HEAD examples start with **one tool
 - **Draft fortune:** "Git can tell us who last edited the line. For why it broke, we scheduled a meeting."
 - **Review question:** Is that an actual irony or just a familiar complaint about meetings? Does a Git-literate reader find it funny?
 
-**Example B — cleaner history versus persistent memory**
+**Example D — cleaner history versus persistent memory**
 
 - **Verified tool facts:** [`git rebase`](https://git-scm.com/docs/git-rebase) reapplies commits onto a different base. A local [`git reflog`](https://git-scm.com/docs/git-reflog) records updates to references, subject to local configuration and retention.
 - **Third concept:** Teams sometimes polish the story of how a decision was made.
