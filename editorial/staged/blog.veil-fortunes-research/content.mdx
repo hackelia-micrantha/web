@@ -1,0 +1,101 @@
+---
+slug: veil-fortunes-research
+status: draft
+title: "What We're Researching in Veil and Fortunes"
+description: "Two Micrantha research directions: recoverable image transformations and a new generation of human-curated UNIX fortunes, with the papers shaping each."
+date: "2026-11-22"
+excerpt: "Veil asks what it takes to make visual obfuscation recoverable. Fortunes asks how to preserve the surprise and wit of UNIX folklore as technology changes."
+tags:
+  - research
+  - veil
+  - fortunes
+  - image-processing
+  - computational-creativity
+  - architecture-notes
+relatedSlugs:
+  - ai-pipelines-need-control-boundaries
+---
+
+A geometric image transformation and a UNIX fortune might seem like unrelated engineering problems. One changes how information looks. The other changes how an idea is expressed.
+
+Yet [Veil](https://veil.micrantha.com) and [Fortunes](https://fortunes.micrantha.com) share an approach: start with an old, useful idea; study the limits of newer techniques; and resist confusing an impressive demonstration with a reliable result.
+
+Here is what we are trying to learn, and the papers most relevant to that work. These are **selected research references, not an academic citation ranking, implementation announcement, or claim that Micrantha has reproduced the authors' results**.
+
+## Veil: change the image, preserve the possibility of recovery
+
+Veil explores geometric image obfuscation and abstract visual transformations. Its longer-term research asks whether a visibly transformed image can also support **intentional, exact recovery by its owner**, provided the required protected recovery information and separately held key remain intact.
+
+Those are different capabilities. An image that looks obscured is not necessarily anonymous; a deliberately recoverable image is **not irreversible redaction**. The system should make that distinction obvious rather than implying that visual distortion alone is a privacy guarantee.
+
+Three questions guide the work:
+
+- **Correctness:** Can restoration reproduce the original source exactly, rather than merely produce an image that looks similar? Image pixels, encoded file bytes, and metadata are different recovery targets.
+- **Capacity and size:** How much information can be carried without making the resulting image impractical? Raw bit capacity is not the same as the size of an actual encoded, portable image.
+- **Robustness and failure:** What survives a lossless round-trip? What breaks after cropping, resizing, JPEG recompression, or social-media processing? When recovery is impossible, failure should be explicit, not approximate or silent.
+
+On-device processing, authenticated recovery information, and an independent key are important design constraints. The research does **not** establish that any ordinary image can survive arbitrary edits and still restore its original bytes.
+
+### Six papers shaping Veil's questions
+
+1. **[Learning Robust Image Watermarking with Lossless Cover Recovery](https://openaccess.thecvf.com/content/ICCV2025/html/Chen_Learning_Robust_Image_Watermarking_with_Lossless_Cover_Recovery_ICCV_2025_paper.html)** — Chen et al., ICCV 2025. A useful comparison between lossless cover recovery on an intact channel and robust watermark detection after distortion. Recovering a decoded cover image is not automatically recovering the original compressed file and metadata.
+
+2. **[FlexMark: Adaptive Watermarking Method for Images](https://www.cs.sfu.ca/~mhefeeda/Papers/mmsys24_flexmark.pdf)** — Arab, Ghorbanpour and Hefeeda, ACM MMSys 2024. Explores adaptive placement and the capacity-versus-robustness trade-off. Its neural approach is a research comparator, not a decision to put a large model into Veil.
+
+3. **[We Can Hide More Bits: The Unused Watermarking Capacity in Theory and in Practice](https://arxiv.org/abs/2510.12812)** — Petrov et al., 2025 preprint. Challenges assumptions about watermark capacity. The important caveat: recovering a small message with high bit accuracy is not proof that a large encrypted recovery payload can be reconstructed with zero errors.
+
+4. **[A Reversible Data Hiding Method in Encrypted Images for Controlling Trade-Off between Hiding Capacity and Compression Efficiency](https://www.mdpi.com/2313-433X/7/12/268)** — Motomura, Imaizumi and Kiya, 2021. Demonstrates why maximizing embeddable bits can make lossless compression worse. The useful measure is the final artifact's size *after* all recovery overhead.
+
+5. **[High-Capacity Reversible Data Hiding in Encrypted Images Based on Pixel Prediction and QuadTree Decomposition](https://www.mdpi.com/2076-3417/13/23/12706)** — Alqahtani and Masmoudi, 2023. Studies adaptive image partitioning and predictive redundancy. It suggests ways to investigate region selection, but does not prove an optimal Veil layout or original-file recovery.
+
+6. **[A Feature-based Fragile Watermarking for Tamper Detection using Voronoi Diagram Decomposition](https://aircconline.com/csit/papers/vol10/csit101012.pdf)** — Golea and Melkemi, 2020. Particularly relevant to geometric regions and tamper localization. Fragile watermark checks and image-region repair are not substitutes for authenticated, exact restoration.
+
+The next useful evidence is not another architecture diagram or a new model. It is a controlled comparison on representative images: exact source-byte equality, final output size, decode cost, peak memory, and clearly documented negative transformations. A simpler method that passes these checks is preferable to a sophisticated one that merely looks promising.
+
+## Fortunes: carry UNIX folklore into the present
+
+UNIX `fortune` has always been more than a random quotation command. Its appeal is the unexpected collision of a compact sentence with the reader's day: a joke, a contradiction, an aphorism, a technical quirk, or an observation that becomes funnier because it arrives without warning.
+
+Fortunes aims to **continue that tradition into modern life and technology**. Its subject matter includes programming languages, terminals, operating systems, development tools, infrastructure, software culture, and wider social behavior. The quirks of real tools matter as much as abstract commentary about computing.
+
+The goal is not to turn a classic collection into an endless stream of generic AI jokes. The existing corpus and human-written material remain central. An optional creative workflow could assist with producing **original, reviewed additions**, preferably offline rather than at request time.
+
+A useful editorial sequence looks like this:
+
+1. Collect small, source-checked observations or premises about a tool, technology, or social behavior.
+2. Label the subject, underlying contradiction, tone, and intended audience.
+3. Select one strong premise or a complementary pair or trio; identify an actual conceptual bridge, not just related keywords.
+4. Draft a short *new expression* and evaluate whether the surprising conclusion is also coherent and technically true.
+5. Check for near-copying, attribution and rights issues, needless harm, repetition, and weak humor; let a human decide what joins the published corpus.
+
+A pair of existing quotations does not become original simply because a model combines them. Likewise, a statement can be relevant, grammatically fluent, and novel without being funny.
+
+### Six papers shaping Fortunes' questions
+
+1. **[Grounded Satirical Generation with RAG](https://arxiv.org/abs/2605.10853)** — Itkonen et al., 2026. Grounding generated satire in real news improved topical and political relevance without a clear improvement in humor. Technical accuracy and actual comic effect need separate review.
+
+2. **[A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X)** — Eppe et al., 2018. Studies how concepts from different domains can be selectively combined to produce an emergent idea. A useful lens for the difference between a genuine insight and two phrases placed side by side.
+
+3. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** — Wang et al., CHI 2023. Explores human-directed brainstorming across distinct domains. The lesson is to support divergent idea generation and human selection, not to delegate editorial judgment.
+
+4. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** — Tikhonov and Shtykovskiy, ICCC 2024. Breaks one-liner creation into associations, refinement, and generation. It motivates evaluating a composed thought rather than treating one-shot model output as a finished joke.
+
+5. **[What Makes an Ideal Quote? Recommending "Unexpected yet Rational" Quotations via Novelty](https://aclanthology.org/2026.acl-long.362/)** — Chang et al., ACL 2026. Examines the value of contextual surprise in selecting existing quotations. Its metrics concern recommendation, not proof of new joke creation, but the distinction between unexpected and nonsensical is useful.
+
+6. **[Engagement Undermines Safety: How Stereotypes and Toxicity Shape Humor in Language Models](https://aclanthology.org/2026.eacl-long.373/)** — Dogra et al., EACL 2026. Documents tensions between perceived funniness and harmful stereotypes in evaluated models and datasets. Optimizing a model's humor or engagement score alone is a poor publishing policy.
+
+For Fortunes, the next useful study is a small, blinded editorial comparison of source-checked prompts and different drafting approaches. Reviewers should score humor, conceptual surprise, coherence, real tool behavior, originality, and audience fit separately. More generated text is not itself progress.
+
+## What the two projects have in common
+
+Veil is asking whether a transformation can preserve **recoverable information** despite changing appearance. Fortunes is asking whether a creative process can preserve **a truthful, surprising idea** while producing new expression.
+
+Both expose the limits of attractive proxy metrics:
+
+- Veil cannot substitute visual similarity, advertised embedding capacity, or average bit accuracy for exact recovery.
+- Fortunes cannot substitute retrieval relevance, model-rated funniness, or output volume for human judgment.
+- Neither project should treat a paper's reported measurements as independently reproduced Micrantha results.
+
+The near-term objective is modest: better-defined experiments, smaller candidate sets, explicit failure cases, and evidence that can support a future product decision.
+
+A successful result might justify more development. An unsuccessful result may justify a simpler approach—or stopping. That is part of the research too.
