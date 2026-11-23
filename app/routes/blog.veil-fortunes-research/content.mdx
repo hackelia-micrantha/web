@@ -1,10 +1,10 @@
 ---
 slug: veil-fortunes-research
 status: published
-title: "From Images to Irony: Research Behind Veil and Fortunes"
-description: "How Micrantha is exploring recoverable image protection and original UNIX-style technical humor, and the research informing both."
+title: "From Obfuscation to Irony: Research Behind Veil and Fortunes"
+description: "Micrantha explores recoverable image and text obfuscation alongside original UNIX-style technical humor, informed by research."
 date: "2026-11-22"
-excerpt: "Two working projects, two open questions: can an obfuscated image remain recoverable for its owner, and can AI discover what makes technology funny?"
+excerpt: "Veil studies recoverable meaning in obfuscated images and text. Fortunes explores whether AI can recognize and create genuinely funny technical observations."
 tags:
   - research
   - veil
@@ -15,13 +15,13 @@ relatedSlugs:
   - ai-pipelines-need-control-boundaries
 ---
 
-A photograph transformed into geometric art and a sarcastic UNIX fortune may not appear to have much in common. Both, however, present a useful engineering challenge: **can we change how information is presented while preserving what matters?**
+A visually abstracted image, an apparently ordinary passage of text, and a sarcastic UNIX fortune may not appear to have much in common. All three raise an interesting question: **can changing the form of information reveal something new while preserving what matters?**
 
-At [Micrantha](https://micrantha.com), two existing projects are exploring different sides of that question. [Veil](https://veil.micrantha.com) transforms images. [Fortunes](https://fortunes.micrantha.com) delivers short, often irreverent observations rooted in UNIX culture.
+At [Micrantha](https://micrantha.com), two projects are exploring different sides of that question. [Veil](https://veil.micrantha.com) currently transforms images and is researching recoverability across visual and written content. [Fortunes](https://fortunes.micrantha.com) delivers short, often irreverent observations rooted in UNIX culture.
 
 The products exist today. The capabilities discussed below are **research goals, not features being advertised as available**. This is an overview for people evaluating the products, potential collaborators, and engineers interested in the decisions behind the work—not an implementation specification.
 
-## Veil: can visual transformation and controlled recovery coexist?
+## Veil: can abstraction and controlled recovery coexist?
 
 **What exists today.** Veil turns images into abstract, Voronoi-style artwork. That transformation is one-way: it discards image information, and the resulting artwork cannot be used to reconstruct the exact source.
 
@@ -30,6 +30,14 @@ The products exist today. The capabilities discussed below are **research goals,
 That creates an interesting potential experience for artists, creators, and privacy-conscious users: share a distinctive visual representation while keeping access to the original under their control. Whether this can be delivered as a practical image workflow is an **open research question**, not a current product promise.
 
 There are important limits. Artistic obfuscation is **not secure redaction or anonymity**; a viewer may still infer details from an image. Encrypting recoverable data would not make everything visible in the transformed image private. And key-based recovery depends on the integrity of the protected information, not just the visual appearance of the result.
+
+### Extending the question to text
+
+Veil is also studying whether writing could be transformed into a **readable abstraction** while retaining a separately protected, encrypted version of the original. Imagine sharing a short, generalized account of a sensitive passage while someone holding the appropriate key could recover the exact original wording from an intact, self-contained text artifact.
+
+This brings together three distinct ideas: **abstraction** changes what the reader sees, **encryption** protects the original content, and **steganography** investigates whether the protected information can be carried within the visible text representation. A readable paraphrase alone is not reversible, and a decryption key alone cannot restore information that was never retained. The research must establish whether the protected content survives realistic copying and formatting changes, without making false confidentiality claims.
+
+This is **not an available Veil feature**, and it is distinct from simpler reversible text-obfuscation experiments. The goal is controlled recoverability, not a promise that hidden information will survive arbitrary editing or go unnoticed.
 
 ### Research informing Veil
 
@@ -68,9 +76,9 @@ These are starting points for experiments in creativity and evaluation, not evid
 
 ## What connects the projects
 
-Veil asks a question about **recoverability**. Fortunes asks a question about **creative understanding**. Both require stronger evidence than a compelling demonstration.
+Veil asks a question about **recoverability across images and writing**. Fortunes asks a question about **creative understanding**. Both require stronger evidence than a compelling demonstration.
 
-For Veil, that means separating appearance from the security and correctness properties of recovery. For Fortunes, it means separating fluent output from insight, originality, and actual humor. In both cases, the research must be allowed to reject an attractive idea when measurements or human evaluation do not support it.
+For Veil, that means separating a visible image or abstracted passage from the security and correctness properties of recovery. For Fortunes, it means separating fluent output from insight, originality, and actual humor. In both cases, the research must be allowed to reject an attractive idea when measurements or human evaluation do not support it.
 
 That approach matters beyond these two products. Useful software research is not simply adopting the newest paper or inserting an AI model into an existing workflow. It means defining the user benefit, validating the difficult assumptions, and knowing when the simpler existing system is good enough.
 
