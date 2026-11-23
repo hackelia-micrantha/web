@@ -117,9 +117,7 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(list.map((entry) => entry.item?.name)).toEqual(
     cards.map((card) => card.name),
   )
-  expect(list.map((entry) => entry.url)).toEqual(
-    cards.map((card) => card.url),
-  )
+  expect(list.map((entry) => entry.url)).toEqual(cards.map((card) => card.url))
   expect(list.map((entry) => entry.position)).toEqual(
     cards.map((_, index) => index + 1),
   )
