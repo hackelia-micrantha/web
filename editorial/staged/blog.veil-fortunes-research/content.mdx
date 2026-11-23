@@ -82,7 +82,14 @@ The UNIX `fortune` tradition is more than a random quotation command. Its appeal
 
 Fortunes aims to **continue that tradition into modern life and technology**. Its subject matter includes programming languages, terminals, operating systems, development tools, infrastructure, software culture, and wider social behavior. The quirks of real tools matter as much as abstract commentary about computing.
 
-**Goal:** Continue that sarcastic UNIX folklore into the modern era through an **AI-enabled fortune composition and curation pipeline**. It could find interesting details in today's systems, identify contradictions, combine two or three observations when that produces a meaningful new idea, and propose succinct fortunes for human review. A one-premise pun should also remain possible.
+There are **two complementary research paths**, not a requirement to combine several quotations every time:
+
+- **Tool-native humor:** Find a funny double meaning, literal error message, naming collision, surprising state, or contradiction **within one real tool or command**. The old `man woman` gag is a historical example of a manual-page lookup being read as a statement in ordinary English. Git's `detached HEAD` state offers another kind of technical ambiguity. The experiment is whether AI notices *why* the language is funny, while remaining accurate about the tool's behavior.
+- **Multi-concept irony:** Combine two or three compatible observations—perhaps a Git feature, a workplace habit, and an expectation about accountability—to expose a relation that was not obvious in any one premise. A genuine conceptual bridge matters more than keyword overlap.
+
+The first can be a short pun with one fact; the second might be a more elaborate satirical insight. Both must be judged by people who understand the reference. Recognizing a pattern in a command name is not the same as proving a joke is original, funny, or appropriate.
+
+**Goal:** Continue that sarcastic UNIX folklore into the modern era through an **AI-enabled fortune composition and curation pipeline**. It could find amusing language **inside technology itself**, identify contradictions between how tools work and how people talk, combine two or three observations **when useful**, and propose succinct fortunes for human review. A one-premise technical pun must remain a first-class option.
 
 The real research question is **whether an AI system can recognize the incongruity, irony, timing, and shared assumptions that make people find something funny**, rather than merely remix the words of existing jokes. Relevance, fluency, and lexical novelty are weaker goals than a coherent new joke.
 
@@ -116,9 +123,25 @@ A useful editorial sequence looks like this:
 
 A pair of existing quotations does not become original simply because a model combines them. Likewise, a statement can be relevant, grammatically fluent, and novel without being funny.
 
-### Worked example: finding irony in Git
+### Worked examples: technical wordplay and conceptual irony
 
-Git is a useful research subject because its real commands carry both technical meaning and a vocabulary that overlaps with human behavior. The following are **new illustrative candidate drafts for the article**, not existing Fortunes entries, model results, or cleared-for-publication jokes.
+Git is a useful research subject because its real commands carry both technical meaning and a vocabulary that overlaps with human behavior. The modern candidate lines below are **illustrative, unverified drafts for the article**, not existing Fortunes entries, model results, or cleared-for-publication jokes. The older UNIX example is labeled separately because it is folklore rather than a new invention.
+
+**Example 0 — the classic `man woman` command (historical reference)**
+
+- **Tool behavior:** `man` searches manual pages. On systems without a manual page named `woman`, `man woman` may produce an error such as "No manual entry for woman"; output depends on the installed manuals and implementation. See this [historical UNIX humor example](https://www.linux.co.cr/lg/issue86/TWDT.html).
+- **Mechanism:** The word `man` doubles as a manual-page command and an English noun. A literal missing-document error is read as a human statement.
+- **Research question:** Can a model detect command-name ambiguity and unintended double meanings in modern tools **without copying** the old line or mistaking a contingent message for a universal command result?
+- **Editorial caution:** The historical punchline can also trade on a gender stereotype. Its inclusion here illustrates *how* technical wordplay works, not an endorsement or a candidate for a modern corpus.
+
+**Example 0b — Git detached HEAD (new illustrative draft)**
+
+- **Verified tool fact:** In [Git's detached HEAD state](https://git-scm.com/docs/user-manual#detached-head), `HEAD` refers directly to a commit instead of a branch. You can still create commits, but a new branch or another reference is needed if you want to keep that line of work readily reachable after switching away.
+- **Mechanism:** A technical name invokes ordinary-language ideas of identity, direction, and commitment.
+- **Candidate wording:** "Git says my HEAD is detached. I'm still making commits; I just don't belong to a branch."
+- **Review question:** Is the double meaning funny to a developer, or merely an accurate description with a human metaphor attached? Does the phrasing already exist elsewhere?
+
+The contrast matters: the `man` and detached-HEAD examples start with **one tool-native ambiguity**. The next two start with **relations between multiple ideas**, where humor depends on discovering a bridge rather than just noticing a double meaning.
 
 **Example A — accountability versus root cause**
 
@@ -136,7 +159,7 @@ Git is a useful research subject because its real commands carry both technical 
 - **Draft fortune:** "We rebased the story for a cleaner history. The reflog remembered the edits."
 - **Review question:** Does the metaphor reveal a new observation, or merely map Git command names onto a cliché? No claim is made that Git always preserves every earlier version.
 
-The challenge for AI is not to see that `rebase` and `reflog` are Git commands. It is to decide **why their relationship with institutional memory might be ironic**, determine whether that connection is true enough to support a joke, and express it without turning into a paragraph of explanation. It should be allowed to reject both examples.
+The challenge for AI is not just to see that `rebase` and `reflog` are Git commands, or that `man` and `HEAD` have meanings outside a terminal. It is to recognize **when one command is funny on its own versus when a new relationship between ideas creates the irony**, determine whether the inference is true enough to support a joke, and express it without turning into a paragraph of explanation. It should be allowed to reject every candidate.
 
 ### Six papers shaping Fortunes' questions
 
@@ -146,13 +169,13 @@ The challenge for AI is not to see that `rebase` and `reflog` are Git commands. 
 
 3. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** — Wang et al., CHI 2023. **How it helps:** a curator can ask for several plausible connections between developer practices and everyday human contradictions, then choose or reject them. This suggests divergent *idea exploration* followed by convergence; it does not prove that more generations create better fortunes.
 
-4. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** — Tikhonov and Shtykovskiy, ICCC 2024. **How it helps:** distinguish finding associations, recognizing a comic mechanism, and writing the final line. The authors report less evaluator-recognized familiarity in one multistep condition, but funniness evidence is less conclusive; adding stages or prompts is not a guaranteed improvement over direct generation.
+4. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** — Tikhonov and Shtykovskiy, ICCC 2024. **How it helps:** distinguish finding associations, recognizing a comic mechanism, and writing the final line—whether starting with one command-name pun such as `detached HEAD` or several observations requiring a bridge. The authors report less evaluator-recognized familiarity in one multistep condition, but funniness evidence is less conclusive; adding stages or prompts is not a guaranteed improvement over direct generation.
 
 5. **[What Makes an Ideal Quote? Recommending "Unexpected yet Rational" Quotations via Novelty](https://aclanthology.org/2026.acl-long.362/)** — Chang et al., ACL 2026. **How it helps:** review two separate properties: was the association unexpected, and does it make sense after the surprise? The work measures selection of existing quotes, not new joke invention, so its ranking results should not become an automatic humor score.
 
 6. **[Engagement Undermines Safety: How Stereotypes and Toxicity Shape Humor in Language Models](https://aclanthology.org/2026.eacl-long.373/)** — Dogra et al., EACL 2026. **How it helps:** keep quality selection and content eligibility separate. Models and engagement-based judges can reward cheap stereotypes or shock, so any clever Git or social joke still needs human review for target, accuracy, and rights. The paper does not imply that satire must avoid criticism or irreverence.
 
-**What we would measure:** a small, offline, blinded comparison using a fixed set of source-checked technical and social premises. Compare direct prompting with fact-grounded and explicitly contradiction-guided drafting; let reviewers independently score humor, coherent surprise, technical fidelity, near-copy risk, and suitability. The idea of selecting two or three complementary seeds is a **separate hypothesis** to test only if the simpler baseline demonstrates a meaningful gap. No experiments or product changes are claimed here.
+**What we would measure:** a small, offline, blinded comparison using a fixed set of source-checked technical and social premises, including real **command names, diagnostic messages, and version-specific tool states**. Compare direct prompting with fact-grounded and explicitly contradiction-guided drafting; let reviewers independently score humor, coherent surprise, technical fidelity, near-copy risk, and suitability. Record whether a joke works through **one tool-native double meaning** or a **multi-premise conceptual bridge**, without creating new required pipeline stages. The idea of selecting two or three complementary seeds is a **separate hypothesis** to test only if the simpler baseline demonstrates a meaningful gap. No experiments or product changes are claimed here.
 
 More generated text, model steps, or rankings are not themselves progress; the relevant output is a small number of original, accurate, genuinely amusing **human-approved** fortunes.
 
