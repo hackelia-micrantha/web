@@ -1,0 +1,77 @@
+---
+slug: veil-fortunes-research
+status: published
+title: "From Images to Irony: Research Behind Veil and Fortunes"
+description: "How Micrantha is exploring recoverable image protection and original UNIX-style technical humor, and the research informing both."
+date: "2026-11-22"
+excerpt: "Two working projects, two open questions: can an obfuscated image remain recoverable for its owner, and can AI discover what makes technology funny?"
+tags:
+  - research
+  - veil
+  - fortunes
+  - computational-creativity
+  - privacy-engineering
+relatedSlugs:
+  - ai-pipelines-need-control-boundaries
+---
+
+A photograph transformed into geometric art and a sarcastic UNIX fortune may not appear to have much in common. Both, however, present a useful engineering challenge: **can we change how information is presented while preserving what matters?**
+
+At [Micrantha](https://micrantha.com), two existing projects are exploring different sides of that question. [Veil](https://veil.micrantha.com) transforms images. [Fortunes](https://fortunes.micrantha.com) delivers short, often irreverent observations rooted in UNIX culture.
+
+The products exist today. The capabilities discussed below are **research goals, not features being advertised as available**. This is an overview for people evaluating the products, potential collaborators, and engineers interested in the decisions behind the work—not an implementation specification.
+
+## Veil: can visual transformation and controlled recovery coexist?
+
+**What exists today.** Veil turns images into abstract, Voronoi-style artwork. That transformation is one-way: it discards image information, and the resulting artwork cannot be used to reconstruct the exact source.
+
+**What we're investigating.** The longer-term goal is a visually transformed, shareable image that an authorized person could restore to its original form using a separately held encryption key. The ambition is to make the transformed image useful for viewing while preserving a controlled path back to the original.
+
+That creates an interesting potential experience for artists, creators, and privacy-conscious users: share a distinctive visual representation while keeping access to the original under their control. Whether this can be delivered as a practical image workflow is an **open research question**, not a current product promise.
+
+There are important limits. Artistic obfuscation is **not secure redaction or anonymity**; a viewer may still infer details from an image. Encrypting recoverable data would not make everything visible in the transformed image private. And key-based recovery depends on the integrity of the protected information, not just the visual appearance of the result.
+
+### Research informing Veil
+
+These are selected references, not a ranking or a claim that Micrantha has reproduced the authors' results.
+
+1. **[Learning Robust Image Watermarking with Lossless Cover Recovery](https://openaccess.thecvf.com/content/ICCV2025/html/Chen_Learning_Robust_Image_Watermarking_with_Lossless_Cover_Recovery_ICCV_2025_paper.html)** (ICCV 2025). This work helps frame the difference between preserving an image exactly and merely recognizing embedded information after it has been altered. For Veil, restoration has to be defined and tested precisely.
+2. **[FlexMark: Adaptive Watermarking Method for Images](https://www.cs.sfu.ca/~mhefeeda/Papers/mmsys24_flexmark.pdf)** (ACM MMSys 2024). This provides a research perspective on the trade-offs between visible quality, information capacity, and resilience. It does not establish a ready-made solution for Veil.
+3. **[A Reversible Data Hiding Method in Encrypted Images for Controlling Trade-Off between Hiding Capacity and Compression Efficiency](https://www.mdpi.com/2313-433X/7/12/268)** (2021). It underscores a practical point: a technique that can theoretically carry more information may still produce an impractically large image.
+
+**What success would mean.** A convincingly simple experience, exact and independently verified restoration under stated conditions, explicit failure when recovery is impossible, and acceptable image quality and resource costs. Until those outcomes are established, the existing one-way transformation stands on its own.
+
+## Fortunes: can AI discover why technology is funny?
+
+**What exists today.** Fortunes is a straightforward API and collection of short UNIX-style humor, quotations, and sarcastic observations. It serves curated material; it does not invent a new joke each time someone makes a request.
+
+**What we're investigating.** UNIX humor has long found comedy in the tools themselves: command names, literal error messages, unexpected defaults, and the gap between what software promises and what it actually does.
+
+The classic `man woman` joke uses a manual-page command as a double meaning in ordinary language. Git's *detached HEAD* is a genuine technical state with similarly unexpected language. Modern software offers countless other examples: dependency conflicts, version-control habits, infrastructure abstractions, and the occasional error that sounds more philosophical than mechanical.
+
+The research is not simply whether a model can write a pun. It is whether AI can **notice the incongruity in a real technical detail**, understand why a knowledgeable reader might find it funny, and turn it into a fresh, concise observation.
+
+A second direction examines conceptual irony: taking two or three seemingly separate ideas and discovering a contradiction or connection between them. The difficult part is finding a meaningful relationship, not merely combining terms that appear in the same search result.
+
+The proposed direction is an **AI-assisted, human-curated creative workflow**. Research and model-assisted drafting could help discover candidate ideas, but people would judge technical accuracy, originality, wit, attribution, and suitability before anything entered the published collection. Generation at the moment an API request arrives is not a requirement.
+
+### Research informing Fortunes
+
+These are starting points for experiments in creativity and evaluation, not evidence that an automated humor pipeline already works.
+
+1. **[A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X)** (2018). A useful foundation for asking whether two distinct concepts can produce a genuinely new idea rather than an awkward combination.
+2. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** (ICCC 2024). Explores associations and intermediate reasoning in one-line joke generation. Reported results raise promising questions about familiarity and variety without proving consistently funnier outcomes.
+3. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** (CHI 2023). Highlights the role of human direction and selection when using models to explore creative connections.
+4. **[Grounded Satirical Generation with RAG](https://arxiv.org/abs/2605.10853)** (2026). A reminder that factual grounding and topical relevance are useful, but do not automatically make satire funny.
+
+**What success would mean.** More original, technically accurate fortunes that actual developers enjoy—and a process that can explain where an observation came from without copying a familiar joke. A model's self-assessed humor score would not be enough.
+
+## What connects the projects
+
+Veil asks a question about **recoverability**. Fortunes asks a question about **creative understanding**. Both require stronger evidence than a compelling demonstration.
+
+For Veil, that means separating appearance from the security and correctness properties of recovery. For Fortunes, it means separating fluent output from insight, originality, and actual humor. In both cases, the research must be allowed to reject an attractive idea when measurements or human evaluation do not support it.
+
+That approach matters beyond these two products. Useful software research is not simply adopting the newest paper or inserting an AI model into an existing workflow. It means defining the user benefit, validating the difficult assumptions, and knowing when the simpler existing system is good enough.
+
+Explore [Veil](https://veil.micrantha.com) and [Fortunes](https://fortunes.micrantha.com), or [contact Micrantha](https://micrantha.com/contact) about the work.
