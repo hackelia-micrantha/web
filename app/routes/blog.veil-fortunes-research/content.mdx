@@ -89,7 +89,7 @@ These are selected references, not a ranking or a claim that Micrantha has repro
 
 **What we're investigating.** UNIX humor has long found comedy in the tools themselves: command names, literal error messages, unexpected defaults, and the gap between what software promises and what it actually does.
 
-The classic `man woman` joke uses a manual-page command as a double meaning in ordinary language. Git's *detached HEAD* is a genuine technical state with similarly unexpected language. Modern software offers countless other examples: dependency conflicts, version-control habits, infrastructure abstractions, and the occasional error that sounds more philosophical than mechanical.
+The classic `man woman` joke uses a manual-page command as a double meaning in ordinary language. Git's _detached HEAD_ is a genuine technical state with similarly unexpected language. Modern software offers countless other examples: dependency conflicts, version-control habits, infrastructure abstractions, and the occasional error that sounds more philosophical than mechanical.
 
 The research is not simply whether a model can write a pun. It is whether AI can **notice the incongruity in a real technical detail**, understand why a knowledgeable reader might find it funny, and turn it into a fresh, concise observation.
 
@@ -99,12 +99,14 @@ The proposed direction is an **AI-assisted, human-curated creative workflow**. R
 
 ### Research informing Fortunes
 
-These are starting points for experiments in creativity and evaluation, not evidence that an automated humor pipeline already works.
+These are starting points for experiments in creativity and evaluation, not evidence that an automated humor pipeline already works. The most important distinction is between **detecting a joke**, **understanding why it works**, and **knowing whether an audience actually finds it funny**.
 
-1. **[A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X)** (2018). A useful foundation for asking whether two distinct concepts can produce a genuinely new idea rather than an awkward combination.
-2. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** (ICCC 2024). Explores associations and intermediate reasoning in one-line joke generation. Reported results raise promising questions about familiarity and variety without proving consistently funnier outcomes.
-3. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** (CHI 2023). Highlights the role of human direction and selection when using models to explore creative connections.
-4. **[Grounded Satirical Generation with RAG](https://arxiv.org/abs/2605.10853)** (2026). A reminder that factual grounding and topical relevance are useful, but do not automatically make satire funny.
+1. **[MechPunBench: A Bilingual Mechanism-Centered Benchmark for Pun Understanding and Generation](https://aclanthology.org/2026.findings-emnlp.1385/)** (Findings of EMNLP 2026). Distinguishes spotting wordplay from explaining its two meanings and rhetorical effect. That is particularly relevant to jokes hidden in command names such as Git's `detached HEAD`; recognizing a pun is not proof that a model understands it.
+2. **[The Difficult Case of Intended and Perceived Sarcasm: a Challenge for Humans and Large Language Models](https://aclanthology.org/2025.iwcs-main.23/)** (Jang and Frassinelli, IWCS 2025). Shows why the writer's intent and the reader's interpretation can diverge. For Fortunes, a sarcastic observation needs evaluation by people who understand its context, not only a model's label.
+3. **[A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X)** (2018). A useful foundation for asking whether two distinct concepts can produce a genuinely new idea rather than an awkward combination.
+4. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** (ICCC 2024). Explores associations and intermediate reasoning in one-line joke generation. Reported results raise promising questions about familiarity and variety without proving consistently funnier outcomes.
+5. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** (CHI 2023). Highlights the role of human direction and selection when using models to explore creative connections.
+6. **[Grounded Satirical Generation with RAG](https://arxiv.org/abs/2605.10853)** (2026). A reminder that factual grounding and topical relevance are useful, but do not automatically make satire funny.
 
 **What success would mean.** More original, technically accurate fortunes that actual developers enjoy—and a process that can explain where an observation came from without copying a familiar joke. A model's self-assessed humor score would not be enough.
 
