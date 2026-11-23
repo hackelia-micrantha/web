@@ -2,9 +2,9 @@
 slug: veil-fortunes-research
 status: draft
 title: "What We're Researching in Veil and Fortunes"
-description: "Two Micrantha research directions: recoverable image transformations and a new generation of human-curated UNIX fortunes, with the papers shaping each."
+description: "Veil investigates embedding encrypted recovery data into obfuscated images; Fortunes explores whether AI can discover the irony behind new UNIX-style humor."
 date: "2026-11-22"
-excerpt: "Veil asks what it takes to make visual obfuscation recoverable. Fortunes asks how to preserve the surprise and wit of UNIX folklore as technology changes."
+excerpt: "From one-way image obfuscation to key-recoverable imagery, and from a curated UNIX humor API to a human-reviewed AI fortune composition pipeline."
 tags:
   - research
   - veil
@@ -20,11 +20,17 @@ A geometric image transformation and a UNIX fortune might seem like unrelated en
 
 Yet [Veil](https://veil.micrantha.com) and [Fortunes](https://fortunes.micrantha.com) share an approach: start with an old, useful idea; study the limits of newer techniques; and resist confusing an impressive demonstration with a reliable result.
 
-Here is what we are trying to learn, and the papers most relevant to that work. These are **selected research references, not an academic citation ranking, implementation announcement, or claim that Micrantha has reproduced the authors' results**.
+Here is what exists today, what we are investigating, and how specific papers help turn ideas into testable questions. These are **selected research references, not an academic citation ranking, implementation announcement, or claim that Micrantha has reproduced the authors' results**.
+
+**Status as of November 2026:** Veil's existing image transformation is one-way. Fortunes' existing API serves an established collection of short UNIX-style humor and sayings; it does not use a generative model to answer each request. The systems described below are **research directions**, not deployed upgrades.
 
 ## Veil: change the image, preserve the possibility of recovery
 
-Veil explores geometric image obfuscation and abstract visual transformations. Its longer-term research asks whether a visibly transformed image can also support **intentional, exact recovery by its owner**, provided the required protected recovery information and separately held key remain intact.
+**Today:** Veil renders source images as Voronoi-style geometric mosaics. Each cell uses a representative color, so information from the original image is discarded. That output is **one-way**; there is no encryption key that can reconstruct what the renderer threw away.
+
+**Goal:** Obfuscate a visible image, encrypt the **original image file bytes**, and carry enough authenticated encrypted recovery information **within the obfuscated image artifact** to reconstruct the original using a separately retained key. The research is whether the artwork and recovery data can coexist in one usable, portable image—not whether a lossy Voronoi transformation can somehow be inverted.
+
+The visible mosaic would remain readable in an ordinary image viewer. An authorized recovery process would need the intact carrier and the separate key; it would authenticate the stored recovery information before returning the original. None of that is a currently shipped image-recovery promise.
 
 Those are different capabilities. An image that looks obscured is not necessarily anonymous; a deliberately recoverable image is **not irreversible redaction**. The system should make that distinction obvious rather than implying that visual distortion alone is a privacy guarantee.
 
@@ -36,29 +42,69 @@ Three questions guide the work:
 
 On-device processing, authenticated recovery information, and an independent key are important design constraints. The research does **not** establish that any ordinary image can survive arbitrary edits and still restore its original bytes.
 
+### The proposed layers: where could the recovery information live?
+
+Rather than simply attaching opaque data, the research asks whether the **visible obfuscation itself** can contribute to carrying the encrypted information. These are candidate *encoding surfaces*, not independently proven channels or an approved format:
+
+1. **Cell geometry.** Controlled properties of a Voronoi layout may represent information while remaining a recognizable mosaic. Example question: can a recipient recover those choices deterministically from a lossless decoded image, without confusing incidental geometry with encoded bits?
+2. **Cell boundaries and borders.** The edges already form a distinct visual structure. Their appearance might provide capacity, but anti-aliasing, re-encoding, and ambiguous border detection can corrupt recovery.
+3. **Fine-scale color or texture.** Very small, keyed variations could carry bits inside regions where they are less visually distracting. These variations must be recoverable **exactly**, not merely look similar; authenticated encrypted bytes do not tolerate an occasional missing bit.
+4. **Adaptive subdivision.** Some regions may support more detailed cells than others. Repeated or selective subdivision could allocate capacity to suitable areas, but describing the subdivisions and maintaining deterministic decoding also costs bits.
+5. **Dedicated lossless capacity as a baseline.** Extra carrier pixels remain a simple comparison point if the visible layers cannot reliably carry enough information. They may make the image larger or visibly less elegant; simplicity and exactness still matter.
+
+These layers could interact. A change to geometry may alter borders and texture simultaneously. **Adding theoretical bit capacities together would double-count information unless each channel can be decoded independently and its overhead measured.** Model-assisted selection of candidate regions is another hypothesis, not a prerequisite; a deterministic baseline comes first.
+
+An illustrative research sequence would take a source image, produce the one-way Voronoi preview, encrypt the unmodified original, map the ciphertext into one or more *tested* image-carrier surfaces, and attempt recovery with a separate key. The critical acceptance test is **byte-for-byte equality of the recovered source**, not a visually faithful reconstruction.
+
 ### Six papers shaping Veil's questions
 
-1. **[Learning Robust Image Watermarking with Lossless Cover Recovery](https://openaccess.thecvf.com/content/ICCV2025/html/Chen_Learning_Robust_Image_Watermarking_with_Lossless_Cover_Recovery_ICCV_2025_paper.html)** — Chen et al., ICCV 2025. A useful comparison between lossless cover recovery on an intact channel and robust watermark detection after distortion. Recovering a decoded cover image is not automatically recovering the original compressed file and metadata.
+1. **[Learning Robust Image Watermarking with Lossless Cover Recovery](https://openaccess.thecvf.com/content/ICCV2025/html/Chen_Learning_Robust_Image_Watermarking_with_Lossless_Cover_Recovery_ICCV_2025_paper.html)** — Chen et al., ICCV 2025. **How it helps:** separate two test cases—exact recovery with an intact carrier and watermark detection after image distortion. An illustration that restores the same decoded pixels but loses the original JPEG compression or metadata would **fail** Veil's exact-file target. The paper does not establish original-file byte recovery.
 
-2. **[FlexMark: Adaptive Watermarking Method for Images](https://www.cs.sfu.ca/~mhefeeda/Papers/mmsys24_flexmark.pdf)** — Arab, Ghorbanpour and Hefeeda, ACM MMSys 2024. Explores adaptive placement and the capacity-versus-robustness trade-off. Its neural approach is a research comparator, not a decision to put a large model into Veil.
+2. **[FlexMark: Adaptive Watermarking Method for Images](https://www.cs.sfu.ca/~mhefeeda/Papers/mmsys24_flexmark.pdf)** — Arab, Ghorbanpour and Hefeeda, ACM MMSys 2024. **How it helps:** compare uniform cell placement against selectively allocated carrier capacity. For example, a smooth region and a highly detailed region may tolerate different visual modifications; the experiment should still score *recoverable* bits, output size, and decoding cost, not appearance alone. Its neural approach is a research comparator, not a decision to deploy a large model.
 
-3. **[We Can Hide More Bits: The Unused Watermarking Capacity in Theory and in Practice](https://arxiv.org/abs/2510.12812)** — Petrov et al., 2025 preprint. Challenges assumptions about watermark capacity. The important caveat: recovering a small message with high bit accuracy is not proof that a large encrypted recovery payload can be reconstructed with zero errors.
+3. **[We Can Hide More Bits: The Unused Watermarking Capacity in Theory and in Practice](https://arxiv.org/abs/2510.12812)** — Petrov et al., 2025 preprint. **How it helps:** distinguish apparent writable capacity from authenticated, zero-error payload capacity. For example, a carrier that recovers 99% of embedded bits may be useful for a watermark but unusable for a complete encrypted original. Count framing, redundancy, and side information before claiming net capacity.
 
-4. **[A Reversible Data Hiding Method in Encrypted Images for Controlling Trade-Off between Hiding Capacity and Compression Efficiency](https://www.mdpi.com/2313-433X/7/12/268)** — Motomura, Imaizumi and Kiya, 2021. Demonstrates why maximizing embeddable bits can make lossless compression worse. The useful measure is the final artifact's size *after* all recovery overhead.
+4. **[A Reversible Data Hiding Method in Encrypted Images for Controlling Trade-Off between Hiding Capacity and Compression Efficiency](https://www.mdpi.com/2313-433X/7/12/268)** — Motomura, Imaizumi and Kiya, 2021. **How it helps:** compare embedding choices by **final lossless file size**, not raw bits per pixel. A densely coded border or texture layer may look economical in raster memory while increasing encoded size substantially. Include the original-file bytes, ciphertext overhead, and all allocation metadata in the comparison.
 
-5. **[High-Capacity Reversible Data Hiding in Encrypted Images Based on Pixel Prediction and QuadTree Decomposition](https://www.mdpi.com/2076-3417/13/23/12706)** — Alqahtani and Masmoudi, 2023. Studies adaptive image partitioning and predictive redundancy. It suggests ways to investigate region selection, but does not prove an optimal Veil layout or original-file recovery.
+5. **[High-Capacity Reversible Data Hiding in Encrypted Images Based on Pixel Prediction and QuadTree Decomposition](https://www.mdpi.com/2076-3417/13/23/12706)** — Alqahtani and Masmoudi, 2023. **How it helps:** test whether selectively subdividing some mosaic regions improves *net* recovery capacity, after accounting for the partition description and associated data. More subdivisions are not automatically better: they may make the image busier, enlarge metadata, or make decoding fragile. The paper does not prove an optimal Veil layout or original-file recovery.
 
-6. **[A Feature-based Fragile Watermarking for Tamper Detection using Voronoi Diagram Decomposition](https://aircconline.com/csit/papers/vol10/csit101012.pdf)** — Golea and Melkemi, 2020. Particularly relevant to geometric regions and tamper localization. Fragile watermark checks and image-region repair are not substitutes for authenticated, exact restoration.
+6. **[A Feature-based Fragile Watermarking for Tamper Detection using Voronoi Diagram Decomposition](https://aircconline.com/csit/papers/vol10/csit101012.pdf)** — Golea and Melkemi, 2020. **How it helps:** reason about region-addressed information and the possibility of locating a damaged area. For example, a changed cell border could be detected as an integrity failure; it should **not** trigger speculative reconstruction of missing original bytes. Fragile watermark checks and region repair are not substitutes for authenticated, exact restoration.
 
-The next useful evidence is not another architecture diagram or a new model. It is a controlled comparison on representative images: exact source-byte equality, final output size, decode cost, peak memory, and clearly documented negative transformations. A simpler method that passes these checks is preferable to a sophisticated one that merely looks promising.
+**What we would measure:** exact source-file hashes after recovery, net recoverable encrypted bytes per final image byte, image legibility, decode cost, peak memory, and negative cases such as cropping, color conversion, and JPEG recompression. Compare a simple lossless carrier with at most a small number of layered candidates on the same images. If any layer fails to preserve complete authenticated data, it contributes **zero** usable exact-recovery capacity in that configuration.
+
+The simplest proven arrangement should win. A new encoding technique or AI model has to justify its added complexity with measured benefit.
 
 ## Fortunes: carry UNIX folklore into the present
 
-UNIX `fortune` has always been more than a random quotation command. Its appeal is the unexpected collision of a compact sentence with the reader's day: a joke, a contradiction, an aphorism, a technical quirk, or an observation that becomes funnier because it arrives without warning.
+**Today:** Fortunes is a deliberately straightforward service and API for retrieving curated, often sarcastic UNIX-style humor, sayings, and quotations. It is not an AI joke generator. Its simplicity is a feature: short text, predictable delivery, and a collection worth revisiting.
+
+The UNIX `fortune` tradition is more than a random quotation command. Its appeal is the unexpected collision of a compact sentence with the reader's day: a joke, a contradiction, an aphorism, a technical quirk, or an observation that becomes funnier because it arrives without warning.
 
 Fortunes aims to **continue that tradition into modern life and technology**. Its subject matter includes programming languages, terminals, operating systems, development tools, infrastructure, software culture, and wider social behavior. The quirks of real tools matter as much as abstract commentary about computing.
 
-The goal is not to turn a classic collection into an endless stream of generic AI jokes. The existing corpus and human-written material remain central. An optional creative workflow could assist with producing **original, reviewed additions**, preferably offline rather than at request time.
+**Goal:** Continue that sarcastic UNIX folklore into the modern era through an **AI-enabled fortune composition and curation pipeline**. It could find interesting details in today's systems, identify contradictions, combine two or three observations when that produces a meaningful new idea, and propose succinct fortunes for human review. A one-premise pun should also remain possible.
+
+The real research question is **whether an AI system can recognize the incongruity, irony, timing, and shared assumptions that make people find something funny**, rather than merely remix the words of existing jokes. Relevance, fluency, and lexical novelty are weaker goals than a coherent new joke.
+
+The existing corpus and human-written material remain central. Offline or batch drafting is the preferred research path; the public API need not—and currently does not—call a model for each request.
+
+### From observations to an original fortune
+
+A proposed **editorial pipeline**, not a new set of microservices or models, separates the operations that are easy to conflate:
+
+```text
+Curated observations and verified tool behavior
+  -> identify small factual idea seeds and provenance
+  -> categorize subject, audience, humor mechanism, rights
+  -> select one, two, or three complementary concepts
+  -> identify a real relationship or contradiction
+  -> try irony, inversion, misdirection, or wordplay
+  -> draft compact original wording
+  -> verify tool facts, novelty, rights, and suitability
+  -> human editorial approval
+  -> separately governed corpus publication
+  -> existing predictable API reads approved entries
+```
 
 A useful editorial sequence looks like this:
 
@@ -70,25 +116,49 @@ A useful editorial sequence looks like this:
 
 A pair of existing quotations does not become original simply because a model combines them. Likewise, a statement can be relevant, grammatically fluent, and novel without being funny.
 
+### Worked example: finding irony in Git
+
+Git is a useful research subject because its real commands carry both technical meaning and a vocabulary that overlaps with human behavior. The following are **new illustrative candidate drafts for the article**, not existing Fortunes entries, model results, or cleared-for-publication jokes.
+
+**Example A — accountability versus root cause**
+
+- **Verified tool fact:** [`git blame`](https://git-scm.com/docs/git-blame) identifies the revision and author that last changed each line; it does not prove why a bug happened.
+- **Second concept:** An organization can mistake identifying a person for explaining a systemic failure.
+- **Candidate bridge:** *blame is attribution, not causality*.
+- **Draft fortune:** "Git can tell us who last edited the line. For why it broke, we scheduled a meeting."
+- **Review question:** Is that an actual irony or just a familiar complaint about meetings? Does a Git-literate reader find it funny?
+
+**Example B — cleaner history versus persistent memory**
+
+- **Verified tool facts:** [`git rebase`](https://git-scm.com/docs/git-rebase) reapplies commits onto a different base. A local [`git reflog`](https://git-scm.com/docs/git-reflog) records updates to references, subject to local configuration and retention.
+- **Third concept:** Teams sometimes polish the story of how a decision was made.
+- **Candidate bridge:** *a cleaner public narrative can coexist with a less tidy local history*.
+- **Draft fortune:** "We rebased the story for a cleaner history. The reflog remembered the edits."
+- **Review question:** Does the metaphor reveal a new observation, or merely map Git command names onto a cliché? No claim is made that Git always preserves every earlier version.
+
+The challenge for AI is not to see that `rebase` and `reflog` are Git commands. It is to decide **why their relationship with institutional memory might be ironic**, determine whether that connection is true enough to support a joke, and express it without turning into a paragraph of explanation. It should be allowed to reject both examples.
+
 ### Six papers shaping Fortunes' questions
 
-1. **[Grounded Satirical Generation with RAG](https://arxiv.org/abs/2605.10853)** — Itkonen et al., 2026. Grounding generated satire in real news improved topical and political relevance without a clear improvement in humor. Technical accuracy and actual comic effect need separate review.
+1. **[Grounded Satirical Generation with RAG](https://arxiv.org/abs/2605.10853)** — Itkonen et al., 2026. **How it helps:** give a drafting system verified information about a command or modern practice, then ask whether its satire is actually funny. A technically faithful `git blame` fact is only a premise; grounding cannot supply the punchline on its own. The reported relevance improvement did not clearly establish better humor.
 
-2. **[A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X)** — Eppe et al., 2018. Studies how concepts from different domains can be selectively combined to produce an emergent idea. A useful lens for the difference between a genuine insight and two phrases placed side by side.
+2. **[A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X)** — Eppe et al., 2018. **How it helps:** explicitly describe the shared structural relationship between two or three concepts. In the Git example, the relevant bridge is attribution versus explanation, not the accidental co-occurrence of "Git" and "management." A coherent blend is not automatically a good joke.
 
-3. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** — Wang et al., CHI 2023. Explores human-directed brainstorming across distinct domains. The lesson is to support divergent idea generation and human selection, not to delegate editorial judgment.
+3. **[PopBlends: Strategies for Conceptual Blending with Large Language Models](https://doi.org/10.1145/3544548.3580948)** — Wang et al., CHI 2023. **How it helps:** a curator can ask for several plausible connections between developer practices and everyday human contradictions, then choose or reject them. This suggests divergent *idea exploration* followed by convergence; it does not prove that more generations create better fortunes.
 
-4. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** — Tikhonov and Shtykovskiy, ICCC 2024. Breaks one-liner creation into associations, refinement, and generation. It motivates evaluating a composed thought rather than treating one-shot model output as a finished joke.
+4. **[Humor Mechanics: Advancing Humor Generation with Multistep Reasoning](https://arxiv.org/abs/2405.07280)** — Tikhonov and Shtykovskiy, ICCC 2024. **How it helps:** distinguish finding associations, recognizing a comic mechanism, and writing the final line. The authors report less evaluator-recognized familiarity in one multistep condition, but funniness evidence is less conclusive; adding stages or prompts is not a guaranteed improvement over direct generation.
 
-5. **[What Makes an Ideal Quote? Recommending "Unexpected yet Rational" Quotations via Novelty](https://aclanthology.org/2026.acl-long.362/)** — Chang et al., ACL 2026. Examines the value of contextual surprise in selecting existing quotations. Its metrics concern recommendation, not proof of new joke creation, but the distinction between unexpected and nonsensical is useful.
+5. **[What Makes an Ideal Quote? Recommending "Unexpected yet Rational" Quotations via Novelty](https://aclanthology.org/2026.acl-long.362/)** — Chang et al., ACL 2026. **How it helps:** review two separate properties: was the association unexpected, and does it make sense after the surprise? The work measures selection of existing quotes, not new joke invention, so its ranking results should not become an automatic humor score.
 
-6. **[Engagement Undermines Safety: How Stereotypes and Toxicity Shape Humor in Language Models](https://aclanthology.org/2026.eacl-long.373/)** — Dogra et al., EACL 2026. Documents tensions between perceived funniness and harmful stereotypes in evaluated models and datasets. Optimizing a model's humor or engagement score alone is a poor publishing policy.
+6. **[Engagement Undermines Safety: How Stereotypes and Toxicity Shape Humor in Language Models](https://aclanthology.org/2026.eacl-long.373/)** — Dogra et al., EACL 2026. **How it helps:** keep quality selection and content eligibility separate. Models and engagement-based judges can reward cheap stereotypes or shock, so any clever Git or social joke still needs human review for target, accuracy, and rights. The paper does not imply that satire must avoid criticism or irreverence.
 
-For Fortunes, the next useful study is a small, blinded editorial comparison of source-checked prompts and different drafting approaches. Reviewers should score humor, conceptual surprise, coherence, real tool behavior, originality, and audience fit separately. More generated text is not itself progress.
+**What we would measure:** a small, offline, blinded comparison using a fixed set of source-checked technical and social premises. Compare direct prompting with fact-grounded and explicitly contradiction-guided drafting; let reviewers independently score humor, coherent surprise, technical fidelity, near-copy risk, and suitability. The idea of selecting two or three complementary seeds is a **separate hypothesis** to test only if the simpler baseline demonstrates a meaningful gap. No experiments or product changes are claimed here.
+
+More generated text, model steps, or rankings are not themselves progress; the relevant output is a small number of original, accurate, genuinely amusing **human-approved** fortunes.
 
 ## What the two projects have in common
 
-Veil is asking whether a transformation can preserve **recoverable information** despite changing appearance. Fortunes is asking whether a creative process can preserve **a truthful, surprising idea** while producing new expression.
+Veil starts with a **working one-way image transformation** and asks whether encrypted original-file recovery can be embedded in the artwork. Fortunes starts with a **working curated UNIX-humor API** and asks whether human-guided AI can discover, compose, and evaluate new irony about today's tools and society.
 
 Both expose the limits of attractive proxy metrics:
 
