@@ -5,12 +5,12 @@ export const blogPosts = [
   {
     slug: "veil-fortunes-research",
     status: "published",
-    title: "From Images to Irony: Research Behind Veil and Fortunes",
+    title: "From Obfuscation to Irony: Research Behind Veil and Fortunes",
     description:
-      "How Micrantha is exploring recoverable image protection and original UNIX-style technical humor, and the research informing both.",
+      "Micrantha explores recoverable image and text obfuscation alongside original UNIX-style technical humor, informed by research.",
     date: "2026-11-22",
     excerpt:
-      "Two working projects, two open questions: can an obfuscated image remain recoverable for its owner, and can AI discover what makes technology funny?",
+      "Veil studies recoverable meaning in obfuscated images and text. Fortunes explores whether AI can recognize and create genuinely funny technical observations.",
     tags: [
       "research",
       "veil",
