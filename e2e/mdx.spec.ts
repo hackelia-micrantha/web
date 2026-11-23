@@ -27,10 +27,19 @@ type ArticleContract = {
 
 const articles: ArticleContract[] = [
   {
+    slug: "from-papers-to-possibilities",
+    title: "From Papers to Possibilities: AI-Assisted Research for Small Tools",
+    series: "How AI Research Transforms Small Tools",
+    part: 1,
+    next: "Veil: From a GitHub Profile Image to Encrypted Recovery",
+    finalText: "A paper becomes useful when its claims meet a real project constraint",
+  },
+  {
     slug: "veil-encrypted-obfuscation",
     title: "Veil: From a GitHub Profile Image to Encrypted Recovery",
     series: "How AI Research Transforms Small Tools",
-    part: 1,
+    part: 2,
+    previous: "From Papers to Possibilities: AI-Assisted Research for Small Tools",
     next: "Fortunes: From Footer Jokes to Team-Specific Humor",
     imageAlt: /portrait transformed into a mosaic of geometric color cells/i,
     finalText: "That was supposed to be the whole project",
@@ -39,7 +48,7 @@ const articles: ArticleContract[] = [
     slug: "fortunes-modern-unix-humor",
     title: "Fortunes: From Footer Jokes to Team-Specific Humor",
     series: "How AI Research Transforms Small Tools",
-    part: 2,
+    part: 3,
     previous: "Veil: From a GitHub Profile Image to Encrypted Recovery",
     finalText: "The customer scenario is a team-specific humor corpus",
   },

@@ -3,6 +3,22 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
+    slug: "from-papers-to-possibilities",
+    status: "published",
+    title: "From Papers to Possibilities: AI-Assisted Research for Small Tools",
+    description:
+      "How AI-assisted reading and measured experiments can expand humble projects.",
+    date: "2026-11-23",
+    excerpt:
+      "Research can inspire new directions and benchmarks for deciding what works.",
+    tags: ["applied-research", "ai-research", "software-engineering"],
+    relatedSlugs: ["veil-encrypted-obfuscation", "fortunes-modern-unix-humor"],
+    series: {
+      slug: "ai-research-transforming-tools",
+      order: 1,
+    },
+  },
+  {
     slug: "veil-encrypted-obfuscation",
     status: "published",
     title: "Veil: From a GitHub Profile Image to Encrypted Recovery",
@@ -12,10 +28,10 @@ export const blogPosts = [
     excerpt:
       "A humble GitHub image experiment became research into encrypting originals and embedding them in the obfuscation itself.",
     tags: ["applied-research", "veil", "privacy-engineering", "ai-research"],
-    relatedSlugs: ["fortunes-modern-unix-humor"],
+    relatedSlugs: ["from-papers-to-possibilities", "fortunes-modern-unix-humor"],
     series: {
       slug: "ai-research-transforming-tools",
-      order: 1,
+      order: 2,
     },
   },
   {
@@ -33,10 +49,10 @@ export const blogPosts = [
       "computational-creativity",
       "ai-research",
     ],
-    relatedSlugs: ["veil-encrypted-obfuscation"],
+    relatedSlugs: ["from-papers-to-possibilities", "veil-encrypted-obfuscation"],
     series: {
       slug: "ai-research-transforming-tools",
-      order: 2,
+      order: 3,
     },
   },
   {
