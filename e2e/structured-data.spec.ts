@@ -99,29 +99,28 @@ test("/blog exposes CollectionPage structured data", async ({ page }) => {
   expect(collectionPage).toBeTruthy()
   expect(collectionPage?.name).toBe("Blog")
   expect(collectionPage?.mainEntity?.["@type"]).toBe("ItemList")
-  expect(collectionPage?.mainEntity?.numberOfItems).toBe(8)
-  expect(collectionPage?.mainEntity?.itemListElement?.[0]?.item?.name).toBe(
-    "From AI-Native SDLC to Governed Software Delivery",
+
+  // Compare structured data with rendered cards instead of a fixed publication count.
+  const cards = await page
+    .getByRole("region", { name: "All published notes" })
+    .locator("a:has(h2)")
+    .evaluateAll((anchors) =>
+      anchors.map((anchor) => ({
+        name: anchor.querySelector("h2")?.textContent?.trim(),
+        pathname: (anchor as HTMLAnchorElement).pathname,
+      })),
+    )
+  expect(cards.length).toBeGreaterThan(0)
+
+  const list = collectionPage?.mainEntity?.itemListElement ?? []
+  expect(collectionPage?.mainEntity?.numberOfItems).toBe(cards.length)
+  expect(list.map((entry) => entry.item?.name)).toEqual(
+    cards.map((card) => card.name),
   )
-  expect(collectionPage?.mainEntity?.itemListElement?.[1]?.item?.name).toBe(
-    "Intent Is Security State, Not Conversation History",
+  expect(list.map((entry) => entry.url)).toEqual(
+    cards.map((card) => `https://micrantha.com${card.pathname}`),
   )
-  expect(collectionPage?.mainEntity?.itemListElement?.[2]?.item?.name).toBe(
-    "The Missing Layer in Agentic Development: Precise Governance",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[3]?.item?.name).toBe(
-    "Replayability Is a Governance Problem",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[4]?.item?.name).toBe(
-    "Recursive Governance and Agent Workflows",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[5]?.item?.name).toBe(
-    "Secure Platform Integration Is Not Plumbing",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[6]?.item?.name).toBe(
-    "AI Pipelines Need Control Boundaries",
-  )
-  expect(collectionPage?.mainEntity?.itemListElement?.[7]?.item?.name).toBe(
-    "Software Layers Are Risk Boundaries",
+  expect(list.map((entry) => entry.position)).toEqual(
+    cards.map((_, index) => index + 1),
   )
 })

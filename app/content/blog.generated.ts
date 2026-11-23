@@ -3,6 +3,24 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
+    slug: "veil-fortunes-research",
+    status: "published",
+    title: "From Obfuscation to Irony: Research Behind Veil and Fortunes",
+    description:
+      "Micrantha explores recoverable image and text obfuscation alongside original UNIX-style technical humor, informed by research.",
+    date: "2026-11-22",
+    excerpt:
+      "Veil studies recoverable meaning in obfuscated images and text. Fortunes explores whether AI can recognize and create genuinely funny technical observations.",
+    tags: [
+      "research",
+      "veil",
+      "fortunes",
+      "computational-creativity",
+      "privacy-engineering",
+    ],
+    relatedSlugs: ["ai-pipelines-need-control-boundaries"],
+  },
+  {
     slug: "ai-native-sdlc-governed-software-delivery",
     status: "published",
     title: "From AI-Native SDLC to Governed Software Delivery",
