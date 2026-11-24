@@ -24,6 +24,12 @@ const blogSeriesDefinitions: BlogSeriesDefinition[] = [
     description:
       "For integration and modernization delivery: contracts, identity, workflow recovery, layered architecture, and AI as a governed integration boundary.",
   },
+  {
+    slug: "ai-research-transforming-tools",
+    title: "How AI Research Transforms Small Tools",
+    description:
+      "How AI-assisted research can turn humble personal experiments into new product possibilities, without confusing research with shipped features.",
+  },
 ]
 
 function resolveSeriesPosts(series: BlogSeriesDefinition) {

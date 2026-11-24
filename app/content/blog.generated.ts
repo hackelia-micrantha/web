@@ -3,22 +3,63 @@ import type { BlogPost } from "~/content/blog"
 
 export const blogPosts = [
   {
-    slug: "veil-fortunes-research",
+    slug: "from-papers-to-possibilities",
     status: "published",
-    title: "From Obfuscation to Irony: Research Behind Veil and Fortunes",
+    title: "From Papers to Possibilities: AI-Assisted Research for Small Tools",
     description:
-      "Micrantha explores recoverable image and text obfuscation alongside original UNIX-style technical humor, informed by research.",
-    date: "2026-11-22",
+      "How AI-assisted reading and measured experiments can expand humble projects.",
+    date: "2026-11-23",
     excerpt:
-      "Veil studies recoverable meaning in obfuscated images and text. Fortunes explores whether AI can recognize and create genuinely funny technical observations.",
+      "Research can inspire new directions and benchmarks for deciding what works.",
+    tags: ["applied-research", "ai-research", "software-engineering"],
+    relatedSlugs: ["veil-encrypted-obfuscation", "fortunes-modern-unix-humor"],
+    series: {
+      slug: "ai-research-transforming-tools",
+      order: 1,
+    },
+  },
+  {
+    slug: "veil-encrypted-obfuscation",
+    status: "published",
+    title: "Veil: From a GitHub Profile Image to Encrypted Recovery",
+    description:
+      "A security-minded GitHub profile experiment becomes research into embedding encrypted originals inside obfuscated images and text.",
+    date: "2026-11-23",
+    excerpt:
+      "A humble GitHub image experiment became research into encrypting originals and embedding them in the obfuscation itself.",
+    tags: ["applied-research", "veil", "privacy-engineering", "ai-research"],
+    relatedSlugs: [
+      "from-papers-to-possibilities",
+      "fortunes-modern-unix-humor",
+    ],
+    series: {
+      slug: "ai-research-transforming-tools",
+      order: 2,
+    },
+  },
+  {
+    slug: "fortunes-modern-unix-humor",
+    status: "published",
+    title: "Fortunes: From Footer Jokes to Team-Specific Humor",
+    description:
+      "A tiny UNIX-style footer-joke API inspires AI research into modern, team-specific technical humor.",
+    date: "2026-11-23",
+    excerpt:
+      "A website footer joke grew into a question: can AI automatically create modern fortunes for specific teams and technologies?",
     tags: [
-      "research",
-      "veil",
+      "applied-research",
       "fortunes",
       "computational-creativity",
-      "privacy-engineering",
+      "ai-research",
     ],
-    relatedSlugs: ["ai-pipelines-need-control-boundaries"],
+    relatedSlugs: [
+      "from-papers-to-possibilities",
+      "veil-encrypted-obfuscation",
+    ],
+    series: {
+      slug: "ai-research-transforming-tools",
+      order: 3,
+    },
   },
   {
     slug: "ai-native-sdlc-governed-software-delivery",

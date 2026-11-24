@@ -225,9 +225,22 @@ test("/blog exposes the architecture notes index", async ({ page }) => {
   await expect(page.getByText("Part 2 of 4")).toHaveCount(1)
   await expect(page.getByText("Part 3 of 4")).toHaveCount(1)
   await expect(page.getByText("Part 4 of 4")).toHaveCount(1)
-  await expect(page.getByText("Part 1 of 3")).toHaveCount(1)
-  await expect(page.getByText("Part 2 of 3")).toHaveCount(1)
-  await expect(page.getByText("Part 3 of 3")).toHaveCount(1)
+  const publishedCards = page.locator(
+    'section[aria-label="All published notes"] .editorial-card',
+  )
+  for (const seriesName of [
+    "Architecture Control Boundaries",
+    "How AI Research Transforms Small Tools",
+  ]) {
+    const seriesCards = publishedCards.filter({
+      has: page.getByRole("link", {
+        name: `Explore ${seriesName} series`,
+      }),
+    })
+    for (const part of [1, 2, 3]) {
+      await expect(seriesCards.getByText(`Part ${part} of 3`)).toHaveCount(1)
+    }
+  }
 })
 
 test("/blog exposes independently navigable series links and reading paths", async ({

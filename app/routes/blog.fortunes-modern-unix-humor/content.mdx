@@ -1,0 +1,56 @@
+---
+slug: fortunes-modern-unix-humor
+status: published
+title: "Fortunes: From Footer Jokes to Team-Specific Humor"
+description: "A tiny UNIX-style footer-joke API inspires AI research into modern, team-specific technical humor."
+date: "2026-11-23"
+excerpt: "A website footer joke grew into a question: can AI automatically create modern fortunes for specific teams and technologies?"
+tags:
+  - applied-research
+  - fortunes
+  - computational-creativity
+  - ai-research
+relatedSlugs:
+  - from-papers-to-possibilities
+  - veil-encrypted-obfuscation
+series:
+  slug: ai-research-transforming-tools
+  order: 3
+---
+
+Fortunes began because I wanted something funny in website footers. The classic UNIX `fortune` command was a good model: short, unexpected quotations and technical jokes, delivered without fuss. I built a small API to serve a curated collection.
+
+It was a useful little diversion. And, for a while, that was enough.
+
+AI-assisted research opened a more interesting possibility: **could we automatically discover and create the kind of humor that made UNIX fortunes memorable, but about today's technology?**
+
+Git's _detached HEAD_, Kubernetes, deployment pipelines, dependency conflicts, and AI agents all have their own vocabulary, absurdities, and inside jokes. The ambition isn't to ask a model for generic puns. It's to investigate a pipeline that understands real technical context, notices incongruities, and proposes short, original fortunes that people actually find funny.
+
+### A fortune corpus for a particular team
+
+The customer scenario is a team-specific humor corpus. Imagine a company creating its own collection based on its approved documentation, tools, terminology, engineering rituals, and shared experiences.
+
+That corpus could give a developer portal, chat bot, or website footer a recognizable sense of humor—jokes that make sense to _that_ team rather than a generic audience. As its technology changes, new fortunes could be researched and drafted automatically, then reviewed and added to the collection.
+
+The important distinction is **automated discovery and creation**, not necessarily generation on every API request. A curated library can serve the results cheaply and predictably.
+
+Company context also needs boundaries: approved source material, no automatic disclosure of private code or incidents to external models, care with attribution and jokes about individuals, and human acceptance before publishing. AI may suggest something plausible without it being accurate, original, or funny.
+
+### What exists and what's being researched
+
+Today Fortunes serves existing, curated material through an API. Automatic research and generation—and company-specific humor corpora—remain **future capabilities**, not things the current API provides.
+
+The research problem is how to connect grounded technical facts with wordplay, irony, and unexpected conceptual combinations, then distinguish a clever observation from fluent nonsense.
+
+### Top research for Fortunes
+
+These are starting points for a small, measured generate-and-curate experiment—not evidence that a complex pipeline automatically makes better jokes.
+
+- [SemEval-2026 Task 1: MWAHAHA](https://aclanthology.org/2026.semeval-1.454/) (SemEval 2026): human pairwise preferences provide a more useful humor benchmark than a model rating its own jokes. A simple prompted baseline tied for first place; elaborate pipelines often yielded only marginal, statistically overlapping gains.
+- [Navigating the Joke Space: Towards Automated Originality Assessment](https://aclanthology.org/2026.chum-1.8/) (CHum 2026): corpus-based novelty and semantic distance are candidate originality signals, but their reported correlations with professional reviewers are moderate—not a replacement for human acceptance.
+- [Humor Is an Audience: Preference Modeling for Constrained Humor Generation](https://aclanthology.org/2026.semeval-1.15/) (SemEval 2026): models reader preferences through human comparisons. A team-specific humor corpus should be evaluated with its _actual_ audience.
+- [MechPunBench](https://aclanthology.org/2026.findings-emnlp.1385/) (EMNLP 2026): assess whether a system recognizes and explains the mechanism behind technical wordplay, not only whether it can generate one.
+- [Intended and perceived sarcasm](https://aclanthology.org/2025.iwcs-main.23/) (IWCS 2025): audience interpretations can diverge from intent, especially when the technical or social context is missing.
+- [A Computational Framework for Conceptual Blending](https://www.sciencedirect.com/science/article/pii/S000437021730142X) (2018): a foundation for testing meaningful connections between otherwise unrelated technical ideas.
+
+It started with a footer. AI research is giving that silly little requirement a possible future as a source of fresh, relevant technical humor for whole teams.
