@@ -86,11 +86,11 @@ test("canonical project semantics come from the reviewed registry snapshot", () 
   expect(projectBySlug("myosotis").summary).toContain("field-operated AI")
 })
 
-test("MUSICPKG presents its public specification without canonical project claims", () => {
+test("CONTENTPKG presents its public research without canonical project claims", () => {
   expect(projectBySlug("musicpkg-specification")).toMatchObject({
-    name: "MUSICPKG",
+    name: "CONTENTPKG",
     source: "presentation-only",
     classification: "laboratory",
-    url: "https://github.com/hackelia-micrantha/musicpkg-community",
+    url: "https://github.com/hackelia-micrantha/contentpkg-community",
   })
 })
