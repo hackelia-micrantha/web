@@ -57,7 +57,7 @@ It must not override canonical:
 - architectural role;
 - lifecycle.
 
-Presentation-only entries are allowed for useful public surfaces that are not canonical registered projects, but they must be explicitly marked `presentation-only`. They do not acquire portfolio membership by appearing on the website. For example, the MUSICPKG card describes the published music interoperability specification, not a separate registered project or an implementation release. A public-safe snapshot need not introduce otherwise undisclosed, non-portfolio project identities merely to mirror private registry completeness.
+Presentation-only entries are allowed for useful public surfaces that are not canonical registered projects, but they must be explicitly marked `presentation-only`. They do not acquire portfolio membership by appearing on the website. For example, the CONTENTPKG card describes the public research and its first published MUSICPKG interoperability profile, not a separate registered project or an implementation release. A public-safe snapshot need not introduce otherwise undisclosed, non-portfolio project identities merely to mirror private registry completeness.
 
 ## Portfolio dispositions
 

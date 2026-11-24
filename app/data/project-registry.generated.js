@@ -444,12 +444,12 @@ export const projectPresentation = {
     {
       kind: "presentation-only",
       slug: "musicpkg-specification",
-      name: "MUSICPKG",
+      name: "CONTENTPKG",
       collection: "laboratory",
       summary:
-        "A working-draft open music ownership and interoperability format, with published specifications and conformance vectors.",
-      url: "https://github.com/hackelia-micrantha/musicpkg-community",
-      architectureRole: "Digital music interoperability specification",
+        "Research into self-contained digital ownership using encrypted content packages and verifiable ownership evidence; MUSICPKG is the first working-draft profile.",
+      url: "https://github.com/hackelia-micrantha/contentpkg-community",
+      architectureRole: "Digital ownership research and music interoperability",
     },
     {
       kind: "canonical",

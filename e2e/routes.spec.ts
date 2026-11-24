@@ -97,7 +97,7 @@ test("/laboratory exposes the current laboratory taxonomy", async ({
     "Testule",
     "Sandcastle",
     "Outermesh",
-    "MUSICPKG",
+    "CONTENTPKG",
     "Phyllotaxis",
   ]) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
