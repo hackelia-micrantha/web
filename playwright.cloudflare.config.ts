@@ -8,6 +8,8 @@ const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
     : undefined
 const port = Number(process.env.CLOUDFLARE_PLAYWRIGHT_PORT ?? 8788)
 const baseURL = `http://127.0.0.1:${port}`
+const reuseWebBuild =
+  process.env.CI === "true" && process.env.PLAYWRIGHT_REUSE_WEB_BUILD === "true"
 
 export default defineConfig({
   testDir: "./e2e",
@@ -39,7 +41,9 @@ export default defineConfig({
   },
   webServer: {
     command: [
-      "yarn build",
+      reuseWebBuild
+        ? "test -s build/index.js && test -s public/tailwind.css && yarn security:publication-output"
+        : "yarn build",
       "yarn cloudflare:functions:build",
       "yarn cloudflare:runtime:stage",
       `yarn wrangler --cwd .cloudflare/runtime dev --config wrangler.toml --no-bundle --ip 127.0.0.1 --port ${port} --local-protocol http --show-interactive-dev-session=false`,
